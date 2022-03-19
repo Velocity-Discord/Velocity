@@ -1,0 +1,175 @@
+.velocity-card {
+    max-width: 383.531px;
+    overflow: hidden;
+}
+.velocity-card .paragraph-9M861H {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.velocity-card {
+    background: var(--background-secondary);
+    border-radius: 5px;
+    padding: 3%;
+}
+.velocity-card-header-top {
+    display: inline-flex;
+}
+.velocity-card-header {
+    margin-bottom: 10px;
+}
+.velocity-card-header-name {
+    margin-right: 3px;
+    font-weight: 600;
+    color: var(--header-primary);
+    font-size: large;
+}
+.velocity-card-header-version {
+    opacity: 0.8;
+    margin-right: 3px;
+    font-weight: 600;
+    color: var(--header-secondary);
+    font-size: large;
+}
+.velocity-card-header-author {
+    margin-top: 3px;
+    font-weight: 600;
+    font-size: 9pt;
+    color: var(--brand-experiment);
+}
+.velocity-card-footer {
+    display: flex;
+    align-items: center;
+}
+.velocity-card-footer-edit-button {
+    border: none !important;
+}
+.velocity-card-footer-switch {
+    margin-left: auto;
+}
+.velocity-card-footer-license {
+    font-weight: 600;
+    color: var(--text-muted);
+}
+#velocity-addons-grid {
+    margin: 20px 0 10px;
+    display: grid;
+    grid-gap: 5%;
+}
+.toast-title {
+    color: var(--text-normal);
+    padding-bottom: 5px;
+    font-size: x-large;
+    font-weight: 600;
+}
+@keyframes toastShow {
+    from {
+        opacity: 0;
+        transform: translateX(100px) scale(0.2);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+@keyframes toastHide {
+    from {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100px) scale(0.3);
+    }
+}
+.velocity-toast {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 1%;
+    margin-right: 2.5%;
+    animation: toastShow 0.15s ease-out;
+    background-color: #2d2c2c66;
+    backdrop-filter: blur(15px);
+    padding: 12px 47px 12px 12px;
+    font-size: 11pt;
+    border-radius: 4px;
+    z-index: 99999;
+    box-shadow: 2px 2px 5px #00000075;
+    color: var(--text-muted);
+    position: relative;
+    width: fit-content;
+    top: 5%;
+    border-right: 2px solid;
+    border-right-color: var(--text-default);
+}
+.velocity-toast.closing {
+    animation: toastHide 0.15s ease-in;
+    opacity: 0;
+    transform: translateY(-30px) scale(0.3);
+}
+#velocity-toasts {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: flex-end;
+    flex-direction: column;
+}
+.velocity-toast.type-error {
+    border-right-color: #fd3a5f;
+}
+.velocity-toast.type-success {
+    border-right-color: #38bf5d;
+}
+.velocity-toast.type-warn {
+    border-right-color: #da8d14;
+}
+.velocity-toast.type-velocity {
+    border-right-color: var(--brand-experiment);
+}
+.Velocity-badge {
+    cursor: pointer;
+}
+#velocity-settings-section {
+    display: flex;
+    padding: 5%;
+    border-bottom: thin solid var(--background-modifier-accent);
+}
+#velocity-settings-section:nth-child(1) {
+    border-top: thin solid var(--background-modifier-accent);
+}
+#velocity-settings-section > div:nth-child(2) {
+    position: absolute;
+    right: 5%;
+}
+#velocity-settings-section-info > div:nth-child(1) {
+    font-weight: 500;
+}
+#velocity-settings-section-info > div:nth-child(2) {
+    font-weight: 400;
+}
+.velocity-button-container {
+    display: flex;
+}
+.velocity-button {
+    margin-right: 10px;
+    margin-top: 5px;
+}
+textarea.velocity-editor::-webkit-scrollbar-thumb {
+    background: var(--background-tertiary);
+    border-radius: 50px;
+}
+textarea.velocity-editor::-webkit-scrollbar {
+    background: transparent;
+    width: 5px;
+}
+textarea.velocity-editor {
+    color: var(--text-normal) !important;
+    height: 200px;
+    width: 100%;
+    overflow-y: scroll;
+    align-items: start;
+    justify-content: left;
+    background: var(--background-secondary);
+    border: none;
+    resize: none;
+}

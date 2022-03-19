@@ -1,0 +1,187 @@
+const fs = require("fs");
+const path = require("path");
+const DataStore = require("./datastore");
+const request = require("./request");
+
+const Velocity = DataStore("VELOCITY_SETTINGS")
+Velocity.enabledThemes = Velocity.enabledThemes || {};
+Velocity.enabledPlugins = Velocity.enabledPlugins || {};
+
+const filters = {
+    themes: /(\.theme.css)$/,
+    plugins: /(\.plugin.js)$/,
+};
+
+const addons = {
+    themes: [],
+    plugins: [],
+};
+const addonsInit = {
+    themes: [],
+    plugins: [],
+};
+
+function readMeta(contents) {
+    let meta = {};
+    let jsdoc = contents.match(/\/\*\*([\s\S]*?)\*\//);
+    if (!jsdoc?.[1]) return meta;
+    for (let ite of jsdoc[1].match(/\*\s([^\n]*)/g)) {
+        ite = ite.replace(/\*( +|)@/, "");
+        let split = ite.split(" ");
+        let key = split[0];
+        let value = split.slice(1).join(" ");
+        meta[key] = value;
+    }
+    return meta;
+}
+
+const themeDir = path.join(__dirname, "..", "themes");
+if (!fs.existsSync(themeDir)) fs.mkdirSync(themeDir);
+
+fs.readdir(themeDir, (err, files) => {
+    if (err) throw new Error(`Error reading '${themeDir}'`);
+    files = files.filter((file) => filters.themes.test(file));
+    for (const file of files) {
+        const filePath = path.join(themeDir, file);
+        fs.readFile(filePath, "utf8", (err, data) => {
+            if (err) throw new Error(`Error reading '${filePath}'`);
+            const meta = readMeta(data);
+            meta.file = filePath;
+            meta.css = data;
+            addons.themes.push(meta);
+        });
+    }
+});
+
+const Themes = new (class {
+    get(name) {
+        return addons.themes.find((p) => p.name === name);
+    }
+    getAll() {
+        return addons.themes;
+    }
+    getEnabled() {
+        return addons.themes.filter((p) => this.isEnabled[p.name]);
+    }
+    isEnabled(name) {
+        return Velocity.enabledThemes[name] || false;
+    }
+    enable(name) {
+        const meta = this.get(name);
+        if (!meta) return;
+        DataStore.setData("VELOCITY_SETTINGS", "enabledThemes", { ...Velocity.enabledThemes, [meta.name]: true });
+        const style = document.createElement("style");
+        style.innerHTML = meta.css;
+        style.setAttribute("velocity-theme-id", meta.name);
+        document.getElementById("velocity-head").appendChild(style);
+    }
+    disable(name) {
+        try {
+            const meta = this.get(name);
+            if (!meta) return;
+            DataStore.setData("VELOCITY_SETTINGS", "enabledThemes", { ...Velocity.enabledThemes, [meta.name]: false });
+            const ele = document.querySelectorAll(`[velocity-theme-id="${meta.name}"]`);
+            for (let ele1 of ele) {
+                if (ele1) ele1.remove();
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    toggle(name) {
+        return this.isEnabled(name) ? this.disable(name) : this.enable(name);
+    }
+    getByFileName(name) {
+        return this.getAll().find((p) => p.file.endsWith(name));
+    }
+})();
+
+const pluginDir = path.join(__dirname, "..", "plugins");
+if (!fs.existsSync(pluginDir)) fs.mkdirSync(pluginDir);
+
+fs.readdir(pluginDir, (err, files) => {
+    if (err) throw new Error(`Error reading '${pluginDir}'`);
+    files = files.filter((file) => filters.plugins.test(file));
+    for (const file of files) {
+        const filePath = path.join(pluginDir, file);
+        fs.readFile(filePath, "utf8", (err, data) => {
+            if (err) throw new Error(`Error reading '${filePath}'`);
+            const meta = readMeta(data);
+            let plugin = require(filePath);
+            meta.export = plugin;
+            meta.file = filePath;
+            addons.plugins.push(meta);
+            addonsInit.plugins.push(() => {
+                function load() {
+                    if (plugin.default) plugin = plugin.default;
+                    if (plugin.onLoad) plugin.onLoad();
+                    return plugin;
+                }
+                if (typeof meta.update === "undefined") load();
+            });
+        });
+    }
+});
+
+const Plugins = new (class {
+    get(name) {
+        return addons.plugins.find((p) => p.name === name);
+    }
+    getAll() {
+        return addons.plugins;
+    }
+    getEnabled() {
+        return addons.plugins.filter((p) => this.isEnabled[p.name]);
+    }
+    isEnabled(name) {
+        return Velocity.enabledPlugins[name] ?? false;
+    }
+    enable(name) {
+        const meta = this.get(name);
+        DataStore.setData("VELOCITY_SETTINGS", "enabledPlugins", { ...Velocity.enabledPlugins, [meta.name]: true });
+        meta.export.onStart();
+    }
+    disable(name) {
+        const meta = this.get(name);
+        DataStore.setData("VELOCITY_SETTINGS", "enabledPlugins", { ...Velocity.enabledPlugins, [meta.name]: false });
+        meta.export.onStop();
+    }
+    toggle(name) {
+        return this.isEnabled(name) ? this.disable(name) : this.enable(name);
+    }
+    getByFileName(name) {
+        return this.getAll().find((p) => p.file.endsWith(name));
+    }
+})();
+
+module.exports = {
+    readMeta,
+    themes: () => {
+        for (const theme of addonsInit.themes) theme();
+        return {
+            getByFileName: (name) => Themes.getByFileName(name),
+            get: (name) => Themes.get(name),
+            getAll: () => Themes.getAll(),
+            getEnabled: () => Themes.getEnabled(),
+            isEnabled: (name) => Themes.isEnabled(name),
+            enable: (name) => Themes.enable(name),
+            disable: (name) => Themes.disable(name),
+            toggle: (name) => Themes.toggle(name),
+            folder: themeDir,
+        };
+    },
+    plugins: () => {
+        for (const plugin of addonsInit.plugins) plugin();
+        return {
+            getByFileName: (name) => Plugins.getByFileName(name),
+            get: (name) => Plugins.get(name),
+            getAll: () => Plugins.getAll(),
+            getEnabled: () => Plugins.getEnabled(),
+            isEnabled: (name) => Plugins.isEnabled(name),
+            enable: (name) => Plugins.enable(name),
+            disable: (name) => Plugins.disable(name),
+            toggle: (name) => Plugins.toggle(name),
+            folder: pluginDir,
+        };
+    },
+};

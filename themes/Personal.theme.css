@@ -1,0 +1,481 @@
+/**
+ * @name AxolotlCSS
+ * @version 0.0.1
+ * @author TheCommieAxolotl#0001
+ * @authorId 538487970408300544
+ * @description 
+ * @source https: //github.com/TheCommieAxolotl/BetterDiscord-Stuff/tree/main/
+ * @website https: //thecommieaxolotl.github.io/BetterDiscord-Stuff/
+ * @invite g2KnUw7u7N
+*/
+
+/* Imports */
+@import url("https://thecommieaxolotl.github.io/BetterDiscord-Stuff/Imports/DiscordLinks.css");
+
+:root {
+    --font: "lato";
+    --brand-experiment: #3875ce;
+    --control-brand-foreground: var(--brand-experiment);
+    --brand-experiment-100: hsl(216, calc(var(--saturation-factor, 1) * 60.5%), 98%);
+    --brand-experiment-130: hsl(216, calc(var(--saturation-factor, 1) * 60.5%), 94.1%);
+    --brand-experiment-160: hsl(216, calc(var(--saturation-factor, 1) * 60.5%), 90.3%);
+    --brand-experiment-200: hsl(216, calc(var(--saturation-factor, 1) * 60.5%), 86.4%);
+    --brand-experiment-230: hsl(216, calc(var(--saturation-factor, 1) * 60.5%), 82.5%);
+    --brand-experiment-260: hsl(216, calc(var(--saturation-factor, 1) * 60.5%), 78.6%);
+    --brand-experiment-300: hsl(216, calc(var(--saturation-factor, 1) * 60.5%), 74.8%);
+    --brand-experiment-330: hsl(216, calc(var(--saturation-factor, 1) * 60.5%), 70.9%);
+    --brand-experiment-360: hsl(216, calc(var(--saturation-factor, 1) * 60.5%), 67%);
+    --brand-experiment-400: hsl(216, calc(var(--saturation-factor, 1) * 60.5%), 63.1%);
+    --brand-experiment-430: hsl(216, calc(var(--saturation-factor, 1) * 60.5%), 59.3%);
+    --brand-experiment-460: hsl(216, calc(var(--saturation-factor, 1) * 60.5%), 55.4%);
+    --brand-experiment-500: hsl(216, calc(var(--saturation-factor, 1) * 60.5%), 51.5%);
+    --brand-experiment-530: hsl(216, calc(var(--saturation-factor, 1) * 45.4%), 47.5%);
+    --brand-experiment-560: #3875ce;
+    --brand-experiment-600: hsl(216, calc(var(--saturation-factor, 1) * 33.2%), 39.4%);
+    --brand-experiment-630: hsl(216, calc(var(--saturation-factor, 1) * 33.2%), 35.3%);
+    --brand-experiment-660: hsl(216, calc(var(--saturation-factor, 1) * 33.2%), 31.3%);
+    --brand-experiment-700: hsl(216, calc(var(--saturation-factor, 1) * 33.2%), 27.3%);
+    --brand-experiment-730: hsl(216, calc(var(--saturation-factor, 1) * 33.2%), 23.2%);
+    --brand-experiment-760: hsl(216, calc(var(--saturation-factor, 1) * 33.2%), 19.2%);
+    --brand-experiment-800: hsl(216, calc(var(--saturation-factor, 1) * 33.2%), 15.1%);
+    --brand-experiment-830: hsl(216, calc(var(--saturation-factor, 1) * 33.2%), 11.1%);
+    --brand-experiment-860: hsl(216, calc(var(--saturation-factor, 1) * 33.2%), 7%);
+    --brand-experiment-900: hsl(216, calc(var(--saturation-factor, 1) * 33.2%), 3%);
+    --brand-experiment-05a: hsla(216, calc(var(--saturation-factor, 1) * 60.5%), 51.5%, 0.05);
+    --brand-experiment-10a: hsla(216, calc(var(--saturation-factor, 1) * 60.5%), 51.5%, 0.1);
+    --brand-experiment-15a: hsla(216, calc(var(--saturation-factor, 1) * 60.5%), 51.5%, 0.15);
+    --brand-experiment-20a: hsla(216, calc(var(--saturation-factor, 1) * 60.5%), 51.5%, 0.2);
+    --brand-experiment-25a: hsla(216, calc(var(--saturation-factor, 1) * 60.5%), 51.5%, 0.25);
+    --brand-experiment-30a: hsla(216, calc(var(--saturation-factor, 1) * 60.5%), 51.5%, 0.3);
+    --brand-experiment-35a: hsla(216, calc(var(--saturation-factor, 1) * 60.5%), 51.5%, 0.35);
+    --brand-experiment-40a: hsla(216, calc(var(--saturation-factor, 1) * 60.5%), 51.5%, 0.4);
+    --brand-experiment-45a: hsla(216, calc(var(--saturation-factor, 1) * 60.5%), 51.5%, 0.45);
+    --brand-experiment-50a: hsla(216, calc(var(--saturation-factor, 1) * 60.5%), 51.5%, 0.5);
+    --brand-experiment-55a: hsla(216, calc(var(--saturation-factor, 1) * 60.5%), 51.5%, 0.55);
+    --brand-experiment-60a: hsla(216, calc(var(--saturation-factor, 1) * 60.5%), 51.5%, 0.6);
+    --brand-experiment-65a: hsla(216, calc(var(--saturation-factor, 1) * 60.5%), 51.5%, 0.65);
+    --brand-experiment-70a: hsla(216, calc(var(--saturation-factor, 1) * 60.5%), 51.5%, 0.7);
+    --brand-experiment-75a: hsla(216, calc(var(--saturation-factor, 1) * 60.5%), 51.5%, 0.75);
+    --brand-experiment-80a: hsla(216, calc(var(--saturation-factor, 1) * 60.5%), 51.5%, 0.8);
+    --brand-experiment-85a: hsla(216, calc(var(--saturation-factor, 1) * 60.5%), 51.5%, 0.85);
+    --brand-experiment-90a: hsla(216, calc(var(--saturation-factor, 1) * 60.5%), 51.5%, 0.9);
+    --brand-experiment-95a: hsla(216, calc(var(--saturation-factor, 1) * 60.5%), 51.5%, 0.95);
+    --message-bubble: #424249;
+    --message-bubble-self: #3f68be;
+}
+
+/* Tweaks */
+.PronounDB-pronouns-text {
+    font-size: 0.75rem !important;
+    height: 1.25rem;
+    cursor: default;
+    font-weight: 500;
+}
+
+.axolotlcord-build {
+    color: var(--brand-experiment-360) !important;
+}
+
+.toolbar-3_r2xA a {
+    display: none !important;
+}
+
+.header-2Kx1US {
+    border-bottom-color: transparent !important;
+    padding-bottom: 0 !important;
+}
+
+.markup-eYLPri .emoji.jumboable {
+    width: 2rem;
+    height: 2rem;
+    min-height: 2rem;
+}
+
+/* Better Jump To Present Button & Unread Messages Bar */
+@keyframes pop {
+    from {
+        transform: translateY(30px);
+        opacity: 0.4;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.newMessagesBar-1hF-9G.barBase-3xxDXu {
+    margin-left: auto;
+    margin-top: auto;
+    position: absolute !important;
+    z-index: 998;
+    bottom: 78px;
+    right: 22px;
+    padding: 8px 8px !important;
+    width: 25.5px;
+    height: 20px;
+    background-color: var(--brand-experiment);
+    box-shadow: var(--elevation-high);
+    border-radius: 100px;
+    display: flex;
+    animation: pop 0.2s ease-in;
+    transition: font-size 0s, color 0.2s 0.1s, padding 0.4s, width 0.1s 50ms;
+    opacity: 1;
+}
+
+.newMessagesBar-1hF-9G.barBase-3xxDXu:hover {
+    padding: 8px 18px !important;
+    width: 105px;
+    transition: font-size 0s, color 0.2s 0.1s, padding 0.4s, width 0.1s 50ms;
+}
+
+.newMessagesBar-1hF-9G.barBase-3xxDXu > button {
+    font-size: 0px;
+    color: transparent !important;
+    transition: color 0.3s 0.1s, padding 0.4s;
+}
+
+.newMessagesBar-1hF-9G.barBase-3xxDXu:hover > button {
+    font-size: 14px;
+    color: #ffffff !important;
+    transition: color 0.3s 0.1s, padding 0.4s;
+}
+
+.barButtonIcon-bMvzp2 {
+    order: -1;
+    margin: 0;
+    margin-right: 0;
+    margin-left: 6.5px;
+    transition: all 0.2s;
+    color: #fff !important;
+}
+
+.newMessagesBar-1hF-9G.barBase-3xxDXu:hover .barButtonIcon-bMvzp2 {
+    margin-right: 5px;
+    margin-left: 0;
+}
+
+.barButtonBase-Sk2mdB {
+    padding: 0;
+}
+
+.barButtonMain-2GIx4o,
+.barButtonMain-2GIx4o * {
+    display: none !important;
+}
+
+[class*="jumpToPresentBar"] {
+    display: contents;
+}
+[class*="jumpToPresentBar"] > button:first-child {
+    display: none;
+}
+[class*="jumpToPresentBar"] > button:last-child {
+    position: absolute;
+    z-index: 1;
+    bottom: 24px;
+    right: 22px;
+    padding: 8px !important;
+    height: auto;
+    background-color: var(--brand-experiment);
+    box-shadow: var(--elevation-high);
+    border-radius: 100px;
+    display: flex;
+    font-size: 0px;
+    color: transparent;
+    transition: font-size 0.2s 0.1s, color 0.2s, padding 0.4s 0.1s;
+    animation: pop 0.2s ease-in;
+}
+[class*="jumpToPresentBar"] > button svg {
+    order: -1;
+    margin: 0px;
+    height: 24px;
+    width: 24px;
+    top: auto;
+    margin-right: 0px;
+    margin-left: 0px;
+    color: #ffffff;
+    transition: margin 0.6s;
+}
+[class*="jumpToPresentBar"]:hover > button {
+    padding: 8px 18px !important;
+    font-size: 14px;
+    color: #ffffff;
+    transition: font-size 0.2s, color 0.2s 0.1s, padding 0.4s;
+}
+[class*="jumpToPresentBar"]:hover > button svg {
+    margin-right: 2px;
+    margin-left: -6px;
+}
+
+/* Scrollbar */
+.scroller-kQBbkU::-webkit-scrollbar {
+    display: none;
+}
+
+/* Messages */
+.group-spacing-16 .divider-IqmEqJ.beforeGroup-1BvJAt {
+    margin-left: 20px;
+    margin-right: 20px;
+    top: 20px;
+}
+
+.divider-IqmEqJ .unreadPill-3nEWYM {
+    display: none;
+}
+
+.scrollerSpacer-3AqkT9 {
+    height: 20px;
+}
+
+.groupStart-3Mlgv1:before,
+.groupStart-3Mlgv1.mentioned-Tre-dv:before {
+    content: "";
+    width: calc(100% - 40px);
+    height: 1px;
+    background: var(--background-modifier-accent);
+    display: block !important;
+    position: absolute;
+    left: 20px;
+    top: 0;
+}
+
+.mentioned-Tre-dv:after {
+    background-color: var(--info-warning-foreground);
+}
+
+.mentioned-Tre-dv.groupStart-3Mlgv1::after {
+    content: "";
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    pointer-events: none;
+    width: 2px;
+}
+
+.form-3gdLxP {
+    border-top: solid 1px rgba(255, 255, 255, 0.06);
+}
+
+.form-3gdLxP {
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 0;
+    padding-top: 20px;
+    margin-top: 0;
+    background: var(--background-primary);
+}
+
+.groupStart-3Mlgv1 {
+    padding-top: 20px !important;
+    margin-top: 20px !important;
+}
+
+.group-spacing-16 .divider-IqmEqJ.hasContent-1y12-u {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.divider-IqmEqJ.hasContent-1y12-u.divider-2rZFJK.hasContent-31hcsn {
+    top: 21px;
+    border-top: 1px solid transparent;
+}
+
+/* Context Menus */
+#user-context-call,
+#user-context-invite-to-server {
+    display: none;
+}
+
+.menu-1QACrS {
+    background-color: rgba(22, 22, 22, 0.432);
+    border: 1px solid var(--background-modifier-accent);
+    overflow: hidden;
+    border-radius: 5px;
+}
+
+.translate-PeW1wK {
+    backdrop-filter: blur(15px);
+    border-radius: 8px;
+}
+
+.menu-1QACrS:not(.translate-PeW1wK .menu-1QACrS)::before {
+    content: "";
+    backdrop-filter: blur(15px);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+.popoutContainer-2wbmiM,
+.container-8Futzw {
+    background-color: rgba(22, 22, 22, 0.432) !important;
+}
+
+.guildSection-2Zyzy8 {
+    background-color: transparent;
+}
+
+/* Axolotlcord tweaks */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    20% {
+        transform: rotate(-20deg);
+    }
+    70% {
+        transform: rotate(380deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.pill-L_aLMQ.bd-selected + .listItemWrapper-3d87LP .homeIcon-r0w4ny {
+    animation: spin 0.8s ease;
+}
+
+.axolotlcord .homeIcon-r0w4ny path {
+    fill: transparent;
+}
+
+.axolotlcord .homeIcon-r0w4ny {
+    background: url("https://i.imgur.com/tfg5teR.png") center/cover no-repeat;
+    min-width: 45px;
+    min-height: 45px;
+}
+
+/* Avatar Status */
+rect.pointerEvents-9SZWKj {
+    stroke: var(--background-primary);
+    stroke-width: 2px;
+    mask: none;
+    ry: 4px;
+    rx: 4px;
+}
+
+.svg-2azL_l > svg > rect {
+    mask: unset;
+    width: 10px;
+    height: 10px;
+    x: 7.5 !important;
+    y: -17 !important;
+    rx: 4px;
+    ry: 4px;
+    z-index: 9;
+}
+
+.container-YkUktl .avatar-1EWyVD.wrapper-1VLyxH * {
+    overflow: visible;
+}
+
+svg.cursorDefault--wfhy5 {
+    display: block !important;
+    overflow: visible;
+}
+
+.member-2gU6Ar .dots-1BwzZQ circle,
+.channel-1Shao0 .dots-1BwzZQ circle {
+    cy: -18.5px;
+    overflow: visible;
+    color: var(--background-primary);
+}
+
+.member-2gU6Ar .dots-1BwzZQ circle:nth-child(odd),
+.channel-1Shao0 .dots-1BwzZQ circle:nth-child(odd) {
+    display: none;
+}
+
+.member-2gU6Ar .channel-1Shao0 svg.dots-1BwzZQ,
+.channel-1Shao0 svg.dots-1BwzZQ {
+    overflow: visible;
+}
+
+[mask="url(#svg-mask-status-online-mobile)"] {
+    height: 15px !important;
+}
+
+rect.pointerEvents-9SZWKj {
+    x: 22 !important;
+    y: 1 !important;
+    height: 10px;
+    width: 10px;
+}
+
+.containerDefault-YUSmu3 rect.pointerEvents-9SZWKj {
+    x: 13 !important;
+    y: 0 !important;
+    height: 6px;
+    width: 6px;
+    rx: 2px;
+    ry: 2px;
+    stroke-width: 0.5px;
+}
+
+.wrapper-1VLyxH foreignObject:not(rect.pointerEvents-9SZWKj) {
+    mask: unset;
+}
+
+.autocompleteRowVertical-EA9dCg rect.pointerEvents-9SZWKj {
+    x: 18 !important;
+}
+
+.userPopout-2j1gM4 rect.pointerEvents-9SZWKj,
+.userInfo-regn9W rect.pointerEvents-9SZWKj {
+    stroke: var(--background-floating);
+    x: 66 !important;
+    y: 66 !important;
+}
+
+.layer-1Ixpg3 rect.pointerEvents-9SZWKj {
+    stroke: var(--background-floating);
+    x: 120 !important;
+    y: 100 !important;
+}
+
+.avatar-3FKimL,
+.avatar-2e8lTP,
+.avatar-6qzftW,
+.wrapper-1VLyxH,
+.avatar-b5OQ1N,
+.avatar-2Vndt_,
+.avatar-1EWyVD {
+    border-radius: 50% !important;
+}
+
+.avatarHint-k7pYop foreignObject {
+    mask: unset;
+    border-radius: 50% !important;
+}
+
+.avatarHintInner-2HUAWj {
+    border-radius: 50% !important;
+}
+
+/* Settings */
+.button-f2h6uQ.lookFilled-yCfaCM:not(.colorRed-rQXKgM, .colorGreen-3y-Z79, .welcomeCTAButtonOuter-3pJkMq, .toolbar-37BrJ5 *, .actionButtons-2vEOUh button) {
+    border: 2px solid var(--brand-experiment);
+}
+
+.button-f2h6uQ.lookFilled-yCfaCM:not(.colorRed-rQXKgM, .toolbar-37BrJ5 *):hover {
+    background: var(--brand-experiment);
+}
+
+.userSettingsSecurity-3C5Hg5 + .divider-_0um2u + .marginTop40-Q4o1tS .button-f2h6uQ.lookOutlined-3yKVGo.colorRed-rQXKgM.sizeSmall-wU2dO-.grow-2sR_-F {
+    background: #a73b3b69;
+}
+
+.userSettingsSecurity-3C5Hg5 + .divider-_0um2u + .marginTop40-Q4o1tS .button-f2h6uQ.lookOutlined-3yKVGo.colorRed-rQXKgM.sizeSmall-wU2dO-.grow-2sR_-F:hover {
+    background: transparent;
+}
+
+.userSettingsSecurity-3C5Hg5 button.colorRed-rQXKgM:hover,
+.lookOutlined-3yKVGo.colorRed-rQXKgM:hover {
+    background: #a73b3b69;
+}
+
+.ShowSessions-list-badgesContainer [aria-label="This is the current session."] > div {
+    background-color: var(--brand-experiment) !important;
+}

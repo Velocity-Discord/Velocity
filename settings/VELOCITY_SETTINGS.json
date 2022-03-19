@@ -1,0 +1,21 @@
+{
+  "enabledThemes": {
+    "Ultra": false,
+    "AxolotlCSS": true,
+    "EmojiReplace": true
+  },
+  "enabledPlugins": {
+    "UserUtils": false,
+    "ActiviyStatus": false
+  },
+  "CSSEnabled": true,
+  "JSEnabled": false,
+  "DevMode": false,
+  "CSS": "@import url(\"https://thecommieaxolotl.github.io/BetterDiscord-Stuff/Imports/DiscordLinks.css\");\n\n[style=\"background-color: hsl(235, calc(var(--saturation-factor, 1) * 85.6%), 64.7%);\"] {\n    background-color: var(--brand-experiment) !important\n}\n\n/* Nitro Promo */\n.privateChannels-oVe7HL [href=\"/store\"] + svg,\n.item-3XjbnG [class*=\"Promo\"],\n.premiumLabel-3HPvdB svg {\n    display: none;\n}\n\n.premiumLabel-3HPvdB {\n    color: var(--color-muted);\n}\n",
+  "JS": "console.log(\"e\")",
+  "FontSize": "12",
+  "Transparency": false,
+  "DegubberKey": true,
+  "Vibrancy": true,
+  "ToolsEnabled": true
+}
