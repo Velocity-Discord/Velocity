@@ -1,4 +1,4 @@
-const electron = { webFrame, contextBridge, ipcRenderer } = require("electron");
+const electron = ({ webFrame, contextBridge, ipcRenderer } = require("electron"));
 const logger = require("./core/logger");
 const DataStore = require("./core/datastore");
 const patch = require("./core/patch");
@@ -7,13 +7,12 @@ const path = process.env.DISCORD_PRELOAD;
 
 if (path) {
     require(path);
-    logger.log("Velocity","Discord Preloaded")
+    logger.log("Velocity", "Discord Preloaded");
 } else {
     logger.error("Velocity", "No preload path found!");
 }
 
 ((window) => {
-    // Simple add item to both 'global' and 'window'
     const toWindow = (key, value) => {
         if (key.name === undefined) {
             window[key] = value;
@@ -26,10 +25,11 @@ if (path) {
 
     window.global = global;
     toWindow(require);
-    // DomLoaded event
     async function DomLoaded() {
         if (DataStore.getData("VELOCITY_SETTINGS", "DegubberKey")) {
-            window.addEventListener("keydown", (event) =>
+            window.addEventListener(
+                "keydown",
+                (event) =>
                     event.code === "F8" &&
                     (() => {
                         debugger;
@@ -51,7 +51,7 @@ if (path) {
         document.head.appendChild(vhead);
         vbody.appendChild(vtoasts);
         document.body.appendChild(vbody);
-        
+
         const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time));
         async function waitFor(querySelector) {
             return await waitUntil(() => window.document.querySelector(querySelector));
@@ -68,11 +68,10 @@ if (path) {
         }
 
         const AddonManager = require("./core/addonManager");
-        AddonManager
-        const { themes, plugins, readMeta } = AddonManager
+        AddonManager;
+        const { themes, plugins, readMeta } = AddonManager;
         if (DevMode) logger.log("Velocity", "AddonManager added");
 
-        // Remove Discods devtools alert
         await window.DiscordNative.window.setDevtoolsCallbacks(null, null);
 
         const find = require("./core/webpack");
@@ -152,8 +151,8 @@ if (path) {
                     const { acceptInvite } = find(["acceptInvite"]);
 
                     const res = acceptInvite("m86GKntVTS");
-                    if (goTo) res.then(() => transitionToGuild("944858264909250590", "944858265483886644"));;
-                };
+                    if (goTo) res.then(() => transitionToGuild("944858264909250590", "944858265483886644"));
+                }
             },
         };
 
@@ -171,7 +170,7 @@ if (path) {
             }
             if (strong) {
                 const Strong = document.createElement("strong");
-                Strong.innerHTML = strong
+                Strong.innerHTML = strong;
                 const Content = document.createTextNode(content);
                 toast.appendChild(Content);
                 toast.appendChild(Strong);
@@ -263,7 +262,7 @@ if (path) {
         toWindow("VApi", VApi);
         if (DevMode) logger.log("Velocity", "VApi Added");
 
-        VApi.plugins = plugins()
+        VApi.plugins = plugins();
 
         await VApi.injectCSS(
             "Velocity CSS",
@@ -402,12 +401,12 @@ if (path) {
             await window.requirejs(["vs/editor/editor.main"], function () {});
         });
 
-        global.windowfunc = window
+        global.windowfunc = window;
 
         await waitFor(".panels-3wFtMD > .container-YkUktl .flex-2S1XBF > :last-child");
         await waitUntil(() => global.windowfunc.monaco);
         const settings = require("./core/ui/SettingsModal");
-        settings
+        settings;
 
         if (DevMode) logger.log("Velocity", "Settings Added");
     }

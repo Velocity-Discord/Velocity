@@ -1,5 +1,5 @@
 const { join } = require("path");
-const electron = { ipcMain, app } = require("electron");
+const electron = ({ ipcMain, app } = require("electron"));
 const Module = require("module");
 const request = require("./core/request");
 const DataStore = require("./core/datastore");
@@ -18,7 +18,6 @@ function ipc(ev, func) {
 
 let hasCrashed = false;
 
-// New BrowserWindow constructor
 class BrowserWindow extends electron.BrowserWindow {
     constructor(opt) {
         if (!opt || !opt.webPreferences || !opt.webPreferences.preload || !opt.title || process.argv.includes("--vanilla")) return super(opt);
@@ -47,11 +46,10 @@ class BrowserWindow extends electron.BrowserWindow {
         }
 
         let win = new electron.BrowserWindow(opt);
-        return win
+        return win;
     }
 }
 
-// Discord Asar
 function LoadDiscord() {
     const basePath = join(process.resourcesPath, "app.asar");
     const pkg = require(join(basePath, "package.json"));
@@ -60,10 +58,10 @@ function LoadDiscord() {
     Module._load(join(basePath, pkg.main), null, true);
 }
 
-// Vanilla
-if (process.argv.includes("--vanilla")) return LoadDiscord();
+if (process.argv.includes("--vanilla")) {
+    return LoadDiscord();
+}
 
-// Kill CSP
 electron.app.once("ready", () => {
     electron.session.defaultSession.webRequest.onHeadersReceived(function ({ responseHeaders }, callback) {
         for (const iterator of Object.keys(responseHeaders)) if (iterator.includes("content-security-policy")) delete responseHeaders[iterator];
@@ -78,14 +76,12 @@ electron.app.once("ready", () => {
         app.exit();
     });
 });
-// New electron
+
 const Electron = new Proxy(electron, { get: (target, prop) => (prop === "BrowserWindow" ? BrowserWindow : target[prop]) });
-// Replace electron with new proxy
 const electronPath = require.resolve("electron");
 delete require.cache[electronPath].exports;
 require.cache[electronPath].exports = Electron;
 
-// DevTools
 const devToolsKey = "DANGEROUS_ENABLE_DEVTOOLS_ONLY_ENABLE_IF_YOU_KNOW_WHAT_YOURE_DOING";
 if (!global.appSettings) global.appSettings = {};
 if (!global.appSettings?.settings) global.appSettings.settings = {};
