@@ -1,13 +1,13 @@
 {
     "name": "velocity",
     "version": "0.0.1",
-    "description": "A discord client mod, A lot of this is \"borrowed\" from DrDiscord.",
+    "description": "Small Discord CLient Mod.",
     "main": "index.js",
     "author": "TheCommieAxolotl",
     "license": "MIT",
     "info": {
         "name": "Velocity",
-        "description": "A discord client mod, A lot of this is \"borrowed\" from DrDiscord.",
+        "description": "Small Discord CLient Mod.",
         "version": "0.0.1",
         "hash": "ea19a7"
     }
