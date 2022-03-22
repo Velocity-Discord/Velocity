@@ -74,7 +74,7 @@
 #velocity-addons-grid {
     margin: 20px 0 10px;
     display: grid;
-    grid-gap: 5%;
+    grid-gap: 20px;
 }
 @keyframes toastShow {
     from {

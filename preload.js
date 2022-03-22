@@ -220,6 +220,7 @@ if (dPath) {
             if (!id.includes("velocity_internal")) return style.remove();
 
             logger.warn("Velocity", "Refused to clear internal styles.");
+
             return;
         };
 

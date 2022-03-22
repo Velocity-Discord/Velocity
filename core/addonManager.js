@@ -3,7 +3,7 @@ const path = require("path");
 const DataStore = require("./datastore");
 const request = require("./request");
 
-const Velocity = DataStore("VELOCITY_SETTINGS")
+const Velocity = DataStore("VELOCITY_SETTINGS");
 Velocity.enabledThemes = Velocity.enabledThemes || {};
 Velocity.enabledPlugins = Velocity.enabledPlugins || {};
 
@@ -20,6 +20,10 @@ const addonsInit = {
     themes: [],
     plugins: [],
 };
+
+function getKeyByValue(object, value) {
+    return Object.keys(object).find((key) => object[key].name === value);
+}
 
 function readMeta(contents) {
     let meta = {};
@@ -55,13 +59,13 @@ fs.readdir(themeDir, (err, files) => {
 
 const Themes = new (class {
     get(name) {
-        return addons.themes.find((p) => p.name === name);
+        return addons.themes.find((p) => p?.name === name);
     }
     getAll() {
         return addons.themes;
     }
     getEnabled() {
-        return addons.themes.filter((p) => this.isEnabled[p.name]);
+        return addons.themes.filter((p) => this.isEnabled[p?.name]);
     }
     isEnabled(name) {
         return Velocity.enabledThemes[name] || false;
@@ -92,9 +96,59 @@ const Themes = new (class {
         return this.isEnabled(name) ? this.disable(name) : this.enable(name);
     }
     getByFileName(name) {
-        return this.getAll().find((p) => p.file.endsWith(name));
+        return this.getAll().find((p) => p?.file.endsWith(name));
     }
 })();
+
+fs.watch(themeDir, { persistent: false }, async (eventType, filename) => {
+    if (!eventType || !filename) return;
+
+    const absolutePath = path.resolve(themeDir, filename);
+    if (!filters.themes.test(filename)) return;
+
+    const name = filename.replace(".theme.css", "");
+
+    let meta;
+    try {
+        fs.readFile(absolutePath, "utf8", (err, data) => {
+            if (err) throw new Error(`Error reading '${absolutePath}'`);
+            meta = readMeta(data);
+            meta.file = absolutePath;
+            meta.css = data;
+
+            if (Themes.get(meta.name)) {
+                const enabled = Velocity.enabledThemes[meta.name] || false;
+
+                delete addons.themes[getKeyByValue(addons.themes, meta.name)];
+
+                VApi.showToast(`Unloaded `, { strong: `${meta.name}` });
+
+                addons.themes.push(meta);
+                VApi.showToast(`Loaded `, { strong: `${meta.name}` });
+
+                if (enabled) {
+                    const ele = document.querySelectorAll(`[velocity-theme-id="${meta.name}"]`);
+                    for (let ele1 of ele) {
+                        if (ele1) {
+                            ele1.remove();
+                            VApi.showToast(`Disabled `, { strong: `${meta.name}`, type: "success" });
+                        }
+                    }
+                    const style = document.createElement("style");
+                    style.innerHTML = meta.css;
+                    style.setAttribute("velocity-theme-id", meta.name);
+                    document.getElementById("velocity-head").appendChild(style);
+                    VApi.showToast(`Enabled `, { strong: `${meta.name}`, type: "success" });
+                }
+            } else {
+                addons.themes.push(meta);
+            }
+        });
+    } catch (e) {
+        Logger.error("Addon Manager", e);
+        VApi.showToast("Error Reading Theme Directory", { type: "error" });
+    }
+});
 
 const pluginDir = path.join(__dirname, "..", "plugins");
 if (!fs.existsSync(pluginDir)) fs.mkdirSync(pluginDir);
@@ -159,6 +213,34 @@ module.exports = {
     themes: () => {
         for (const theme of addonsInit.themes) theme();
         return {
+            reloadAll: () => {
+                fs.readdir(themeDir, (err, files) => {
+                    if (err) throw new Error(`Error reading '${themeDir}'`);
+                    files = files.filter((file) => filters.themes.test(file));
+
+                    let oldFs;
+
+                    for (let [key, addon] of Object.entries(addons.themes)) {
+                        oldFs = {
+                            ...oldFs,
+                            [addon.file]: [addon.name],
+                        };
+                    }
+
+                    for (const file of files) {
+                        const filePath = path.join(themeDir, file);
+
+                        fs.readFile(filePath, "utf8", (err, data) => {
+                            if (err) throw new Error(`Error reading '${filePath}'`);
+                            const meta = readMeta(data);
+                            meta.file = filePath;
+                            meta.css = data;
+
+                            if (!oldFs.hasOwnProperty(filePath)) addons.themes.push(meta);
+                        });
+                    }
+                });
+            },
             getByFileName: (name) => Themes.getByFileName(name),
             get: (name) => Themes.get(name),
             getAll: () => Themes.getAll(),
