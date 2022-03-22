@@ -191,3 +191,62 @@ textarea.velocity-editor {
     border: none;
     resize: none;
 }
+
+/* Settings */
+
+.velocity-tools-wrapper {
+    padding: 60px 120px 80px;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+}
+.velocity-tools-header {
+    display: inline-flex;
+}
+.tools-clickable {
+    margin-left: 5px;
+    align-items: flex-end;
+    display: flex;
+}
+.velocity-tools-header h1 {
+    font-size: 30pt;
+}
+hr.velocity-tools-separator {
+    margin: 10px 0 30px;
+    height: 0.07em;
+    padding: 0;
+    background-color: var(--text-muted);
+    border: 0;
+}
+.velocity-tool [class*="size16"] {
+    margin: 8px 0 3px;
+    color: var(--header-secondary);
+}
+.velocity-tool-type {
+    font-size: 20pt;
+    font-weight: 550;
+    color: var(--header-secondary);
+}
+.velocity-tool-title {
+    font-size: 16px !important;
+    margin: 15px 0 8px;
+}
+.velocity-tool [class*="size16"] + div[class^="input"] {
+    max-width: 400px;
+}
+.velocity-tools-wrapper::-webkit-scrollbar {
+    width: 8px;
+}
+.velocity-tools-wrapper::-webkit-scrollbar-track {
+    background: var(--scrollbar-auto-track);
+    border-radius: 10px;
+}
+.velocity-tools-wrapper::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: var(--scrollbar-thin-thumb);
+}
+.velocity-tools-wrapper {
+    margin: 5px;
+}
+.velocity-close-conteainer path {
+    fill: hsl(210, calc(var(--saturation-factor, 1) * 2.9%), 86.7%) !important;
+}

@@ -15,17 +15,6 @@ const path = require("path");
 const closeIcon = VApi.getModule("CloseIconWithKeybind").default;
 const { info } = require("../../package.json");
 
-VApi.injectCSS(
-    "VelocitySettingsCSS",
-    `
-    .velocity-tools-wrapper{padding: 60px 120px 80px;overflow-y: scroll;scroll-behavior: smooth;}.velocity-tools-header{display:inline-flex}.tools-clickable{margin-left:5px;align-items:flex-end;display:flex}.velocity-tools-header h1{font-size:30pt}
-    hr.velocity-tools-separator {margin: 10px 0 30px 0;height: .07em;padding: 0;background-color: var(--text-muted);border: 0;} .velocity-tool [class*="size16"] {margin: 8px 0 3px 0;color: var(--header-secondary)}
-    .velocity-tool-type {font-size: 20pt;font-weight: 550;color: var(--header-secondary);} .velocity-tool-title {font-size: 16px !important;margin: 15px 0 8px 0;} .velocity-tool [class*="size16"] + div[class^="input"] {max-width: 400px;}
-    .velocity-tools-wrapper::-webkit-scrollbar{width:8px}.velocity-tools-wrapper::-webkit-scrollbar-track{background:var(--scrollbar-auto-track);border-radius:10px}.velocity-tools-wrapper::-webkit-scrollbar-thumb{border-radius:10px;background-color:var(--scrollbar-thin-thumb)}.velocity-tools-wrapper{margin:5px}
-    .velocity-close-conteainer path {fill: hsl(210, calc(var(--saturation-factor, 1) * 2.9%), 86.7%) !important;}
-    `,
-);
-
 async function pushLayer(element) {
     VApi.getModule(["pushLayer"]).pushLayer(() => element);
 }
@@ -359,10 +348,6 @@ async function add() {
     const themesTabText = document.createTextNode("Themes");
     themesTab.appendChild(themesTabText);
     themesTab.classList.add("velocity-themes", ...classes);
-    const toolsTab = document.createElement("div");
-    const toolsTabText = document.createTextNode("Tools");
-    toolsTab.appendChild(toolsTabText);
-    toolsTab.classList.add("velocity-tools", ...classes);
 
     connectionsTabAfter.parentNode.insertBefore(seperator, connectionsTabAfter);
     connectionsTabAfter.parentNode.insertBefore(header, connectionsTabAfter);
@@ -371,232 +356,12 @@ async function add() {
     if (Settings.JSEnabled) connectionsTabAfter.parentNode.insertBefore(ssTab, connectionsTabAfter);
     connectionsTabAfter.parentNode.insertBefore(pluginsTab, connectionsTabAfter);
     connectionsTabAfter.parentNode.insertBefore(themesTab, connectionsTabAfter);
-    if (Settings.ToolsEnabled) connectionsTabAfter.parentNode.insertBefore(toolsTab, connectionsTabAfter);
 
     const tabSelector = document.querySelector(".velocity-settings");
     const cssSelector = document.querySelector(".velocity-custom-css");
     const ssSelector = document.querySelector(".velocity-startup-script");
     const pluginsSelector = document.querySelector(".velocity-plugins");
     const themesSelector = document.querySelector(".velocity-themes");
-    const toolsSelector = document.querySelector(".velocity-tools");
-
-    if (Settings.ToolsEnabled) {
-        toolsSelector.addEventListener("click", () => {
-            pushLayer([
-                React.createElement("div", {
-                    className: "velocity-close-conteainer",
-                    style: { top: "60px", right: "60px", position: "absolute" },
-                    children: [
-                        React.createElement(closeIcon, {
-                            closeAction: () => {
-                                VApi.getModule(["popLayer"]).popLayer();
-                            },
-                            keybind: "ESC",
-                        }),
-                    ],
-                }),
-                React.createElement("div", {
-                    className: "velocity-tools-wrapper",
-                    children: [
-                        React.createElement("div", {
-                            className: "velocity-tools-header",
-                            children: [
-                                React.createElement(
-                                    "h1",
-                                    {
-                                        className: `${VApi.getModule(["defaultMarginh1"]).h1} ${Text.Colors.HEADER_PRIMARY}`,
-                                    },
-                                    "Velocity Tools",
-                                ),
-                                React.createElement(Tooltip, {
-                                    text: "Internal Tools are Tools that only effect your client, External Tools are global and others can see",
-                                    children: (props) =>
-                                        React.createElement(VApi.getModule("Clickable").default, {
-                                            ...props,
-                                            className: "tools-clickable",
-                                            children: [
-                                                React.createElement("svg", {
-                                                    width: "16",
-                                                    height: "16",
-                                                    viewBox: "0 0 22 22",
-                                                    children: [
-                                                        React.createElement("path", {
-                                                            fill: "var(--interactive-normal)",
-                                                            d: "M12 2C6.486 2 2 6.487 2 12C2 17.515 6.486 22 12 22C17.514 22 22 17.515 22 12C22 6.487 17.514 2 12 2ZM12 18.25C11.31 18.25 10.75 17.691 10.75 17C10.75 16.31 11.31 15.75 12 15.75C12.69 15.75 13.25 16.31 13.25 17C13.25 17.691 12.69 18.25 12 18.25ZM13 13.875V15H11V12H12C13.104 12 14 11.103 14 10C14 8.896 13.104 8 12 8C10.896 8 10 8.896 10 10H8C8 7.795 9.795 6 12 6C14.205 6 16 7.795 16 10C16 11.861 14.723 13.429 13 13.875Z",
-                                                        }),
-                                                    ],
-                                                }),
-                                            ],
-                                        }),
-                                }),
-                            ],
-                        }),
-                        React.createElement("hr", {
-                            className: "velocity-tools-separator",
-                        }),
-                        React.createElement(
-                            "div",
-                            {
-                                className: "velocity-tool-type",
-                            },
-                            "Internal Tools",
-                        ),
-                        React.createElement("div", {
-                            className: "velocity-tool",
-                            children: [
-                                React.createElement(
-                                    "div",
-                                    {
-                                        className: `velocity-tool-title ${headerClasses}`,
-                                    },
-                                    "Toast Tester",
-                                ),
-                                React.createElement(
-                                    Text,
-                                    {
-                                        color: Text.Colors.HEADER_PRIMARY,
-                                        size: Text.Sizes.SIZE_16,
-                                    },
-                                    "Toast Content",
-                                ),
-                                React.createElement(TextInput, {
-                                    id: `velocity-tool-toast-content`,
-                                    placeholder: "hello world",
-                                }),
-                                React.createElement(
-                                    Text,
-                                    {
-                                        color: Text.Colors.HEADER_PRIMARY,
-                                        size: Text.Sizes.SIZE_16,
-                                    },
-                                    "Toast Type",
-                                ),
-                                React.createElement(TextInput, {
-                                    id: `velocity-tool-toast-type`,
-                                    placeholder: "info",
-                                }),
-                                React.createElement(
-                                    Text,
-                                    {
-                                        color: Text.Colors.HEADER_PRIMARY,
-                                        size: Text.Sizes.SIZE_16,
-                                    },
-                                    "Toast Timeout",
-                                ),
-                                React.createElement(TextInput, {
-                                    id: `velocity-tool-toast-timeout`,
-                                    placeholder: "3000",
-                                }),
-                                React.createElement("div", {
-                                    className: "velocity-tool-button-container",
-                                    style: { disply: "inline-flex", margin: "8px 0 0 0" },
-                                    children: [
-                                        React.createElement(
-                                            button,
-                                            {
-                                                id: "velocity-tool-toast-show-button",
-                                                color: ButtonColors.BRAND,
-                                                size: ButtonSizes.SMALL,
-                                                className: ["velocity-button"],
-                                                onClick: () => {
-                                                    const content = document.getElementById("velocity-tool-toast-content").value;
-                                                    const type = document.getElementById("velocity-tool-toast-type").value;
-                                                    const timeout = document.getElementById("velocity-tool-toast-timeout").value;
-                                                    VApi.showToast(content, { type: [type || "info"], timeout: [timeout || 3000] });
-                                                },
-                                            },
-                                            "Show Toast",
-                                        ),
-                                    ],
-                                }),
-                            ],
-                        }),
-                        React.createElement("hr", {
-                            className: "velocity-tools-separator",
-                        }),
-                        React.createElement(
-                            "div",
-                            {
-                                className: "velocity-tool-type",
-                            },
-                            "External Tools",
-                        ),
-                        React.createElement("div", {
-                            className: "velocity-tool",
-                            children: [
-                                React.createElement(
-                                    "div",
-                                    {
-                                        className: `velocity-tool-title ${headerClasses}`,
-                                    },
-                                    "Webhook Tester",
-                                ),
-                                React.createElement(
-                                    Text,
-                                    {
-                                        color: Text.Colors.HEADER_PRIMARY,
-                                        size: Text.Sizes.SIZE_16,
-                                    },
-                                    "Webhook Content",
-                                ),
-                                React.createElement(TextInput, {
-                                    id: `velocity-tool-webhook-content`,
-                                    placeholder: "hello world",
-                                }),
-                                React.createElement(
-                                    Text,
-                                    {
-                                        color: Text.Colors.HEADER_PRIMARY,
-                                        size: Text.Sizes.SIZE_16,
-                                    },
-                                    "Webhook Author Name",
-                                ),
-                                React.createElement(TextInput, {
-                                    id: `velocity-tool-webhook-name`,
-                                    placeholder: "amazing name",
-                                }),
-                                React.createElement(
-                                    Text,
-                                    {
-                                        color: Text.Colors.HEADER_PRIMARY,
-                                        size: Text.Sizes.SIZE_16,
-                                    },
-                                    "Webhook URL",
-                                ),
-                                React.createElement(TextInput, {
-                                    id: `velocity-tool-webhook-url`,
-                                    placeholder: "https://discord...",
-                                }),
-                                React.createElement("div", {
-                                    className: "velocity-tool-button-container",
-                                    style: { disply: "inline-flex", margin: "8px 0 0 0" },
-                                    children: [
-                                        React.createElement(
-                                            button,
-                                            {
-                                                id: "velocity-tool-webhook-trigger-button",
-                                                color: ButtonColors.BRAND,
-                                                size: ButtonSizes.SMALL,
-                                                className: ["velocity-button"],
-                                                onClick: () => {
-                                                    const url = document.getElementById("velocity-tool-webhook-url").value;
-                                                    const content = document.getElementById("velocity-tool-webhook-content").value;
-                                                    const name = document.getElementById("velocity-tool-webhook-name").value;
-                                                    VApi.triggerWebhook(url, content, name);
-                                                    VApi.showToast("Sent Message", { type: "success" });
-                                                },
-                                            },
-                                            "Send Message",
-                                        ),
-                                    ],
-                                }),
-                            ],
-                        }),
-                    ],
-                }),
-            ]);
-        });
-    }
 
     pluginsSelector.addEventListener("click", () => {
         (async () => {
@@ -1054,11 +819,6 @@ async function add() {
                                             name: "Startup Script",
                                             note: "Loads Startup Script.",
                                             warning: "You can easily add malicious scripts! Be careful!",
-                                        }),
-                                        React.createElement(SettingsSection, {
-                                            setting: "ToolsEnabled",
-                                            name: "Velocity Tools",
-                                            note: "Enables tools tab in settings.",
                                         }),
                                         React.createElement(SettingsSection, {
                                             setting: "ReloadOnLogin",
