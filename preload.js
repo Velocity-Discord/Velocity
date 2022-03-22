@@ -407,6 +407,12 @@ if (dPath) {
         settings;
 
         if (DevMode) logger.log("Velocity", "Settings Added");
+
+        if (DataStore.getData("VELOCITY_SETTINGS", "ReloadOnLogin")) {
+            VApi.getModule(["dirtyDispatch"]).subscribe("LOGIN", (event) => {
+                location.reload();
+            });
+        }
     }
     if (window.document.readyState === "loading") window.document.addEventListener("DOMContentLoaded", DomLoaded);
     else DomLoaded();
