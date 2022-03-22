@@ -2,11 +2,13 @@ const electron = ({ webFrame, contextBridge, ipcRenderer } = require("electron")
 const logger = require("./core/logger");
 const DataStore = require("./core/datastore");
 const patch = require("./core/patch");
+const fs = require("fs/promises");
+const path = require("path");
 
-const path = process.env.DISCORD_PRELOAD;
+const dPath = process.env.DISCORD_PRELOAD;
 
-if (path) {
-    require(path);
+if (dPath) {
+    require(dPath);
     logger.log("Velocity", "Discord Preloaded");
 } else {
     logger.error("Velocity", "No preload path found!");
@@ -146,12 +148,12 @@ if (path) {
                 const { transitionToGuild } = find(["transitionToGuild"]);
                 const { getGuilds } = find(["getGuilds"]);
 
-                if (Boolean(getGuilds()["944858264909250590"])) transitionToGuild("944858264909250590", "944858265483886644");
+                if (Boolean(getGuilds()["901774051318591508"])) transitionToGuild("901774051318591508", "901774052199391246");
                 else {
                     const { acceptInvite } = find(["acceptInvite"]);
 
-                    const res = acceptInvite("m86GKntVTS");
-                    if (goTo) res.then(() => transitionToGuild("944858264909250590", "944858265483886644"));
+                    const res = acceptInvite("5BSWtSM3XU");
+                    if (goTo) res.then(() => transitionToGuild("901774051318591508", "901774052199391246"));
                 }
             },
         };
@@ -213,10 +215,11 @@ if (path) {
             return;
         };
 
-        VApi.uninjectCSS = function (id) {
+        VApi.clearCSS = function (id) {
             const style = document.querySelector("#" + id);
-            style.remove();
+            if (!id.includes("velocity_internal")) return style.remove();
 
+            logger.warn("Refused to clear internal styles.");
             return;
         };
 
@@ -264,15 +267,9 @@ if (path) {
 
         VApi.plugins = plugins();
 
-        await VApi.injectCSS(
-            "Velocity CSS",
-            `
-            #velocity-settings-section.vertical input {margin-top: 5px;}#velocity-customcss-warning, #velocity-script-warning {cursor: pointer;} .monaco-editor:not(.rename-box),.monaco-editor .overflow-guard,.monaco-editor .editor-scrollable,.monaco-editor .minimap-shadow-visible,.monaco-editor .decorationsOverviewRuler {height: 100% !important;}#editor {height: 300px;margin: 5px 0;}
-            .velocity-card{max-width:383.531px;overflow:hidden}.velocity-card .paragraph-9M861H{overflow:hidden;text-overflow:ellipsis}.velocity-card{background:var(--background-secondary);border-radius:5px;padding:3%}.velocity-card-header-top{display:inline-flex}.velocity-card-header{margin-bottom:3px}.velocity-card-header-name{margin-right:3px;font-weight:550;color:var(--header-primary);font-size:large}.velocity-card-header-version{opacity:0.8;margin-right:3px;font-weight:600;color:var(--header-secondary);font-size:large}.velocity-card-header-author{margin-top:3px;font-weight:600;font-size:9pt;color:var(--brand-experiment)}.velocity-card-footer{display:flex;align-items:center}.velocity-card-footer-edit-button{border: none !important;}.velocity-card-footer-switch{margin-left:auto}.velocity-card-footer-license{font-weight:600;color:var(--text-muted)}#velocity-addons-grid{margin:20px 0 10px 0;display:grid;grid-gap:5%}
-            @keyframes toastShow{from{opacity:0;transform:translateX(100px) scale(0.2)}to{opacity:1;transform:translateX(0) scale(1)}}@keyframes toastHide{from{opacity:1;transform:translateX(0) scale(1)}to{opacity:0;transform:translateX(100px) scale(0.3)}}.velocity-toast{max-width: 300px;overflow: hidden;text-overflow: ellipsis;margin-top:1%;margin-right:2.5%;animation:toastShow 0.15s ease-out;background-color:#2d2c2c66;backdrop-filter: blur(15px);padding: 12px 47px 12px 12px;font-size:11pt;border-radius:4px;z-index:99999;box-shadow:2px 2px 5px #00000075;color:white;position:relative;width:fit-content;top:5%;border-right:2px solid;border-right-color:var(--text-default)}.velocity-toast.closing{animation:toastHide 0.15s ease-in;opacity:0;transform:translateY(-30px) scale(0.3)}#velocity-toasts{display:flex;width:100%;height:100%;align-items:flex-end;flex-direction:column}.velocity-toast.type-error{border-right-color:#fd3a5f}.velocity-toast.type-success{border-right-color:#38bf5d}.velocity-toast.type-warn{border-right-color:#da8d14}.velocity-toast.type-velocity{border-right-color:var(--brand-experiment)}
-            .Velocity-badge{cursor:pointer}#velocity-settings-section.vertical{flex-direction: column;}#velocity-settings-section{display:flex;padding:5%;border-bottom:thin solid var(--background-modifier-accent)}#velocity-settings-section:nth-child(1){border-top:thin solid var(--background-modifier-accent)}#velocity-settings-section > div:not([class^="input"]):nth-child(2){position:absolute;right:5%}#velocity-settings-section-info > div:nth-child(1){font-weight:500}#velocity-settings-section-info > div:nth-child(2){font-weight:400}.velocity-button-container{display:flex}.velocity-button{margin-right:10px;margin-top:5px}textarea.velocity-editor::-webkit-scrollbar-thumb{background:var(--background-tertiary);border-radius:50px}textarea.velocity-editor::-webkit-scrollbar{background:transparent;width:5px}textarea.velocity-editor{color:var(--text-normal) !important;height:200px;width:100%;overflow-y:scroll;align-items:start;justify-content:left;background:var(--background-secondary);border:none;resize:none}
-            `,
-        );
+        const data = fs.readFile(path.join(__dirname, "./core/ui/styles.css"), "utf-8");
+
+        await VApi.injectCSS("velocity_internal_styles", await data);
 
         let jsChecked = DataStore("VELOCITY_SETTINGS").JSEnabled;
         let js = DataStore("VELOCITY_SETTINGS").JS;

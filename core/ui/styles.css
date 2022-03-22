@@ -1,3 +1,24 @@
+.velocity-card:nth-last-child(1) {
+    margin-bottom: 30px;
+}
+#velocity-settings-section.vertical input {
+    margin-top: 5px;
+}
+#velocity-customcss-warning,
+#velocity-script-warning {
+    cursor: pointer;
+}
+.monaco-editor .decorationsOverviewRuler,
+.monaco-editor .editor-scrollable,
+.monaco-editor .minimap-shadow-visible,
+.monaco-editor .overflow-guard,
+.monaco-editor:not(.rename-box) {
+    height: 100% !important;
+}
+#editor {
+    height: 300px;
+    margin: 5px 0;
+}
 .velocity-card {
     max-width: 383.531px;
     overflow: hidden;
@@ -15,11 +36,11 @@
     display: inline-flex;
 }
 .velocity-card-header {
-    margin-bottom: 10px;
+    margin-bottom: 3px;
 }
 .velocity-card-header-name {
     margin-right: 3px;
-    font-weight: 600;
+    font-weight: 550;
     color: var(--header-primary);
     font-size: large;
 }
@@ -55,12 +76,6 @@
     display: grid;
     grid-gap: 5%;
 }
-.toast-title {
-    color: var(--text-normal);
-    padding-bottom: 5px;
-    font-size: x-large;
-    font-weight: 600;
-}
 @keyframes toastShow {
     from {
         opacity: 0;
@@ -95,7 +110,7 @@
     border-radius: 4px;
     z-index: 99999;
     box-shadow: 2px 2px 5px #00000075;
-    color: var(--text-muted);
+    color: white;
     position: relative;
     width: fit-content;
     top: 5%;
@@ -129,6 +144,9 @@
 .Velocity-badge {
     cursor: pointer;
 }
+#velocity-settings-section.vertical {
+    flex-direction: column;
+}
 #velocity-settings-section {
     display: flex;
     padding: 5%;
@@ -137,7 +155,7 @@
 #velocity-settings-section:nth-child(1) {
     border-top: thin solid var(--background-modifier-accent);
 }
-#velocity-settings-section > div:nth-child(2) {
+#velocity-settings-section > div:not([class^="input"]):nth-child(2) {
     position: absolute;
     right: 5%;
 }

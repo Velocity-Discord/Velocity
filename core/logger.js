@@ -28,6 +28,5 @@ function warn(title, ...warnings) {
 function error(title, ...errors) {
     return logging({ type: "error", title: title, input: errors });
 }
-module.exports = { log, warn, error, logging };
 
-//#sourceURL=Velocity Logger
+module.exports = { log, warn, error, logging };
