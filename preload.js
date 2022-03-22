@@ -219,7 +219,7 @@ if (dPath) {
             const style = document.querySelector("#" + id);
             if (!id.includes("velocity_internal")) return style.remove();
 
-            logger.warn("Refused to clear internal styles.");
+            logger.warn("Velocity", "Refused to clear internal styles.");
             return;
         };
 
