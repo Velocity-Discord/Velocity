@@ -1,6 +1,7 @@
 const electron = ({ webFrame, contextBridge, ipcRenderer } = require("electron"));
 const logger = require("./core/logger");
 const styling = require("./core/styling");
+const scripting = require("./core/scripting");
 const toasts = require("./core/toast");
 const DataStore = require("./core/datastore");
 const patch = require("./core/patch");
@@ -103,11 +104,29 @@ if (dPath) {
             React: { ...React },
             ReactDOM: { ...ReactDOM },
             request,
-            themes: themes(),
             getModule: find,
-            utils: {
+            Utilities: {
                 waitFor,
                 waitUntil,
+                joinServer: (code, goTo = true) => {
+                    const { transitionToGuild } = find(["transitionToGuild"]);
+                    const { acceptInvite } = find(["acceptInvite"]);
+
+                    const res = acceptInvite(code);
+                    if (goTo) res.then(({ guild, channel }) => transitionToGuild(guild.id, channel.id));
+                },
+                joinOfficialServer: () => {
+                    const { transitionToGuild } = find(["transitionToGuild"]);
+                    const { getGuilds } = find(["getGuilds"]);
+
+                    if (Boolean(getGuilds()["901774051318591508"])) transitionToGuild("901774051318591508", "901774052199391246");
+                    else {
+                        const { acceptInvite } = find(["acceptInvite"]);
+
+                        const res = acceptInvite("5BSWtSM3XU");
+                        if (goTo) res.then(() => transitionToGuild("901774051318591508", "901774052199391246"));
+                    }
+                },
             },
             velocityElements: {
                 head: document.getElementById("velocity-head"),
@@ -115,6 +134,7 @@ if (dPath) {
             },
             Logger: logger,
             Styling: styling,
+            Scripting: scripting,
             showToast: toasts,
             modals: {
                 open: (reactElement, modalOpts) => ModalFunctions.openModal(reactElement, modalOpts),
@@ -145,52 +165,18 @@ if (dPath) {
                 },
             },
             Patcher: patch,
-            joinServer: (code, goTo = true) => {
-                const { transitionToGuild } = find(["transitionToGuild"]);
-                const { acceptInvite } = find(["acceptInvite"]);
-
-                const res = acceptInvite(code);
-                if (goTo) res.then(({ guild, channel }) => transitionToGuild(guild.id, channel.id));
-            },
-            joinOfficialServer: () => {
-                const { transitionToGuild } = find(["transitionToGuild"]);
-                const { getGuilds } = find(["getGuilds"]);
-
-                if (Boolean(getGuilds()["901774051318591508"])) transitionToGuild("901774051318591508", "901774052199391246");
-                else {
-                    const { acceptInvite } = find(["acceptInvite"]);
-
-                    const res = acceptInvite("5BSWtSM3XU");
-                    if (goTo) res.then(() => transitionToGuild("901774051318591508", "901774052199391246"));
-                }
-            },
         };
 
         const FluxDispatcher = find(["_currentDispatchActionType", "_processingWaitQueue"]);
         VApi.FluxDispatcher = FluxDispatcher;
 
-        VApi.appendScript = function (id, url) {
-            const eid = escapeID(id);
-            const script = document.createElement("script");
-            script.src = url;
-            script.id = eid;
-
-            document.getElementById("velocity-head").appendChild(script);
-
-            return;
-        };
-
-        VApi.removeScript = function (id) {
-            const eid = escapeID(id);
-            document.getElementById(eid).remove();
-
-            return;
-        };
-
         toWindow("VApi", VApi);
         if (DevMode) logger.log("Velocity", "VApi Added");
 
-        VApi.plugins = plugins();
+        VApi.AddonManager = {
+            plugins: plugins(),
+            themes: themes(),
+        };
 
         const InfoModal = require("./core/ui/InfoModal");
         VApi.showInfoModal = function () {
@@ -231,8 +217,8 @@ if (dPath) {
         // Patches & Addons
         await waitFor(".guilds-2JjMmN");
 
-        const allThemes = VApi.themes.getAll();
-        const allPlugins = VApi.plugins.getAll();
+        const allThemes = VApi.AddonManager.themes.getAll();
+        const allPlugins = VApi.AddonManager.plugins.getAll();
 
         for (let meta of Object.values(allThemes)) {
             VApi.showToast(`Loaded <strong>${meta.name} ${meta.version}</strong>`);
@@ -245,9 +231,9 @@ if (dPath) {
         for (let [theme, data] of Object.entries(enabledThemes)) {
             if (DevMode) console.log(theme, data);
             if (data) {
-                if (VApi.themes.get(theme)) {
+                if (VApi.AddonManager.themes.get(theme)) {
                     logger.log("ThemeManager", `Enabled ${theme}`);
-                    VApi.themes.enable(theme);
+                    VApi.AddonManager.themes.enable(theme);
                     VApi.showToast(`Enabled <strong>${theme}</strong>`, { type: "success" });
                 }
             }
@@ -257,10 +243,10 @@ if (dPath) {
         for (let [plugin, data] of Object.entries(enabledPlugins)) {
             if (DevMode) console.log(plugin, data);
             if (data) {
-                if (VApi.plugins.get(plugin)) {
+                if (VApi.AddonManager.plugins.get(plugin)) {
                     try {
                         logger.log("PluginManager", `Enabled ${plugin}`);
-                        VApi.plugins.enable(plugin);
+                        VApi.AddonManager.plugins.enable(plugin);
                         VApi.showToast(`Enabled <strong>${plugin}</strong>`, { type: "success" });
                     } catch (e) {
                         VApi.showToast(`Failed to start <strong>${plugin}</strong>`, { type: "error" });
