@@ -304,7 +304,7 @@ const Card = React.memo((props) => {
 });
 
 async function add() {
-    await VApi.waitFor(".sidebar-nqHbhN");
+    await VApi.utils.waitFor(".sidebar-nqHbhN");
 
     const Settings = DataStore("VELOCITY_SETTINGS");
 

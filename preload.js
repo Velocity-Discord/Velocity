@@ -1,5 +1,7 @@
 const electron = ({ webFrame, contextBridge, ipcRenderer } = require("electron"));
 const logger = require("./core/logger");
+const styling = require("./core/styling");
+const toasts = require("./core/toast");
 const DataStore = require("./core/datastore");
 const patch = require("./core/patch");
 const fs = require("fs/promises");
@@ -103,11 +105,17 @@ if (dPath) {
             request,
             themes: themes(),
             getModule: find,
-            waitFor,
+            utils: {
+                waitFor,
+                waitUntil,
+            },
             velocityElements: {
                 head: document.getElementById("velocity-head"),
                 body: document.getElementById("velocity-body"),
             },
+            Logger: logger,
+            Styling: styling,
+            showToast: toasts,
             modals: {
                 open: (reactElement, modalOpts) => ModalFunctions.openModal(reactElement, modalOpts),
                 close: (modalId, way) => ModalFunctions.closeModal(modalId, way),
@@ -161,69 +169,6 @@ if (dPath) {
         const FluxDispatcher = find(["_currentDispatchActionType", "_processingWaitQueue"]);
         VApi.FluxDispatcher = FluxDispatcher;
 
-        VApi.showToast = async function (content, options = {}) {
-            const container = document.getElementById("velocity-toasts");
-            const { strong = "", type = "", timeout = 3000, color = "" } = options;
-
-            const toast = document.createElement("div");
-            toast.classList.add("velocity-toast");
-            if (type) {
-                toast.classList.add(`type-${type}`);
-            }
-            if (strong) {
-                const Strong = document.createElement("strong");
-                Strong.innerHTML = strong;
-                const Content = document.createTextNode(content);
-                toast.appendChild(Content);
-                toast.appendChild(Strong);
-            } else {
-                toast.innerHTML = content;
-            }
-            setTimeout(() => {
-                toast.classList.add("closing");
-                setTimeout(() => {
-                    toast.remove();
-                }, 700);
-            }, timeout);
-            if (color) {
-                toast.style.color = color;
-            }
-            container.appendChild(toast);
-
-            return;
-        };
-
-        VApi.triggerWebhook = async function (url, content, name) {
-            const r = new XMLHttpRequest();
-            r.open("POST", url);
-            r.setRequestHeader("Content-type", "application/json");
-
-            var params = {
-                username: name,
-                content: content,
-            };
-
-            r.send(JSON.stringify(params));
-        };
-
-        VApi.injectCSS = function (id, css) {
-            var style = document.createElement("style");
-            style.innerText = css;
-            style.id = id;
-            document.getElementById("velocity-head").appendChild(style);
-
-            return;
-        };
-
-        VApi.clearCSS = function (id) {
-            const style = document.querySelector("#" + id);
-            if (!id.includes("velocity_internal")) return style.remove();
-
-            logger.warn("Velocity", "Refused to clear internal styles.");
-
-            return;
-        };
-
         VApi.appendScript = function (id, url) {
             const eid = escapeID(id);
             const script = document.createElement("script");
@@ -242,27 +187,6 @@ if (dPath) {
             return;
         };
 
-        VApi.linkStyle = function (id, url) {
-            const eid = escapeID(id);
-            const style = document.createElement("link");
-            style.rel = "stylesheet";
-            style.href = url;
-            style.id = eid;
-
-            document.getElementById("velocity-head").appendChild(style);
-
-            return;
-        };
-
-        VApi.removeStyle = function (id) {
-            const eid = escapeID(id);
-            document.getElementById(eid).remove();
-
-            return;
-        };
-
-        VApi.logger = logger;
-
         toWindow("VApi", VApi);
         if (DevMode) logger.log("Velocity", "VApi Added");
 
@@ -270,7 +194,7 @@ if (dPath) {
 
         const data = fs.readFile(path.join(__dirname, "./core/ui/styles.css"), "utf-8");
 
-        await VApi.injectCSS("velocity_internal_styles", await data);
+        VApi.Styling.injectInternalCSS("velocity_internal_styles", await data);
 
         let jsChecked = DataStore("VELOCITY_SETTINGS").JSEnabled;
         let js = DataStore("VELOCITY_SETTINGS").JS;

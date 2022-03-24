@@ -1,32 +1,32 @@
 const { info } = require("../package.json");
 
-function logging({ type = "info", title = info.name, input = undefined }) {
-    const con = console[type].__sentry_original__ ? console[type].__sentry_original__ : console[type];
-    return con(`%c[${title}]%c`, ["font-weight: bold", "color: #3b62d6"].join(";"), "", ...input);
+function print({ type = "info", title = info.name, input = "" }) {
+    const i = console[type];
+    return i(`%c[${title}]%c`, ["font-weight: bold", "color: #3b62d6"].join(";"), "", ...input);
 }
 /**
  * @name log
  * @param {string} title
- * @param  {...any} logs
+ * @param  {...any} content
  */
 function log(title, ...logs) {
-    return logging({ type: "info", title: title, input: logs });
+    return print({ type: "info", title: title, input: logs });
 }
 /**
  * @name warn
  * @param {string} title
- * @param  {...any} warns
+ * @param  {...any} warning
  */
 function warn(title, ...warnings) {
-    return logging({ type: "warn", title: title, input: warnings });
+    return print({ type: "warn", title: title, input: warnings });
 }
 /**
  * @name error
  * @param {string} title
- * @param  {...any} errors
+ * @param  {...any} error
  */
 function error(title, ...errors) {
-    return logging({ type: "error", title: title, input: errors });
+    return print({ type: "error", title: title, input: errors });
 }
 
-module.exports = { log, warn, error, logging };
+module.exports = { log, warn, error, print };
