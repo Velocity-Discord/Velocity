@@ -192,6 +192,11 @@ if (dPath) {
 
         VApi.plugins = plugins();
 
+        const InfoModal = require("./core/ui/InfoModal");
+        VApi.showInfoModal = function () {
+            InfoModal.prompt("Velocity");
+        };
+
         const data = fs.readFile(path.join(__dirname, "./core/ui/styles.css"), "utf-8");
 
         VApi.Styling.injectInternalCSS("velocity_internal_styles", await data);
