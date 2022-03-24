@@ -230,10 +230,10 @@ if (dPath) {
         const allPlugins = VApi.plugins.getAll();
 
         for (let meta of Object.values(allThemes)) {
-            VApi.showToast(`Loaded `, { strong: `${meta.name} ${meta.version}` });
+            VApi.showToast(`Loaded <strong>${meta.name} ${meta.version}</strong>`);
         }
         for (let meta of Object.values(allPlugins)) {
-            VApi.showToast(`Loaded `, { strong: `${meta.name} ${meta.version}` });
+            VApi.showToast(`Loaded <strong>${meta.name} ${meta.version}</strong>`);
         }
 
         const enabledThemes = DataStore("VELOCITY_SETTINGS").enabledThemes;
@@ -243,7 +243,7 @@ if (dPath) {
                 if (VApi.themes.get(theme)) {
                     logger.log("ThemeManager", `Enabled ${theme}`);
                     VApi.themes.enable(theme);
-                    VApi.showToast(`Enabled `, { strong: `${theme}`, type: "success" });
+                    VApi.showToast(`Enabled <strong>${theme}</strong>`, { type: "success" });
                 }
             }
         }
@@ -256,9 +256,9 @@ if (dPath) {
                     try {
                         logger.log("PluginManager", `Enabled ${plugin}`);
                         VApi.plugins.enable(plugin);
-                        VApi.showToast(`Enabled `, { strong: `${plugin}`, type: "success" });
+                        VApi.showToast(`Enabled <strong>${plugin}</strong>`, { type: "success" });
                     } catch (e) {
-                        VApi.showToast(`Failed to start `, { strong: `${plugin}`, type: "error" });
+                        VApi.showToast(`Failed to start <strong>${plugin}</strong>`, { type: "error" });
                         logger.error("Addon Manager", e);
                     }
                 }

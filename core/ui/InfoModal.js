@@ -1,15 +1,16 @@
-const DataStore = require("../datastore");
-const { info } = require("../../package.json");
+const DataStore = require("../datastore")
+const { info } = require("../../package.json")
 const button = VApi.getModule(["ButtonColors"]).default;
 const Text = VApi.getModule("Text").default;
 const ButtonColors = VApi.getModule(["ButtonColors"]).ButtonColors;
 // const { React } = VApi
 
+
 // React.createElement("div", {
 //     id: "velocity-popout",
 //     children: [
 //         React.createElement("div", {
-//             id: "velocity-info",
+//             id: "velocity-info", 
 //             children: [
 //         React.createElement(Text, {
 //             size: Text.Sizes.SIZE_34,
@@ -58,42 +59,26 @@ const ButtonColors = VApi.getModule(["ButtonColors"]).ButtonColors;
                             onConfirm: () => resolve(true),
                             onCancel: () => resolve(false),
                             children: [
-                                React.createElement(
-                                    Text,
-                                    {
-                                        size: Text.Sizes.SIZE_34,
-                                        color: Text.Colors.HEADER_PRIMARY,
-                                        id: "velocity-title",
-                                    },
-                                    "Velocity",
-                                ),
-                                React.createElement(
-                                    Text,
-                                    {
-                                        size: Text.Sizes.SIZE_24,
-                                        color: Text.Colors.HEADER_SECONDARY,
-                                        id: "velocity-version",
-                                    },
-                                    info.version,
-                                ),
-                                React.createElement(
-                                    Text,
-                                    {
-                                        size: Text.Sizes.SIZE_24,
-                                        color: Text.Colors.HEADER_SECONDARY,
-                                        id: "velocity-description",
-                                    },
-                                    info.description,
-                                ),
-                                React.createElement(
-                                    Text,
-                                    {
-                                        id: "velocity-author",
-                                        size: Text.Sizes.SIZE_16,
-                                        color: Text.colors.HEADER_SECONDARY,
-                                    },
-                                    info.author,
-                                ),
+                                React.createElement(Text, {
+                                    size: Text.Sizes.SIZE_34,
+                                    color: Text.Colors.HEADER_PRIMARY,
+                                    id: "velocity-title"
+                                }, "Velocity"),
+                                React.createElement(Text, {
+                                    size: Text.Sizes.SIZE_24,
+                                    color: Text.Colors.HEADER_SECONDARY,
+                                    id: "velocity-version"
+                                }, info.version),
+                                React.createElement(Text, {
+                                    size: Text.Sizes.SIZE_24,
+                                    color: Text.Colors.HEADER_SECONDARY,
+                                    id: "velocity-description"
+                                }, info.description),
+                                React.createElement(Text, {
+                                    id: "velocity-author",
+                                    size: Text.Sizes.SIZE_16,
+                                    color: Text.colors.HEADER_SECONDARY
+                                }, info.author)
                             ],
                         },
                         props,
