@@ -12,9 +12,6 @@
         "hash": "4468e5"
     },
     "scripts": {
-        "doc": "jsdoc -c jsdoc.json"
-    },
-    "devDependencies": {
-        "jsdoc": "^3.6.10"
+        "test": "exit"
     }
 }
