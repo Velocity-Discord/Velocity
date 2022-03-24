@@ -9,7 +9,11 @@
         "name": "Velocity",
         "description": "Small Discord Client Mod.",
         "version": "0.1.0",
-        "hash": "4468e5"
+        "hash": "4468e5",
+        "api": {
+            "version": "1.0.0",
+            "channel": "stable"
+        }
     },
     "scripts": {
         "test": "exit"

@@ -7,6 +7,7 @@ const DataStore = require("./core/datastore");
 const patch = require("./core/patch");
 const fs = require("fs/promises");
 const path = require("path");
+const { info } = require("./package.json");
 
 const dPath = process.env.DISCORD_PRELOAD;
 
@@ -101,6 +102,11 @@ if (dPath) {
         const ModalElements = find(["ModalRoot", "ModalListContent"]);
 
         const VApi = {
+            Meta: {
+                Discord: `${await DiscordNative.app.getReleaseChannel()} ${await DiscordNative.app.getVersion()}`,
+                Velocity: info.version,
+                VApi: `${info.api.channel} ${info.api.version}`,
+            },
             React: { ...React },
             ReactDOM: { ...ReactDOM },
             request,
