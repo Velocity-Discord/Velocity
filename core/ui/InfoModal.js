@@ -28,7 +28,7 @@ async function prompt(title) {
                                 size: Text.Sizes.SIZE_16,
                                 color: Text.Colors.HEADER_SECONDARY,
                                 id: "velocity-version"
-                            }, info.version + ` (${info.hash})`),
+                            }, `Version ${info.version} (${info.hash})`),
                             React.createElement(Text, {
                                 size: Text.Sizes.SIZE_16,
                                 color: Text.Colors.HEADER_SECONDARY,
