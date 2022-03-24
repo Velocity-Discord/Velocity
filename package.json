@@ -10,5 +10,11 @@
         "description": "Small Discord Client Mod.",
         "version": "0.1.0",
         "hash": "4468e5"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "devDependencies": {
+        "jsdoc": "^3.6.10"
     }
 }
