@@ -1,5 +1,5 @@
-const DataStore = require("../datastore");
-const { info } = require("../../package.json");
+const DataStore = require("../datastore")
+const { info } = require("../../package.json")
 const button = VApi.getModule(["ButtonColors"]).default;
 const Text = VApi.getModule("Text").default;
 const ButtonColors = VApi.getModule(["ButtonColors"]).ButtonColors;
@@ -24,33 +24,21 @@ async function prompt(title) {
                         onConfirm: () => resolve(true),
                         onCancel: () => resolve(false),
                         children: [
-                            React.createElement(
-                                Text,
-                                {
-                                    size: Text.Sizes.SIZE_16,
-                                    color: Text.Colors.HEADER_SECONDARY,
-                                    id: "velocity-version",
-                                },
-                                info.version + ` (${info.hash})`,
-                            ),
-                            React.createElement(
-                                Text,
-                                {
-                                    size: Text.Sizes.SIZE_16,
-                                    color: Text.Colors.HEADER_SECONDARY,
-                                    id: "velocity-description",
-                                },
-                                info.description,
-                            ),
-                            React.createElement(
-                                Text,
-                                {
-                                    id: "velocity-author",
-                                    size: Text.Sizes.SIZE_16,
-                                    color: Text.Colors.HEADER_SECONDARY,
-                                },
-                                info.author,
-                            ),
+                            React.createElement(Text, {
+                                size: Text.Sizes.SIZE_16,
+                                color: Text.Colors.HEADER_SECONDARY,
+                                id: "velocity-version"
+                            }, info.version + ` (${info.hash})`),
+                            React.createElement(Text, {
+                                size: Text.Sizes.SIZE_16,
+                                color: Text.Colors.HEADER_SECONDARY,
+                                id: "velocity-description"
+                            }, info.description),
+                            React.createElement(Text, {
+                                id: "velocity-author",
+                                size: Text.Sizes.SIZE_16,
+                                color: Text.Colors.HEADER_SECONDARY
+                            }, info.author)
                         ],
                     },
                     props,
@@ -60,4 +48,4 @@ async function prompt(title) {
     });
 }
 
-module.exports = { prompt };
+module.exports = {prompt};
