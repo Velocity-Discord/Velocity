@@ -6,14 +6,6 @@ if (Boolean(webpackChunkdiscord_app.Velocity_getModule)) module.exports = webpac
 else {
     const webpackExports = webpackChunkdiscord_app.push([[Symbol("Velocity")], {}, (e) => e]);
 
-    /**
-     * @name getModule
-     * @description Gets the module from the webpack exports.
-     * @param {Function} filter
-     * @param {boolean} first
-     * @returns {any}
-     */
-
     function getModule(filter, first = true) {
         let modules = [];
         for (let ite in webpackExports.c) {
@@ -26,26 +18,12 @@ else {
         return modules;
     }
 
-    /**
-     * @name find
-     * @description Uses getModule to get the module.
-     * @param {Function|Array|String} filter
-     * @returns {any}
-     */
-
     function find(filter) {
         if (typeof filter === "string") return byDisplayName(filter);
         if (typeof filter === "number") return webpackExports.c[filter];
         if (Array.isArray(filter)) return byProps(...filter);
         return getModule(filter, true);
     }
-
-    /**
-     * @name byProps
-     * @description Uses properties to find the module.
-     * @param {Array} properties
-     * @returns {any}
-     */
 
     function byProps(...props) {
         return getModule((m) => props.every((prop) => typeof m[prop] !== "undefined")) || byPropsDefault(props);
@@ -71,26 +49,12 @@ else {
         all: byPropsAll,
     });
 
-    /**
-     * @name byPrototypes
-     * @description Uses prototypes to find the module.
-     * @param {Array} prototypes
-     * @returns {any}
-     */
-
     function byPrototypes(...protos) {
         return getModule((m) => protos.every((proto) => typeof m?.default?.prototype?.[proto] !== "undefined"));
     }
     Object.assign(byPrototypes, {
         all: (...protos) => getModule((m) => protos.every((proto) => typeof m?.default?.prototype?.[proto] !== "undefined"), false),
     });
-
-    /**
-     * @name byDisplayName
-     * @description Uses a displayName to find the module.
-     * @param {String} displayName
-     * @returns {any}
-     */
 
     function byDisplayName(displayName) {
         return getModule((m) => m.default?.displayName === displayName) || byDisplayNameType(displayName) || byDisplayNameTypeRender(displayName);

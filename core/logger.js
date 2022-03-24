@@ -5,25 +5,25 @@ function print({ type = "info", title = info.name, input = "" }) {
     return i(`%c[${title}]%c`, ["font-weight: bold", "color: #3b62d6"].join(";"), "", ...input);
 }
 /**
- * @name log
+ * Logger.log
  * @param {string} title
- * @param  {...any} content
+ * @param {...any} content
  */
 function log(title, ...logs) {
     return print({ type: "info", title: title, input: logs });
 }
 /**
- * @name warn
+ * Logger.warn
  * @param {string} title
- * @param  {...any} warning
+ * @param {...any} warning
  */
 function warn(title, ...warnings) {
     return print({ type: "warn", title: title, input: warnings });
 }
 /**
- * @name error
+ * Logger.error
  * @param {string} title
- * @param  {...any} error
+ * @param {...any} error
  */
 function error(title, ...errors) {
     return print({ type: "error", title: title, input: errors });
