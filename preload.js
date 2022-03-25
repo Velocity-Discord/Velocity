@@ -69,10 +69,6 @@ if (dPath) {
             return item;
         }
 
-        function escapeID(id) {
-            return id.replace(/^[^a-z]+|[^\w-]+/gi, "-");
-        }
-
         const AddonManager = require("./core/addonManager");
         AddonManager;
         const { themes, plugins, readMeta } = AddonManager;
@@ -82,6 +78,11 @@ if (dPath) {
 
         const find = require("./core/webpack");
         const request = require("./core/request");
+        const updater = require("./core/updater");
+
+        if (DataStore.getData("VELOCITY_SETTINGS", "CheckForUpdates")) {
+            updater.checkForUpdates();
+        }
 
         t = find(["isDeveloper"]);
         Object.defineProperty(t, "isDeveloper", { get: (_) => 1, set: (_) => _, configurable: true });

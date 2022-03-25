@@ -191,3 +191,23 @@ textarea.velocity-editor {
     border: none;
     resize: none;
 }
+
+.velocity-settings-title-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-block: 5px;
+}
+
+.velocity-settings-title {
+    text-transform: uppercase;
+    color: var(--interactive-normal);
+    font-weight: 600;
+    font-size: 11pt;
+}
+
+.velocity-settings-title-divider {
+    height: 2px;
+    width: 100%;
+    background: var(--interactive-normal);
+}

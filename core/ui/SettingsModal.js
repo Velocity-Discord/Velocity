@@ -152,6 +152,39 @@ const SettingsInputSection = React.memo((props) => {
     }
 });
 
+const SettingsTitle = React.memo((props) => {
+    const { text, divider = false } = props;
+    if (divider) {
+        return [
+            React.createElement("div", {
+                className: "velocity-settings-title-container",
+                children: [
+                    React.createElement(
+                        "div",
+                        {
+                            className: "velocity-settings-title",
+                        },
+                        text,
+                    ),
+                    React.createElement("div", {
+                        className: "velocity-settings-title-divider",
+                    }),
+                ],
+            }),
+        ];
+    } else {
+        return [
+            React.createElement(
+                "div",
+                {
+                    className: "velocity-settings-title",
+                },
+                text,
+            ),
+        ];
+    }
+});
+
 const SettingsSection = React.memo((props) => {
     const { setting, note, name, warning, action, reload = false } = props;
 
@@ -787,6 +820,18 @@ async function add() {
                                     onConfirm: () => resolve(true),
                                     onCancel: () => resolve(false),
                                     children: [
+                                        React.createElement(SettingsTitle, { text: "General", divider: true }),
+                                        React.createElement(SettingsSection, {
+                                            setting: "CheckForUpdates",
+                                            name: "Check For Updates",
+                                            note: "Checks for updates on start.",
+                                        }),
+                                        React.createElement(SettingsSection, {
+                                            setting: "ReloadOnLogin",
+                                            name: "Reload On Login",
+                                            note: "Fixes some issues with logins.",
+                                        }),
+                                        React.createElement(SettingsTitle, { text: "Window", divider: true }),
                                         React.createElement(SettingsSection, {
                                             setting: "Transparency",
                                             name: "Window Transparency",
@@ -809,6 +854,7 @@ async function add() {
                                                 warning.innerHTML = "Requires Restart.";
                                             },
                                         }),
+                                        React.createElement(SettingsTitle, { text: "Tools", divider: true }),
                                         React.createElement(SettingsSection, {
                                             setting: "CSSEnabled",
                                             name: "Custom Css",
@@ -820,11 +866,7 @@ async function add() {
                                             note: "Loads Startup Script.",
                                             warning: "You can easily add malicious scripts! Be careful!",
                                         }),
-                                        React.createElement(SettingsSection, {
-                                            setting: "ReloadOnLogin",
-                                            name: "Reload On Login",
-                                            note: "Fixes some issues with logins.",
-                                        }),
+                                        React.createElement(SettingsTitle, { text: "Developer", divider: true }),
                                         React.createElement(SettingsSection, {
                                             setting: "DegubberKey",
                                             name: "Debugger Hotkey",
