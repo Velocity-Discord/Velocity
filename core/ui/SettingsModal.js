@@ -941,7 +941,7 @@ if (process.platform === "darwin") {
         (async () => {
             const i = e.metaKey && e.code === "Comma";
             if (i) {
-                add();
+                if (!document.querySelector(".velocity-settings")) add();
             }
         })(),
     );
@@ -950,11 +950,11 @@ if (process.platform === "darwin") {
         (async () => {
             const i = e.ctrlKey && e.code === "Comma";
             if (i) {
-                add();
+                if (!document.querySelector(".velocity-settings")) add();
             }
         })(),
     );
 }
 settingsquery.addEventListener("click", async () => {
-    add();
+    if (!document.querySelector(".velocity-settings")) add();
 });
