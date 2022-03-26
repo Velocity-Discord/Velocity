@@ -1,6 +1,6 @@
 const { info } = require("../package.json");
 const request = require("./request");
-const logger = require("./logger");
+const logger = require("./logger")
 const path = require("path");
 const { ipcRenderer, shell } = require("electron");
 
@@ -47,13 +47,13 @@ async function failModal(title, content) {
 }
 
 async function checkForUpdates() {
-    logger.log("Velocity", "Checking for updates");
+    logger.log("Velocity", "Checking for updates")
     let updateData;
     request(updateURL, (_, __, body) => (updateData = JSON.parse(body)));
 
-    VApi.showToast("Requesting Update Data");
+    VApi.showToast("Requesting Update Data")
     setTimeout(() => {
-        console.log(updateData);
+        console.log(updateData)
         if (updateData) {
             if (updateData.version !== info.version) {
                 async function updatePrompt() {
@@ -81,8 +81,8 @@ async function checkForUpdates() {
 
                                             const VDir = path.join(__dirname, "..");
 
-                                            let targetPackage;
-                                            showToast("Requesting package...");
+                                            let targetPackage
+                                            showToast("Requesting package...")
                                             request("https://raw.githubusercontent.com/Velocity-Discord/Velocity/main/package.json", (err, _, body) => {
                                                 if (err) {
                                                     showToast("Request Failed", { type: "error" });
@@ -95,22 +95,18 @@ async function checkForUpdates() {
                                                             "You can manually update Velocity by opening the Velocity Folder and doing one of the following,",
                                                             "- Run `git pull` in the terminal (inside the folder)",
                                                             "- Download the **ZIP** from GitHub and replace the old folder with it uncompressed.",
-                                                            React.createElement(
-                                                                ButtonEle,
-                                                                {
+                                                            React.createElement(ButtonEle, {
                                                                     id: "velocity-folder",
                                                                     color: Button.ButtonColors.BRAND,
                                                                     className: ["velocity-button"],
                                                                     onClick: () => {
                                                                         shell.openPath(VDir);
                                                                     },
-                                                                },
-                                                                "Open Velocity Folder",
-                                                            ),
+                                                                }, "Open Velocity Folder"),
                                                         ]);
                                                     }
                                                 }
-                                            });
+                                            })
 
                                             // changelogModal({ subtitle: updateData.changelog.subtitle, description: updateData.changelog.description });
                                         },
@@ -175,9 +171,11 @@ async function checkForUpdates() {
                         });
                     });
                 }
+            } else {
+                VApi.showToast("No Updates Found")
             }
         }
-    }, 1500);
+    }, 1500)
 }
 
 module.exports = { checkForUpdates };
