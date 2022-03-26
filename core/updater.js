@@ -51,6 +51,7 @@ async function checkForUpdates() {
     let updateData;
     request(updateURL, (_, __, body) => (updateData = JSON.parse(body)));
 
+    await waitUntil(() => window.document.querySelector('[class*="guilds"]'));
     VApi.showToast("Requesting Update Data");
     setTimeout(() => {
         if (updateData) {

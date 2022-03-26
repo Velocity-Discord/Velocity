@@ -199,7 +199,7 @@ if (dPath) {
 
         if (jsChecked) {
             try {
-                await waitFor(".guilds-2JjMmN");
+                await waitFor('[class*="guilds"]');
                 eval(js);
             } catch (e) {
                 VApi.showToast("Error Compiling Startup Script. See Console For More Details", { type: "error", timeout: 4000 });
@@ -222,7 +222,7 @@ if (dPath) {
         if (DevMode) logger.log("Velocity", "Custom CSS Injected");
 
         // Patches & Addons
-        await waitFor(".guilds-2JjMmN");
+        await waitFor('[class*="guilds"]');
 
         const allThemes = VApi.AddonManager.themes.getAll();
         const allPlugins = VApi.AddonManager.plugins.getAll();
