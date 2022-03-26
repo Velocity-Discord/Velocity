@@ -92,9 +92,9 @@ async function checkForUpdates() {
                                                     } catch (error) {
                                                         showToast("Failed to Parse Package", { type: "error" });
                                                         failModal("Update Failed", [
-                                                            "You can manually update Velocity by opening the Velocity Folder and doing one of the following",
+                                                            "You can manually update Velocity by opening the Velocity Folder and doing one of the following,",
                                                             "- Run `git pull` in the terminal (inside the folder)",
-                                                            "- Download the **ZIP** from GitHub and replace the old folder with it.",
+                                                            "- Download the **ZIP** from GitHub and replace the old folder with it uncompressed.",
                                                             React.createElement(
                                                                 ButtonEle,
                                                                 {
