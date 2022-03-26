@@ -1,3 +1,7 @@
+// This Client Mod is based on DrDiscord version 1.0.0 as found here: https://github.com/unknown81311/DrDiscord
+// Original license: MIT License
+// https://github.com/unknown81311/DrDiscord/blob/main/LICENSE.md
+
 const { join } = require("path");
 const electron = ({ ipcMain, app } = require("electron"));
 const Module = require("module");

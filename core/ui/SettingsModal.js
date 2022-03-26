@@ -14,6 +14,7 @@ const TextInput = VApi.getModule("TextInput").default;
 const path = require("path");
 const closeIcon = VApi.getModule("CloseIconWithKeybind").default;
 const { info } = require("../../package.json");
+const updater = require("../updater");
 
 async function pushLayer(element) {
     VApi.getModule(["pushLayer"]).pushLayer(() => element);
@@ -381,22 +382,25 @@ async function add() {
     const themesTabText = document.createTextNode("Themes");
     themesTab.appendChild(themesTabText);
     themesTab.classList.add("velocity-themes", ...classes);
+    const updateTab = document.createElement("div");
+    const updateTabText = document.createTextNode("Check for Updates");
+    updateTab.appendChild(updateTabText);
+    updateTab.classList.add("velocity-update", ...classes);
 
     connectionsTabAfter.parentNode.insertBefore(seperator, connectionsTabAfter);
     connectionsTabAfter.parentNode.insertBefore(header, connectionsTabAfter);
+    connectionsTabAfter.parentNode.insertBefore(updateTab, connectionsTabAfter);
     connectionsTabAfter.parentNode.insertBefore(settingsTab, connectionsTabAfter);
     if (Settings.CSSEnabled) connectionsTabAfter.parentNode.insertBefore(cssTab, connectionsTabAfter);
     if (Settings.JSEnabled) connectionsTabAfter.parentNode.insertBefore(ssTab, connectionsTabAfter);
     connectionsTabAfter.parentNode.insertBefore(pluginsTab, connectionsTabAfter);
     connectionsTabAfter.parentNode.insertBefore(themesTab, connectionsTabAfter);
 
-    const tabSelector = document.querySelector(".velocity-settings");
-    const cssSelector = document.querySelector(".velocity-custom-css");
-    const ssSelector = document.querySelector(".velocity-startup-script");
-    const pluginsSelector = document.querySelector(".velocity-plugins");
-    const themesSelector = document.querySelector(".velocity-themes");
+    updateTab.addEventListener("click", () => {
+        updater.checkForUpdates();
+    });
 
-    pluginsSelector.addEventListener("click", () => {
+    pluginsTab.addEventListener("click", () => {
         (async () => {
             async function prompt(title) {
                 const Plugins = VApi.AddonManager.plugins.getAll();
@@ -459,7 +463,7 @@ async function add() {
         })();
     });
 
-    themesSelector.addEventListener("click", () => {
+    themesTab.addEventListener("click", () => {
         (async () => {
             async function prompt(title) {
                 const Themes = VApi.AddonManager.themes.getAll();
@@ -523,7 +527,7 @@ async function add() {
     });
 
     if (Settings.JSEnabled) {
-        ssSelector.addEventListener("click", () => {
+        ssTab.addEventListener("click", () => {
             (async () => {
                 const startupJS = DataStore.getData("VELOCITY_SETTINGS", "JS");
                 let fontsize = DataStore.getData("VELOCITY_SETTINGS", "FontSize") || 14;
@@ -660,7 +664,7 @@ async function add() {
     }
 
     if (Settings.CSSEnabled) {
-        cssSelector.addEventListener("click", () => {
+        cssTab.addEventListener("click", () => {
             (async () => {
                 const customCSS = DataStore.getData("VELOCITY_SETTINGS", "CSS");
                 let fontsize = DataStore.getData("VELOCITY_SETTINGS", "FontSize") || 14;
@@ -793,7 +797,7 @@ async function add() {
         });
     }
 
-    tabSelector.addEventListener("click", () => {
+    settingsTab.addEventListener("click", () => {
         (async () => {
             async function prompt(title) {
                 const { getModule, modals } = VApi;

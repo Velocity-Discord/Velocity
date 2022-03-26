@@ -103,18 +103,18 @@
     margin-top: 1%;
     margin-right: 2.5%;
     animation: toastShow 0.15s ease-out;
-    background-color: #2d2c2c66;
+    background-color: #4949499e;
     backdrop-filter: blur(15px);
     padding: 12px 47px 12px 12px;
     font-size: 11pt;
-    border-radius: 4px;
+    border-radius: 3px;
     z-index: 99999;
     box-shadow: 2px 2px 5px #00000075;
-    color: white;
+    color: #fff;
     position: relative;
     width: fit-content;
     top: 5%;
-    border-right: 2px solid;
+    border-right: 3px solid;
     border-right-color: var(--text-default);
 }
 .velocity-toast.closing {
