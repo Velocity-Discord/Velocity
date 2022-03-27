@@ -1,4 +1,4 @@
-const DataStore = require("../datastore");
+const DataStore = require("../datastore")
 const { ipcRenderer, shell } = require("electron");
 const settingsquery = document.querySelector(".panels-3wFtMD > .container-YkUktl .flex-2S1XBF > :last-child");
 const button = VApi.getModule.find(["ButtonColors"]).default;
@@ -9,14 +9,14 @@ const SwitchEle = VApi.getModule.find("Switch").default;
 const Tooltip = VApi.getModule.find.prototypes("renderTooltip").default;
 const { React, logger } = VApi;
 const Markdown = VApi.getModule.find((m) => m.default?.displayName === "Markdown" && m.default.rules).default;
-const Switche = VApi.getModule.find("Switch").default;
+const Switche = VApi.getModule.find("Switch").default
 const TextInput = VApi.getModule.find("TextInput").default;
-const path = require("path");
-const closeIcon = VApi.getModule.find("CloseIconWithKeybind").default;
-const { info } = require("../../package.json");
+const path = require("path")
+const closeIcon = VApi.getModule.find("CloseIconWithKeybind").default
+const {info} = require("../../package.json")
 const updater = require("../updater");
 
-async function pushLayer(element) {
+async function pushLayer(element) { 
     VApi.getModule.find(["pushLayer"]).pushLayer(() => element);
 }
 
@@ -53,195 +53,152 @@ async function reloadPrompt(title, content) {
     });
 }
 
-const monaco = global.windowfunc.monaco;
+const monaco = global.windowfunc.monaco
 
 const SettingsInputSection = React.memo((props) => {
-    const { setting, note, name, warning, placeholder, type, maxLength, vertical } = props;
+const { setting, note, name, warning, placeholder, type, maxLength, vertical } = props;
 
-    const [value, setValue] = React.useState(DataStore.getData("VELOCITY_SETTINGS", setting));
-    if (vertical) {
-        return React.createElement("div", {
-            id: "velocity-settings-section",
-            class: "vertical",
-            children: [
-                React.createElement("div", {
-                    id: "velocity-settings-section-info",
-                    children: [
-                        React.createElement(
-                            Text,
-                            {
-                                color: Text.Colors.HEADER_PRIMARY,
-                                size: Text.Sizes.SIZE_16,
-                            },
-                            name,
-                        ),
-                        React.createElement(
-                            Text,
-                            {
-                                color: Text.Colors.HEADER_SECONDARY,
-                                size: Text.Sizes.SIZE_14,
-                            },
-                            note,
-                        ),
-                        React.createElement(
-                            Text,
-                            {
-                                color: Text.Colors.ERROR,
-                                size: Text.Sizes.SIZE_14,
-                            },
-                            warning,
-                        ),
-                    ],
-                }),
-                React.createElement(TextInput, {
-                    value: value,
-                    placeholder: placeholder,
-                    type: type,
-                    maxLength: maxLength,
-                    onInput: ({ target }) => {
-                        setValue(target.value);
-                        DataStore.setData("VELOCITY_SETTINGS", setting, target.value);
-                    },
-                }),
-            ],
-        });
-    } else {
-        return React.createElement("div", {
-            id: "velocity-settings-section",
-            children: [
-                React.createElement("div", {
-                    id: "velocity-settings-section-info",
-                    children: [
-                        React.createElement(
-                            Text,
-                            {
-                                color: Text.Colors.HEADER_PRIMARY,
-                                size: Text.Sizes.SIZE_16,
-                            },
-                            name,
-                        ),
-                        React.createElement(
-                            Text,
-                            {
-                                color: Text.Colors.HEADER_SECONDARY,
-                                size: Text.Sizes.SIZE_14,
-                            },
-                            note,
-                        ),
-                        React.createElement(
-                            Text,
-                            {
-                                color: Text.Colors.ERROR,
-                                size: Text.Sizes.SIZE_14,
-                            },
-                            warning,
-                        ),
-                    ],
-                }),
-                React.createElement(TextInput, {
-                    value: value,
-                    placeholder: placeholder,
-                    type: type,
-                    maxLength: maxLength,
-                    onInput: ({ target }) => {
-                        setValue(target.value);
-                        DataStore.setData("VELOCITY_SETTINGS", setting, target.value);
-                    },
-                }),
-            ],
-        });
-    }
-});
-
-const SettingsTitle = React.memo((props) => {
-    const { text, divider = false } = props;
-    if (divider) {
-        return [
+const [value, setValue] = React.useState(DataStore.getData("VELOCITY_SETTINGS", setting));
+if (vertical) {
+    return React.createElement("div", {
+        id: "velocity-settings-section",
+        class: "vertical",
+        children: [
             React.createElement("div", {
-                className: "velocity-settings-title-container",
+                id: "velocity-settings-section-info",
                 children: [
-                    React.createElement(
-                        "div",
-                        {
-                            className: "velocity-settings-title",
-                        },
-                        text,
-                    ),
-                    React.createElement("div", {
-                        className: "velocity-settings-title-divider",
-                    }),
+                    React.createElement(Text, {
+                        color: Text.Colors.HEADER_PRIMARY,
+                        size: Text.Sizes.SIZE_16,
+                    }, name),
+                    React.createElement(Text, {
+                        color: Text.Colors.HEADER_SECONDARY,
+                        size: Text.Sizes.SIZE_14,
+                    }, note),
+                    React.createElement(Text, {
+                        color: Text.Colors.ERROR,
+                        size: Text.Sizes.SIZE_14,
+                    }, warning),
                 ],
             }),
-        ];
-    } else {
-        return [
-            React.createElement(
-                "div",
-                {
-                    className: "velocity-settings-title",
-                },
-                text,
-            ),
-        ];
-    }
-});
-
-const SettingsSection = React.memo((props) => {
-    const { setting, note, name, warning, action, reload = false } = props;
-
-    const [enabled, setEnabled] = React.useState(DataStore.getData("VELOCITY_SETTINGS", setting));
+            React.createElement(TextInput, {
+                value: value,
+                placeholder: placeholder,
+                type: type,
+                maxLength: maxLength,
+                onInput: ({ target }) => {
+                    setValue(target.value)
+                    DataStore.setData("VELOCITY_SETTINGS", setting, target.value);
+            }
+            }),
+        ],
+    });
+}
+else {
     return React.createElement("div", {
         id: "velocity-settings-section",
         children: [
             React.createElement("div", {
                 id: "velocity-settings-section-info",
                 children: [
-                    React.createElement(
-                        Text,
-                        {
-                            color: Text.Colors.HEADER_PRIMARY,
-                            size: Text.Sizes.SIZE_16,
-                        },
-                        name,
-                    ),
-                    React.createElement(
-                        Text,
-                        {
-                            color: Text.Colors.HEADER_SECONDARY,
-                            size: Text.Sizes.SIZE_14,
-                        },
-                        note,
-                    ),
-                    React.createElement(
-                        Text,
-                        {
-                            color: Text.Colors.ERROR,
-                            size: Text.Sizes.SIZE_14,
-                            id: `velocity-settings-section-${setting.toLowerCase()}-warning`,
-                        },
-                        warning,
-                    ),
+                    React.createElement(Text, {
+                        color: Text.Colors.HEADER_PRIMARY,
+                        size: Text.Sizes.SIZE_16,
+                    }, name),
+                    React.createElement(Text, {
+                        color: Text.Colors.HEADER_SECONDARY,
+                        size: Text.Sizes.SIZE_14,
+                    }, note),
+                    React.createElement(Text, {
+                        color: Text.Colors.ERROR,
+                        size: Text.Sizes.SIZE_14,
+                    }, warning),
                 ],
             }),
-            React.createElement(Switche, {
-                checked: enabled,
-                onChange: async () => {
-                    if (action) {
-                        action();
-                    }
-                    DataStore.setData("VELOCITY_SETTINGS", setting, !enabled);
-                    setEnabled(!enabled);
-                    if (reload) {
-                        const re = await reloadPrompt("Restart Discord?", "This Setting Requires a full reload of discord.");
-                        if (re) {
-                            ipcRenderer.invoke("reload-app");
-                        }
-                    }
-                },
+            React.createElement(TextInput, {
+                value: value,
+                placeholder: placeholder,
+                type: type,
+                maxLength: maxLength,
+                onInput: ({ target }) => {
+                    setValue(target.value)
+                    DataStore.setData("VELOCITY_SETTINGS", setting, target.value);
+            }
             }),
         ],
     });
+}
+})
+
+const SettingsTitle = React.memo((props) => {
+    const {text, divider = false} = props
+    if (divider) {
+        return [
+            React.createElement("div", {
+                className: "velocity-settings-title-container",
+                children: [
+                    React.createElement("div", {
+                        className: "velocity-settings-title"
+                    }, text),
+                    React.createElement("div", {
+                        className: "velocity-settings-title-divider"
+                    })
+                ]
+            })
+        ]
+    } else {
+        return [
+            React.createElement("div", {
+                className: "velocity-settings-title"
+            }, text)
+        ]
+    }
+})
+
+const SettingsSection = React.memo((props) => {
+const { setting, note, name, warning, action, reload = false } = props;
+
+const [enabled, setEnabled] = React.useState(DataStore.getData("VELOCITY_SETTINGS", setting));
+return React.createElement("div", {
+    id: "velocity-settings-section",
+    children: [
+        React.createElement("div", {
+            id: "velocity-settings-section-info",
+            children: [
+                React.createElement(Text, {
+                    color: Text.Colors.HEADER_PRIMARY,
+                    size: Text.Sizes.SIZE_16,
+                }, name),
+                React.createElement(Text, {
+                    color: Text.Colors.HEADER_SECONDARY,
+                    size: Text.Sizes.SIZE_14,
+                }, note),
+                React.createElement(Text, {
+                    color: Text.Colors.ERROR,
+                    size: Text.Sizes.SIZE_14,
+                    id: `velocity-settings-section-${setting.toLowerCase()}-warning`
+                }, warning),
+            ],
+        }),
+        React.createElement(Switche, {
+            checked: enabled,
+            onChange: async () => {
+                if (action) {
+                    action()
+                }
+                DataStore.setData("VELOCITY_SETTINGS", setting, !enabled);
+                setEnabled(!enabled);
+                if (reload) {
+                    const re = await reloadPrompt("Restart Discord?", "This Setting Requires a full reload of discord.");
+                    if (re) {
+                        ipcRenderer.invoke("reload-app");
+                    }
+                }
+            },
+        }),
+    ],
 });
+})
 
 const Card = React.memo((props) => {
     const { meta, type } = props;
@@ -316,13 +273,15 @@ const Card = React.memo((props) => {
                                         setEnabled(!enabled);
                                         if (!enabled) {
                                             VApi.showToast(`Enabled <strong>${meta.name}</strong>`, { type: "success" });
-                                        } else {
+                                        }
+                                        else {
                                             VApi.showToast(`Disabled <strong>${meta.name}</strong>`, { type: "success" });
                                         }
                                     } catch (e) {
                                         if (!enabled) {
                                             VApi.showToast(`Failed to start <strong>${meta.name}</strong>`, { type: "error" });
-                                        } else {
+                                        }
+                                        else {
                                             VApi.showToast(`Failed to stop <strong>${meta.name}</strong>`, { type: "error" });
                                         }
                                         logger.error("Addon Manager", e);
@@ -339,7 +298,7 @@ const Card = React.memo((props) => {
 
 const settings = DataStore("VELOCITY_SETTINGS");
 const Settings = DataStore("VELOCITY_SETTINGS");
-const headerClasses = "velocity-header-display";
+const headerClasses = "velocity-header-display"
 
 async function settingsPrompt(title) {
     const { getModule, modals } = VApi;
@@ -577,7 +536,6 @@ async function themePrompt(title) {
     });
 }
 
-const startupJS = DataStore.getData("VELOCITY_SETTINGS", "JS");
 let fontsize = DataStore.getData("VELOCITY_SETTINGS", "FontSize") || 14;
 if (fontsize > 14) {
     fontsize = 14;
@@ -621,27 +579,23 @@ async function jsPrompt(title) {
                             }),
                             React.createElement(Tooltip, {
                                 text: "You can still manually add the script...",
-                                children: (props) =>
-                                    React.createElement(VApi.getModule.find("Clickable").default, {
-                                        ...props,
-                                        className: "warning-clickable",
-                                        children: [
-                                            React.createElement(
-                                                Text,
-                                                {
-                                                    color: Text.Colors.ERROR,
-                                                    size: Text.Sizes.SIZE_14,
-                                                    id: `velocity-script-warning`,
-                                                },
-                                                "",
-                                            ),
-                                        ],
-                                        onClick: () => {
-                                            const coreDir = path.join(__dirname, "..");
-                                            const settingsDir = path.join(coreDir, "..", "settings");
-                                            shell.openPath(settingsDir);
-                                        },
-                                    }),
+                                children: (props) => 
+                                React.createElement(VApi.getModule.find("Clickable").default, {
+                                    ...props,
+                                    className: "warning-clickable",
+                                    children: [
+                                        React.createElement(Text, {
+                                            color: Text.Colors.ERROR,
+                                            size: Text.Sizes.SIZE_14,
+                                            id: `velocity-script-warning`,
+                                        }, ""),
+                                    ],
+                                    onClick: () => {
+                                        const coreDir = path.join(__dirname, "..");
+                                        const settingsDir = path.join(coreDir, "..", "settings")
+                                        shell.openPath(settingsDir);
+                                    }
+                                }),
                             }),
                             (this.save = React.createElement("div", {
                                 class: "velocity-button-container",
@@ -652,8 +606,8 @@ async function jsPrompt(title) {
                                             id: "startup-script-save",
                                             disabled: false,
                                             className: [ButtonColors.BRAND, "velocity-button"],
-                                            onClick: ({ target }) => {
-                                                const content = this.editor.getValue();
+                                            onClick: ({target}) => {
+                                                const content = window.editor.getValue();
                                                 if (!target.disabled) {
                                                     DataStore.setData("VELOCITY_SETTINGS", "JS", content);
                                                     VApi.showToast("Saved", { type: "success" });
@@ -668,7 +622,7 @@ async function jsPrompt(title) {
                                             id: "startup-script-clear",
                                             className: [ButtonColors.RED, "velocity-button"],
                                             onClick: () => {
-                                                this.editor.setValue("");
+                                                window.editor.setValue("");
                                                 DataStore.setData("VELOCITY_SETTINGS", "JS", "");
 
                                                 VApi.showToast("Cleared", { type: "success" });
@@ -687,7 +641,6 @@ async function jsPrompt(title) {
     });
 }
 
-const customCSS = DataStore.getData("VELOCITY_SETTINGS", "CSS");
 async function cssPrompt(title) {
     const { getModule, modals } = VApi;
     const ConfirmationModal = getModule.find("ConfirmModal").default;
@@ -723,25 +676,21 @@ async function cssPrompt(title) {
                             }),
                             React.createElement(Tooltip, {
                                 text: "Click me to open the folder!",
-                                children: (props) =>
-                                    React.createElement(VApi.getModule.find("Clickable").default, {
-                                        ...props,
-                                        className: "warning-clickable",
-                                        children: [
-                                            React.createElement(
-                                                Text,
-                                                {
-                                                    color: Text.Colors.ERROR,
-                                                    size: Text.Sizes.SIZE_14,
-                                                    id: `velocity-customcss-warning`,
-                                                },
-                                                "",
-                                            ),
-                                        ],
-                                        onClick: () => {
-                                            shell.openPath(VApi.AddonManager.themes.folder);
-                                        },
-                                    }),
+                                children: (props) => 
+                                React.createElement(VApi.getModule.find("Clickable").default, {
+                                    ...props,
+                                    className: "warning-clickable",
+                                    children: [
+                                        React.createElement(Text, {
+                                            color: Text.Colors.ERROR,
+                                            size: Text.Sizes.SIZE_14,
+                                            id: `velocity-customcss-warning`,
+                                        }, ""),
+                                    ],
+                                    onClick: () => {
+                                        shell.openPath(VApi.AddonManager.themes.folder);
+                                    }
+                                }),
                             }),
                             React.createElement("div", {
                                 class: "velocity-button-container",
@@ -752,11 +701,15 @@ async function cssPrompt(title) {
                                             id: "custom-css-save",
                                             className: [ButtonColors.BRAND, "velocity-button"],
                                             onClick: () => {
-                                                const content = this.editor.getValue();
-                                                DataStore.setData("VELOCITY_SETTINGS", "CSS", content);
-                                                VApi.customCSS.reload();
+                                                try {
+                                                    const content = window.editor.getValue();
+                                                    DataStore.setData("VELOCITY_SETTINGS", "CSS", content);
+                                                    VApi.customCSS.reload();
 
-                                                VApi.showToast("Saved", { type: "success" });
+                                                    VApi.showToast("Saved", { type: "success" });
+                                                } catch (error) {
+                                                    console.error(error)
+                                                }
                                             },
                                         },
                                         "Save",
@@ -767,7 +720,7 @@ async function cssPrompt(title) {
                                             id: "custom-css-clear",
                                             className: [ButtonColors.RED, "velocity-button"],
                                             onClick: () => {
-                                                this.editor.setValue("");
+                                                window.editor.setValue("");
                                                 DataStore.setData("VELOCITY_SETTINGS", "CSS", "");
                                                 VApi.customCSS.reload();
 
@@ -806,7 +759,7 @@ VApi.Patcher("VelocityInternal-Settings-Patch", UserSettings.prototype, "getPred
         className: `velocity-updates-tab`,
         onClick: () => {
             updater.checkForUpdates();
-        },
+        }
     });
     insert({
         section: "settings",
@@ -823,16 +776,17 @@ VApi.Patcher("VelocityInternal-Settings-Patch", UserSettings.prototype, "getPred
             label: "Custom CSS",
             className: `velocity-customcss-tab`,
             onClick: () => {
+                const customCSS = DataStore.getData("VELOCITY_SETTINGS", "CSS");
                 cssPrompt("Custom CSS");
                 setTimeout(() => {
-                    this.editor = monaco.editor.create(document.getElementById("editor"), {
+                    window.editor = monaco.editor.create(document.getElementById("editor"), {
                         language: "css",
                         theme: document.documentElement.classList.contains("theme-dark") ? "vs-dark" : "vs-light",
                         value: customCSS,
                         fontSize: fontsize,
                     });
-                    this.editor.onDidChangeModelContent(() => {
-                        const content = this.editor.getValue();
+                    window.editor.onDidChangeModelContent(() => {
+                        const content = window.editor.getValue();
 
                         if (content.includes("/**" && "@name")) {
                             const warn = document.getElementById("velocity-customcss-warning");
@@ -852,16 +806,17 @@ VApi.Patcher("VelocityInternal-Settings-Patch", UserSettings.prototype, "getPred
             label: "Startup Script",
             className: `velocity-ssscript-tab`,
             onClick: () => {
+                const startupJS = DataStore.getData("VELOCITY_SETTINGS", "JS");
                 jsPrompt("Startup Script");
                 setTimeout(() => {
-                    this.editor = monaco.editor.create(document.getElementById("editor"), {
+                    window.editor = monaco.editor.create(document.getElementById("editor"), {
                         language: "javascript",
                         theme: document.documentElement.classList.contains("theme-dark") ? "vs-dark" : "vs-light",
                         value: startupJS,
                         fontSize: fontsize,
                     });
-                    this.editor.onDidChangeModelContent(() => {
-                        const content = this.editor.getValue();
+                    window.editor.onDidChangeModelContent(() => {
+                        const content = window.editor.getValue();
                         const button = document.getElementById("startup-script-save");
                         if (content.includes("getToken" || "getEmail")) {
                             const warn = document.querySelector("#velocity-script-warning");

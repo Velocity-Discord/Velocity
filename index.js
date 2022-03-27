@@ -54,6 +54,10 @@ class BrowserWindow extends electron.BrowserWindow {
     }
 }
 
+app.on("render-process-gone", () => {
+    hasCrashed = true;
+});
+
 function LoadDiscord() {
     const basePath = join(process.resourcesPath, "app.asar");
     const pkg = require(join(basePath, "package.json"));
@@ -61,6 +65,7 @@ function LoadDiscord() {
     electron.app.name = pkg.name;
     Module._load(join(basePath, pkg.main), null, true);
 }
+
 
 if (process.argv.includes("--vanilla")) {
     return LoadDiscord();

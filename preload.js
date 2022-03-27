@@ -45,6 +45,10 @@ if (dPath) {
 
         logger.log("Velocity", "DOM Loaded");
 
+        window.DiscordSentry.close();
+        window.DiscordSentry.getCurrentHub().getClient().close();
+        logger.log("Velocity", "Killed Sentry");
+
         const DevMode = DataStore("VELOCITY_SETTINGS").DevMode;
 
         const vhead = document.createElement("velocity-head");
