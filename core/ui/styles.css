@@ -210,3 +210,11 @@ textarea.velocity-editor {
     width: 100%;
     background: var(--interactive-normal);
 }
+.velocity-header-display {
+    font-size: 12px;
+    font-weight: 700;
+    font-family: var(--font-display);
+    line-height: 16px;
+    text-transform: uppercase;
+    color: var(--channels-default);
+}

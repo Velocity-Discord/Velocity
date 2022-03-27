@@ -41,6 +41,37 @@ else {
         return getModule((m) => props.every((prop) => typeof m.default?.[prop] !== "undefined"), false);
     }
 
+    this.listeners = new Set();
+
+    function removeListener(listener) {
+        return this.listeners.delete(listener);
+    }
+
+    function getLazy(filter) {
+        const fromCache = getModule(filter);
+        if (fromCache) return Promise.resolve(fromCache);
+
+        return new Promise((resolve) => {
+            const cancel = () => {removeListener(listener)};
+            const listener = function (m) {
+                const directMatch = filter(m);
+                
+                if (directMatch) {
+                    cancel();
+                    return resolve(directMatch);
+                }
+
+                const defaultMatch = filter(m.default);
+                if (!defaultMatch) return; 
+
+                cancel();
+                resolve(m.default);
+            };
+
+            this.addListener(listener);
+        });
+    }
+
     Object.assign(byPropsAll, {
         default: byPropsDefaultAll,
     });
@@ -96,6 +127,6 @@ else {
             });
         },
     });
-    webpackChunkdiscord_app.Velocity_getModule = find;
-    module.exports = find;
+    webpackChunkdiscord_app.Velocity_getModule = { find, getLazy };
+    module.exports = { find, getLazy };
 }

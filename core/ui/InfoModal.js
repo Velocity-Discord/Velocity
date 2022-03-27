@@ -1,14 +1,14 @@
 const DataStore = require("../datastore")
 const { info } = require("../../package.json")
-const button = VApi.getModule(["ButtonColors"]).default;
-const Text = VApi.getModule("Text").default;
-const ButtonColors = VApi.getModule(["ButtonColors"]).ButtonColors;
+const button = VApi.getModule.find(["ButtonColors"]).default;
+const Text = VApi.getModule.find("Text").default;
+const ButtonColors = VApi.getModule.find(["ButtonColors"]).ButtonColors;
 
 async function prompt(title) {
     const { React, getModule, modals } = VApi;
-    const ConfirmationModal = getModule("ConfirmModal").default;
-    const Button = getModule(["ButtonColors"]);
-    const { Messages } = getModule((m) => m.default?.Messages?.OKAY).default;
+    const ConfirmationModal = getModule.find("ConfirmModal").default;
+    const Button = getModule.find(["ButtonColors"]);
+    const { Messages } = getModule.find((m) => m.default?.Messages?.OKAY).default;
 
     return new Promise((resolve) => {
         modals.open((props) => {

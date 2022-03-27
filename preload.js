@@ -83,23 +83,23 @@ if (dPath) {
             updater.checkForUpdates();
         }
 
-        t = find(["isDeveloper"]);
+        t = find.find(["isDeveloper"]);
         Object.defineProperty(t, "isDeveloper", { get: (_) => 1, set: (_) => _, configurable: true });
 
         let Badges;
         request("https://raw.githubusercontent.com/TheCommieAxolotl/TheCommieAxolotl/main/v/Badges.json", (_, __, body) => (Badges = JSON.parse(body)));
 
         const React = await waitUntil(() => {
-            if (!find(["createElement", "Component"])?.createElement) return false;
-            return find(["createElement", "Component"]);
+            if (!find.find(["createElement", "Component"])?.createElement) return false;
+            return find.find(["createElement", "Component"]);
         });
         const ReactDOM = await waitUntil(() => {
-            if (!find(["render", "hydrate"])?.render) return false;
-            return find(["render", "hydrate"]);
+            if (!find.find(["render", "hydrate"])?.render) return false;
+            return find.find(["render", "hydrate"]);
         });
 
-        const ModalFunctions = find(["openModal", "openModalLazy"]);
-        const ModalElements = find(["ModalRoot", "ModalListContent"]);
+        const ModalFunctions = find.find(["openModal", "openModalLazy"]);
+        const ModalElements = find.find(["ModalRoot", "ModalListContent"]);
 
         const VApi = {
             Meta: {
@@ -115,19 +115,19 @@ if (dPath) {
                 waitFor,
                 waitUntil,
                 joinServer: (code, goTo = true) => {
-                    const { transitionToGuild } = find(["transitionToGuild"]);
-                    const { acceptInvite } = find(["acceptInvite"]);
+                    const { transitionToGuild } = find.find(["transitionToGuild"]);
+                    const { acceptInvite } = find.find(["acceptInvite"]);
 
                     const res = acceptInvite(code);
                     if (goTo) res.then(({ guild, channel }) => transitionToGuild(guild.id, channel.id));
                 },
                 joinOfficialServer: () => {
-                    const { transitionToGuild } = find(["transitionToGuild"]);
-                    const { getGuilds } = find(["getGuilds"]);
+                    const { transitionToGuild } = find.find(["transitionToGuild"]);
+                    const { getGuilds } = find.find(["getGuilds"]);
 
                     if (Boolean(getGuilds()["901774051318591508"])) transitionToGuild("901774051318591508", "901774052199391246");
                     else {
-                        const { acceptInvite } = find(["acceptInvite"]);
+                        const { acceptInvite } = find.find(["acceptInvite"]);
 
                         const res = acceptInvite("5BSWtSM3XU");
                         if (goTo) res.then(() => transitionToGuild("901774051318591508", "901774052199391246"));
@@ -173,7 +173,7 @@ if (dPath) {
             Patcher: patch,
         };
 
-        const FluxDispatcher = find(["_currentDispatchActionType", "_processingWaitQueue"]);
+        const FluxDispatcher = find.find(["_currentDispatchActionType", "_processingWaitQueue"]);
         VApi.FluxDispatcher = FluxDispatcher;
 
         toWindow("VApi", VApi);
@@ -264,11 +264,11 @@ if (dPath) {
 
         if (DevMode) logger.log("Velocity", "Addons Loaded");
 
-        patch("VelocityInternal-GuildTooltip-Patch", find("GuildTooltip"), "default", ([props], res) => {
+        patch("VelocityInternal-GuildTooltip-Patch", find.find("GuildTooltip"), "default", ([props], res) => {
             if (!(props.guild.id === "901774051318591508" || (props.guild.id === "944858264909250590" && !props.guild.features.has("VERIFIED")))) return;
             props.guild.features.add("VERIFIED");
         });
-        patch("VelocityInternal-Badge-Patch", find("UserProfileBadgeList"), "default", ([{ user }], res) => {
+        patch("VelocityInternal-Badge-Patch", find.find("UserProfileBadgeList"), "default", ([{ user }], res) => {
             const Badge = Badges[user.id];
             if (!Badge) return;
             function makeChildren(children) {
@@ -283,10 +283,10 @@ if (dPath) {
                       );
             }
             res.props.children.push(
-                React.createElement(find("Tooltip").default, {
+                React.createElement(find.find("Tooltip").default, {
                     text: Badges[user.id].name,
                     children: (props) =>
-                        React.createElement(find("Clickable").default, {
+                        React.createElement(find.find("Clickable").default, {
                             ...props,
                             className: "Velocity-badge",
                             children: React.createElement(Badge.icon.tag, {
@@ -330,7 +330,7 @@ if (dPath) {
         if (DevMode) logger.log("Velocity", "Settings Added");
 
         if (DataStore.getData("VELOCITY_SETTINGS", "ReloadOnLogin")) {
-            VApi.getModule(["dirtyDispatch"]).subscribe("LOGIN", (event) => {
+            VApi.getModule.find(["dirtyDispatch"]).subscribe("LOGIN", (event) => {
                 location.reload();
             });
         }

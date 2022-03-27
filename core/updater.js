@@ -16,10 +16,10 @@ const updateURL = "https://raw.githubusercontent.com/TheCommieAxolotl/TheCommieA
 
 async function failModal(title, content) {
     const { React, getModule, modals } = VApi;
-    const ConfirmationModal = getModule("ConfirmModal").default;
-    const Button = getModule(["ButtonColors"]);
-    const { Messages } = getModule((m) => m.default?.Messages?.OKAY).default;
-    const Markdown = getModule((m) => m.default?.displayName === "Markdown" && m.default.rules).default;
+    const ConfirmationModal = getModule.find("ConfirmModal").default;
+    const Button = getModule.find(["ButtonColors"]);
+    const { Messages } = getModule.find((m) => m.default?.Messages?.OKAY).default;
+    const Markdown = getModule.find((m) => m.default?.displayName === "Markdown" && m.default.rules).default;
 
     if (!Array.isArray(content)) content = [content];
     content = content.map((c) => (typeof c === "string" ? React.createElement(Markdown, null, c) : c));
@@ -58,12 +58,12 @@ async function checkForUpdates() {
             if (updateData.version !== info.version) {
                 async function updatePrompt() {
                     const { React, getModule, modals, showToast } = VApi;
-                    const ConfirmationModal = getModule("ConfirmModal").default;
-                    const Button = getModule(["ButtonColors"]);
+                    const ConfirmationModal = getModule.find("ConfirmModal").default;
+                    const Button = getModule.find(["ButtonColors"]);
                     const ButtonEle = Button.default;
-                    const Text = getModule("Text").default;
-                    const { Messages } = getModule((m) => m.default?.Messages?.OKAY).default;
-                    const Markdown = getModule((m) => m.default?.displayName === "Markdown" && m.default.rules).default;
+                    const Text = getModule.find("Text").default;
+                    const { Messages } = getModule.find((m) => m.default?.Messages?.OKAY).default;
+                    const Markdown = getModule.find((m) => m.default?.displayName === "Markdown" && m.default.rules).default;
 
                     return new Promise((resolve) => {
                         modals.open((props) => {
@@ -142,14 +142,14 @@ async function checkForUpdates() {
                 async function changelogModal(options = {}) {
                     const { title = "What's New", description, subtitle } = options;
                     const { React, getModule, modals } = VApi;
-                    const ConfirmationModal = getModule("ConfirmModal").default;
-                    const Button = getModule(["ButtonColors"]);
-                    const ChangelogClasses = getModule(["fixed", "improved"]);
-                    const ModalCloseButton = getModule(["ModalCloseButton"]).default;
-                    const Text = getModule("Text").default;
-                    const Titles = getModule(["Tags", "default"]);
-                    const { Messages } = getModule((m) => m.default?.Messages?.OKAY).default;
-                    const MarkdownParser = getModule(["defaultRules", "parse"]);
+                    const ConfirmationModal = getModule.find("ConfirmModal").default;
+                    const Button = getModule.find(["ButtonColors"]);
+                    const ChangelogClasses = getModule.find(["fixed", "improved"]);
+                    const ModalCloseButton = getModule.find(["ModalCloseButton"]).default;
+                    const Text = getModule.find("Text").default;
+                    const Titles = getModule.find(["Tags", "default"]);
+                    const { Messages } = getModule.find((m) => m.default?.Messages?.OKAY).default;
+                    const MarkdownParser = getModule.find(["defaultRules", "parse"]);
 
                     return new Promise((resolve) => {
                         modals.open((props) => {
