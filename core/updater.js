@@ -138,39 +138,6 @@ async function checkForUpdates() {
                 }
 
                 updatePrompt();
-
-                async function changelogModal(options = {}) {
-                    const { title = "What's New", description, subtitle } = options;
-                    const { React, getModule, modals } = VApi;
-                    const ConfirmationModal = getModule.find("ConfirmModal").default;
-                    const Button = getModule.find(["ButtonColors"]);
-                    const ChangelogClasses = getModule.find(["fixed", "improved"]);
-                    const ModalCloseButton = getModule.find(["ModalCloseButton"]).default;
-                    const Text = getModule.find("Text").default;
-                    const Titles = getModule.find(["Tags", "default"]);
-                    const { Messages } = getModule.find((m) => m.default?.Messages?.OKAY).default;
-                    const MarkdownParser = getModule.find(["defaultRules", "parse"]);
-
-                    return new Promise((resolve) => {
-                        modals.open((props) => {
-                            if (props.transitionState === 3) resolve(false);
-                            return React.createElement(
-                                ConfirmationModal,
-                                Object.assign(
-                                    {
-                                        header: [
-                                            React.createElement(Titles.default, { tag: Titles.Tags.H4 }, title),
-                                            React.createElement(Text, { size: Text.Sizes.SMALL, color: Text.Colors.STANDARD, className: ChangelogClasses.date }, subtitle),
-                                        ],
-                                        onCancel: () => resolve(false),
-                                        children: [React.createElement("p", { className: Text.Colors.HEADER_SECONDARY }, MarkdownParser.parse(description))],
-                                    },
-                                    props,
-                                ),
-                            );
-                        });
-                    });
-                }
             } else {
                 VApi.showToast("No Updates Found")
             }
@@ -178,4 +145,48 @@ async function checkForUpdates() {
     }, 1500)
 }
 
-module.exports = { checkForUpdates };
+async function changelogModal(options = {}) {
+    let updateJson;
+    request(updateURL, (_, __, body) => (updateJson = JSON.parse(body)));
+
+    setTimeout(() => {
+    const { image = updateJson.changelog.image || "https://velocity-discord.netlify.app/assets/3.png", subtitle = updateJson.changelog.subtitle, description = updateJson.changelog.description } = options;
+    const { React, getModule, modals } = VApi;
+    const ConfirmationModal = getModule.find("ConfirmModal").default;
+    const Button = getModule.find(["ButtonColors"]);
+    const ChangelogClasses = getModule.find(["fixed", "improved"]);
+    const ModalCloseButton = getModule.find(["ModalCloseButton"]).default;
+    const Text = getModule.find("Text").default;
+    const Titles = getModule.find(["Tags", "default"]);
+    const dateClass = VApi.getModule.find(["size12", "size32"]).size12;
+    
+    const { Messages } = getModule.find((m) => m.default?.Messages?.OKAY).default;
+    const Markdown = VApi.getModule.find((m) => m.default?.displayName === "Markdown" && m.default.rules).default;
+
+    return new Promise((resolve) => {
+        modals.open((props) => {
+            if (props.transitionState === 3) resolve(false);
+            return React.createElement(
+                ConfirmationModal,
+                Object.assign(
+                    {
+                        bodyClassName: "velocity-changelog",
+                        header: [
+                            React.createElement("h2", null, "What's New"),
+                            React.createElement("div", { style: { fontWeight: "400" }, className: `${dateClass} ${ChangelogClasses.date}` }, subtitle),
+                        ],
+                        onCancel: () => resolve(false),
+                        children: [
+                            React.createElement("img", {src: image}),
+                            React.createElement(Markdown, { className: Text.Colors.HEADER_SECONDARY }, description)
+                        ],
+                    },
+                    props,
+                ),
+            );
+        });
+    });
+    }, 1500)
+}
+
+module.exports = { checkForUpdates, changelogModal };

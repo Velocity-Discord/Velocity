@@ -115,6 +115,7 @@ if (dPath) {
             ReactDOM: { ...ReactDOM },
             request,
             getModule: find,
+            showChangelog: () => {updater.changelogModal()},
             Utilities: {
                 waitFor,
                 waitUntil,

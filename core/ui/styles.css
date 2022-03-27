@@ -218,3 +218,28 @@ textarea.velocity-editor {
     text-transform: uppercase;
     color: var(--channels-default);
 }
+
+.velocity-changelog img {
+    width: 100%;
+    border-radius: 5px;
+    outline: 0;
+    margin-bottom: 14px;
+}
+
+.velocity-changelog strong {
+    text-transform: uppercase;
+    color: var(--text-normal);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.velocity-changelog strong::after {
+    content: "";
+    height: 1px;
+    background: currentColor;
+    margin-left: 4px;
+    opacity: 0.6;
+    width: 100%;
+}
