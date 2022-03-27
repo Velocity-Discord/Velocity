@@ -243,3 +243,9 @@ textarea.velocity-editor {
     opacity: 0.6;
     width: 100%;
 }
+
+.velocity-modal-header-flex {
+    width: 408px;
+    display: flex;
+    justify-content: space-between;
+}
