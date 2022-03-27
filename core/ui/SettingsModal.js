@@ -743,7 +743,7 @@ async function cssPrompt(title) {
 const UserSettings = VApi.getModule.find("SettingsView").default;
 
 VApi.Patcher("VelocityInternal-Settings-Patch", UserSettings.prototype, "getPredicateSections", ([args], returnValue) => {
-    let location = returnValue.findIndex((s) => s.section.toLowerCase() == "connections") + 1;
+    let location = returnValue.findIndex((s) => s.section.toLowerCase() == "discord nitro") - 2;
     if (location < 0) return;
     const insert = (section) => {
         returnValue.splice(location, 0, section);
@@ -846,6 +846,21 @@ VApi.Patcher("VelocityInternal-Settings-Patch", UserSettings.prototype, "getPred
         className: `velocity-themes-tab`,
         onClick: () => {
             themePrompt("Themes");
+        },
+    });
+    let changeLocation = returnValue.findIndex((s) => s.section.toLowerCase() == "changelog") + 1;
+    if (changeLocation < 0) return;
+    const insertChange = (section) => {
+        returnValue.splice(changeLocation, 0, section);
+        changeLocation++;
+    };
+
+    insertChange({
+        section: "velocity-changelog",
+        label: "Velocity Change Log",
+        className: `velocity-velocity-changelog-tab`,
+        onClick: () => {
+            updater.changelogModal()
         },
     });
 });
