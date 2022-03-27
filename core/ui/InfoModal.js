@@ -20,7 +20,6 @@ async function prompt(title) {
                         header: title,
                         confirmButtonColor: Button.ButtonColors.BRAND,
                         confirmText: "Done",
-                        cancelText: " ",
                         onConfirm: () => resolve(true),
                         onCancel: () => resolve(false),
                         children: [

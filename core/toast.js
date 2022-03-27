@@ -4,7 +4,7 @@
  * @param {object} [options] - Type Color and Timeout=3000
  */
 async function showToast(content, options = {}) {
-    const container = document.getElementById("velocity-toasts");
+    const container = document.querySelector("velocity-toasts");
     const { type = "", timeout = 3000, color = "" } = options;
 
     const toast = document.createElement("div");

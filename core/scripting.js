@@ -13,7 +13,7 @@ function appendScript(id, url) {
     script.src = url;
     script.id = eid;
 
-    document.getElementById("velocity-head").appendChild(script);
+    document.querySelector("velocity-head").appendChild(script);
 
     return;
 }

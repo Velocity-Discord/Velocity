@@ -47,13 +47,12 @@ if (dPath) {
 
         const DevMode = DataStore("VELOCITY_SETTINGS").DevMode;
 
-        const vhead = document.createElement("div");
-        vhead.id = "velocity-head";
-        const vbody = document.createElement("div");
-        vbody.id = "velocity-body";
-        const vtoasts = document.createElement("div");
-        vtoasts.id = "velocity-toasts";
+        const vhead = document.createElement("velocity-head");
+        const vthemes = document.createElement("velocity-themes");
+        const vbody = document.createElement("velocity-body");
+        const vtoasts = document.createElement("velocity-toasts");
 
+        vhead.appendChild(vthemes)
         document.head.appendChild(vhead);
         vbody.appendChild(vtoasts);
         document.body.appendChild(vbody);
@@ -78,7 +77,7 @@ if (dPath) {
 
         const find = require("./core/webpack");
         const request = require("./core/request");
-        const updater = require("./core/updater");
+        const updater = require("./core/updater")
 
         if (DataStore.getData("VELOCITY_SETTINGS", "CheckForUpdates")) {
             updater.checkForUpdates();
@@ -136,8 +135,8 @@ if (dPath) {
                 },
             },
             velocityElements: {
-                head: document.getElementById("velocity-head"),
-                body: document.getElementById("velocity-body"),
+                head: document.querySelector("velocity-head"),
+                body: document.querySelector("velocity-body"),
             },
             Logger: logger,
             Styling: styling,
@@ -164,7 +163,7 @@ if (dPath) {
                         let style = document.createElement("style");
                         style.innerText = css;
                         style.id = "customcss";
-                        document.getElementById("velocity-head").appendChild(style);
+                        document.querySelector("velocity-head").appendChild(style);
                     }
                 },
                 update: (css) => {
@@ -186,9 +185,9 @@ if (dPath) {
         };
 
         const InfoModal = require("./core/ui/InfoModal");
-        VApi.showInfoModal = function () {
+        VApi.showInfoModal = function() {
             InfoModal.prompt("Velocity");
-        };
+        }
 
         const data = fs.readFile(path.join(__dirname, "./core/ui/styles.css"), "utf-8");
 
@@ -216,7 +215,7 @@ if (dPath) {
             var style = document.createElement("style");
             style.innerText = customCSS;
             style.id = "customcss";
-            document.getElementById("velocity-head").appendChild(style);
+            document.querySelector("velocity-head").appendChild(style);
         }
 
         if (DevMode) logger.log("Velocity", "Custom CSS Injected");
