@@ -4,3 +4,6 @@
 
 # Velocity
 A Small Client Mod for Discord
+
+# License Notice
+The license notice is included at the top of `index.js`
