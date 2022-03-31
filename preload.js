@@ -269,6 +269,239 @@ if (dPath) {
 
         if (DevMode) logger.log("Velocity", "Addons Loaded");
 
+
+        const MessageContent = find.find("MessageContent").default;
+        const Alert  = find.find("Alert").default;
+        const ButtonEle = find.find(["ButtonColors"]).default;
+        const ButtonColors = find.find(["ButtonColors"]).ButtonColors;
+        const ButtonSizes = find.find(["ButtonColors"]).ButtonSizes;
+
+        patch("VelocityInternal-Protocol-Patch", MessageContent, "type", ([props], res) => {
+            const regex = /velocity\:\/\/(about)?(update)?/gi;
+            const aboutRegex = /velocity\:\/\/(about)/gi
+            const updateRegex = /velocity\:\/\/(update)/gi;
+            const getVersionRegex = /velocity\:\/\/update\?v(.*)>(.*)/gi;
+            const updateVersionRegex = /velocity\:\/\/(update\?v[0-9].[0-9].[0-9])/gi;
+            let containsProtocol = regex.test(props.message.content)
+
+            if (containsProtocol) {
+                if (aboutRegex.test(props.message.content)) {
+                    delete(res.props.children[0])
+                    res.props.children.push([
+                        React.createElement("div", {
+                            className: "velocity-about-card",
+                            children: [
+                                React.createElement("div", {
+                                    className: "velocity-about-card-header",
+                                    children: [
+                                        React.createElement("h1", {
+                                            className: "velocity-about-card-header-title",
+                                        }, "About Velocity"),
+                                        React.createElement(find.find("Tooltip").default, {
+                                            text: "What's This?",
+                                            children: (props) =>
+                                                React.createElement(find.find("Clickable").default, {
+                                                    ...props,
+                                                    className: "velocity-about-card-header-info",
+                                                    onClick: () => {
+                                                        try {
+                                                            VApi.modals.open(p => React.createElement(Alert, {
+                                                                ...p,
+                                                                title: "What is this?",
+                                                                body: React.createElement("p", {
+                                                                    className: "velocity-about-alert-text"
+                                                                }, "This is a Velocity Feature. It allows you to install ", React.createElement("br"), "updates and get info about Velocity directly from the client.")
+                                                            }))
+                                                        } catch (error) {
+                                                            logger.error(error)
+                                                        }
+                                                    },  
+                                                    children: [
+                                                        React.createElement("svg", {
+                                                            class: "velocity-about-card-header-info-svg",
+                                                            width: "16",
+                                                            height: "16",
+                                                            viewBox: "0 0 12 12",
+                                                            children: [
+                                                                React.createElement("path", {
+                                                                    fill: "currentColor",
+                                                                    d: "M6 1C3.243 1 1 3.244 1 6c0 2.758 2.243 5 5 5s5-2.242 5-5c0-2.756-2.243-5-5-5zm0 2.376a.625.625 0 110 1.25.625.625 0 010-1.25zM7.5 8.5h-3v-1h1V6H5V5h1a.5.5 0 01.5.5v2h1v1z",
+                                                                }),
+                                                            ],
+                                                        }),
+                                                    ]
+                                                }),
+                                        }),
+                                    ]
+                                }),
+                                React.createElement("div", {
+                                    className: "velocity-about-card-body",
+                                    children: [
+                                        React.createElement("span", {
+                                            className: "velocity-about-card-body-version"
+                                        }, `Version ${info.version} (${info.hash})`),
+                                        React.createElement("span", {
+                                            className: "velocity-about-card-body-author",
+                                        }, `API ${info.api.channel} ${info.api.version}`)
+                                    ]
+                                })
+                            ],
+                        }),
+                    ]);
+                }
+                if (updateRegex.test(props.message.content)) {
+                    if (updateVersionRegex.test(props.message.content)) {
+                        const vNum = getVersionRegex.exec(props.message.content)
+                        delete(res.props.children[0])
+                        res.props.children.push([
+                            React.createElement("div", {
+                                className: "velocity-update-card",
+                                children: [
+                                    React.createElement("div", {
+                                        className: "velocity-update-card-header",
+                                        children: [
+                                            React.createElement("h1", {
+                                                className: "velocity-update-card-header-title",
+                                            }, `Update Velocity to v${vNum[1]}`),
+                                            React.createElement(find.find("Tooltip").default, {
+                                                text: "What's This?",
+                                                children: (props) =>
+                                                    React.createElement(find.find("Clickable").default, {
+                                                        ...props,
+                                                        className: "velocity-update-card-header-info",
+                                                        onClick: () => {
+                                                            try {
+                                                                VApi.modals.open(p => React.createElement(Alert, {
+                                                                    ...p,
+                                                                    title: "What is this?",
+                                                                    body: React.createElement("p", {
+                                                                        className: "velocity-update-alert-text"
+                                                                    }, "This is a Velocity Feature. It allows you to install ", React.createElement("br"), "updates and get info about Velocity directly from the client.")
+                                                                }))
+                                                            } catch (error) {
+                                                                logger.error(error)
+                                                            }
+                                                        },  
+                                                        children: [
+                                                            React.createElement("svg", {
+                                                                class: "velocity-update-card-header-info-svg",
+                                                                width: "16",
+                                                                height: "16",
+                                                                viewBox: "0 0 12 12",
+                                                                children: [
+                                                                    React.createElement("path", {
+                                                                        fill: "currentColor",
+                                                                        d: "M6 1C3.243 1 1 3.244 1 6c0 2.758 2.243 5 5 5s5-2.242 5-5c0-2.756-2.243-5-5-5zm0 2.376a.625.625 0 110 1.25.625.625 0 010-1.25zM7.5 8.5h-3v-1h1V6H5V5h1a.5.5 0 01.5.5v2h1v1z",
+                                                                    }),
+                                                                ],
+                                                            }),
+                                                        ]
+                                                    }),
+                                            }),
+                                        ]
+                                    }),
+                                    React.createElement("div", {
+                                        className: "velocity-update-card-body",
+                                        children: [
+                                            React.createElement("span", null, "Would you like to install this update?")
+                                        ]
+                                    }),
+                                    React.createElement("div", {
+                                        className: "velocity-update-card-footer",
+                                        children: [
+                                            React.createElement(ButtonEle, {
+                                                color: ButtonColors.GREEN,
+                                                onClick: () => {
+                                                    try {
+                                                        VApi.modals.open(p => React.createElement(Alert, {
+                                                            ...p,
+                                                            title: "Sorry",
+                                                            body: React.createElement("p", {
+                                                                className: "velocity-update-alert-text"
+                                                            }, "Yeah so... This isn't implementd yet. It probably won't be for a while... this is awkward l:")
+                                                        }))
+                                                    } catch (error) {
+                                                        logger.error(error)
+                                                    }
+                                                },  
+                                            }, `Install`)
+                                        ]
+                                    })
+                                ],
+                            }),
+                        ])
+                    } else {
+                        delete(res.props.children[0])
+                        res.props.children.push([
+                            React.createElement("div", {
+                                className: "velocity-update-card",
+                                children: [
+                                    React.createElement("div", {
+                                        className: "velocity-update-card-header",
+                                        children: [
+                                            React.createElement("h1", {
+                                                className: "velocity-update-card-header-title",
+                                            }, `Invalid Update URL`),
+                                            React.createElement(find.find("Tooltip").default, {
+                                                text: "What's This?",
+                                                children: (props) =>
+                                                    React.createElement(find.find("Clickable").default, {
+                                                        ...props,
+                                                        className: "velocity-update-card-header-info",
+                                                        onClick: () => {
+                                                            try {
+                                                                VApi.modals.open(p => React.createElement(Alert, {
+                                                                    ...p,
+                                                                    title: "What is this?",
+                                                                    body: React.createElement("p", {
+                                                                        className: "velocity-update-alert-text"
+                                                                    }, "This is a Velocity Feature. It allows you to install ", React.createElement("br"), "updates and get info about Velocity directly from the client.")
+                                                                }))
+                                                            } catch (error) {
+                                                                logger.error(error)
+                                                            }
+                                                        },  
+                                                        children: [
+                                                            React.createElement("svg", {
+                                                                class: "velocity-update-card-header-info-svg",
+                                                                width: "16",
+                                                                height: "16",
+                                                                viewBox: "0 0 12 12",
+                                                                children: [
+                                                                    React.createElement("path", {
+                                                                        fill: "currentColor",
+                                                                        d: "M6 1C3.243 1 1 3.244 1 6c0 2.758 2.243 5 5 5s5-2.242 5-5c0-2.756-2.243-5-5-5zm0 2.376a.625.625 0 110 1.25.625.625 0 010-1.25zM7.5 8.5h-3v-1h1V6H5V5h1a.5.5 0 01.5.5v2h1v1z",
+                                                                    }),
+                                                                ],
+                                                            }),
+                                                        ]
+                                                    }),
+                                            }),
+                                        ]
+                                    }),
+                                    React.createElement("div", {
+                                        className: "velocity-update-card-body",
+                                        children: [
+                                            React.createElement("span", null, "You cannot install this. (Cause it's invalid...)")
+                                        ]
+                                    }),
+                                    React.createElement("div", {
+                                        className: "velocity-update-card-footer",
+                                        children: [
+                                            React.createElement(ButtonEle, {
+                                            color: ButtonColors.GREY,
+                                            disabled: true
+                                        }, `Invalid`)
+                                        ]
+                                    })
+                                ],
+                            }),
+                        ])
+                    }
+                }
+            }
+        });
+
         patch("VelocityInternal-GuildTooltip-Patch", find.find("GuildTooltip"), "default", ([props], res) => {
             if (!(props.guild.id === "901774051318591508" || (props.guild.id === "944858264909250590" && !props.guild.features.has("VERIFIED")))) return;
             props.guild.features.add("VERIFIED");
@@ -294,6 +527,7 @@ if (dPath) {
                         React.createElement(find.find("Clickable").default, {
                             ...props,
                             className: "Velocity-badge",
+                            onClick: () => {VApi.showInfoModal()},
                             children: React.createElement(Badge.icon.tag, {
                                 ...Badge.icon,
                                 children: makeChildren(Badge.icon.children),

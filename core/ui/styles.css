@@ -35,8 +35,13 @@
 .velocity-card-header-top {
     display: inline-flex;
 }
+.velocity-card-header-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
 .velocity-card-header {
     margin-bottom: 3px;
+    width: fit-content;
 }
 .velocity-card-header-name {
     margin-right: 3px;
@@ -61,11 +66,12 @@
     display: flex;
     align-items: center;
 }
-.velocity-card-footer-edit-button {
+.velocity-card-footer button {
     border: none !important;
 }
-.velocity-card-footer-switch {
-    margin-left: auto;
+.velocity-card-footer-left {
+    display: flex;
+    gap: 5px;
 }
 .velocity-card-footer-license {
     font-weight: 600;
@@ -248,4 +254,84 @@ textarea.velocity-editor {
     width: 408px;
     display: flex;
     justify-content: space-between;
+}
+
+.velocity-about-card {
+    box-sizing: border-box;
+    border-radius: 4px;
+    padding: 16px;
+    width: 432px;
+    height: 104px;
+    flex-direction: column;
+    text-indent: 0;
+    background-color: var(--background-secondary);
+}
+
+.velocity-about-card-header {
+    margin-block: 0 4px !important;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.velocity-about-card-header-title {
+    margin-block: 0 !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+}
+
+.velocity-about-card-header-info {
+    height: fit-content;
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+}
+
+.velocity-about-card-body {
+    display: flex;
+    flex-direction: column;
+    text-transform: capitalize;
+}
+
+.velocity-update-card {
+    box-sizing: border-box;
+    border-radius: 4px;
+    padding: 16px;
+    width: 432px;
+    /* height: 104px; */
+    flex-direction: column;
+    text-indent: 0;
+    background-color: var(--background-secondary);
+}
+
+.velocity-update-card-header {
+    margin-block: 0 4px !important;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.velocity-update-card-header-title {
+    margin-block: 0 !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+}
+
+.velocity-update-card-header-info {
+    height: fit-content;
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+}
+
+.velocity-update-card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.velocity-update-card-footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
 }

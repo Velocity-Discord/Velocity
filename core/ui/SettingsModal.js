@@ -2,9 +2,9 @@ const DataStore = require("../datastore")
 const { ipcRenderer, shell } = require("electron");
 const settingsquery = document.querySelector(".panels-3wFtMD > .container-YkUktl .flex-2S1XBF > :last-child");
 const button = VApi.getModule.find(["ButtonColors"]).default;
-const Text = VApi.getModule.find("Text").default;
 const ButtonColors = VApi.getModule.find(["ButtonColors"]).ButtonColors;
 const ButtonSizes = VApi.getModule.find(["ButtonColors"]).ButtonSizes;
+const Text = VApi.getModule.find("Text").default;
 const SwitchEle = VApi.getModule.find("Switch").default;
 const Tooltip = VApi.getModule.find.prototypes("renderTooltip").default;
 const { React, logger } = VApi;
@@ -12,6 +12,7 @@ const Markdown = VApi.getModule.find((m) => m.default?.displayName === "Markdown
 const Switche = VApi.getModule.find("Switch").default
 const TextInput = VApi.getModule.find("TextInput").default;
 const path = require("path")
+const fs = require("fs")
 const closeIcon = VApi.getModule.find("CloseIconWithKeybind").default
 const {info} = require("../../package.json")
 const updater = require("../updater");
@@ -211,28 +212,54 @@ const Card = React.memo((props) => {
         children: [
             React.createElement("div", {
                 className: "velocity-card-header-wrapper",
-                children: React.createElement("div", {
-                    className: "velocity-card-header",
-                    children: [
-                        React.createElement("div", {
-                            className: "velocity-card-header-top",
-                            children: [
-                                React.createElement("div", {
-                                    className: "velocity-card-header-name",
-                                    children: meta.name,
-                                }),
-                                React.createElement("div", {
-                                    className: "velocity-card-header-version",
-                                    children: `v${meta.version}`,
-                                }),
-                            ],
+                children: [
+                    React.createElement("div", {
+                        className: "velocity-card-header",
+                        children: [
+                            React.createElement("div", {
+                                className: "velocity-card-header-top",
+                                children: [
+                                    React.createElement("div", {
+                                        className: "velocity-card-header-name",
+                                        children: meta.name,
+                                    }),
+                                    React.createElement("div", {
+                                        className: "velocity-card-header-version",
+                                        children: `v${meta.version}`,
+                                    }),
+                                ],
+                            }),
+                            React.createElement("div", {
+                                className: "velocity-card-header-author",
+                                children: meta.author,
+                            }),
+                        ],
+                    }),
+                    React.createElement("div", {
+                        className: "velocity-card-header-switch",
+                        children: React.createElement(Switche, {
+                            checked: enabled,
+                            onChange: () => {
+                                try {
+                                    VApi.AddonManager[type].toggle(meta.name);
+                                    setEnabled(!enabled);
+                                    if (!enabled) {
+                                        VApi.showToast(`Enabled <strong>${meta.name}</strong>`, { type: "success" });
+                                    } else {
+                                        VApi.showToast(`Disabled <strong>${meta.name}</strong>`, { type: "success" });
+                                    }
+                                } catch (e) {
+                                    if (!enabled) {
+                                        VApi.showToast(`Failed to start <strong>${meta.name}</strong>`, { type: "error" });
+                                    } else {
+                                        VApi.showToast(`Failed to stop <strong>${meta.name}</strong>`, { type: "error" });
+                                    }
+                                    logger.error("Addon Manager", e);
+                                }
+                            },
                         }),
-                        React.createElement("div", {
-                            className: "velocity-card-header-author",
-                            children: meta.author,
-                        }),
-                    ],
-                }),
+                    }),
+                ],
             }),
             React.createElement("div", {
                 className: "velocity-card-content-wrapper",
@@ -261,33 +288,21 @@ const Card = React.memo((props) => {
                                     },
                                     "Edit",
                                 ),
+                                React.createElement(
+                                    button,
+                                    {
+                                        color: ButtonColors.RED,
+                                        size: ButtonSizes.TINY,
+                                        className: ["velocity-card-footer-delete-button"],
+                                        onClick: () => {
+                                            fs.unlink(meta.file, () => {
+                                                VApi.showToast(`Deleted ${meta.name}`, {type: "error"})
+                                            });
+                                        },
+                                    },
+                                    "Delete",
+                                ),
                             ],
-                        }),
-                        React.createElement("div", {
-                            className: "velocity-card-footer-switch",
-                            children: React.createElement(Switche, {
-                                checked: enabled,
-                                onChange: () => {
-                                    try {
-                                        VApi.AddonManager[type].toggle(meta.name);
-                                        setEnabled(!enabled);
-                                        if (!enabled) {
-                                            VApi.showToast(`Enabled <strong>${meta.name}</strong>`, { type: "success" });
-                                        }
-                                        else {
-                                            VApi.showToast(`Disabled <strong>${meta.name}</strong>`, { type: "success" });
-                                        }
-                                    } catch (e) {
-                                        if (!enabled) {
-                                            VApi.showToast(`Failed to start <strong>${meta.name}</strong>`, { type: "error" });
-                                        }
-                                        else {
-                                            VApi.showToast(`Failed to stop <strong>${meta.name}</strong>`, { type: "error" });
-                                        }
-                                        logger.error("Addon Manager", e);
-                                    }
-                                },
-                            }),
                         }),
                     ],
                 }),

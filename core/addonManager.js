@@ -58,6 +58,9 @@ fs.readdir(themeDir, (err, files) => {
 });
 
 const Themes = new (class {
+    delete(name) {
+        return delete(addons.themes.find((p) => p?.name === name));
+    }
     get(name) {
         return addons.themes.find((p) => p?.name === name);
     }
@@ -119,7 +122,7 @@ fs.watch(themeDir, { persistent: false }, async (eventType, filename) => {
         if (Themes.get(meta.name)) {
             const enabled = Velocity.enabledThemes[meta.name] || false;
 
-            delete addons.themes[getKeyByValue(addons.themes, meta.name)];
+            delete(addons.themes[getKeyByValue(addons.themes, meta.name)]);
 
             VApi.showToast(`Unloaded <strong>${meta.name}</strong>`);
 
@@ -178,6 +181,9 @@ fs.readdir(pluginDir, (err, files) => {
 });
 
 const Plugins = new (class {
+    delete(name) {
+        return delete(addons.plugins.find((p) => p.name === name));
+    }
     get(name) {
         return addons.plugins.find((p) => p.name === name);
     }
@@ -213,6 +219,7 @@ module.exports = {
     themes: () => {
         for (const theme of addonsInit.themes) theme();
         return {
+            delete: (name) => Themes.delete(name),
             getByFileName: (name) => Themes.getByFileName(name),
             get: (name) => Themes.get(name),
             getAll: () => Themes.getAll(),
@@ -227,6 +234,7 @@ module.exports = {
     plugins: () => {
         for (const plugin of addonsInit.plugins) plugin();
         return {
+            delete: (name) => Plugins.delete(name),
             getByFileName: (name) => Plugins.getByFileName(name),
             get: (name) => Plugins.get(name),
             getAll: () => Plugins.getAll(),
