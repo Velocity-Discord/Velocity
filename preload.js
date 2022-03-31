@@ -418,7 +418,7 @@ if (dPath) {
                                                             title: "Sorry",
                                                             body: React.createElement("p", {
                                                                 className: "velocity-update-alert-text"
-                                                            }, "Yeah so... This isn't implementd yet. It probably won't be for a while... this is awkward l:")
+                                                            }, "Yeah so... This isn't implemented yet. It probably won't be for a while... this is awkward l:")
                                                         }))
                                                     } catch (error) {
                                                         logger.error(error)
