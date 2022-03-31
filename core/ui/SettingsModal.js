@@ -230,8 +230,17 @@ const Card = React.memo((props) => {
                                 ],
                             }),
                             React.createElement("div", {
-                                className: "velocity-card-header-author",
-                                children: meta.author,
+                                className: "velocity-card-header-author-wrapper",
+                                children: [
+                                    React.createElement("div", {
+                                        className: "velocity-card-header-author-text",
+                                        children: "By ",
+                                    }),
+                                    React.createElement("div", {
+                                        className: "velocity-card-header-author",
+                                        children: meta.author,
+                                    }),
+                                ],
                             }),
                         ],
                     }),
@@ -296,7 +305,7 @@ const Card = React.memo((props) => {
                                         className: ["velocity-card-footer-delete-button"],
                                         onClick: () => {
                                             fs.unlink(meta.file, () => {
-                                                VApi.showToast(`Deleted ${meta.name}`, {type: "error"})
+                                                VApi.showToast(`Deleted ${meta.name}`, { type: "error" });
                                             });
                                         },
                                     },

@@ -1,5 +1,5 @@
 .velocity-card:nth-last-child(1) {
-    margin-bottom: 30px;
+    margin-bottom: 15px;
 }
 #velocity-settings-section.vertical input {
     margin-top: 5px;
@@ -20,28 +20,41 @@
     margin: 5px 0;
 }
 .velocity-card {
-    max-width: 383.531px;
     overflow: hidden;
+    background: var(--background-secondary);
+    border-radius: 5px;
+    min-height: 95px;
 }
 .velocity-card .paragraph-9M861H {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.velocity-card {
-    background: var(--background-secondary);
-    border-radius: 5px;
-    padding: 3%;
+.velocity-card-content-wrapper {
+    padding: 0 3% 0 3%;
+}
+.velocity-card-footer-wrapper {
+    padding: 0 3% 3% 3%;
+    margin-top: 25px;
 }
 .velocity-card-header-top {
     display: inline-flex;
+    align-items: flex-end;
 }
 .velocity-card-header-wrapper {
     display: flex;
     justify-content: space-between;
+    border-bottom: 1px solid var(--background-modifier-accent);
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    padding: 3%;
+    background: var(--background-secondary-alt);
 }
 .velocity-card-header {
     margin-bottom: 3px;
     width: fit-content;
+    justify-content: flex-end;
+    display: flex;
+    flex-direction: column;
 }
 .velocity-card-header-name {
     margin-right: 3px;
@@ -56,11 +69,29 @@
     color: var(--header-secondary);
     font-size: large;
 }
+.velocity-card-header-switch {
+    display: flex;
+    align-items: center;
+}
+.velocity-card-header-author-wrapper {
+    display: flex;
+}
 .velocity-card-header-author {
     margin-top: 3px;
     font-weight: 600;
     font-size: 9pt;
-    color: var(--brand-experiment);
+    color: var(--brand-experiment-430);
+    margin-bottom: 1px;
+    margin-top: 3px;
+}
+.velocity-card-header-author-text {
+    margin-top: 3px;
+    font-weight: 500;
+    font-size: 9pt;
+    color: var(--text-muted);
+    margin-bottom: 1px;
+    margin-top: 3px;
+    margin-right: 3px;
 }
 .velocity-card-footer {
     display: flex;
