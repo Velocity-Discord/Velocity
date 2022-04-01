@@ -281,14 +281,12 @@ const Card = React.memo((props) => {
                 className: "velocity-card-footer-wrapper",
                 children: React.createElement("div", {
                     className: "velocity-card-footer",
-                    children: [
-                        React.createElement("div", {
+                    children: React.createElement("div", {
                             className: "velocity-card-footer-left",
                             children: [
                                 React.createElement(
                                     button,
                                     {
-                                        color: ButtonColors.GREY,
                                         size: ButtonSizes.TINY,
                                         className: ["velocity-card-footer-edit-button"],
                                         onClick: () => {
@@ -313,7 +311,7 @@ const Card = React.memo((props) => {
                                 ),
                             ],
                         }),
-                    ],
+                    
                 }),
             }),
         ],

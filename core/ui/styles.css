@@ -366,3 +366,25 @@ textarea.velocity-editor {
     align-items: center;
     justify-content: flex-end;
 }
+
+.velocity-permissions-modal-header {
+    font-size: 17px;
+    font-weight: 440;
+    margin-bottom: 5px;
+}
+
+.velocity-permissions-modal-perm {
+    font-weight: 400;
+}
+
+.velocity-button-container button {
+    padding: 2px 16px;
+    width: auto;
+    min-width: 0;
+}
+
+.velocity-card-footer-left button {
+    padding: 2px 8px;
+    width: auto;
+    min-width: 0;
+}

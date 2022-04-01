@@ -8,6 +8,7 @@ const patch = require("./core/patch");
 const fs = require("fs/promises");
 const path = require("path");
 const { info } = require("./package.json");
+const { varParser } = require("./core/styleParser");
 
 const dPath = process.env.DISCORD_PRELOAD;
 
@@ -166,7 +167,7 @@ if (dPath) {
 
                     if (DataStore("VELOCITY_SETTINGS").CSSEnabled) {
                         let style = document.createElement("style");
-                        style.innerText = css;
+                        style.innerText = varParser(css);
                         style.id = "customcss";
                         document.querySelector("velocity-head").appendChild(style);
                     }
@@ -218,7 +219,7 @@ if (dPath) {
 
         if (cssChecked) {
             var style = document.createElement("style");
-            style.innerText = customCSS;
+            style.innerText = varParser(customCSS);
             style.id = "customcss";
             document.querySelector("velocity-head").appendChild(style);
         }
