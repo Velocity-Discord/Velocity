@@ -2,7 +2,8 @@ const fs = require("fs");
 const path = require("path");
 const DataStore = require("./datastore");
 const request = require("./request");
-const { varParser } = require("./styleParser")
+const { parse } = require("./styleParser");
+const cssBeta = DataStore("VELOCITY_SETTINGS").CSSFeatures;
 
 const Velocity = DataStore("VELOCITY_SETTINGS")
 Velocity.enabledThemes = Velocity.enabledThemes || {};
@@ -52,7 +53,7 @@ fs.readdir(themeDir, (err, files) => {
             if (err) throw new Error(`Error reading '${filePath}'`);
             const meta = readMeta(data);
             meta.file = filePath;
-            meta.css = varParser(data);
+            meta.css = cssBeta ? parse(data) : data
             addons.themes.push(meta);
         });
     }
@@ -113,12 +114,13 @@ fs.watch(themeDir, { persistent: false }, async (eventType, filename) => {
     const name = filename.replace(".theme.css", "");
 
     let meta;
+    
     try {
     fs.readFile(absolutePath, "utf8", (err, data) => {
         if (err) throw new Error(`Error reading '${absolutePath}'`);
         meta = readMeta(data);
         meta.file = absolutePath;
-        meta.css = varParser(data);
+        meta.css = cssBeta ? parse(data) : data;
 
         if (Themes.get(meta.name)) {
             const enabled = Velocity.enabledThemes[meta.name] || false;

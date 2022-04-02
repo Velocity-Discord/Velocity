@@ -8,7 +8,7 @@ const patch = require("./core/patch");
 const fs = require("fs/promises");
 const path = require("path");
 const { info } = require("./package.json");
-const { varParser } = require("./core/styleParser");
+const { parse } = require("./core/styleParser");
 
 const dPath = process.env.DISCORD_PRELOAD;
 
@@ -164,10 +164,11 @@ if (dPath) {
                 reload: () => {
                     document.querySelector("#customcss").remove();
                     const css = DataStore("VELOCITY_SETTINGS").CSS;
+                    const cssBeta = DataStore("VELOCITY_SETTINGS").CSSFeatures
 
                     if (DataStore("VELOCITY_SETTINGS").CSSEnabled) {
                         let style = document.createElement("style");
-                        style.innerText = varParser(css);
+                        style.innerText = cssBeta ? parse(css) : css;
                         style.id = "customcss";
                         document.querySelector("velocity-head").appendChild(style);
                     }
@@ -216,10 +217,11 @@ if (dPath) {
 
         let cssChecked = DataStore("VELOCITY_SETTINGS").CSSEnabled;
         let customCSS = DataStore("VELOCITY_SETTINGS").CSS;
+        const cssBeta = DataStore("VELOCITY_SETTINGS").CSSFeatures;
 
         if (cssChecked) {
             var style = document.createElement("style");
-            style.innerText = varParser(customCSS);
+            style.innerText = cssBeta ? parse(customCSS) : customCSS;
             style.id = "customcss";
             document.querySelector("velocity-head").appendChild(style);
         }

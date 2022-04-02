@@ -95,7 +95,8 @@
 }
 .velocity-card-footer {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
+    justify-content: space-between;
 }
 .velocity-card-footer button {
     border: none !important;
@@ -103,10 +104,6 @@
 .velocity-card-footer-left {
     display: flex;
     gap: 5px;
-}
-.velocity-card-footer-license {
-    font-weight: 600;
-    color: var(--text-muted);
 }
 #velocity-addons-grid {
     margin: 20px 0 10px;
@@ -387,4 +384,14 @@ textarea.velocity-editor {
     padding: 2px 8px;
     width: auto;
     min-width: 0;
+}
+.velocity-card-footer-right {
+    display: flex;
+    gap: 5px;
+    align-items: flex-end;
+}
+.velocity-clickable {
+    cursor: pointer;
+    display: flex;
+    align-items: flex-end;
 }
