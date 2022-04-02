@@ -381,7 +381,7 @@ textarea.velocity-editor {
 }
 
 .velocity-card-footer-left button {
-    padding: 2px 8px;
+    padding: 2px 10px;
     width: auto;
     min-width: 0;
 }
@@ -394,4 +394,18 @@ textarea.velocity-editor {
     cursor: pointer;
     display: flex;
     align-items: flex-end;
+    color: var(--text-normal);
+    transition: all 0.1s ease;
+}
+.velocity-clickable:hover {
+    color: white;
+}
+.velocity-addon-card-site,
+.velocity-addon-card-license,
+.velocity-addon-card-source {
+    transform: translateY(1px);
+}
+
+.velocity-addon-card-server {
+    transform: translateY(2px);
 }
