@@ -45,9 +45,11 @@ if (dPath) {
 
         logger.log("Velocity", "DOM Loaded");
 
-        window.DiscordSentry.close();
-        window.DiscordSentry.getCurrentHub().getClient().close();
-        logger.log("Velocity", "Killed Sentry");
+        if (window.DiscordSentry) {
+            window.DiscordSentry.close();
+            window.DiscordSentry.getCurrentHub().getClient().close();
+            logger.log("Velocity", "Killed Sentry");
+        }
 
         function polyfillWebpack() {
             if (typeof(webpackJsonp) !== "undefined") return;
