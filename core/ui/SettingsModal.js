@@ -1050,30 +1050,26 @@ VApi.Patcher("VelocityInternal-Settings-Patch", UserSettings.prototype, "getPred
                                         React.createElement(button, {
                                             color: ButtonColors.BRAND,
                                             onClick: async (target) => {
-                                                let badgeStatus;
-                                                request("https://raw.githubusercontent.com/TheCommieAxolotl/TheCommieAxolotl/main/v/Badges.json", (_, __, body) => {
-                                                    badgeStatus = JSON.parse(body);
-                                                    if (badgeStatus) {
+                                                request("https://raw.githubusercontent.com/TheCommieAxolotl/TheCommieAxolotl/main/v/Badges.json", (_, res, body) => {
+                                                    if (res.statusCode == 200) {
                                                         const statusBadgeElement = document.querySelector(".velocity-developer-status-badges-text");
-                                                        statusBadgeElement.innerHTML = `Status - Fine`;
+                                                        statusBadgeElement.innerHTML = `Status - Fine (${res.statusCode})`;
                                                         statusBadgeElement.style.color = "var(--text-positive)";
                                                     } else {
-                                                        const statusBadgeElement = document.querySelector(".velocity-developer-status-badges-text");
-                                                        statusBadgeElement.innerHTML = `Status - Unknown`;
-                                                        statusBadgeElement.style.color = "var(--text-danger)";
+                                                        const statusUpdateElement = document.querySelector(".velocity-developer-status-badges-text");
+                                                        statusUpdateElement.innerHTML = `Status - Unknown (${res.statusCode})`;
+                                                        statusUpdateElement.style.color = "var(--text-danger)";
                                                     }
                                                 });
 
-                                                let updateStatus;
-                                                request("https://raw.githubusercontent.com/TheCommieAxolotl/TheCommieAxolotl/main/v/update.json", (_, __, body) => {
-                                                    updateStatus = JSON.parse(body)
-                                                    if (updateStatus) {
+                                                request("https://raw.githubusercontent.com/TheCommieAxolotl/TheCommieAxolotl/main/v/update.json", (_, res, body) => {
+                                                    if (res.statusCode == 200) {
                                                         const statusUpdateElement = document.querySelector(".velocity-developer-status-update-text");
-                                                        statusUpdateElement.innerHTML = `Status - Fine`;
+                                                        statusUpdateElement.innerHTML = `Status - Fine (${res.statusCode})`;
                                                         statusUpdateElement.style.color = "var(--text-positive)";
                                                     } else {
                                                         const statusUpdateElement = document.querySelector(".velocity-developer-status-update-text");
-                                                        statusUpdateElement.innerHTML = `Status - Unknown`;
+                                                        statusUpdateElement.innerHTML = `Status - Unknown (${res.statusCode})`;
                                                         statusUpdateElement.style.color = "var(--text-danger)";
                                                     }
                                                 })
@@ -1110,6 +1106,13 @@ VApi.Patcher("VelocityInternal-Settings-Patch", UserSettings.prototype, "getPred
                                     color: Text.Colors.MUTED,
                                     className: "velocity-developer-status-update-text",
                                 }, "Status"),
+                                React.createElement(VApi.getModule.find(["EmptyStateImage"]).EmptyStateImage, {
+                                    height: 200,
+                                    width: 415,
+                                    darkSrc: "/assets/c115d59ca13c0f942965a82a0f05bf01.svg",
+                                    lightSrc: "/assets/ad530d02033b87bb89752f915c2fbe3c.svg",
+                                    style: {flex: "none", marginInline: "auto"}
+                                }),
                             ]
                         })
                     ]);
