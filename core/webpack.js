@@ -41,10 +41,15 @@ else {
         return getModule((m) => props.every((prop) => typeof m.default?.[prop] !== "undefined"), false);
     }
 
-    this.listeners = new Set();
+    let listeners = new Set();
+
+    function addListener(listener) {
+        listeners.add(listener);
+        return removeListener.bind(this, listener);
+    }
 
     function removeListener(listener) {
-        return this.listeners.delete(listener);
+        return listeners.delete(listener);
     }
 
     function getLazy(filter) {
@@ -68,7 +73,7 @@ else {
                 resolve(m.default);
             };
 
-            this.addListener(listener);
+            addListener(listener);
         });
     }
 

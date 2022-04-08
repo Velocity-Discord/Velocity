@@ -387,25 +387,69 @@ textarea.velocity-editor {
 }
 .velocity-card-footer-right {
     display: flex;
-    gap: 5px;
+    gap: 6px;
     align-items: flex-end;
 }
 .velocity-clickable {
     cursor: pointer;
     display: flex;
     align-items: flex-end;
-    color: var(--text-normal);
+    color: var(--text-muted);
     transition: all 0.1s ease;
 }
 .velocity-clickable:hover {
-    color: white;
-}
-.velocity-addon-card-site,
-.velocity-addon-card-license,
-.velocity-addon-card-source {
-    transform: translateY(1px);
+    color: var(--text-normal);
 }
 
-.velocity-addon-card-server {
-    transform: translateY(2px);
+.velocity-developer-internal-patch {
+    gap: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    border-bottom: thin solid var(--background-modifier-accent);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.velocity-developer-internal-patch > [class^="input"] {
+    width: 350px;
+}
+.velocity-developer-container {
+    display: flex;
+    flex-direction: column;
+    padding: 60px 130px 80px 40px;
+    flex: 1 1 auto;
+}
+.velocity-developer-internal-patch-info {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.velocity-developer-internal-beta-tag {
+    color: white;
+    font-weight: 720;
+    font-size: 10pt;
+    border-radius: 20px;
+    background: var(--brand-experiment);
+    padding: 5px 10px;
+}
+.velocity-developer-internal-warning {
+    font-size: 12pt;
+    color: var(--text-danger);
+    font-weight: 600;
+}
+.velocity-developer-header {
+    max-height: 26px !important;
+    margin-bottom: 12px;
+}
+.velocity-developer-items-container {
+    margin-bottom: 15px;
+}
+.velocity-developer-status-buttons-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+.velocity-developer-status-header {
+    font-size: 18px;
+    font-weight: 500;
 }

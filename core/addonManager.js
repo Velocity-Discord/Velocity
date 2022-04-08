@@ -172,13 +172,28 @@ fs.readdir(pluginDir, (err, files) => {
             meta.type = "plugin"
             meta.file = filePath;
             addons.plugins.push(meta);
+            function load() {
+                if (plugin.default) plugin = plugin.default;
+                if (typeof plugin.Plugin === "function") {
+                    setTimeout(() => {
+                        if (plugin.Plugin().onLoad) plugin.Plugin().onLoad();
+                    }, 2000)
+                }
+                else {
+                    setTimeout(() => {
+                        if (plugin.Plugin.onLoad) plugin.Plugin.onLoad();
+                    }, 2000);
+                }
+                return plugin;
+            }
+            load();
             addonsInit.plugins.push(() => {
                 function load() {
                     if (plugin.default) plugin = plugin.default;
                     if (plugin.onLoad) plugin.onLoad();
                     return plugin;
                 }
-                if (typeof meta.update === "undefined") load();
+                load();
             });
         });
     }
@@ -203,12 +218,26 @@ const Plugins = new (class {
     enable(name) {
         const meta = this.get(name);
         DataStore.setData("VELOCITY_SETTINGS", "enabledPlugins", { ...Velocity.enabledPlugins, [meta.name]: true });
-        meta.export.onStart();
+        try {
+            if (typeof meta.export.Plugin === "function") { 
+                return meta.export.Plugin().onStart();
+            }
+            meta.export.Plugin.onStart();
+        } catch (error) {
+            console.error(error);
+        }
     }
     disable(name) {
         const meta = this.get(name);
         DataStore.setData("VELOCITY_SETTINGS", "enabledPlugins", { ...Velocity.enabledPlugins, [meta.name]: false });
-        meta.export.onStop();
+        try {
+            if (typeof meta.export.Plugin === "function") {
+                return meta.export.Plugin().onStop();
+            }
+            meta.export.Plugin.onStop();
+        } catch (error) {
+            console.error(error);
+        }
     }
     toggle(name) {
         return this.isEnabled(name) ? this.disable(name) : this.enable(name);

@@ -2,7 +2,6 @@ const electron = ({ webFrame, contextBridge, ipcRenderer } = require("electron")
 const logger = require("./core/logger");
 const styling = require("./core/styling");
 const scripting = require("./core/scripting");
-const toasts = require("./core/toast");
 const DataStore = require("./core/datastore");
 const patch = require("./core/patch");
 const fs = require("fs/promises");
@@ -49,6 +48,18 @@ if (dPath) {
         window.DiscordSentry.close();
         window.DiscordSentry.getCurrentHub().getClient().close();
         logger.log("Velocity", "Killed Sentry");
+
+        function polyfillWebpack() {
+            if (typeof(webpackJsonp) !== "undefined") return;
+
+            window.webpackJsonp = [];
+            window.webpackJsonp.length = 10000;
+            window.webpackJsonp.flat = () => window.webpackJsonp;
+            window.webpackJsonp.push = ([[], module, [[id]]]) => {
+                return module[id]({}, {}, WebpackModules.require);
+            };
+        }
+        polyfillWebpack()
 
         const DevMode = DataStore("VELOCITY_SETTINGS").DevMode;
 
@@ -106,6 +117,7 @@ if (dPath) {
         const ModalFunctions = find.find(["openModal", "openModalLazy"]);
         const ModalElements = find.find(["ModalRoot", "ModalListContent"]);
 
+        global.webpackChunkdiscord_app = window.webpackChunkdiscord_app;
         const VApi = {
             Meta: {
                 Discord: `${await DiscordNative.app.getReleaseChannel()} ${await DiscordNative.app.getVersion()}`,
@@ -147,7 +159,6 @@ if (dPath) {
             Logger: logger,
             Styling: styling,
             Scripting: scripting,
-            showToast: toasts,
             modals: {
                 open: (reactElement, modalOpts) => ModalFunctions.openModal(reactElement, modalOpts),
                 close: (modalId, way) => ModalFunctions.closeModal(modalId, way),
@@ -185,6 +196,11 @@ if (dPath) {
 
         toWindow("VApi", VApi);
         if (DevMode) logger.log("Velocity", "VApi Added");
+
+        const { showToast, showConfirmationModal } = require("./core/notification");
+
+        VApi.showToast = showToast;
+        VApi.showConfirmationModal = showConfirmationModal
 
         VApi.AddonManager = {
             plugins: plugins(),

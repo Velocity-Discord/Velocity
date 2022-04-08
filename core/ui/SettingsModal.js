@@ -17,6 +17,9 @@ const closeIcon = VApi.getModule.find("CloseIconWithKeybind").default
 const {info} = require("../../package.json")
 const updater = require("../updater");
 
+const { internalPatches } = require("../Stores");
+const request = require("../request");
+
 async function pushLayer(element) { 
     VApi.getModule.find(["pushLayer"]).pushLayer(() => element);
 }
@@ -295,7 +298,7 @@ const Card = React.memo((props) => {
                                             children: [
                                                 React.createElement("svg", {
                                                     className: "velocity-card-footer-source velocity-addon-card-source",
-                                                    width: "18", height: "18", viewBox: "0 0 256 250",
+                                                    width: "16", height: "16", viewBox: "0 0 256 250",
                                                     children: [
                                                         React.createElement("path", {
                                                             d:"M128.00106,0 C57.3172926,0 0,57.3066942 0,128.00106 C0,184.555281 36.6761997,232.535542 87.534937,249.460899 C93.9320223,250.645779 96.280588,246.684165 96.280588,243.303333 C96.280588,240.251045 96.1618878,230.167899 96.106777,219.472176 C60.4967585,227.215235 52.9826207,204.369712 52.9826207,204.369712 C47.1599584,189.574598 38.770408,185.640538 38.770408,185.640538 C27.1568785,177.696113 39.6458206,177.859325 39.6458206,177.859325 C52.4993419,178.762293 59.267365,191.04987 59.267365,191.04987 C70.6837675,210.618423 89.2115753,204.961093 96.5158685,201.690482 C97.6647155,193.417512 100.981959,187.77078 104.642583,184.574357 C76.211799,181.33766 46.324819,170.362144 46.324819,121.315702 C46.324819,107.340889 51.3250588,95.9223682 59.5132437,86.9583937 C58.1842268,83.7344152 53.8029229,70.715562 60.7532354,53.0843636 C60.7532354,53.0843636 71.5019501,49.6441813 95.9626412,66.2049595 C106.172967,63.368876 117.123047,61.9465949 128.00106,61.8978432 C138.879073,61.9465949 149.837632,63.368876 160.067033,66.2049595 C184.49805,49.6441813 195.231926,53.0843636 195.231926,53.0843636 C202.199197,70.715562 197.815773,83.7344152 196.486756,86.9583937 C204.694018,95.9223682 209.660343,107.340889 209.660343,121.315702 C209.660343,170.478725 179.716133,181.303747 151.213281,184.472614 C155.80443,188.444828 159.895342,196.234518 159.895342,208.176593 C159.895342,225.303317 159.746968,239.087361 159.746968,243.303333 C159.746968,246.709601 162.05102,250.70089 168.53925,249.443941 C219.370432,232.499507 256,184.536204 256,128.00106 C256,57.3066942 198.691187,0 128.00106,0 Z M47.9405593,182.340212 C47.6586465,182.976105 46.6581745,183.166873 45.7467277,182.730227 C44.8183235,182.312656 44.2968914,181.445722 44.5978808,180.80771 C44.8734344,180.152739 45.876026,179.97045 46.8023103,180.409216 C47.7328342,180.826786 48.2627451,181.702199 47.9405593,182.340212 Z M54.2367892,187.958254 C53.6263318,188.524199 52.4329723,188.261363 51.6232682,187.366874 C50.7860088,186.474504 50.6291553,185.281144 51.2480912,184.70672 C51.8776254,184.140775 53.0349512,184.405731 53.8743302,185.298101 C54.7115892,186.201069 54.8748019,187.38595 54.2367892,187.958254 Z M58.5562413,195.146347 C57.7719732,195.691096 56.4895886,195.180261 55.6968417,194.042013 C54.9125733,192.903764 54.9125733,191.538713 55.713799,190.991845 C56.5086651,190.444977 57.7719732,190.936735 58.5753181,192.066505 C59.3574669,193.22383 59.3574669,194.58888 58.5562413,195.146347 Z M65.8613592,203.471174 C65.1597571,204.244846 63.6654083,204.03712 62.5716717,202.981538 C61.4524999,201.94927 61.1409122,200.484596 61.8446341,199.710926 C62.5547146,198.935137 64.0575422,199.15346 65.1597571,200.200564 C66.2704506,201.230712 66.6095936,202.705984 65.8613592,203.471174 Z M75.3025151,206.281542 C74.9930474,207.284134 73.553809,207.739857 72.1039724,207.313809 C70.6562556,206.875043 69.7087748,205.700761 70.0012857,204.687571 C70.302275,203.678621 71.7478721,203.20382 73.2083069,203.659543 C74.6539041,204.09619 75.6035048,205.261994 75.3025151,206.281542 Z M86.046947,207.473627 C86.0829806,208.529209 84.8535871,209.404622 83.3316829,209.4237 C81.8013,209.457614 80.563428,208.603398 80.5464708,207.564772 C80.5464708,206.498591 81.7483088,205.631657 83.2786917,205.606221 C84.8005962,205.576546 86.046947,206.424403 86.046947,207.473627 Z M96.6021471,207.069023 C96.7844366,208.099171 95.7267341,209.156872 94.215428,209.438785 C92.7295577,209.710099 91.3539086,209.074206 91.1652603,208.052538 C90.9808515,206.996955 92.0576306,205.939253 93.5413813,205.66582 C95.054807,205.402984 96.4092596,206.021919 96.6021471,207.069023 Z",
@@ -318,10 +321,10 @@ const Card = React.memo((props) => {
                                             children: [
                                                 React.createElement("svg", {
                                                     className: "velocity-card-footer-site velocity-addon-card-site",
-                                                    width: "20", height: "20", viewBox: "0 0 32 32",
+                                                    width: "16", height: "16", viewBox: "0 0 20 20",
                                                     children: [
                                                         React.createElement("path", {
-                                                            d:"M11 16C11 14.6074 11.0779 13.2657 11.2219 12H20.7781C20.9221 13.2657 21 14.6074 21 16C21 17.3926 20.9221 18.7343 20.7781 20H11.2219C11.0779 18.7343 11 17.3926 11 16ZM9.20981 20C9.07254 18.7196 9 17.3786 9 16C9 14.6214 9.07253 13.2804 9.2098 12H2.57976C2.20255 13.2674 2 14.6101 2 16C2 17.39 2.20255 18.7326 2.57976 20H9.20981ZM3.34726 22H9.48459C9.79887 23.8596 10.2564 25.5469 10.8289 26.978C11.1976 27.8997 11.6221 28.7358 12.1012 29.4499C8.23033 28.3298 5.04983 25.584 3.34726 22ZM11.5149 22H20.4851C20.1955 23.5993 19.7954 25.0322 19.3142 26.2352C18.7992 27.5227 18.2109 28.4975 17.6089 29.1341C17.0089 29.7686 16.4649 30 16 30C15.5351 30 14.9911 29.7686 14.3911 29.1341C13.7891 28.4975 13.2008 27.5227 12.6858 26.2352C12.2046 25.0322 11.8045 23.5993 11.5149 22ZM22.5154 22C22.2011 23.8596 21.7436 25.5469 21.1711 26.978C20.8024 27.8997 20.3779 28.7358 19.8988 29.4499C23.7697 28.3298 26.9502 25.584 28.6527 22H22.5154ZM29.4202 20C29.7974 18.7326 30 17.39 30 16C30 14.6101 29.7974 13.2674 29.4202 12H22.7902C22.9275 13.2804 23 14.6214 23 16C23 17.3786 22.9275 18.7196 22.7902 20H29.4202ZM19.3142 5.76479C19.7954 6.96781 20.1955 8.40075 20.4851 10H11.5149C11.8045 8.40075 12.2046 6.96781 12.6858 5.76479C13.2008 4.47728 13.7891 3.50246 14.3911 2.86588C14.989 2.2336 15.5314 2.0016 15.9952 2.00001L16 2L16.0027 2C16.467 2.0009 17.0101 2.23265 17.6089 2.86588C18.2109 3.50246 18.7992 4.47728 19.3142 5.76479ZM22.5154 10H28.6527C26.9502 6.41602 23.7697 3.67018 19.8988 2.55008C20.3779 3.26419 20.8024 4.10032 21.1711 5.022C21.7436 6.45315 22.2011 8.14037 22.5154 10ZM3.34726 10H9.48459C9.79887 8.14037 10.2564 6.45315 10.8289 5.022C11.1976 4.10032 11.6221 3.26419 12.1012 2.55008C8.23032 3.67018 5.04983 6.41602 3.34726 10Z",
+                                                            d:"M 6.9044 14.5008 H 13.0958 C 12.4759 17.7722 11.2345 19.999 10.0001 19.999 C 8.8031 19.999 7.5995 17.9051 6.9624 14.7953 L 6.9044 14.5008 H 13.0958 H 6.9044 Z M 1.0659 14.501 L 5.3715 14.5008 C 5.7363 16.583 6.3546 18.3545 7.1637 19.5942 C 4.6009 18.8373 2.4672 17.0825 1.2122 14.7799 L 1.0659 14.501 Z M 14.6286 14.5008 L 18.9343 14.501 C 17.703 16.9406 15.5018 18.8071 12.8375 19.5939 C 13.592 18.4362 14.1807 16.8162 14.5524 14.9129 L 14.6286 14.5008 L 18.9343 14.501 L 14.6286 14.5008 Z M 14.9315 8.0008 L 19.8016 8.0002 C 19.9328 8.6465 20.0016 9.3155 20.0016 10.0005 C 20.0016 11.0458 19.8413 12.0537 19.5438 13.0009 H 14.8412 C 14.9465 12.0433 15.0016 11.0372 15.0016 10.0005 C 15.0016 9.5462 14.991 9.0977 14.9703 8.6567 L 14.9315 8.0008 L 19.8016 8.0002 L 14.9315 8.0008 Z M 0.1986 8.0002 L 5.0686 8.0008 C 5.0224 8.6508 4.9985 9.319 4.9985 10.0005 C 4.9985 10.8299 5.0339 11.6396 5.1019 12.4207 L 5.159 13.0009 H 0.4564 C 0.1589 12.0537 -0.0015 11.0458 -0.0015 10.0005 C -0.0015 9.3155 0.0674 8.6465 0.1986 8.0002 Z M 6.5756 8.0002 H 13.4246 C 13.4748 8.6459 13.5016 9.3147 13.5016 10.0005 C 13.5016 10.8381 13.4617 11.6505 13.3878 12.4262 L 13.3261 13.0009 H 6.674 C 6.561 12.0551 6.4985 11.0476 6.4985 10.0005 C 6.4985 9.4862 6.5136 8.9814 6.5423 8.4887 L 6.5756 8.0002 H 13.4246 H 6.5756 Z M 12.9444 0.5771 L 12.8365 0.4068 C 15.8548 1.2978 18.2788 3.5744 19.372 6.5002 L 14.7811 6.5005 C 14.4656 4.0835 13.8246 2.0079 12.9444 0.5771 L 12.8365 0.4068 L 12.9444 0.5771 Z M 7.0419 0.4436 L 7.1636 0.4069 C 6.2829 1.7564 5.6283 3.736 5.2806 6.0606 L 5.2191 6.5005 L 0.6282 6.5002 C 1.7066 3.6139 4.0802 1.3594 7.0419 0.4436 L 7.1636 0.4069 L 7.0419 0.4436 Z M 10.0001 0.0019 C 11.3189 0.0019 12.6457 2.5437 13.2141 6.1854 L 13.2609 6.5002 H 6.7393 C 7.2787 2.691 8.6436 0.0019 10.0001 0.0019 Z",
                                                             fill: "currentColor"
                                                         })
                                                     ],
@@ -341,10 +344,10 @@ const Card = React.memo((props) => {
                                             children: [
                                                 React.createElement("svg", {
                                                     className: "velocity-card-footer-server velocity-addon-card-server",
-                                                    width: "20", height: "20", viewBox: "0 0 24 24",
+                                                    width: "16", height: "16", viewBox: "0 0 20 20",
                                                     children: [
                                                         React.createElement("path", {
-                                                            d:"M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM17 13.5C17 12.6716 16.3284 12 15.5 12H8.5C7.67157 12 7 12.6716 7 13.5V14C7 15.9714 8.85951 18 12 18C15.1405 18 17 15.9714 17 14V13.5ZM14.75 8.25C14.75 6.73122 13.5188 5.5 12 5.5C10.4812 5.5 9.25 6.73122 9.25 8.25C9.25 9.76878 10.4812 11 12 11C13.5188 11 14.75 9.76878 14.75 8.25Z",
+                                                            d:"M 10 20 C 4.4771 20 0 15.5228 0 10 C 0 4.4771 4.4771 0 10 0 C 15.5228 0 20 4.4771 20 10 C 20 15.5228 15.5228 20 10 20 Z M 15 11.5 C 15 10.6716 14.3284 10 13.5 10 H 6.5 C 5.6716 10 5 10.6716 5 11.5 V 12 C 5 13.9714 6.8595 16 10 16 C 13.1405 16 15 13.9714 15 12 V 11.5 Z M 12.75 6.25 C 12.75 4.7312 11.5188 3.5 10 3.5 C 8.4812 3.5 7.25 4.7312 7.25 6.25 C 7.25 7.7688 8.4812 9 10 9 C 11.5188 9 12.75 7.7688 12.75 6.25 Z",
                                                             fill: "currentColor"
                                                         })
                                                     ],
@@ -364,7 +367,7 @@ const Card = React.memo((props) => {
                                             children: [
                                                 React.createElement("svg", {
                                                     className: "velocity-card-footer-license velocity-addon-card-license",
-                                                    width: "18", height: "18", viewBox: "0 0 24 24",
+                                                    width: "16", height: "16", viewBox: "0 0 24 24",
                                                     children: [
                                                         React.createElement("path", {
                                                             d:"M3.75 3C3.33579 3 3 3.33579 3 3.75C3 4.16421 3.33579 4.5 3.75 4.5H4.792L2.05543 11.217C2.01882 11.3069 2 11.403 2 11.5C2 13.433 3.567 15 5.5 15C7.433 15 9 13.433 9 11.5C9 11.403 8.98118 11.3069 8.94457 11.217L6.208 4.5H11.25L11.25 16.5H7.25293C6.01029 16.5 5.00293 17.5074 5.00293 18.75C5.00293 19.9926 6.01029 21 7.25293 21H16.75C17.9926 21 19 19.9926 19 18.75C19 17.5074 17.9926 16.5 16.75 16.5H12.75L12.75 4.5H17.792L15.0554 11.217C15.0188 11.3069 15 11.403 15 11.5C15 13.433 16.567 15 18.5 15C20.433 15 22 13.433 22 11.5C22 11.403 21.9812 11.3069 21.9446 11.217L19.208 4.5H20.25C20.6642 4.5 21 4.16421 21 3.75C21 3.33579 20.6642 3 20.25 3H3.75ZM5.5 6.73782L7.13459 10.75H3.86541L5.5 6.73782ZM16.8654 10.75L18.5 6.73782L20.1346 10.75H16.8654Z",
@@ -517,6 +520,11 @@ async function settingsPrompt(title) {
                                 type: "number",
                                 vertical: true,
                                 maxLength: 2,
+                            }),
+                            React.createElement(SettingsSection, {
+                                setting: "DeveloperSettings",
+                                name: "Developer Settings",
+                                note: "Only Enbale if you know what you are doing.",
                             }),
                             React.createElement(Text, {
                                 color: Text.Colors.HEADER_SECONDARY,
@@ -971,6 +979,146 @@ VApi.Patcher("VelocityInternal-Settings-Patch", UserSettings.prototype, "getPred
             themePrompt("Themes");
         },
     });
+    if (Settings.DeveloperSettings) {
+        insert({
+            section: "developer",
+            label: "Developer",
+            className: `velocity-developer-tab`,
+            onClick: () => {
+                try {
+                    VApi.getModule.find(["pushLayer"]).pushLayer(() => [
+                        React.createElement("div", {
+                            className: "velocity-close-conteainer",
+                            style: { top: "60px", right: "60px", position: "absolute" },
+                            children: [
+                                React.createElement(closeIcon, {
+                                    closeAction: () => {
+                                        VApi.getModule.find(["popLayer"]).popLayer();
+                                    },
+                                    keybind: "ESC",
+                                }),
+                            ],
+                        }),
+                        React.createElement("div", {
+                            className: "velocity-developer-container",
+                            children: [
+                                React.createElement(Text, {
+                                    size: Text.Sizes.SIZE_14,
+                                    className: `velocity-developer-header ${VApi.getModule.find(["h1"]).h1}`,
+                                }, "Internal Patches"),
+                                React.createElement("div", {
+                                    className: "velocity-developer-items-container",
+                                    children: [
+                                        internalPatches.map((patch) => React.createElement("div", {
+                                            className: "velocity-developer-internal-patch",
+                                            children: [
+                                                React.createElement(TextInput, {
+                                                    value: patch.name,
+                                                    disabled: true
+                                                }),
+                                                React.createElement("div", {
+                                                    className: "velocity-developer-internal-patch-info",
+                                                    children: [
+                                                        patch.warning && React.createElement("div", {
+                                                            className: "velocity-developer-internal-warning",
+                                                        }, "WARNING - Killing this patch is dangerous and can cause issues."),
+                                                        patch.beta && React.createElement("div", {
+                                                            className: "velocity-developer-internal-beta-tag",
+                                                        }, "BETA"),
+                                                        React.createElement(button, {
+                                                            size: ButtonSizes.SMALL,
+                                                            color: ButtonColors.RED,
+                                                            onClick: (target) => {
+                                                                target.target.tagName == "BUTTON" ? target.target.setAttribute("disabled", "true") : target.target.parentElement.setAttribute("disabled", "true");
+                                                                VApi.Patcher.unpatchAll(patch.name);
+                                                                VApi.showToast(`Killed <strong>${patch.name}</strong>`, { type: "error" });
+                                                            }
+                                                        }, "Kill")
+                                                    ]
+                                                }),
+                                            ]
+                                        }))
+                                    ]
+                                }),
+                                React.createElement(Text, {
+                                    size: Text.Sizes.SIZE_14,
+                                    className: `velocity-developer-header ${VApi.getModule.find(["h1"]).h1}`,
+                                }, "Backend Status"),
+                                React.createElement("div", {
+                                    className: "velocity-developer-status-buttons-container",
+                                    children: [
+                                        React.createElement(button, {
+                                            color: ButtonColors.BRAND,
+                                            onClick: async (target) => {
+                                                let badgeStatus;
+                                                request("https://raw.githubusercontent.com/TheCommieAxolotl/TheCommieAxolotl/main/v/Badges.json", (_, __, body) => {
+                                                    badgeStatus = JSON.parse(body);
+                                                    if (badgeStatus) {
+                                                        const statusBadgeElement = document.querySelector(".velocity-developer-status-badges-text");
+                                                        statusBadgeElement.innerHTML = `Status - Fine`;
+                                                        statusBadgeElement.style.color = "var(--text-positive)";
+                                                    } else {
+                                                        const statusBadgeElement = document.querySelector(".velocity-developer-status-badges-text");
+                                                        statusBadgeElement.innerHTML = `Status - Unknown`;
+                                                        statusBadgeElement.style.color = "var(--text-danger)";
+                                                    }
+                                                });
+
+                                                let updateStatus;
+                                                request("https://raw.githubusercontent.com/TheCommieAxolotl/TheCommieAxolotl/main/v/update.json", (_, __, body) => {
+                                                    updateStatus = JSON.parse(body)
+                                                    if (updateStatus) {
+                                                        const statusUpdateElement = document.querySelector(".velocity-developer-status-update-text");
+                                                        statusUpdateElement.innerHTML = `Status - Fine`;
+                                                        statusUpdateElement.style.color = "var(--text-positive)";
+                                                    } else {
+                                                        const statusUpdateElement = document.querySelector(".velocity-developer-status-update-text");
+                                                        statusUpdateElement.innerHTML = `Status - Unknown`;
+                                                        statusUpdateElement.style.color = "var(--text-danger)";
+                                                    }
+                                                })
+                                            }
+                                        }, "Re-Request"),
+                                        React.createElement(button, {
+                                            color: ButtonColors.RED,
+                                            onClick: (target) => {
+                                                const statusBadgeElement = document.querySelector(".velocity-developer-status-badges-text");
+                                                const statusUpdateElement = document.querySelector(".velocity-developer-status-update-text");
+                                                statusUpdateElement.innerHTML = "Status";
+                                                statusBadgeElement.innerHTML = "Status";
+                                                statusUpdateElement.style.color = null;
+                                                statusBadgeElement.style.color = null;
+                                            }
+                                        }, "Clear Cache")
+                                    ]
+                                }),
+                                React.createElement(Text, {
+                                    size: Text.Sizes.SIZE_16,
+                                    className: "velocity-developer-status-header"
+                                }, "Badges"),
+                                React.createElement(Text, {
+                                    size: Text.Sizes.SIZE_14,
+                                    color: Text.Colors.MUTED,
+                                    className: "velocity-developer-status-badges-text",
+                                }, "Status"),
+                                React.createElement(Text, {
+                                    size: Text.Sizes.SIZE_16,
+                                    className: "velocity-developer-status-header"
+                                }, "Updates"),
+                                React.createElement(Text, {
+                                    size: Text.Sizes.SIZE_14,
+                                    color: Text.Colors.MUTED,
+                                    className: "velocity-developer-status-update-text",
+                                }, "Status"),
+                            ]
+                        })
+                    ]);
+                } catch (error) {
+                    console.error(error)
+                }
+            },
+        });
+    }
     let changeLocation = returnValue.findIndex((s) => s.section.toLowerCase() == "changelog") + 1;
     if (changeLocation < 0) return;
     const insertChange = (section) => {
@@ -986,4 +1134,30 @@ VApi.Patcher("VelocityInternal-Settings-Patch", UserSettings.prototype, "getPred
             updater.changelogModal()
         },
     });
+});
+
+const TabBar = VApi.getModule.find("TabBar").default
+VApi.Patcher("VelocityInternal-Settings-Info-Patch", TabBar.prototype, "render", ([args], returnValue) => {
+    let children = returnValue.props.children;
+    if (!children || !children.length || children.length < 3) return;
+    if (children[children.length - 3].type.displayName !== "Separator") return;
+    if (!children[children.length - 2].type.toString().includes("socialLinks")) return;
+    let infoClasses = VApi.getModule.find(["versionHash"])
+
+    const infoEle = React.createElement("span", {
+        className: `${Text.Colors.MUTED} ${Text.Sizes.SIZE_12} ${infoClasses.line}`,
+        children: [
+            `velocity ${info.version} `,
+            React.createElement("span", {
+                className: infoClasses.versionHash
+            }, `(${info.hash})`)
+        ]
+    });
+
+    const originalVersions = children[children.length - 1].type;
+    children[children.length - 1].type = function () {
+        const returnVal = originalVersions(...arguments);
+        returnVal.props.children.splice(1, 0, infoEle);
+        return returnVal;
+    };
 });

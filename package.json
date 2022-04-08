@@ -1,6 +1,6 @@
 {
     "name": "velocity",
-    "version": "0.2.1",
+    "version": "0.3.1",
     "description": "Small Discord Client Mod.",
     "main": "index.js",
     "author": "TheCommieAxolotl",
@@ -8,8 +8,8 @@
     "info": {
         "name": "Velocity",
         "description": "Small Discord Client Mod.",
-        "version": "0.2.1",
-        "hash": "a8f5b6",
+        "version": "0.3.1",
+        "hash": "0714550",
         "api": {
             "version": "1.0.0",
             "channel": "stable"
