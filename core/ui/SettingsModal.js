@@ -16,6 +16,7 @@ const fs = require("fs")
 const closeIcon = VApi.getModule.find("CloseIconWithKeybind").default
 const {info} = require("../../package.json")
 const updater = require("../updater");
+const ModalComponents = VApi.getModule.find(["ModalRoot"]);
 
 const { internalPatches } = require("../Stores");
 const request = require("../request");
@@ -421,249 +422,264 @@ const settings = DataStore("VELOCITY_SETTINGS");
 const Settings = DataStore("VELOCITY_SETTINGS");
 const headerClasses = "velocity-header-display"
 
-async function settingsPrompt(title) {
+async function settingsPrompt() {
     const { getModule, modals } = VApi;
-    const ConfirmationModal = getModule.find("ConfirmModal").default;
-    const Button = getModule.find(["ButtonColors"]);
-    const { Messages } = getModule.find((m) => m.default?.Messages?.OKAY).default;
-    const TextInput = VApi.getModule.find("TextInput").default;
-    const Switch = VApi.getModule.find("Switch").default;
-
-    const csschecked = settings.CSSEnabled;
-    const jschecked = settings.JSEnabled;
 
     return new Promise((resolve) => {
-        modals.open((props) => {
-            if (props.transitionState === 3) resolve(null);
-            return React.createElement(
-                ConfirmationModal,
-                Object.assign(
-                    {
-                        header: title,
-                        confirmButtonColor: Button.ButtonColors.BRAND,
-                        confirmText: "Done",
-                        onConfirm: () => resolve(true),
-                        onCancel: () => resolve(false),
-                        children: [
-                            React.createElement(SettingsTitle, { text: "General", divider: true }),
-                            React.createElement(SettingsSection, {
-                                setting: "CheckForUpdates",
-                                name: "Check For Updates",
-                                note: "Checks for updates on start.",
-                            }),
-                            React.createElement(SettingsSection, {
-                                setting: "ReloadOnLogin",
-                                name: "Reload On Login",
-                                note: "Fixes some issues with logins.",
-                            }),
-                            React.createElement(SettingsTitle, { text: "Window", divider: true }),
-                            React.createElement(SettingsSection, {
-                                setting: "Transparency",
-                                name: "Window Transparency",
-                                note: "Makes the main window transparent.",
-                                reload: true,
-                                action: () => {
-                                    DataStore.setData("VELOCITY_SETTINGS", "Vibrancy", false);
-                                    const warning = document.getElementById("velocity-settings-section-transparency-warning");
-                                    warning.innerHTML = "Requires Restart.";
-                                },
-                            }),
-                            React.createElement(SettingsSection, {
-                                setting: "Vibrancy",
-                                name: "Window Vibrancy",
-                                note: "Makes the main window have Vibrancy. (MacOS)",
-                                reload: true,
-                                action: () => {
-                                    DataStore.setData("VELOCITY_SETTINGS", "Transparency", false);
-                                    const warning = document.getElementById("velocity-settings-section-vibrancy-warning");
-                                    warning.innerHTML = "Requires Restart.";
-                                },
-                            }),
-                            React.createElement(SettingsTitle, { text: "Tools", divider: true }),
-                            React.createElement(SettingsSection, {
-                                setting: "CSSEnabled",
-                                name: "Custom Css",
-                                note: "Enables Custom Css.",
-                            }),
-                            React.createElement(SettingsSection, {
-                                setting: "JSEnabled",
-                                name: "Startup Script",
-                                note: "Loads Startup Script.",
-                                warning: "You can easily add malicious scripts! Be careful!",
-                            }),
-                            React.createElement(SettingsTitle, { text: "Developer", divider: true }),
-                            React.createElement(SettingsSection, {
-                                setting: "DegubberKey",
-                                name: "Debugger Hotkey",
-                                note: "Press f8 to freeze discord with DevTools open.",
-                                reload: true,
-                                action: () => {
-                                    const warning = document.getElementById("velocity-settings-section-degubberkey-warning");
-                                    warning.innerHTML = "Requires Restart.";
-                                },
-                            }),
-                            React.createElement(SettingsSection, {
-                                setting: "DevMode",
-                                name: "Debugging Mode",
-                                note: "Sends startup logs to the console.",
-                            }),
-                            React.createElement(SettingsSection, {
-                                setting: "CSSFeatures",
-                                name: "Beta CSS Features",
-                                note: "Adds Velocity's beta CSS @ Rules.",
-                            }),
-                            React.createElement(SettingsInputSection, {
-                                setting: "FontSize",
-                                name: "Editor Font Size",
-                                note: "A value between 2-14 is best.",
-                                placeholder: "14",
-                                type: "number",
-                                vertical: true,
-                                maxLength: 2,
-                            }),
-                            React.createElement(SettingsSection, {
-                                setting: "DeveloperSettings",
-                                name: "Developer Settings",
-                                note: "Only Enbale if you know what you are doing.",
-                            }),
-                            React.createElement(Text, {
-                                color: Text.Colors.HEADER_SECONDARY,
-                                size: Text.Sizes.SIZE_12,
-                                style: { marginTop: "5px" },
-                                children: [
-                                    "psst, need some help? Join our ",
-                                    React.createElement(
-                                        "a",
-                                        {
-                                            onClick: () => {
-                                                VApi.Utilities.joinOfficialServer();
-                                                VApi.showToast("Exit settings and have a look!", { title: "Joined Official Server", type: "success", timeout: 5000 });
-                                            },
+        modals.open(props => React.createElement(ModalComponents.ModalRoot, Object.assign(props, {
+            size: "medium",
+            className: "velocity-modal",
+            children: [
+                React.createElement(ModalComponents.ModalHeader, null, React.createElement(Text, {
+                    size: Text.Sizes.SIZE_20,
+                    color: Text.Colors.HEADER_PRIMARY,
+                    className: VApi.getModule.find(["h1"]).h1,
+                }, "Velocity Settings")),
+                React.createElement(ModalComponents.ModalContent, {
+                    children: [
+                        React.createElement(SettingsTitle, {
+                            text: "General",
+                            divider: true
+                        }),
+                        React.createElement(SettingsSection, {
+                            setting: "CheckForUpdates",
+                            name: "Check For Updates",
+                            note: "Checks for updates on start.",
+                        }),
+                        React.createElement(SettingsSection, {
+                            setting: "ReloadOnLogin",
+                            name: "Reload On Login",
+                            note: "Fixes some issues with logins.",
+                        }),
+                        React.createElement(SettingsTitle, {
+                            text: "Window",
+                            divider: true
+                        }),
+                        React.createElement(SettingsSection, {
+                            setting: "Transparency",
+                            name: "Window Transparency",
+                            note: "Makes the main window transparent.",
+                            reload: true,
+                            action: () => {
+                                DataStore.setData("VELOCITY_SETTINGS", "Vibrancy", false);
+                                const warning = document.getElementById("velocity-settings-section-transparency-warning");
+                                warning.innerHTML = "Requires Restart.";
+                            },
+                        }),
+                        React.createElement(SettingsSection, {
+                            setting: "Vibrancy",
+                            name: "Window Vibrancy",
+                            note: "Makes the main window have Vibrancy. (MacOS)",
+                            reload: true,
+                            action: () => {
+                                DataStore.setData("VELOCITY_SETTINGS", "Transparency", false);
+                                const warning = document.getElementById("velocity-settings-section-vibrancy-warning");
+                                warning.innerHTML = "Requires Restart.";
+                            },
+                        }),
+                        React.createElement(SettingsTitle, {
+                            text: "Tools",
+                            divider: true
+                        }),
+                        React.createElement(SettingsSection, {
+                            setting: "CSSEnabled",
+                            name: "Custom Css",
+                            note: "Enables Custom Css.",
+                        }),
+                        React.createElement(SettingsSection, {
+                            setting: "JSEnabled",
+                            name: "Startup Script",
+                            note: "Loads Startup Script.",
+                            warning: "You can easily add malicious scripts! Be careful!",
+                        }),
+                        React.createElement(SettingsTitle, {
+                            text: "Developer",
+                            divider: true
+                        }),
+                        React.createElement(SettingsSection, {
+                            setting: "DegubberKey",
+                            name: "Debugger Hotkey",
+                            note: "Press f8 to freeze discord with DevTools open.",
+                            reload: true,
+                            action: () => {
+                                const warning = document.getElementById("velocity-settings-section-degubberkey-warning");
+                                warning.innerHTML = "Requires Restart.";
+                            },
+                        }),
+                        React.createElement(SettingsSection, {
+                            setting: "DevMode",
+                            name: "Debugging Mode",
+                            note: "Sends startup logs to the console.",
+                        }),
+                        React.createElement(SettingsSection, {
+                            setting: "CSSFeatures",
+                            name: "Beta CSS Features",
+                            note: "Adds Velocity's beta CSS @ Rules.",
+                        }),
+                        React.createElement(SettingsInputSection, {
+                            setting: "FontSize",
+                            name: "Editor Font Size",
+                            note: "A value between 2-14 is best.",
+                            placeholder: "14",
+                            type: "number",
+                            vertical: true,
+                            maxLength: 2,
+                        }),
+                        React.createElement(SettingsSection, {
+                            setting: "DeveloperSettings",
+                            name: "Developer Settings",
+                            note: "Only Enbale if you know what you are doing.",
+                        }),
+                    ], 
+                }),
+                React.createElement(ModalComponents.ModalFooter, {
+                    className: "velocity-modal-footer",
+                    children: [
+                        React.createElement(Text, {
+                            color: Text.Colors.HEADER_SECONDARY,
+                            size: Text.Sizes.SIZE_12,
+                            style: {
+                                marginTop: "5px"
+                            },
+                            children: [
+                                "psst, need some help? Join our ",
+                                React.createElement(
+                                    "a", {
+                                        onClick: () => {
+                                            VApi.Utilities.joinOfficialServer();
+                                            VApi.showToast("Exit settings and have a look!", {
+                                                title: "Joined Official Server",
+                                                type: "success",
+                                                timeout: 5000
+                                            });
                                         },
-                                        "Official Server",
-                                    ),
-                                ],
-                            }),
-                        ],
-                    },
-                    props,
-                ),
-            );
-        });
+                                    },
+                                    "Official Server",
+                                ),
+                            ],
+                        }),
+                        React.createElement(button, {
+                            onClick: props.onClose,
+                            className: "velocity-button"
+                        }, "Done")
+                    ]
+                })
+            ]
+        })));
     });
 }
 
-async function pluginPrompt(title) {
+async function pluginPrompt() {
     const Plugins = VApi.AddonManager.plugins.getAll();
     const { getModule, modals } = VApi;
-    const ConfirmationModal = getModule.find("ConfirmModal").default;
-    const Button = getModule.find(["ButtonColors"]);
-    const { Messages } = getModule.find((m) => m.default?.Messages?.OKAY).default;
-    const TextInput = VApi.getModule.find("TextInput").default;
-
-    const csschecked = settings.CSSEnabled;
-    const startupJS = DataStore.getData("VELOCITY_SETTINGS", "JS");
 
     return new Promise((resolve) => {
-        modals.open((props) => {
-            if (props.transitionState === 3) resolve(null);
-            return React.createElement(
-                ConfirmationModal,
-                Object.assign(
-                    {
-                        header: title,
-                        confirmButtonColor: Button.ButtonColors.BRAND,
-                        confirmText: "Done",
-                        onConfirm: () => resolve(true),
-                        onCancel: () => resolve(false),
-                        children: [
-                            React.createElement(
-                                button,
-                                {
-                                    id: "plugins-folder",
-                                    color: ButtonColors.BRAND,
-                                    size: ButtonSizes.SMALL,
-                                    className: ["velocity-button"],
-                                    onClick: () => {
-                                        shell.openPath(VApi.AddonManager.plugins.folder);
-                                    },
+        modals.open(props => React.createElement(ModalComponents.ModalRoot, Object.assign(props, {
+            size: "medium",
+            className: "velocity-modal",
+            children: [
+                React.createElement(ModalComponents.ModalHeader, null, React.createElement(Text, {
+                    size: Text.Sizes.SIZE_20,
+                    color: Text.Colors.HEADER_PRIMARY,
+                    className: VApi.getModule.find(["h1"]).h1,
+                }, "Velocity Plugins")),
+                React.createElement(ModalComponents.ModalContent, {
+                    children: [
+                        React.createElement("div", {className: "velocity-modal-spacer"}),
+                        React.createElement(
+                            button,
+                            {
+                                id: "plugins-folder",
+                                color: ButtonColors.BRAND,
+                                size: ButtonSizes.SMALL,
+                                className: ["velocity-button"],
+                                onClick: () => {
+                                    shell.openPath(VApi.AddonManager.plugins.folder);
                                 },
-                                "Open Plugins Folder",
-                            ),
-                            React.createElement("div", {
-                                id: "velocity-addons-grid",
-                                children: [
-                                    Plugins.map((plugin) =>
-                                        React.createElement(Card, {
-                                            meta: plugin,
-                                            type: "plugins",
-                                        }),
-                                    ),
-                                ],
-                            }),
-                        ],
-                    },
-                    props,
-                ),
-            );
-        });
+                            },
+                            "Open Plugins Folder",
+                        ),
+                        React.createElement("div", {
+                            id: "velocity-addons-grid",
+                            children: [
+                                Plugins.map((plugin) =>
+                                    React.createElement(Card, {
+                                        meta: plugin,
+                                        type: "plugins",
+                                    }),
+                                ),
+                            ],
+                        }),
+                    ], 
+                }),
+                React.createElement(ModalComponents.ModalFooter, {
+                    className: "velocity-modal-footer",
+                    children: [
+                        React.createElement(button, {
+                            onClick: props.onClose,
+                            className: "velocity-button"
+                        }, "Done")
+                    ]
+                })
+            ]
+        })));
     });
 }
 
-async function themePrompt(title) {
+async function themePrompt() {
     const Themes = VApi.AddonManager.themes.getAll();
     const { getModule, modals } = VApi;
-    const ConfirmationModal = getModule.find("ConfirmModal").default;
-    const Button = getModule.find(["ButtonColors"]);
-    const { Messages } = getModule.find((m) => m.default?.Messages?.OKAY).default;
-    const TextInput = VApi.getModule.find("TextInput").default;
-
-    const csschecked = settings.CSSEnabled;
-    const startupJS = DataStore.getData("VELOCITY_SETTINGS", "JS");
 
     return new Promise((resolve) => {
-        modals.open((props) => {
-            if (props.transitionState === 3) resolve(null);
-            return React.createElement(
-                ConfirmationModal,
-                Object.assign(
-                    {
-                        header: title,
-                        confirmButtonColor: Button.ButtonColors.BRAND,
-                        confirmText: "Done",
-                        onConfirm: () => resolve(true),
-                        onCancel: () => resolve(false),
-                        children: [
-                            React.createElement(
-                                button,
-                                {
-                                    id: "themes-folder",
-                                    color: ButtonColors.BRAND,
-                                    size: ButtonSizes.SMALL,
-                                    className: ["velocity-button"],
-                                    onClick: () => {
-                                        shell.openPath(VApi.AddonManager.themes.folder);
-                                    },
+        modals.open(props => React.createElement(ModalComponents.ModalRoot, Object.assign(props, {
+            size: "medium",
+            className: "velocity-modal",
+            children: [
+                React.createElement(ModalComponents.ModalHeader, null, React.createElement(Text, {
+                    size: Text.Sizes.SIZE_20,
+                    color: Text.Colors.HEADER_PRIMARY,
+                    className: VApi.getModule.find(["h1"]).h1,
+                }, "Velocity Plugins")),
+                React.createElement(ModalComponents.ModalContent, {
+                    children: [
+                        React.createElement("div", {className: "velocity-modal-spacer"}),
+                        React.createElement(
+                            button,
+                            {
+                                id: "themes-folder",
+                                color: ButtonColors.BRAND,
+                                size: ButtonSizes.SMALL,
+                                className: ["velocity-button"],
+                                onClick: () => {
+                                    shell.openPath(VApi.AddonManager.themes.folder);
                                 },
-                                "Open Themes Folder",
-                            ),
-                            React.createElement("div", {
-                                id: "velocity-addons-grid",
-                                children: [
-                                    Themes.map((theme) =>
-                                        React.createElement(Card, {
-                                            meta: theme,
-                                            type: "themes",
-                                        }),
-                                    ),
-                                ],
-                            }),
-                        ],
-                    },
-                    props,
-                ),
-            );
-        });
+                            },
+                            "Open Themes Folder",
+                        ),
+                        React.createElement("div", {
+                            id: "velocity-addons-grid",
+                            children: [
+                                Themes.map((theme) =>
+                                    React.createElement(Card, {
+                                        meta: theme,
+                                        type: "themes",
+                                    }),
+                                ),
+                            ],
+                        }),
+                    ], 
+                }),
+                React.createElement(ModalComponents.ModalFooter, {
+                    className: "velocity-modal-footer",
+                    children: [
+                        React.createElement(button, {
+                            onClick: props.onClose,
+                            className: "velocity-button"
+                        }, "Done")
+                    ]
+                })
+            ]
+        })));
     });
 }
 
@@ -676,198 +692,201 @@ if (fontsize < 2) {
     fontsize = 2;
     DataStore.setData("VELOCITY_SETTINGS", "FontSize", 2);
 }
-async function jsPrompt(title) {
+async function jsPrompt() {
     const { getModule, modals } = VApi;
-    const ConfirmationModal = getModule.find("ConfirmModal").default;
-    const Button = getModule.find(["ButtonColors"]);
-    const { Messages } = getModule.find((m) => m.default?.Messages?.OKAY).default;
-    const TextInput = VApi.getModule.find("TextInput").default;
 
-    const csschecked = settings.CSSEnabled;
-    const startupJS = DataStore.getData("VELOCITY_SETTINGS", "JS");
     return new Promise((resolve) => {
-        modals.open((props) => {
-            if (props.transitionState === 3) resolve(null);
-            return React.createElement(
-                ConfirmationModal,
-                Object.assign(
-                    {
-                        header: title,
-                        confirmButtonColor: Button.ButtonColors.BRAND,
-                        confirmText: "Done",
-                        onConfirm: () => resolve(true),
-                        onCancel: () => resolve(false),
-                        children: [
-                            React.createElement(
-                                "h1",
-                                {
-                                    class: headerClasses,
-                                },
-                                "Startup Script",
-                            ),
-                            React.createElement("div", {
-                                id: "editor",
-                            }),
-                            React.createElement(Tooltip, {
-                                text: "You can still manually add the script...",
-                                children: (props) => 
-                                React.createElement(VApi.getModule.find("Clickable").default, {
-                                    ...props,
-                                    className: "warning-clickable",
-                                    children: [
-                                        React.createElement(Text, {
-                                            color: Text.Colors.ERROR,
-                                            size: Text.Sizes.SIZE_14,
-                                            id: `velocity-script-warning`,
-                                        }, ""),
-                                    ],
-                                    onClick: () => {
-                                        const coreDir = path.join(__dirname, "..");
-                                        const settingsDir = path.join(coreDir, "..", "settings")
-                                        shell.openPath(settingsDir);
-                                    }
-                                }),
-                            }),
-                            (this.save = React.createElement("div", {
-                                class: "velocity-button-container",
+        modals.open(props => React.createElement(ModalComponents.ModalRoot, Object.assign(props, {
+            size: "medium",
+            className: "velocity-modal",
+            children: [
+                React.createElement(ModalComponents.ModalHeader, null, React.createElement(Text, {
+                    size: Text.Sizes.SIZE_20,
+                    color: Text.Colors.HEADER_PRIMARY,
+                    className: VApi.getModule.find(["h1"]).h1,
+                }, "Startup Script")),
+                React.createElement(ModalComponents.ModalContent, {
+                    children: [
+                        React.createElement("div", {className: "velocity-modal-spacer"}),
+                        React.createElement(
+                            "h1",
+                            {
+                                class: headerClasses,
+                            },
+                            "Startup Script",
+                        ),
+                        React.createElement("div", {
+                            id: "editor",
+                        }),
+                        React.createElement(Tooltip, {
+                            text: "You can still manually add the script...",
+                            children: (props) => 
+                            React.createElement(VApi.getModule.find("Clickable").default, {
+                                ...props,
+                                className: "warning-clickable",
                                 children: [
-                                    React.createElement(
-                                        button,
-                                        {
-                                            id: "startup-script-save",
-                                            disabled: false,
-                                            className: [ButtonColors.BRAND, "velocity-button"],
-                                            onClick: ({target}) => {
-                                                const content = window.editor.getValue();
-                                                if (!target.disabled) {
-                                                    DataStore.setData("VELOCITY_SETTINGS", "JS", content);
-                                                    VApi.showToast("Saved", { type: "success" });
-                                                }
-                                            },
-                                        },
-                                        "Save",
-                                    ),
-                                    React.createElement(
-                                        button,
-                                        {
-                                            id: "startup-script-clear",
-                                            className: [ButtonColors.RED, "velocity-button"],
-                                            onClick: () => {
-                                                window.editor.setValue("");
-                                                DataStore.setData("VELOCITY_SETTINGS", "JS", "");
-
-                                                VApi.showToast("Cleared", { type: "success" });
-                                            },
-                                        },
-                                        "Clear",
-                                    ),
+                                    React.createElement(Text, {
+                                        color: Text.Colors.ERROR,
+                                        size: Text.Sizes.SIZE_14,
+                                        id: `velocity-script-warning`,
+                                    }, ""),
                                 ],
-                            })),
-                        ],
-                    },
-                    props,
-                ),
-            );
-        });
+                                onClick: () => {
+                                    const coreDir = path.join(__dirname, "..");
+                                    const settingsDir = path.join(coreDir, "..", "settings")
+                                    shell.openPath(settingsDir);
+                                }
+                            }),
+                        }),
+                        (this.save = React.createElement("div", {
+                            class: "velocity-button-container",
+                            children: [
+                                React.createElement(
+                                    button,
+                                    {
+                                        id: "startup-script-save",
+                                        disabled: false,
+                                        className: [ButtonColors.BRAND, "velocity-button"],
+                                        onClick: ({target}) => {
+                                            const content = window.editor.getValue();
+                                            if (!target.disabled) {
+                                                DataStore.setData("VELOCITY_SETTINGS", "JS", content);
+                                                VApi.showToast("Saved", { type: "success" });
+                                            }
+                                        },
+                                    },
+                                    "Save",
+                                ),
+                                React.createElement(
+                                    button,
+                                    {
+                                        id: "startup-script-clear",
+                                        className: [ButtonColors.RED, "velocity-button"],
+                                        onClick: () => {
+                                            window.editor.setValue("");
+                                            DataStore.setData("VELOCITY_SETTINGS", "JS", "");
+
+                                            VApi.showToast("Cleared", { type: "success" });
+                                        },
+                                    },
+                                    "Clear",
+                                ),
+                            ],
+                        })),
+                        React.createElement("div", {className: "velocity-modal-spacer"}),
+                    ], 
+                }),
+                React.createElement(ModalComponents.ModalFooter, {
+                    className: "velocity-modal-footer",
+                    children: [
+                        React.createElement(button, {
+                            onClick: props.onClose,
+                            className: "velocity-button"
+                        }, "Done")
+                    ]
+                })
+            ]
+        })));
     });
 }
 
-async function cssPrompt(title) {
+async function cssPrompt() {
     const { getModule, modals } = VApi;
-    const ConfirmationModal = getModule.find("ConfirmModal").default;
-    const Button = getModule.find(["ButtonColors"]);
-    const { Messages } = getModule.find((m) => m.default?.Messages?.OKAY).default;
-    const TextInput = VApi.getModule.find("TextInput").default;
-
-    const csschecked = settings.CSSEnabled;
-    const customCSS = DataStore.getData("VELOCITY_SETTINGS", "CSS");
 
     return new Promise((resolve) => {
-        modals.open((props) => {
-            if (props.transitionState === 3) resolve(null);
-            return React.createElement(
-                ConfirmationModal,
-                Object.assign(
-                    {
-                        header: title,
-                        confirmButtonColor: Button.ButtonColors.BRAND,
-                        confirmText: "Done",
-                        onConfirm: () => resolve(true),
-                        onCancel: () => resolve(false),
-                        children: [
-                            React.createElement(
-                                "h1",
-                                {
-                                    class: headerClasses,
-                                },
-                                "Custom Css",
-                            ),
-                            React.createElement("div", {
-                                id: "editor",
-                            }),
-                            React.createElement(Tooltip, {
-                                text: "Click me to open the folder!",
-                                children: (props) => 
-                                React.createElement(VApi.getModule.find("Clickable").default, {
-                                    ...props,
-                                    className: "warning-clickable",
-                                    children: [
-                                        React.createElement(Text, {
-                                            color: Text.Colors.ERROR,
-                                            size: Text.Sizes.SIZE_14,
-                                            id: `velocity-customcss-warning`,
-                                        }, ""),
-                                    ],
-                                    onClick: () => {
-                                        shell.openPath(VApi.AddonManager.themes.folder);
-                                    }
-                                }),
-                            }),
-                            React.createElement("div", {
-                                class: "velocity-button-container",
+        modals.open(props => React.createElement(ModalComponents.ModalRoot, Object.assign(props, {
+            size: "medium",
+            className: "velocity-modal",
+            children: [
+                React.createElement(ModalComponents.ModalHeader, null, React.createElement(Text, {
+                    size: Text.Sizes.SIZE_20,
+                    color: Text.Colors.HEADER_PRIMARY,
+                    className: VApi.getModule.find(["h1"]).h1,
+                }, "Startup Custom CSS")),
+                React.createElement(ModalComponents.ModalContent, {
+                    children: [
+                        React.createElement("div", {className: "velocity-modal-spacer"}),
+                        React.createElement(
+                            "h1",
+                            {
+                                class: headerClasses,
+                            },
+                            "Custom Css",
+                        ),
+                        React.createElement("div", {
+                            id: "editor",
+                        }),
+                        React.createElement(Tooltip, {
+                            text: "Click me to open the folder!",
+                            children: (props) => 
+                            React.createElement(VApi.getModule.find("Clickable").default, {
+                                ...props,
+                                className: "warning-clickable",
                                 children: [
-                                    React.createElement(
-                                        button,
-                                        {
-                                            id: "custom-css-save",
-                                            className: [ButtonColors.BRAND, "velocity-button"],
-                                            onClick: () => {
-                                                try {
-                                                    const content = window.editor.getValue();
-                                                    DataStore.setData("VELOCITY_SETTINGS", "CSS", content);
-                                                    VApi.customCSS.reload();
-
-                                                    VApi.showToast("Saved", { type: "success" });
-                                                } catch (error) {
-                                                    console.error(error)
-                                                }
-                                            },
-                                        },
-                                        "Save",
-                                    ),
-                                    React.createElement(
-                                        button,
-                                        {
-                                            id: "custom-css-clear",
-                                            className: [ButtonColors.RED, "velocity-button"],
-                                            onClick: () => {
-                                                window.editor.setValue("");
-                                                DataStore.setData("VELOCITY_SETTINGS", "CSS", "");
+                                    React.createElement(Text, {
+                                        color: Text.Colors.ERROR,
+                                        size: Text.Sizes.SIZE_14,
+                                        id: `velocity-customcss-warning`,
+                                    }, ""),
+                                ],
+                                onClick: () => {
+                                    shell.openPath(VApi.AddonManager.themes.folder);
+                                }
+                            }),
+                        }),
+                        React.createElement("div", {
+                            class: "velocity-button-container",
+                            children: [
+                                React.createElement(
+                                    button,
+                                    {
+                                        id: "custom-css-save",
+                                        className: [ButtonColors.BRAND, "velocity-button"],
+                                        onClick: () => {
+                                            try {
+                                                const content = window.editor.getValue();
+                                                DataStore.setData("VELOCITY_SETTINGS", "CSS", content);
                                                 VApi.customCSS.reload();
 
-                                                VApi.showToast("Cleared", { type: "success" });
-                                            },
+                                                VApi.showToast("Saved", { type: "success" });
+                                            } catch (error) {
+                                                console.error(error)
+                                            }
                                         },
-                                        "Clear",
-                                    ),
-                                ],
-                            }),
-                        ],
-                    },
-                    props,
-                ),
-            );
-        });
+                                    },
+                                    "Save",
+                                ),
+                                React.createElement(
+                                    button,
+                                    {
+                                        id: "custom-css-clear",
+                                        className: [ButtonColors.RED, "velocity-button"],
+                                        onClick: () => {
+                                            window.editor.setValue("");
+                                            DataStore.setData("VELOCITY_SETTINGS", "CSS", "");
+                                            VApi.customCSS.reload();
+
+                                            VApi.showToast("Cleared", { type: "success" });
+                                        },
+                                    },
+                                    "Clear",
+                                ),
+                            ],
+                        }),
+                        React.createElement("div", {className: "velocity-modal-spacer"}),
+                    ], 
+                }),
+                React.createElement(ModalComponents.ModalFooter, {
+                    className: "velocity-modal-footer",
+                    children: [
+                        React.createElement(button, {
+                            onClick: props.onClose,
+                            className: "velocity-button"
+                        }, "Done")
+                    ]
+                })
+            ]
+        })));
     });
 }
 
@@ -897,7 +916,7 @@ VApi.Patcher("VelocityInternal-Settings-Patch", UserSettings.prototype, "getPred
         label: "Settings",
         className: `velocity-settings-tab`,
         onClick: () => {
-            settingsPrompt("Velocity Settings");
+            settingsPrompt();
         },
     });
 
@@ -908,7 +927,7 @@ VApi.Patcher("VelocityInternal-Settings-Patch", UserSettings.prototype, "getPred
             className: `velocity-customcss-tab`,
             onClick: () => {
                 const customCSS = DataStore.getData("VELOCITY_SETTINGS", "CSS");
-                cssPrompt("Custom CSS");
+                cssPrompt();
                 setTimeout(() => {
                     window.editor = monaco.editor.create(document.getElementById("editor"), {
                         language: "css",
@@ -938,7 +957,7 @@ VApi.Patcher("VelocityInternal-Settings-Patch", UserSettings.prototype, "getPred
             className: `velocity-ssscript-tab`,
             onClick: () => {
                 const startupJS = DataStore.getData("VELOCITY_SETTINGS", "JS");
-                jsPrompt("Startup Script");
+                jsPrompt();
                 setTimeout(() => {
                     window.editor = monaco.editor.create(document.getElementById("editor"), {
                         language: "javascript",
@@ -968,7 +987,7 @@ VApi.Patcher("VelocityInternal-Settings-Patch", UserSettings.prototype, "getPred
         label: "Plugins",
         className: `velocity-plugins-tab`,
         onClick: () => {
-            pluginPrompt("Plugins");
+            pluginPrompt();
         },
     });
     insert({
@@ -976,7 +995,7 @@ VApi.Patcher("VelocityInternal-Settings-Patch", UserSettings.prototype, "getPred
         label: "Themes",
         className: `velocity-themes-tab`,
         onClick: () => {
-            themePrompt("Themes");
+            themePrompt();
         },
     });
     if (Settings.DeveloperSettings) {

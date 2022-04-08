@@ -229,7 +229,7 @@ textarea.velocity-editor {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-block: 5px;
+    margin-block: 10px 5px;
 }
 
 .velocity-settings-title {
@@ -470,4 +470,10 @@ textarea.velocity-editor {
     background-color: var(--scrollbar-auto-scrollbar-color-thumb) !important;
     border-inline: 4px solid var(--background-primary);
     border-radius: 50px;
+}
+.velocity-modal-footer {
+    flex-direction: column-reverse;
+}
+.velocity-modal-spacer {
+    height: 10px;
 }
