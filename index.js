@@ -66,7 +66,6 @@ function LoadDiscord() {
     Module._load(join(basePath, pkg.main), null, true);
 }
 
-
 if (process.argv.includes("--vanilla")) {
     return LoadDiscord();
 }
@@ -86,10 +85,12 @@ electron.app.once("ready", () => {
     });
 });
 
-const Electron = new Proxy(electron, { get: (target, prop) => (prop === "BrowserWindow" ? BrowserWindow : target[prop]) });
 const electronPath = require.resolve("electron");
 delete require.cache[electronPath].exports;
-require.cache[electronPath].exports = Electron;
+require.cache[electronPath].exports = {
+    ...electron,
+    BrowserWindow,
+};
 
 const devToolsKey = "DANGEROUS_ENABLE_DEVTOOLS_ONLY_ENABLE_IF_YOU_KNOW_WHAT_YOURE_DOING";
 if (!global.appSettings) global.appSettings = {};
