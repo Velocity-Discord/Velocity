@@ -3,7 +3,7 @@
 </p>
 
 # Velocity
-A Small Client Mod for Discord
+#### An upcoming Client Modification for [@discord](https://github.com/discord) enhanced by Plugins and Themes!
 
 # License Notice
 The license notice is included at the top of `index.js`
