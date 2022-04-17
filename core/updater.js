@@ -49,11 +49,12 @@ async function failModal(title, content) {
 async function checkForUpdates() {
     logger.log("Velocity", "Checking for updates");
     let updateData;
-    request(updateURL, (_, __, body) => (updateData = JSON.parse(body)));
+    request(updateURL, async (_, __, body) => {
+        updateData = JSON.parse(body);
 
-    await waitUntil(() => window.document.querySelector('[class*="guilds"]'));
-    VApi.showToast("Requesting Update Data");
-    setTimeout(() => {
+        await waitUntil(() => window.document.querySelector('[class*="guilds"]'));
+        VApi.showToast("Requesting Update Data");
+
         if (updateData) {
             if (updateData.version !== info.version) {
                 async function updatePrompt() {
@@ -63,7 +64,6 @@ async function checkForUpdates() {
                     const ButtonEle = Button.default;
                     const Text = getModule.find("Text").default;
                     const { Messages } = getModule.find((m) => m.default?.Messages?.OKAY).default;
-                    const Markdown = getModule.find((m) => m.default?.displayName === "Markdown" && m.default.rules).default;
 
                     return new Promise((resolve) => {
                         modals.open((props) => {
@@ -146,19 +146,20 @@ async function checkForUpdates() {
                 VApi.showToast("No Updates Found");
             }
         }
-    }, 1500);
+    });
 }
 
 async function changelogModal(options = {}) {
     let updateJson;
-    request(updateURL, (_, __, body) => (updateJson = JSON.parse(body)));
+    request(updateURL, (_, __, body) => {
+        updateJson = JSON.parse(body);
 
-    setTimeout(() => {
         const {
             image = updateJson.changelog.image || "https://velocity-discord.netlify.app/assets/3.png",
             subtitle = updateJson.changelog.subtitle,
             description = updateJson.changelog.description,
         } = options;
+
         const { React, getModule, modals } = VApi;
         const ConfirmationModal = getModule.find("ConfirmModal").default;
         const Button = getModule.find(["ButtonColors"]);
@@ -229,7 +230,7 @@ async function changelogModal(options = {}) {
                 );
             });
         });
-    }, 1500);
+    });
 }
 
 module.exports = { checkForUpdates, changelogModal };
