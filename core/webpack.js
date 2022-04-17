@@ -57,17 +57,19 @@ else {
         if (fromCache) return Promise.resolve(fromCache);
 
         return new Promise((resolve) => {
-            const cancel = () => {removeListener(listener)};
+            const cancel = () => {
+                removeListener(listener);
+            };
             const listener = function (m) {
                 const directMatch = filter(m);
-                
+
                 if (directMatch) {
                     cancel();
                     return resolve(directMatch);
                 }
 
                 const defaultMatch = filter(m.default);
-                if (!defaultMatch) return; 
+                if (!defaultMatch) return;
 
                 cancel();
                 resolve(m.default);

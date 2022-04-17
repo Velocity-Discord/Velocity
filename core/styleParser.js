@@ -1,4 +1,4 @@
-const logger = require("./logger")
+const logger = require("./logger");
 
 function varParser(css) {
     let newCSS = css;
@@ -25,7 +25,7 @@ function ifParser(css) {
         ifs.forEach((v) => {
             let condition = v.match(ifRgx)[1];
             let content = v.match(cRgx);
-            newCSS = newCSS.replace(v, "")
+            newCSS = newCSS.replace(v, "");
 
             let c = content[0].replace("*/", "").replace(/\/\*[\s]*@end-if/, "");
 
@@ -38,7 +38,7 @@ ${c}
                     \`
                     }`);
             } catch (e) {
-                logger.error("Style Parser", e)
+                logger.error("Style Parser", e);
             }
         });
     }
@@ -49,8 +49,8 @@ ${c}
 function parse(css) {
     let newCSS = css;
 
-    newCSS = ifParser(newCSS)
-    newCSS = varParser(newCSS)
+    newCSS = ifParser(newCSS);
+    newCSS = varParser(newCSS);
 
     return newCSS;
 }

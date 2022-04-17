@@ -1,6 +1,6 @@
-// This Client Mod is based on DrDiscord version 1.0.0 as found here: https://github.com/unknown81311/DrDiscord
+// This Client Mod is based on DrDiscord version 1.0.0 as found here: https://github.com/Dr-Discord/DrDiscord (now unavailable)
 // Original license: MIT License
-// https://github.com/unknown81311/DrDiscord/blob/main/LICENSE.md
+// hhttps://github.com/Dr-Discord/DrDiscord/blob/main/LICENSE.md
 
 const { join } = require("path");
 const electron = ({ ipcMain, app } = require("electron"));
@@ -9,6 +9,8 @@ const request = require("./core/request");
 const DataStore = require("./core/datastore");
 
 const Settings = DataStore("VELOCITY_SETTINGS");
+
+process.env.VELOCITY_DIRECTORY = __dirname;
 
 electron.app.commandLine.appendSwitch("no-force-async-hooks-checks");
 function ipc(ev, func) {

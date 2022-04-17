@@ -19,7 +19,7 @@ function requ({ request }, resolve, { method, url, headers, qs, timeout, body, s
                     timeout,
                     body,
                     stream,
-                }),
+                })
             );
         }
         resolve(res);

@@ -5,7 +5,7 @@ const request = require("./request");
 const { parse } = require("./styleParser");
 const cssBeta = DataStore("VELOCITY_SETTINGS").CSSFeatures;
 
-const Velocity = DataStore("VELOCITY_SETTINGS")
+const Velocity = DataStore("VELOCITY_SETTINGS");
 Velocity.enabledThemes = Velocity.enabledThemes || {};
 Velocity.enabledPlugins = Velocity.enabledPlugins || {};
 
@@ -46,14 +46,14 @@ if (!fs.existsSync(themeDir)) fs.mkdirSync(themeDir);
 
 fs.readdir(themeDir, (err, files) => {
     if (err) throw new Error(`Error reading '${themeDir}'`);
-    files = files.filter((file) => filters.themes.test(file));
+    files = files.filter((file) => filters.themes.test(file)).sort();
     for (const file of files) {
         const filePath = path.join(themeDir, file);
         fs.readFile(filePath, "utf8", (err, data) => {
             if (err) throw new Error(`Error reading '${filePath}'`);
             const meta = readMeta(data);
             meta.file = filePath;
-            meta.css = cssBeta ? parse(data) : data
+            meta.css = cssBeta ? parse(data) : data;
             addons.themes.push(meta);
         });
     }
@@ -61,7 +61,7 @@ fs.readdir(themeDir, (err, files) => {
 
 const Themes = new (class {
     delete(name) {
-        return delete(addons.themes.find((p) => p?.name === name));
+        return delete addons.themes.find((p) => p?.name === name);
     }
     get(name) {
         return addons.themes.find((p) => p?.name === name);
@@ -114,45 +114,45 @@ fs.watch(themeDir, { persistent: false }, async (eventType, filename) => {
     const name = filename.replace(".theme.css", "");
 
     let meta;
-    
+
     try {
-    fs.readFile(absolutePath, "utf8", (err, data) => {
-        if (err) throw new Error(`Error reading '${absolutePath}'`);
-        meta = readMeta(data);
-        meta.file = absolutePath;
-        meta.css = cssBeta ? parse(data) : data;
+        fs.readFile(absolutePath, "utf8", (err, data) => {
+            if (err) throw new Error(`Error reading '${absolutePath}'`);
+            meta = readMeta(data);
+            meta.file = absolutePath;
+            meta.css = cssBeta ? parse(data) : data;
 
-        if (Themes.get(meta.name)) {
-            const enabled = Velocity.enabledThemes[meta.name] || false;
+            if (Themes.get(meta.name)) {
+                const enabled = Velocity.enabledThemes[meta.name] || false;
 
-            delete(addons.themes[getKeyByValue(addons.themes, meta.name)]);
+                delete addons.themes[getKeyByValue(addons.themes, meta.name)];
 
-            VApi.showToast(`Unloaded <strong>${meta.name}</strong>`);
+                VApi.showToast(`Unloaded <strong>${meta.name}</strong>`);
 
-            addons.themes.push(meta);
-            VApi.showToast(`Loaded <strong>${meta.name}</strong>`);
+                addons.themes.push(meta);
+                VApi.showToast(`Loaded <strong>${meta.name}</strong>`);
 
-            if (enabled) {
-                const ele = document.querySelectorAll(`[velocity-theme-id="${meta.name}"]`);
-                for (let ele1 of ele) {
-                    if (ele1) {
-                        ele1.remove();
-                        VApi.showToast(`Disabled <strong>${meta.name}</strong>`, { type: "success" });
+                if (enabled) {
+                    const ele = document.querySelectorAll(`[velocity-theme-id="${meta.name}"]`);
+                    for (let ele1 of ele) {
+                        if (ele1) {
+                            ele1.remove();
+                            VApi.showToast(`Disabled <strong>${meta.name}</strong>`, { type: "success" });
+                        }
                     }
+                    const style = document.createElement("style");
+                    style.innerHTML = meta.css;
+                    style.setAttribute("velocity-theme-id", meta.name);
+                    document.querySelector("velocity-themes").appendChild(style);
+                    VApi.showToast(`Enabled <strong>${meta.name}</strong>`, { type: "success" });
                 }
-                const style = document.createElement("style");
-                style.innerHTML = meta.css;
-                style.setAttribute("velocity-theme-id", meta.name);
-                document.querySelector("velocity-themes").appendChild(style);
-                VApi.showToast(`Enabled <strong>${meta.name}</strong>`, { type: "success" });
+            } else {
+                addons.themes.push(meta);
             }
-        } else {
-            addons.themes.push(meta);
-        }
-    });
+        });
     } catch (e) {
-        Logger.error("Addon Manager", e)
-        VApi.showToast("Error Reading Theme Directory", {type: "error"})
+        Logger.error("Addon Manager", e);
+        VApi.showToast("Error Reading Theme Directory", { type: "error" });
     }
 });
 
@@ -161,7 +161,7 @@ if (!fs.existsSync(pluginDir)) fs.mkdirSync(pluginDir);
 
 fs.readdir(pluginDir, (err, files) => {
     if (err) throw new Error(`Error reading '${pluginDir}'`);
-    files = files.filter((file) => filters.plugins.test(file));
+    files = files.filter((file) => filters.plugins.test(file)).sort();
     for (const file of files) {
         const filePath = path.join(pluginDir, file);
         fs.readFile(filePath, "utf8", (err, data) => {
@@ -169,7 +169,7 @@ fs.readdir(pluginDir, (err, files) => {
             const meta = readMeta(data);
             let plugin = require(filePath);
             meta.export = plugin;
-            meta.type = "plugin"
+            meta.type = "plugin";
             meta.file = filePath;
             addons.plugins.push(meta);
             function load() {
@@ -177,9 +177,8 @@ fs.readdir(pluginDir, (err, files) => {
                 if (typeof plugin.Plugin === "function") {
                     setTimeout(() => {
                         if (plugin.Plugin().onLoad) plugin.Plugin().onLoad();
-                    }, 2000)
-                }
-                else {
+                    }, 2000);
+                } else {
                     setTimeout(() => {
                         if (plugin.Plugin.onLoad) plugin.Plugin.onLoad();
                     }, 2000);
@@ -201,7 +200,7 @@ fs.readdir(pluginDir, (err, files) => {
 
 const Plugins = new (class {
     delete(name) {
-        return delete(addons.plugins.find((p) => p.name === name));
+        return delete addons.plugins.find((p) => p.name === name);
     }
     get(name) {
         return addons.plugins.find((p) => p.name === name);
@@ -219,7 +218,7 @@ const Plugins = new (class {
         const meta = this.get(name);
         DataStore.setData("VELOCITY_SETTINGS", "enabledPlugins", { ...Velocity.enabledPlugins, [meta.name]: true });
         try {
-            if (typeof meta.export.Plugin === "function") { 
+            if (typeof meta.export.Plugin === "function") {
                 return meta.export.Plugin().onStart();
             }
             meta.export.Plugin.onStart();

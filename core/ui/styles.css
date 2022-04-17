@@ -1,13 +1,16 @@
 .velocity-card:nth-last-child(1) {
     margin-bottom: 15px;
 }
+
 #velocity-settings-section.vertical input {
     margin-top: 5px;
 }
+
 #velocity-customcss-warning,
 #velocity-script-warning {
     cursor: pointer;
 }
+
 .monaco-editor .decorationsOverviewRuler,
 .monaco-editor .editor-scrollable,
 .monaco-editor .minimap-shadow-visible,
@@ -15,31 +18,38 @@
 .monaco-editor:not(.rename-box) {
     height: 100% !important;
 }
+
 #editor {
     height: 300px;
     margin: 5px 0;
 }
+
 .velocity-card {
     overflow: hidden;
     background: var(--background-secondary);
     border-radius: 5px;
     min-height: 95px;
 }
+
 .velocity-card .paragraph-9M861H {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
 .velocity-card-content-wrapper {
     padding: 0 3% 0 3%;
 }
+
 .velocity-card-footer-wrapper {
     padding: 0 3% 3% 3%;
     margin-top: 25px;
 }
+
 .velocity-card-header-top {
     display: inline-flex;
     align-items: flex-end;
 }
+
 .velocity-card-header-wrapper {
     display: flex;
     justify-content: space-between;
@@ -49,6 +59,7 @@
     padding: 3%;
     background: var(--background-secondary-alt);
 }
+
 .velocity-card-header {
     margin-bottom: 3px;
     width: fit-content;
@@ -56,12 +67,14 @@
     display: flex;
     flex-direction: column;
 }
+
 .velocity-card-header-name {
     margin-right: 3px;
     font-weight: 550;
     color: var(--header-primary);
     font-size: large;
 }
+
 .velocity-card-header-version {
     opacity: 0.8;
     margin-right: 3px;
@@ -69,13 +82,16 @@
     color: var(--header-secondary);
     font-size: large;
 }
+
 .velocity-card-header-switch {
     display: flex;
     align-items: center;
 }
+
 .velocity-card-header-author-wrapper {
     display: flex;
 }
+
 .velocity-card-header-author {
     margin-top: 3px;
     font-weight: 600;
@@ -84,6 +100,7 @@
     margin-bottom: 1px;
     margin-top: 3px;
 }
+
 .velocity-card-header-author-text {
     margin-top: 3px;
     font-weight: 500;
@@ -93,23 +110,34 @@
     margin-top: 3px;
     margin-right: 3px;
 }
+
 .velocity-card-footer {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
 }
-.velocity-card-footer button {
-    border: none !important;
+
+.velocity-card-footer-sponsor-button {
+    border: 2px solid #da7bca !important;
+    background-color: #0000 !important;
+    box-sizing: border-box;
 }
+
+.velocity-card-footer-sponsor-button:hover {
+    background-color: #da7bca29 !important;
+}
+
 .velocity-card-footer-left {
     display: flex;
     gap: 5px;
 }
+
 #velocity-addons-grid {
     margin: 20px 0 10px;
     display: grid;
     grid-gap: 20px;
 }
+
 @keyframes toastShow {
     from {
         opacity: 0;
@@ -120,6 +148,7 @@
         transform: translateX(0) scale(1);
     }
 }
+
 @keyframes toastHide {
     from {
         opacity: 1;
@@ -130,6 +159,7 @@
         transform: translateX(100px) scale(0.3);
     }
 }
+
 .velocity-toast {
     max-width: 300px;
     overflow: hidden;
@@ -151,68 +181,86 @@
     border-right: 3px solid;
     border-right-color: var(--text-default);
 }
+
 .velocity-toast.closing {
     animation: toastHide 0.15s ease-in;
     opacity: 0;
     transform: translateY(-30px) scale(0.3);
 }
+
 velocity-toasts {
     display: flex;
     width: 100%;
     align-items: flex-end;
     flex-direction: column;
 }
+
 .velocity-toast.type-error {
     border-right-color: #fd3a5f;
 }
+
 .velocity-toast.type-success {
     border-right-color: #38bf5d;
 }
+
 .velocity-toast.type-warn {
     border-right-color: #da8d14;
 }
+
 .velocity-toast.type-velocity {
     border-right-color: var(--brand-experiment);
 }
+
 .Velocity-badge {
     cursor: pointer;
 }
+
 #velocity-settings-section.vertical {
     flex-direction: column;
 }
+
 #velocity-settings-section {
     display: flex;
     padding: 5%;
     border-bottom: thin solid var(--background-modifier-accent);
 }
+
 #velocity-settings-section:nth-child(1) {
     border-top: thin solid var(--background-modifier-accent);
 }
+
 #velocity-settings-section > div:not([class^="input"]):nth-child(2) {
     position: absolute;
     right: 5%;
 }
+
 #velocity-settings-section-info > div:nth-child(1) {
     font-weight: 500;
 }
+
 #velocity-settings-section-info > div:nth-child(2) {
     font-weight: 400;
 }
+
 .velocity-button-container {
     display: flex;
 }
+
 .velocity-button {
     margin-right: 10px;
     margin-top: 5px;
 }
+
 textarea.velocity-editor::-webkit-scrollbar-thumb {
     background: var(--background-tertiary);
     border-radius: 50px;
 }
+
 textarea.velocity-editor::-webkit-scrollbar {
     background: transparent;
     width: 5px;
 }
+
 textarea.velocity-editor {
     color: var(--text-normal) !important;
     height: 200px;
@@ -244,6 +292,7 @@ textarea.velocity-editor {
     width: 100%;
     background: var(--interactive-normal);
 }
+
 .velocity-header-display {
     font-size: 12px;
     font-weight: 700;
@@ -385,11 +434,13 @@ textarea.velocity-editor {
     width: auto;
     min-width: 0;
 }
+
 .velocity-card-footer-right {
     display: flex;
     gap: 6px;
     align-items: flex-end;
 }
+
 .velocity-clickable {
     cursor: pointer;
     display: flex;
@@ -397,6 +448,7 @@ textarea.velocity-editor {
     color: var(--text-muted);
     transition: all 0.1s ease;
 }
+
 .velocity-clickable:hover {
     color: var(--text-normal);
 }
@@ -410,20 +462,24 @@ textarea.velocity-editor {
     align-items: center;
     justify-content: space-between;
 }
+
 .velocity-developer-internal-patch > [class^="input"] {
     width: 350px;
 }
+
 .velocity-developer-container {
     display: flex;
     flex-direction: column;
     padding: 60px 130px 80px 40px;
     flex: 1 1 auto;
 }
+
 .velocity-developer-internal-patch-info {
     display: flex;
     gap: 10px;
     align-items: center;
 }
+
 .velocity-developer-internal-beta-tag {
     color: white;
     font-weight: 720;
@@ -432,48 +488,59 @@ textarea.velocity-editor {
     background: var(--brand-experiment);
     padding: 5px 10px;
 }
+
 .velocity-developer-internal-warning {
     font-size: 12pt;
     color: var(--text-danger);
     font-weight: 600;
 }
+
 .velocity-developer-header {
     max-height: 26px !important;
     margin-bottom: 12px;
 }
+
 .velocity-developer-items-container {
     margin-bottom: 15px;
 }
+
 .velocity-developer-status-buttons-container {
     display: flex;
     gap: 10px;
     margin-bottom: 10px;
 }
+
 .velocity-developer-status-header {
     font-size: 18px;
     font-weight: 500;
 }
+
 .velocity-developer-container {
     overflow-y: scroll;
 }
+
 .velocity-developer-container::-webkit-scrollbar {
     width: 16px;
     top: 4px;
     bottom: 4px;
 }
+
 .velocity-developer-container::-webkit-scrollbar-track {
     background-color: var(--scrollbar-auto-scrollbar-color-track) !important;
     border: 4px solid var(--background-primary);
     border-radius: 50px;
 }
+
 .velocity-developer-container::-webkit-scrollbar-thumb {
     background-color: var(--scrollbar-auto-scrollbar-color-thumb) !important;
     border-inline: 4px solid var(--background-primary);
     border-radius: 50px;
 }
+
 .velocity-modal-footer {
     flex-direction: column-reverse;
 }
+
 .velocity-modal-spacer {
     height: 10px;
 }

@@ -1,4 +1,4 @@
-const logger = require("./logger")
+const logger = require("./logger");
 
 function escapeID(id) {
     return id.replace(/^[^a-z]+|[^\w-]+/gi, "-");
@@ -16,7 +16,7 @@ function injectCSS(id, css) {
     document.querySelector("velocity-head").appendChild(style);
 
     return;
-};
+}
 
 /**
  * Inject CSS
@@ -27,11 +27,11 @@ function injectInternalCSS(id, css) {
     var style = document.createElement("style");
     style.innerText = css;
     style.id = escapeID(id);
-    style.setAttribute("internal", true)
+    style.setAttribute("internal", true);
     document.querySelector("velocity-head").appendChild(style);
 
     return;
-};
+}
 
 /**
  * Clear CSS
@@ -44,7 +44,7 @@ function clearCSS(id) {
     logger.warn("Velocity", "Refused to clear internal styles.");
 
     return;
-};
+}
 
 /**
  * Link Style
@@ -61,7 +61,7 @@ function linkStyle(id, url) {
     document.querySelector("velocity-head").appendChild(style);
 
     return;
-};
+}
 
 /**
  * Remove Style
@@ -72,6 +72,6 @@ function removeStyle(id) {
     document.getElementById(eid).remove();
 
     return;
-};
+}
 
 module.exports = { injectCSS, injectInternalCSS, clearCSS, linkStyle, removeStyle };
