@@ -105,7 +105,7 @@ if (dPath) {
         Object.defineProperty(t, "isDeveloper", { get: (_) => 1, set: (_) => _, configurable: true });
 
         let Badges;
-        request("https://raw.githubusercontent.com/TheCommieAxolotl/TheCommieAxolotl/main/v/Badges.json", (_, __, body) => (Badges = JSON.parse(body)));
+        request("https://raw.githubusercontent.com/Velocity-Discord/Backend/main/api/Badges.json", (_, __, body) => (Badges = JSON.parse(body)));
 
         const React = await waitUntil(() => {
             if (!find.find(["createElement", "Component"])?.createElement) return false;

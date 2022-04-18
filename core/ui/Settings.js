@@ -1256,7 +1256,7 @@ VApi.Patcher("VelocityInternal-Settings-Patch", UserSettings.prototype, "getPred
                                             {
                                                 color: ButtonColors.BRAND,
                                                 onClick: async (target) => {
-                                                    request("https://raw.githubusercontent.com/TheCommieAxolotl/TheCommieAxolotl/main/v/Badges.json", (_, res, body) => {
+                                                    request("https://raw.githubusercontent.com/Velocity-Discord/Backend/main/api/Badges.json", (_, res, body) => {
                                                         if (res.statusCode == 200) {
                                                             const statusBadgeElement = document.querySelector(".velocity-developer-status-badges-text");
                                                             statusBadgeElement.innerHTML = `Status - Fine (${res.statusCode})`;
@@ -1268,7 +1268,7 @@ VApi.Patcher("VelocityInternal-Settings-Patch", UserSettings.prototype, "getPred
                                                         }
                                                     });
 
-                                                    request("https://raw.githubusercontent.com/TheCommieAxolotl/TheCommieAxolotl/main/v/update.json", (_, res, body) => {
+                                                    request("https://raw.githubusercontent.com/Velocity-Discord/Backend/main/api/Updates.json", (_, res, body) => {
                                                         if (res.statusCode == 200) {
                                                             const statusUpdateElement = document.querySelector(".velocity-developer-status-update-text");
                                                             statusUpdateElement.innerHTML = `Status - Fine (${res.statusCode})`;

@@ -12,7 +12,7 @@ async function waitUntil(condition) {
     return item;
 }
 
-const updateURL = "https://raw.githubusercontent.com/TheCommieAxolotl/TheCommieAxolotl/main/v/update.json";
+const updateURL = "https://raw.githubusercontent.com/Velocity-Discord/Backend/main/api/Updates.json";
 
 async function failModal(title, content) {
     const { React, getModule, modals } = VApi;
