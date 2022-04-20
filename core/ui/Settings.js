@@ -12,9 +12,8 @@ const Button = getModule.find(["ButtonColors"]).default;
 const ButtonColors = getModule.find(["ButtonColors"]).ButtonColors;
 const ButtonSizes = getModule.find(["ButtonColors"]).ButtonSizes;
 const Text = getModule.find("Text").default;
-const SwitchEle = getModule.find("Switch").default;
 const Tooltip = getModule.find.prototypes("renderTooltip").default;
-const Switche = getModule.find("Switch").default;
+const SwitchEle = getModule.find("Switch").default;
 const TextInput = getModule.find("TextInput").default;
 const CloseIcon = getModule.find("CloseIconWithKeybind").default;
 const ModalComponents = getModule.find(["ModalRoot"]);
@@ -224,7 +223,7 @@ const SettingsSection = React.memo((props) => {
                     ),
                 ],
             }),
-            React.createElement(Switche, {
+            React.createElement(SwitchEle, {
                 checked: enabled,
                 onChange: async () => {
                     if (action) {
@@ -290,7 +289,7 @@ const Card = React.memo((props) => {
                     }),
                     React.createElement("div", {
                         className: "velocity-card-header-switch",
-                        children: React.createElement(Switche, {
+                        children: React.createElement(SwitchEle, {
                             checked: enabled,
                             onChange: () => {
                                 try {

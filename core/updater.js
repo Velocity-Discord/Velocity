@@ -161,35 +161,44 @@ async function changelogModal(options = {}) {
         } = options;
 
         const { React, getModule, modals } = VApi;
-        const ConfirmationModal = getModule.find("ConfirmModal").default;
-        const Button = getModule.find(["ButtonColors"]);
+
+        const ModalComponents = getModule.find(["ModalRoot"]);
         const ChangelogClasses = getModule.find(["fixed", "improved"]);
         const Text = getModule.find("Text").default;
-        const Titles = getModule.find(["Tags", "default"]);
         const dateClass = getModule.find(["size12", "size32"]).size12;
         const closeModals = getModule.find(["closeAllModals"]).closeAllModals;
         const closeClasses = getModule.find(["root", "close"]);
         const contentsClasses = getModule.find(["spinnerItem", "submitting"]);
+        const Tooltip = getModule.find.prototypes("renderTooltip").default;
 
-        const { Messages } = getModule.find((m) => m.default?.Messages?.OKAY).default;
         const Markdown = getModule.find((m) => m.default?.displayName === "Markdown" && m.default.rules).default;
 
         return new Promise((resolve) => {
             modals.open((props) => {
-                if (props.transitionState === 3) resolve(false);
                 return React.createElement(
-                    ConfirmationModal,
-                    Object.assign(
-                        {
-                            bodyClassName: "velocity-changelog",
-                            header: [
+                    ModalComponents.ModalRoot,
+                    Object.assign(props, {
+                        size: "small",
+                        className: "velocity-changelog",
+                        children: [
+                            React.createElement(
+                                ModalComponents.ModalHeader,
+                                null,
                                 React.createElement("div", {
                                     class: "velocity-modal-header-flex",
                                     children: [
                                         React.createElement("div", {
                                             class: "velocity-modal-header-container",
                                             children: [
-                                                React.createElement("h2", null, "What's New"),
+                                                React.createElement(
+                                                    Text,
+                                                    {
+                                                        size: Text.Sizes.SIZE_20,
+                                                        color: Text.Colors.HEADER_PRIMARY,
+                                                        className: getModule.find(["h1"]).h1,
+                                                    },
+                                                    "What's New"
+                                                ),
                                                 React.createElement("div", { style: { fontWeight: "400" }, className: `${dateClass} ${ChangelogClasses.date}` }, subtitle),
                                             ],
                                         }),
@@ -220,13 +229,50 @@ async function changelogModal(options = {}) {
                                             ],
                                         }),
                                     ],
-                                }),
-                            ],
-                            onCancel: () => resolve(false),
-                            children: [React.createElement("img", { src: image }), React.createElement(Markdown, { className: Text.Colors.HEADER_SECONDARY }, description)],
-                        },
-                        props
-                    )
+                                })
+                            ),
+                            React.createElement(ModalComponents.ModalContent, {
+                                children: [React.createElement("img", { src: image }), React.createElement(Markdown, { className: Text.Colors.HEADER_SECONDARY }, description)],
+                            }),
+                            React.createElement(ModalComponents.ModalFooter, {
+                                className: "velocity-changelog-modal-footer",
+                                children: [
+                                    React.createElement(
+                                        Text,
+                                        {
+                                            size: Text.Sizes.SIZE_12,
+                                            color: Text.Colors.STANDARD,
+                                        },
+                                        "Check us Out Here!"
+                                    ),
+                                    React.createElement(Tooltip, {
+                                        text: "Velocity",
+                                        children: (props) =>
+                                            React.createElement("a", {
+                                                ...props,
+                                                href: "https://velocity-discord.netlify.app/",
+                                                rel: "noreferrer noopener",
+                                                target: "_blank",
+                                                className: "velocity-logo",
+                                                children: [
+                                                    React.createElement("svg", {
+                                                        width: "16",
+                                                        height: "16",
+                                                        viewBox: "0.4326 0.7052 359.1 341.6",
+                                                        children: [
+                                                            React.createElement("path", {
+                                                                d: "M180 342.295C128.695 251.204 26.085 137.341.4326 137.341 77.39 46.251.4326 137.341 77.39 46.251 77.39 114.568 128.695 137.341 180 205.659 231.305 137.341 282.61 114.568 282.61 46.251 359.567 137.341 282.61 46.251 359.567 137.341 333.915 137.341 231.305 251.204 179 342ZM180 142.808C205.653 120.036 231.305 91.796 256.958 23.478L231.305.7052C205.653 69.023 191 81.121 180 91.796 168.5 81.121 154.348 69.023 128.695.7052L103.043 23.478C128.695 91.796 154.348 120.036 180 142.808Z",
+                                                                fill: "currentColor",
+                                                            }),
+                                                        ],
+                                                    }),
+                                                ],
+                                            }),
+                                    }),
+                                ],
+                            }),
+                        ],
+                    })
                 );
             });
         });
