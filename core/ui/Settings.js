@@ -303,10 +303,11 @@ const Card = React.memo((props) => {
                                 } catch (e) {
                                     if (!enabled) {
                                         showToast(`Failed to start <strong>${meta.name}</strong>`, { type: "error" });
+                                        logger.error("Addon Manager", `Failed to start ${meta.name}`, e);
                                     } else {
                                         showToast(`Failed to stop <strong>${meta.name}</strong>`, { type: "error" });
+                                        logger.error("Addon Manager", `Failed to stop ${meta.name}`, e);
                                     }
-                                    logger.error("Addon Manager", e);
                                 }
                             },
                         }),

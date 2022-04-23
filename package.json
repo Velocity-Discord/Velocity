@@ -15,7 +15,5 @@
             "channel": "stable"
         }
     },
-    "scripts": {
-        "test": "exit"
-    }
+    "scripts": {}
 }

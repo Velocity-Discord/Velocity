@@ -54,7 +54,7 @@ const storage = new (class DataStore {
 })();
 
 const Storage = (pluginName) =>
-    new Proxy(storage.getAllData(pluginName), {
+    new Proxy(storage.getAllData(pluginName) || {}, {
         get: (_, key) => storage.getData(pluginName, key),
         set: (_, key, value) => {
             if (value === undefined || value === null) return storage.deleteData(pluginName, key);

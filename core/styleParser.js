@@ -30,15 +30,17 @@ function ifParser(css) {
             let c = content[0].replace("*/", "").replace(/\/\*[\s]*@end-if/, "");
 
             try {
-                eval(`if (${condition}) {
-                    newCSS = newCSS + \`
-${c}
+                eval(`
+                if (${condition}) {
+                    newCSS = newCSS +
+                        \`
+/* Velocity @if condition: ${condition} */
 
-/* ${condition} */
-                    \`
-                    }`);
+${c}
+                    \`;
+                }`);
             } catch (e) {
-                logger.error("Style Parser", e);
+                logger.error("Style Parser", "Error Parsing @if rule: ", e);
             }
         });
     }

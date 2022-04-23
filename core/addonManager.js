@@ -46,8 +46,12 @@ if (!fs.existsSync(themeDir)) fs.mkdirSync(themeDir);
 
 fs.readdir(themeDir, (err, files) => {
     if (err) throw new Error(`Error reading '${themeDir}'`);
-    files = files.filter((file) => filters.themes.test(file)).sort();
-    for (const file of files) {
+    files = files
+        .filter((file) => filters.themes.test(file))
+        .reverse()
+        .sort();
+
+    files.map((file) => {
         const filePath = path.join(themeDir, file);
         fs.readFile(filePath, "utf8", (err, data) => {
             if (err) throw new Error(`Error reading '${filePath}'`);
@@ -56,7 +60,7 @@ fs.readdir(themeDir, (err, files) => {
             meta.css = cssBeta ? parse(data) : data;
             addons.themes.push(meta);
         });
-    }
+    });
 });
 
 const Themes = new (class {
@@ -151,7 +155,7 @@ fs.watch(themeDir, { persistent: false }, async (eventType, filename) => {
             }
         });
     } catch (e) {
-        Logger.error("Addon Manager", e);
+        Logger.error("Addon Manager", "Error Reading Theme Directory:", e);
         VApi.showToast("Error Reading Theme Directory", { type: "error" });
     }
 });
@@ -161,8 +165,12 @@ if (!fs.existsSync(pluginDir)) fs.mkdirSync(pluginDir);
 
 fs.readdir(pluginDir, (err, files) => {
     if (err) throw new Error(`Error reading '${pluginDir}'`);
-    files = files.filter((file) => filters.plugins.test(file)).sort();
-    for (const file of files) {
+    files = files
+        .filter((file) => filters.plugins.test(file))
+        .reverse()
+        .sort();
+    files.map((file) => {
+        console.log(file);
         const filePath = path.join(pluginDir, file);
         fs.readFile(filePath, "utf8", (err, data) => {
             if (err) throw new Error(`Error reading '${filePath}'`);
@@ -195,7 +203,7 @@ fs.readdir(pluginDir, (err, files) => {
                 load();
             });
         });
-    }
+    });
 });
 
 const Plugins = new (class {

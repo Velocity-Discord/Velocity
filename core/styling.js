@@ -1,4 +1,7 @@
 const logger = require("./logger");
+const DataStore = require("./DataStore");
+const { parse } = require("./styleParser");
+const cssBeta = DataStore("VELOCITY_SETTINGS").CSSFeatures;
 
 function escapeID(id) {
     return id.replace(/^[^a-z]+|[^\w-]+/gi, "-");
@@ -11,7 +14,7 @@ function escapeID(id) {
  */
 function injectCSS(id, css) {
     var style = document.createElement("style");
-    style.innerText = css;
+    style.innerText = cssBeta ? parse(css) : css;
     style.id = id;
     document.querySelector("velocity-head").appendChild(style);
 
@@ -25,7 +28,7 @@ function injectCSS(id, css) {
  */
 function injectInternalCSS(id, css) {
     var style = document.createElement("style");
-    style.innerText = css;
+    style.innerText = parse(css);
     style.id = escapeID(id);
     style.setAttribute("internal", true);
     document.querySelector("velocity-head").appendChild(style);

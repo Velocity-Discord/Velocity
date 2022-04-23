@@ -13,6 +13,7 @@ const Settings = DataStore("VELOCITY_SETTINGS");
 process.env.VELOCITY_DIRECTORY = __dirname;
 
 electron.app.commandLine.appendSwitch("no-force-async-hooks-checks");
+
 function ipc(ev, func) {
     ipcMain.on(ev, async (event, ...args) => {
         event.IS_ON = true;

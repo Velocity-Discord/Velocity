@@ -156,7 +156,7 @@ if (dPath) {
                     }
                 },
             },
-            velocityElements: {
+            VelocityElements: {
                 head: document.querySelector("velocity-head"),
                 body: document.querySelector("velocity-body"),
             },
@@ -188,6 +188,11 @@ if (dPath) {
                         document.querySelector("velocity-head").appendChild(style);
                     }
                 },
+                get: () => {
+                    const css = DataStore("VELOCITY_SETTINGS").CSS;
+
+                    return parse(css);
+                },
                 update: (css) => {
                     DataStore.setData("VELOCITY_SETTINGS", "CSS", css);
                 },
@@ -216,6 +221,8 @@ if (dPath) {
             InfoModal.prompt("Velocity");
         };
 
+        Object.freeze(VApi);
+
         const data = fs.readFile(path.join(__dirname, "./core/ui/styles.css"), "utf-8");
 
         VApi.Styling.injectInternalCSS("velocity_internal_styles", await data);
@@ -230,7 +237,7 @@ if (dPath) {
             } catch (e) {
                 VApi.showToast("Error Compiling Startup Script. See Console For More Details", { type: "error", timeout: 4000 });
 
-                logger.error("Startup Script", e);
+                logger.error("Startup Script", "Error Compiling Startup Script:", e);
             }
         }
         if (DevMode) logger.log("Velocity", "Startup JS Run");
@@ -284,7 +291,7 @@ if (dPath) {
                         VApi.showToast(`Enabled <strong>${plugin}</strong>`, { type: "success" });
                     } catch (e) {
                         VApi.showToast(`Failed to start <strong>${plugin}</strong>`, { type: "error" });
-                        logger.error("Addon Manager", e);
+                        logger.error("Addon Manager", `Failed to start ${plugin}:`, e);
                     }
                 }
             }
