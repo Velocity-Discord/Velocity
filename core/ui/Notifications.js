@@ -5,9 +5,10 @@ const Buttons = VApi.getModule.find(["ButtonColors"]);
  * @param {string} content - The Toast Content.
  * @param {object} [options] - Type Color and Timeout=3000
  */
-async function showToast(content, options = {}) {
+async function showToast(title, content, options = {}) {
     const container = document.querySelector("velocity-toasts");
     const { type = "", timeout = 3000, color = "" } = options;
+    let time1, time2;
 
     const toast = document.createElement("div");
     toast.classList.add("velocity-toast");
@@ -15,17 +16,29 @@ async function showToast(content, options = {}) {
         toast.classList.add(`type-${type}`);
     }
 
-    toast.innerHTML = content;
+    toast.innerHTML = `
+    <div class="velocity-toast-title">${title || ""}</div>
+    <div class="velocity-toast-body">${content || ""}</div>
+    `;
 
-    setTimeout(() => {
+    const closeToast = () => {
         toast.classList.add("closing");
-        setTimeout(() => {
+        time1 = setTimeout(() => {
             toast.remove();
+
+            clearTimeout(time1);
         }, 700);
+    };
+
+    time2 = setTimeout(() => {
+        closeToast();
+        clearTimeout(time2);
     }, timeout);
+
     if (color) {
         toast.style.color = color;
     }
+
     container.appendChild(toast);
 
     return;

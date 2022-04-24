@@ -53,7 +53,7 @@ async function checkForUpdates() {
         updateData = JSON.parse(body);
 
         await waitUntil(() => window.document.querySelector('[class*="guilds"]'));
-        VApi.showToast("Requesting Update Data");
+        VApi.showToast("Updater", "Requesting Update Data");
 
         if (updateData) {
             if (updateData.version !== info.version) {
@@ -82,15 +82,15 @@ async function checkForUpdates() {
                                             const VDir = path.join(__dirname, "..");
 
                                             let targetPackage;
-                                            showToast("Requesting package...");
+                                            showToast("Updater", "Requesting package...");
                                             request("https://raw.githubusercontent.com/Velocity-Discord/Velocity/main/package.json", (err, _, body) => {
                                                 if (err) {
-                                                    showToast("Request Failed", { type: "error" });
+                                                    showToast("Updater", "Request Failed", { type: "error" });
                                                 } else {
                                                     try {
                                                         targetPackage = JSON.parse(body);
                                                     } catch (error) {
-                                                        showToast("Failed to Parse Package", { type: "error" });
+                                                        showToast("Updater", "Failed to Parse Package", { type: "error" });
                                                         failModal("Update Failed", [
                                                             "You can manually update Velocity by opening the Velocity Folder and doing one of the following,",
                                                             "- Run `git pull` in the terminal (inside the folder)",
@@ -143,7 +143,7 @@ async function checkForUpdates() {
 
                 updatePrompt();
             } else {
-                VApi.showToast("No Updates Found");
+                VApi.showToast("Updater", "No Updates Found");
             }
         }
     });

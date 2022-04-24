@@ -9,15 +9,24 @@ const Velocity = DataStore("VELOCITY_SETTINGS");
 Velocity.enabledThemes = Velocity.enabledThemes || {};
 Velocity.enabledPlugins = Velocity.enabledPlugins || {};
 
+Velocity.remoteThemes = Velocity.remoteThemes || [];
+Velocity.remotePlugins = Velocity.remotePlugins || [];
+
 const filters = {
     themes: /(\.theme.css)$/,
     plugins: /(\.plugin.js)$/,
+};
+
+const remoteAddons = {
+    themes: [],
+    plugins: [],
 };
 
 const addons = {
     themes: [],
     plugins: [],
 };
+
 const addonsInit = {
     themes: [],
     plugins: [],
@@ -39,6 +48,67 @@ function readMeta(contents) {
         meta[key] = value;
     }
     return meta;
+}
+
+const RemoteActions = new (class {
+    loadTheme(url) {
+        if (!filters.themes.test(url)) {
+            VApi.Logger.error("Remote Addon Manager", "Requested File Does not match Theme Filters");
+            return VApi.showToast("Remote Addon Manager", `Failed to load Remote Theme. See Console For More Details`, { type: "error" });
+        }
+
+        request(url, async (err, _, body) => {
+            const data = body;
+
+            const meta = readMeta(data);
+            meta.remote = true;
+            meta.sessionId = remoteAddons.themes.length + 1;
+            meta.css = cssBeta ? parse(data) : data;
+
+            remoteAddons.themes.push(meta);
+            addons.themes.push(meta);
+
+            VApi.showToast("Remote Addon Manager", `Loaded <strong>${meta.name}</strong>`);
+
+            if (!Velocity.remoteThemes.find((m) => m.name === meta.name)) {
+                DataStore.setData("VELOCITY_SETTINGS", "remoteThemes", [...Velocity.remoteThemes, { name: meta.name, url: url }]);
+            }
+        });
+    }
+
+    unloadTheme(name) {
+        const entry = remoteAddons.themes.filter((m) => m.name == name);
+        if (entry[0]) {
+            Themes.disable(name);
+            remoteAddons.themes = remoteAddons.themes.filter((m) => m.name !== name);
+            addons.themes = addons.themes.filter((m) => {
+                return Boolean(m !== entry[0]);
+            });
+            DataStore.setData(
+                "VELOCITY_SETTINGS",
+                "remoteThemes",
+                Velocity.remoteThemes.filter((m) => {
+                    const val = m.name !== name;
+                    return val;
+                })
+            );
+
+            VApi.showToast("Remote Addon Manager", `Unloaded <strong>${name}</strong>`);
+        }
+    }
+
+    loadPlugin(url) {}
+
+    unloadPlugin(name) {}
+})();
+
+function loadRemoteAddons() {
+    Velocity.remoteThemes.forEach((theme) => {
+        RemoteActions.loadTheme(theme.url);
+    });
+    Velocity.remotePlugins.forEach((plugin) => {
+        RemoteActions.loadPlugin(plugin.url);
+    });
 }
 
 const themeDir = path.join(__dirname, "..", "themes");
@@ -131,24 +201,24 @@ fs.watch(themeDir, { persistent: false }, async (eventType, filename) => {
 
                 delete addons.themes[getKeyByValue(addons.themes, meta.name)];
 
-                VApi.showToast(`Unloaded <strong>${meta.name}</strong>`);
+                VApi.showToast("Addon Manager", `Unloaded <strong>${meta.name}</strong>`);
 
                 addons.themes.push(meta);
-                VApi.showToast(`Loaded <strong>${meta.name}</strong>`);
+                VApi.showToast("Addon Manager", `Loaded <strong>${meta.name}</strong>`);
 
                 if (enabled) {
                     const ele = document.querySelectorAll(`[velocity-theme-id="${meta.name}"]`);
                     for (let ele1 of ele) {
                         if (ele1) {
                             ele1.remove();
-                            VApi.showToast(`Disabled <strong>${meta.name}</strong>`, { type: "success" });
+                            VApi.showToast("Addon Manager", `Disabled <strong>${meta.name}</strong>`, { type: "success" });
                         }
                     }
                     const style = document.createElement("style");
                     style.innerHTML = meta.css;
                     style.setAttribute("velocity-theme-id", meta.name);
                     document.querySelector("velocity-themes").appendChild(style);
-                    VApi.showToast(`Enabled <strong>${meta.name}</strong>`, { type: "success" });
+                    VApi.showToast("Addon Manager", `Enabled <strong>${meta.name}</strong>`, { type: "success" });
                 }
             } else {
                 addons.themes.push(meta);
@@ -156,7 +226,7 @@ fs.watch(themeDir, { persistent: false }, async (eventType, filename) => {
         });
     } catch (e) {
         Logger.error("Addon Manager", "Error Reading Theme Directory:", e);
-        VApi.showToast("Error Reading Theme Directory", { type: "error" });
+        VApi.showToast("Addon Manager", "Error Reading Theme Directory", { type: "error" });
     }
 });
 
@@ -255,6 +325,20 @@ const Plugins = new (class {
 })();
 
 module.exports = {
+    remote: () => {
+        loadRemoteAddons();
+        return {
+            loadTheme: (url) => {
+                RemoteActions.loadTheme(url);
+            },
+            loadPlugin: (url) => {
+                RemoteActions.loadPlugin(url);
+            },
+            unloadTheme: (name) => {
+                RemoteActions.unloadTheme(name);
+            },
+        };
+    },
     readMeta,
     themes: () => {
         for (const theme of addonsInit.themes) theme();

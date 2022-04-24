@@ -1,4 +1,4 @@
-const { React, modals, logger, getModule, showToast, Utilities } = VApi;
+const { React, modals, logger, getModule, showToast, Utilities, AddonManager } = VApi;
 const { ipcRenderer, shell } = require("electron");
 const { internalPatches } = require("../Stores");
 const { info } = require("../../package.json");
@@ -247,7 +247,7 @@ const Card = React.memo((props) => {
     const { meta, type } = props;
     let buttons = [];
 
-    const [enabled, setEnabled] = React.useState(VApi.AddonManager[type].isEnabled(meta.name));
+    const [enabled, setEnabled] = React.useState(AddonManager[type].isEnabled(meta.name));
     return React.createElement("div", {
         className: "velocity-card",
         type,
@@ -270,6 +270,11 @@ const Card = React.memo((props) => {
                                         className: "velocity-card-header-version",
                                         children: `v${meta.version}`,
                                     }),
+                                    meta.remote &&
+                                        React.createElement("div", {
+                                            className: "velocity-card-header-remote-tag",
+                                            children: `Remote`,
+                                        }),
                                 ],
                             }),
                             React.createElement("div", {
@@ -293,19 +298,19 @@ const Card = React.memo((props) => {
                             checked: enabled,
                             onChange: () => {
                                 try {
-                                    VApi.AddonManager[type].toggle(meta.name);
+                                    AddonManager[type].toggle(meta.name);
                                     setEnabled(!enabled);
                                     if (!enabled) {
-                                        showToast(`Enabled <strong>${meta.name}</strong>`, { type: "success" });
+                                        showToast("Addon Manager", `Enabled <strong>${meta.name}</strong>`, { type: "success" });
                                     } else {
-                                        showToast(`Disabled <strong>${meta.name}</strong>`, { type: "success" });
+                                        showToast("Addon Manager", `Disabled <strong>${meta.name}</strong>`, { type: "success" });
                                     }
                                 } catch (e) {
                                     if (!enabled) {
-                                        showToast(`Failed to start <strong>${meta.name}</strong>`, { type: "error" });
+                                        showToast("Addon Manager", `Failed to start <strong>${meta.name}</strong>`, { type: "error" });
                                         logger.error("Addon Manager", `Failed to start ${meta.name}`, e);
                                     } else {
-                                        showToast(`Failed to stop <strong>${meta.name}</strong>`, { type: "error" });
+                                        showToast("Addon Manager", `Failed to stop <strong>${meta.name}</strong>`, { type: "error" });
                                         logger.error("Addon Manager", `Failed to stop ${meta.name}`, e);
                                     }
                                 }
@@ -459,27 +464,38 @@ const Card = React.memo((props) => {
                                                 ],
                                             }),
                                     }),
-                                React.createElement(
-                                    Button,
-                                    {
-                                        size: ButtonSizes.SMALL,
-                                        className: ["velocity-card-footer-edit-button"],
-                                        onClick: () => {
-                                            shell.openPath(meta.file);
+                                meta.file &&
+                                    React.createElement(
+                                        Button,
+                                        {
+                                            size: ButtonSizes.SMALL,
+                                            className: ["velocity-card-footer-edit-button"],
+                                            onClick: () => {
+                                                shell.openPath(meta.file);
+                                            },
                                         },
-                                    },
-                                    "Edit"
-                                ),
+                                        "Edit"
+                                    ),
                                 React.createElement(
                                     Button,
                                     {
                                         color: ButtonColors.RED,
                                         size: ButtonSizes.SMALL,
                                         className: ["velocity-card-footer-delete-button"],
-                                        onClick: () => {
-                                            fs.unlink(meta.file, () => {
-                                                showToast(`Deleted ${meta.name}`, { type: "error" });
-                                            });
+                                        onClick: (event) => {
+                                            try {
+                                                event.target.parentNode.parentNode.parentNode.parentNode.remove();
+                                                if (meta.remote) {
+                                                    type == "themes" ? AddonManager.remote.unloadTheme(meta.name) : AddonManager.unloadPlugin(meta.name);
+                                                    showToast("Addon Manager", `Deleted ${meta.name}`, { type: "error" });
+                                                } else {
+                                                    fs.unlink(meta.file, () => {
+                                                        showToast("Addon Manager", `Deleted ${meta.name}`, { type: "error" });
+                                                    });
+                                                }
+                                            } catch (e) {
+                                                console.error(e);
+                                            }
                                         },
                                     },
                                     "Delete"
@@ -631,7 +647,7 @@ async function settingsPrompt() {
                                             {
                                                 onClick: () => {
                                                     Utilities.joinOfficialServer();
-                                                    showToast("Exit settings and have a look!", {
+                                                    showToast("Velocity", "Exit settings and have a look!", {
                                                         title: "Joined Official Server",
                                                         type: "success",
                                                         timeout: 5000,
@@ -660,7 +676,7 @@ async function settingsPrompt() {
 }
 
 async function pluginPrompt() {
-    const Plugins = VApi.AddonManager.plugins.getAll();
+    const Plugins = AddonManager.plugins.getAll();
 
     return new Promise((resolve) => {
         modals.open((props) =>
@@ -694,7 +710,7 @@ async function pluginPrompt() {
                                         size: ButtonSizes.SMALL,
                                         className: ["velocity-button"],
                                         onClick: () => {
-                                            shell.openPath(VApi.AddonManager.plugins.folder);
+                                            shell.openPath(AddonManager.plugins.folder);
                                         },
                                     },
                                     "Open Plugins Folder"
@@ -702,7 +718,7 @@ async function pluginPrompt() {
                                 React.createElement("div", {
                                     id: "velocity-addons-grid",
                                     children: [
-                                        Plugins.map((plugin) =>
+                                        Plugins.sort().map((plugin) =>
                                             React.createElement(Card, {
                                                 meta: plugin,
                                                 type: "plugins",
@@ -733,7 +749,7 @@ async function pluginPrompt() {
 }
 
 async function themePrompt() {
-    const Themes = VApi.AddonManager.themes.getAll();
+    const Themes = AddonManager.themes.getAll();
 
     return new Promise((resolve) => {
         modals.open((props) =>
@@ -753,29 +769,59 @@ async function themePrompt() {
                                     color: Text.Colors.HEADER_PRIMARY,
                                     className: getModule.find(["h1"]).h1,
                                 },
-                                "Velocity Plugins"
+                                "Velocity Themes"
                             )
                         ),
                         React.createElement(ModalComponents.ModalContent, {
                             children: [
                                 React.createElement("div", { className: "velocity-modal-spacer" }),
-                                React.createElement(
-                                    Button,
-                                    {
-                                        id: "themes-folder",
-                                        color: ButtonColors.BRAND,
-                                        size: ButtonSizes.SMALL,
-                                        className: ["velocity-button"],
-                                        onClick: () => {
-                                            shell.openPath(VApi.AddonManager.themes.folder);
-                                        },
-                                    },
-                                    "Open Themes Folder"
-                                ),
+                                React.createElement("div", {
+                                    className: "velocity-addon-modal-body-header",
+                                    children: [
+                                        React.createElement(TextInput, {
+                                            placeholder: "Remote URL (.theme.css)",
+                                            type: "text",
+                                            onInput: ({ target }) => {
+                                                this.remoteUrl = target.value;
+                                            },
+                                        }),
+                                        React.createElement("div", {
+                                            className: "velocity-addon-modal-body-header-buttons",
+                                            children: [
+                                                React.createElement(
+                                                    Button,
+                                                    {
+                                                        id: "load-remote-theme",
+                                                        color: ButtonColors.BRAND,
+                                                        size: ButtonSizes.SMALL,
+                                                        className: ["velocity-button"],
+                                                        onClick: () => {
+                                                            AddonManager.remote.loadTheme(this.remoteUrl);
+                                                        },
+                                                    },
+                                                    "Load Remote Theme"
+                                                ),
+                                                React.createElement(
+                                                    Button,
+                                                    {
+                                                        id: "themes-folder",
+                                                        color: ButtonColors.PRIMARY,
+                                                        size: ButtonSizes.SMALL,
+                                                        className: ["velocity-button"],
+                                                        onClick: () => {
+                                                            shell.openPath(AddonManager.themes.folder);
+                                                        },
+                                                    },
+                                                    "Open Themes Folder"
+                                                ),
+                                            ],
+                                        }),
+                                    ],
+                                }),
                                 React.createElement("div", {
                                     id: "velocity-addons-grid",
                                     children: [
-                                        Themes.map((theme) =>
+                                        Themes.sort().map((theme) =>
                                             React.createElement(Card, {
                                                 meta: theme,
                                                 type: "themes",
@@ -886,7 +932,7 @@ async function jsPrompt() {
                                                     const content = window.editor.getValue();
                                                     if (!target.disabled) {
                                                         DataStore.setData("VELOCITY_SETTINGS", "JS", content);
-                                                        showToast("Saved", { type: "success" });
+                                                        showToast("Startup Script", "Saved", { type: "success" });
                                                     }
                                                 },
                                             },
@@ -901,7 +947,7 @@ async function jsPrompt() {
                                                     window.editor.setValue("");
                                                     DataStore.setData("VELOCITY_SETTINGS", "JS", "");
 
-                                                    showToast("Cleared", { type: "success" });
+                                                    showToast("Startup Script", "Cleared", { type: "success" });
                                                 },
                                             },
                                             "Clear"
@@ -950,7 +996,7 @@ async function cssPrompt() {
                                     color: Text.Colors.HEADER_PRIMARY,
                                     className: getModule.find(["h1"]).h1,
                                 },
-                                "Startup Custom CSS"
+                                "Custom CSS"
                             )
                         ),
                         React.createElement(ModalComponents.ModalContent, {
@@ -984,7 +1030,7 @@ async function cssPrompt() {
                                                 ),
                                             ],
                                             onClick: () => {
-                                                shell.openPath(VApi.AddonManager.themes.folder);
+                                                shell.openPath(AddonManager.themes.folder);
                                             },
                                         }),
                                 }),
@@ -1002,7 +1048,7 @@ async function cssPrompt() {
                                                         DataStore.setData("VELOCITY_SETTINGS", "CSS", content);
                                                         VApi.customCSS.reload();
 
-                                                        showToast("Saved", { type: "success" });
+                                                        showToast("Custom CSS", "Saved", { type: "success" });
                                                     } catch (error) {
                                                         console.error(error);
                                                     }
@@ -1020,7 +1066,7 @@ async function cssPrompt() {
                                                     DataStore.setData("VELOCITY_SETTINGS", "CSS", "");
                                                     VApi.customCSS.reload();
 
-                                                    showToast("Cleared", { type: "success" });
+                                                    showToast("Custom CSS", "Cleared", { type: "success" });
                                                 },
                                             },
                                             "Clear"
@@ -1228,7 +1274,7 @@ VApi.Patcher("VelocityInternal-Settings-Patch", UserSettings.prototype, "getPred
                                                                             ? target.target.setAttribute("disabled", "true")
                                                                             : target.target.parentElement.setAttribute("disabled", "true");
                                                                         VApi.Patcher.unpatchAll(patch.name);
-                                                                        showToast(`Killed <strong>${patch.name}</strong>`, { type: "error" });
+                                                                        showToast("Velocity", `Killed <strong>${patch.name}</strong>`, { type: "error" });
                                                                     },
                                                                 },
                                                                 "Kill"

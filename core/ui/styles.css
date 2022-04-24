@@ -1,3 +1,10 @@
+velocity-toasts {
+    display: flex;
+    width: 100%;
+    align-items: flex-end;
+    flex-direction: column;
+}
+
 .velocity-card:nth-last-child(1) {
     margin-bottom: 15px;
 }
@@ -83,6 +90,15 @@
     font-size: large;
 }
 
+.velocity-card-header-remote-tag {
+    color: #fff;
+    font-weight: 600;
+    padding: 3px 4px;
+    font-size: 13px;
+    border-radius: 4px;
+    background: var(--brand-experiment);
+}
+
 .velocity-card-header-switch {
     display: flex;
     align-items: center;
@@ -127,6 +143,10 @@
     background-color: #da7bca29 !important;
 }
 
+.velocity-card-footer-delete-button > div {
+    pointer-events: none;
+}
+
 .velocity-card-footer-left {
     display: flex;
     gap: 5px;
@@ -161,25 +181,30 @@
 }
 
 .velocity-toast {
-    max-width: 300px;
+    top: 5%;
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    min-width: 180px;
     overflow: hidden;
     text-overflow: ellipsis;
     margin-top: 1%;
     margin-right: 2.5%;
-    animation: toastShow 0.15s ease-out;
-    background-color: #4949499e;
     backdrop-filter: blur(15px);
-    padding: 12px 47px 12px 12px;
-    font-size: 11pt;
+    padding: 12px 20px;
     border-radius: 3px;
     z-index: 99999;
-    box-shadow: 2px 2px 5px #00000075;
-    color: #fff;
     position: relative;
     width: fit-content;
-    top: 5%;
-    border-right: 3px solid;
-    border-right-color: var(--text-default);
+    background-color: #4949499e;
+    box-shadow: 2px 2px 5px #00000075;
+    animation: toastShow 0.15s ease-out;
+
+    color: #fff;
+    font-size: 11pt;
+
+    border-left: 3px solid;
+    border-left-color: var(--text-default);
 }
 
 .velocity-toast.closing {
@@ -188,27 +213,30 @@
     transform: translateY(-30px) scale(0.3);
 }
 
-velocity-toasts {
-    display: flex;
-    width: 100%;
-    align-items: flex-end;
-    flex-direction: column;
+.velocity-toast-title {
+    font-weight: 600;
+    margin-bottom: 3px;
+}
+
+.velocity-toast-body {
+    font-weight: 400;
+    color: #d8d8d8;
 }
 
 .velocity-toast.type-error {
-    border-right-color: #fd3a5f;
+    border-left-color: #fd3a5f;
 }
 
 .velocity-toast.type-success {
-    border-right-color: #38bf5d;
+    border-left-color: #38bf5d;
 }
 
 .velocity-toast.type-warn {
-    border-right-color: #da8d14;
+    border-left-color: #da8d14;
 }
 
 .velocity-toast.type-velocity {
-    border-right-color: var(--brand-experiment);
+    border-left-color: var(--brand-experiment);
 }
 
 .Velocity-badge {
@@ -360,6 +388,11 @@ textarea.velocity-editor {
     width: 408px;
     display: flex;
     justify-content: space-between;
+}
+
+.velocity-addon-modal-body-header-buttons {
+    display: flex;
+    margin-top: 6px;
 }
 
 .velocity-changelog-modal-footer {

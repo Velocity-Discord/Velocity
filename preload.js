@@ -88,7 +88,7 @@ if (dPath) {
 
         const AddonManager = require("./core/addonManager");
         AddonManager;
-        const { themes, plugins, readMeta } = AddonManager;
+        const { themes, plugins, readMeta, remote } = AddonManager;
         if (DevMode) logger.log("Velocity", "AddonManager added");
 
         await window.DiscordNative.window.setDevtoolsCallbacks(null, null);
@@ -214,6 +214,7 @@ if (dPath) {
         VApi.AddonManager = {
             plugins: plugins(),
             themes: themes(),
+            remote: remote(),
         };
 
         const InfoModal = require("./core/ui/InfoModal");
@@ -235,7 +236,7 @@ if (dPath) {
                 await waitFor('[class*="guilds"]');
                 eval(js);
             } catch (e) {
-                VApi.showToast("Error Compiling Startup Script. See Console For More Details", { type: "error", timeout: 4000 });
+                VApi.showToast("Startup Script", "Error Compiling Startup Script. See Console For More Details", { type: "error", timeout: 4000 });
 
                 logger.error("Startup Script", "Error Compiling Startup Script:", e);
             }
@@ -262,10 +263,10 @@ if (dPath) {
         const allPlugins = VApi.AddonManager.plugins.getAll();
 
         for (let meta of Object.values(allThemes)) {
-            VApi.showToast(`Loaded <strong>${meta.name} ${meta.version}</strong>`);
+            VApi.showToast("Addon Manager", `Loaded <strong>${meta.name} ${meta.version}</strong>`);
         }
         for (let meta of Object.values(allPlugins)) {
-            VApi.showToast(`Loaded <strong>${meta.name} ${meta.version}</strong>`);
+            VApi.showToast("Addon Manager", `Loaded <strong>${meta.name} ${meta.version}</strong>`);
         }
 
         const enabledThemes = DataStore("VELOCITY_SETTINGS").enabledThemes;
@@ -273,9 +274,9 @@ if (dPath) {
             if (DevMode) console.log(theme, data);
             if (data) {
                 if (VApi.AddonManager.themes.get(theme)) {
-                    logger.log("ThemeManager", `Enabled ${theme}`);
+                    logger.log("Addon Manager", `Enabled ${theme}`);
                     VApi.AddonManager.themes.enable(theme);
-                    VApi.showToast(`Enabled <strong>${theme}</strong>`, { type: "success" });
+                    VApi.showToast("Addon Manager", `Enabled <strong>${theme}</strong>`, { type: "success" });
                 }
             }
         }
@@ -286,11 +287,11 @@ if (dPath) {
             if (data) {
                 if (VApi.AddonManager.plugins.get(plugin)) {
                     try {
-                        logger.log("PluginManager", `Enabled ${plugin}`);
+                        logger.log("Addon Manager", `Enabled ${plugin}`);
                         VApi.AddonManager.plugins.enable(plugin);
-                        VApi.showToast(`Enabled <strong>${plugin}</strong>`, { type: "success" });
+                        VApi.showToast("Addon Manager", `Enabled <strong>${plugin}</strong>`, { type: "success" });
                     } catch (e) {
-                        VApi.showToast(`Failed to start <strong>${plugin}</strong>`, { type: "error" });
+                        VApi.showToast("Addon Manager", `Failed to start <strong>${plugin}</strong>`, { type: "error" });
                         logger.error("Addon Manager", `Failed to start ${plugin}:`, e);
                     }
                 }
