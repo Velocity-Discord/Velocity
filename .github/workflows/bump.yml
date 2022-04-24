@@ -1,0 +1,16 @@
+name: Bump Hash
+
+on:
+  push:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    
+      - name: Bump Hash
+        uses: TheCommieAxolotl/Bump-Hash-Action@v0.0.1
