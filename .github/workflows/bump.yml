@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Bump Hash
-        uses: TheCommieAxolotl/Bump-Hash-Action@v0.0.2
+        uses: TheCommieAxolotl/Bump-Hash-Action@v0.0.3
         with:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 #       - name: Commit files
