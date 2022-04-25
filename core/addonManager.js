@@ -37,6 +37,7 @@ function getKeyByValue(object, value) {
 }
 
 function readMeta(contents) {
+    if (typeof contents == "undefined") return null;
     let meta = {};
     let jsdoc = contents.match(/\/\*\*([\s\S]*?)\*\//);
     if (!jsdoc?.[1]) return meta;

@@ -177,7 +177,7 @@ if (dPath) {
             DataStore: DataStore,
             customCSS: {
                 reload: () => {
-                    document.querySelector("#customcss").remove();
+                    if (document.querySelector("#customcss")) document.querySelector("#customcss").remove();
                     const css = DataStore("VELOCITY_SETTINGS").CSS;
                     const cssBeta = DataStore("VELOCITY_SETTINGS").CSSFeatures;
 
