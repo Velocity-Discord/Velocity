@@ -13,13 +13,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Bump Hash
-        uses: TheCommieAxolotl/Bump-Hash-Action@v0.0.1
+        uses: TheCommieAxolotl/Bump-Hash-Action@v0.0.2
         with:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      - name: Commit files
+#       - name: Commit files
       
-        run: |
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git commit -m "Bump Hash" -a
-          git push -u origin main
+#         run: |
+#           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+#           git config --local user.name "github-actions[bot]"
+#           git commit -m "Bump Hash" -a
+#           git push -u origin main
