@@ -13,9 +13,7 @@ function appendScript(id, url) {
     script.src = url;
     script.id = eid;
 
-    document.querySelector("velocity-head").appendChild(script);
-
-    return;
+    return document.querySelector("velocity-head").appendChild(script);
 }
 
 /**
@@ -24,9 +22,7 @@ function appendScript(id, url) {
  */
 function removeScript(id) {
     const eid = escapeID(id);
-    document.getElementById(eid).remove();
-
-    return;
+    return document.getElementById(eid).remove();
 }
 
 module.exports = { appendScript, removeScript };

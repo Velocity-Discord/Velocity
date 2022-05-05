@@ -16,9 +16,7 @@ function injectCSS(id, css) {
     var style = document.createElement("style");
     style.innerText = cssBeta ? parse(css) : css;
     style.id = id;
-    document.querySelector("velocity-head").appendChild(style);
-
-    return;
+    return document.querySelector("velocity-head").appendChild(style);
 }
 
 /**
@@ -31,9 +29,7 @@ function injectInternalCSS(id, css) {
     style.innerText = parse(css);
     style.id = escapeID(id);
     style.setAttribute("internal", true);
-    document.querySelector("velocity-head").appendChild(style);
-
-    return;
+    return document.querySelector("velocity-head").appendChild(style);
 }
 
 /**
@@ -44,9 +40,7 @@ function clearCSS(id) {
     const style = document.querySelector("#" + escapeID(id));
     if (!style.hasAttribute("internal")) return style.remove();
 
-    logger.warn("Velocity", "Refused to clear internal styles.");
-
-    return;
+    return logger.warn("Velocity", "Refused to clear internal styles.");
 }
 
 /**
@@ -61,9 +55,7 @@ function linkStyle(id, url) {
     style.href = url;
     style.id = eid;
 
-    document.querySelector("velocity-head").appendChild(style);
-
-    return;
+    return document.querySelector("velocity-head").appendChild(style);
 }
 
 /**
@@ -72,9 +64,7 @@ function linkStyle(id, url) {
  */
 function removeStyle(id) {
     const eid = escapeID(id);
-    document.getElementById(eid).remove();
-
-    return;
+    return document.getElementById(eid).remove();
 }
 
 module.exports = { injectCSS, injectInternalCSS, clearCSS, linkStyle, removeStyle };
