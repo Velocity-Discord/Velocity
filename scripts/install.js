@@ -1,6 +1,6 @@
 const path = require("path");
 const fs = require("fs");
-const { mkdir, writeFile } = require("fs").promises;
+const { mkdir, writeFile, readdir } = require("fs").promises;
 
 async function run() {
     const readline = require("readline").createInterface({
@@ -8,7 +8,97 @@ async function run() {
         output: process.stdout,
     });
 
-    let installPath;
+    let appPath;
+
+    if (process.argv.includes("--mac")) {
+        if (process.argv.includes("--canary")) {
+            appPath = "/Applications/Discord Canary.app/Contents/Resources/";
+        } else if (process.argv.includes("--ptb")) {
+            appPath = "/Applications/Discord PTB.app/Contents/Resources/";
+        } else {
+            appPath = "/Applications/Discord.app/Contents/Resources/";
+        }
+
+        console.log(`Preparing to install to '${appPath}'`);
+
+        readline.question("Is this ok? (y/n) ", async (answer) => {
+            if (answer == "y") {
+                if (fs.existsSync(path.join(appPath, "app"))) {
+                    console.error("A Discord Client Modification is already installed in this directory.");
+                    console.log("Overwriting existing files...");
+                } else {
+                    await mkdir(path.join(appPath, "app"));
+                }
+                await Promise.all([
+                    writeFile(path.join(appPath, "app", "index.js"), `require(\`${path.join(__dirname, "../").replace(RegExp(path.sep.repeat(2), "g"), "/")}\`)`),
+                    writeFile(
+                        path.join(appPath, "app", "package.json"),
+                        JSON.stringify({
+                            main: "index.js",
+                            name: "discord",
+                        })
+                    ),
+                ]);
+                console.log("Done!");
+                readline.close();
+            } else {
+                console.log("Exiting Install.");
+                process.exit();
+            }
+        });
+
+        return true;
+    } else if (process.argv.includes("--win")) {
+        if (process.argv.includes("--canary")) {
+            const discordPath = path.join(process.env.LOCALAPPDATA, "Discord");
+            const discordDirectory = await readdir(discordPath);
+
+            const currentBuild = discordDirectory.filter((paths) => paths.startsWith("app-")).reverse()[0];
+            appPath = path.join(discordPath, currentBuild, "resources");
+        } else if (process.argv.includes("--ptb")) {
+            const discordPath = path.join(process.env.LOCALAPPDATA, "DiscordPTB");
+            const discordDirectory = await readdir(discordPath);
+
+            const currentBuild = discordDirectory.filter((paths) => paths.startsWith("app-")).reverse()[0];
+            appPath = path.join(discordPath, currentBuild, "resources");
+        } else {
+            const discordPath = path.join(process.env.LOCALAPPDATA, "Discord");
+            const discordDirectory = await readdir(discordPath);
+
+            const currentBuild = discordDirectory.filter((paths) => paths.startsWith("app-")).reverse()[0];
+            appPath = path.join(discordPath, currentBuild, "resources");
+        }
+
+        console.log(`Preparing to install to '${appPath}'`);
+
+        readline.question("Is this ok? (y/n) ", async (answer) => {
+            if (answer == "y") {
+                if (fs.existsSync(path.join(appPath, "app"))) {
+                    console.error("A Discord Client Modification is already installed in this directory.");
+                    console.log("Overwriting existing files...");
+                } else {
+                    await mkdir(path.join(appPath, "app"));
+                }
+                await Promise.all([
+                    writeFile(path.join(appPath, "app", "index.js"), `require(\`${path.join(__dirname, "../").replace(RegExp(path.sep.repeat(2), "g"), "/")}\`)`),
+                    writeFile(
+                        path.join(appPath, "app", "package.json"),
+                        JSON.stringify({
+                            main: "index.js",
+                            name: "discord",
+                        })
+                    ),
+                ]);
+                console.log("Done!");
+                readline.close();
+            } else {
+                console.log("Exiting Install.");
+                process.exit();
+            }
+        });
+
+        return true;
+    }
 
     readline.question("Please enter the absolute path to the discord folder you would like to install Velocity. (filePath) ", (paths) => {
         const proposedPath = path.resolve(paths);
@@ -18,7 +108,6 @@ async function run() {
             return readline.close();
         }
 
-        let appPath;
         const selected = path.basename(proposedPath);
         let channelName;
         if (proposedPath.toLowerCase().includes("canary")) channelName = "Discord Canary";
