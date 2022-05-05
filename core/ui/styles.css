@@ -18,6 +18,7 @@ velocity-toasts {
     cursor: pointer;
 }
 
+/* stylelint-disable */
 .monaco-editor .decorationsOverviewRuler,
 .monaco-editor .editor-scrollable,
 .monaco-editor .minimap-shadow-visible,
@@ -25,6 +26,7 @@ velocity-toasts {
 .monaco-editor:not(.rename-box) {
     height: 100% !important;
 }
+/* stylelint-enable */
 
 #editor {
     height: 300px;
@@ -38,17 +40,17 @@ velocity-toasts {
     min-height: 95px;
 }
 
-.velocity-card .paragraph-9M861H {
+.velocity-card [class^="paragraph"] {
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .velocity-card-content-wrapper {
-    padding: 0 3% 0 3%;
+    padding: 0 3%;
 }
 
 .velocity-card-footer-wrapper {
-    padding: 0 3% 3% 3%;
+    padding: 0 3% 3%;
     margin-top: 25px;
 }
 
@@ -62,8 +64,8 @@ velocity-toasts {
     justify-content: space-between;
     border-bottom: 1px solid var(--background-modifier-accent);
     margin-bottom: 10px;
-    padding-bottom: 5px;
     padding: 3%;
+    padding-bottom: 5px;
     background: var(--background-secondary-alt);
 }
 
@@ -114,7 +116,6 @@ velocity-toasts {
     font-size: 9pt;
     color: var(--brand-experiment-430);
     margin-bottom: 1px;
-    margin-top: 3px;
 }
 
 .velocity-card-header-author-text {
@@ -123,7 +124,6 @@ velocity-toasts {
     font-size: 9pt;
     color: var(--text-muted);
     margin-bottom: 1px;
-    margin-top: 3px;
     margin-right: 3px;
 }
 
@@ -158,22 +158,24 @@ velocity-toasts {
     grid-gap: 20px;
 }
 
-@keyframes toastShow {
+@keyframes toast-show {
     from {
         opacity: 0;
         transform: translateX(100px) scale(0.2);
     }
+
     to {
         opacity: 1;
         transform: translateX(0) scale(1);
     }
 }
 
-@keyframes toastHide {
+@keyframes toast-hide {
     from {
         opacity: 1;
         transform: translateX(0) scale(1);
     }
+
     to {
         opacity: 0;
         transform: translateX(100px) scale(0.3);
@@ -196,19 +198,17 @@ velocity-toasts {
     z-index: 99999;
     position: relative;
     width: fit-content;
-    background-color: #4949499e;
+    background-color: var(--background-floating);
     box-shadow: 2px 2px 5px #00000075;
-    animation: toastShow 0.15s ease-out;
-
+    animation: toast-show 0.15s ease-out;
     color: #fff;
     font-size: 11pt;
-
     border-left: 3px solid;
     border-left-color: var(--text-default);
 }
 
 .velocity-toast.closing {
-    animation: toastHide 0.15s ease-in;
+    animation: toast-hide 0.15s ease-in;
     opacity: 0;
     transform: translateY(-30px) scale(0.3);
 }
@@ -239,7 +239,7 @@ velocity-toasts {
     border-left-color: var(--brand-experiment);
 }
 
-.Velocity-badge {
+.velocity-badge {
     cursor: pointer;
 }
 
@@ -277,6 +277,10 @@ velocity-toasts {
 .velocity-button {
     margin-right: 10px;
     margin-top: 5px;
+}
+
+#startup-script-save.disabled {
+    pointer-events: none;
 }
 
 textarea.velocity-editor::-webkit-scrollbar-thumb {
@@ -321,6 +325,25 @@ textarea.velocity-editor {
     background: var(--interactive-normal);
 }
 
+.notification::after {
+    content: "1";
+    position: absolute;
+    pointer-events: none;
+    background: var(--status-danger);
+    border-radius: 50px;
+    width: 16px;
+    height: 16px;
+    text-align: center;
+    color: #fff;
+    right: 10px;
+    font-size: 11px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 8px;
+}
+
 .velocity-header-display {
     font-size: 12px;
     font-weight: 700;
@@ -356,7 +379,9 @@ textarea.velocity-editor {
 .velocity-changelog strong:not(ul *)::after {
     content: "";
     height: 1px;
+    /* stylelint-disable */
     background: currentColor;
+    /* stylelint-enable */
     margin-left: 4px;
     opacity: 0.6;
     width: 100%;
@@ -371,7 +396,7 @@ textarea.velocity-editor {
     line-height: 20px;
 }
 
-.velocity-changelog li:before {
+.velocity-changelog li::before {
     content: "";
     background-color: #dcddde;
     position: absolute;
@@ -448,7 +473,6 @@ textarea.velocity-editor {
     border-radius: 4px;
     padding: 16px;
     width: 432px;
-    /* height: 104px; */
     flex-direction: column;
     text-indent: 0;
     background-color: var(--background-secondary);
@@ -545,6 +569,7 @@ textarea.velocity-editor {
     flex-direction: column;
     padding: 60px 130px 80px 40px;
     flex: 1 1 auto;
+    overflow-y: scroll;
 }
 
 .velocity-developer-internal-patch-info {
@@ -586,10 +611,6 @@ textarea.velocity-editor {
 .velocity-developer-status-header {
     font-size: 18px;
     font-weight: 500;
-}
-
-.velocity-developer-container {
-    overflow-y: scroll;
 }
 
 .velocity-developer-container::-webkit-scrollbar {

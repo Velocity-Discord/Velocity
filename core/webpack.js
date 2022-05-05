@@ -97,6 +97,9 @@ else {
     function byDisplayName(displayName) {
         return getModule((m) => m.default?.displayName === displayName) || byDisplayNameType(displayName) || byDisplayNameTypeRender(displayName);
     }
+    function byDisplayNameDefault(displayName) {
+        return getModule((m) => m.default?.displayName === displayName)?.default;
+    }
     function byDisplayNameType(displayName) {
         return getModule((m) => m.default?.type?.displayName === displayName);
     }
@@ -135,5 +138,5 @@ else {
         },
     });
     webpackChunkdiscord_app.Velocity_getModule = { find, getLazy };
-    module.exports = { find, getLazy };
+    module.exports = { find, getLazy, findByDisplayName: byDisplayName, findByDisplayNameDefault: byDisplayNameDefault, findByProps: byProps, findByPropsDefault: byPropsDefault };
 }

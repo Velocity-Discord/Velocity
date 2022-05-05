@@ -79,6 +79,7 @@ const RemoteActions = new (class {
 
     unloadTheme(name) {
         const entry = remoteAddons.themes.filter((m) => m.name == name);
+
         if (entry[0]) {
             Themes.disable(name);
             remoteAddons.themes = remoteAddons.themes.filter((m) => m.name !== name);
@@ -97,10 +98,6 @@ const RemoteActions = new (class {
             VApi.showToast("Remote Addon Manager", `Unloaded <strong>${name}</strong>`);
         }
     }
-
-    loadPlugin(url) {}
-
-    unloadPlugin(name) {}
 })();
 
 function loadRemoteAddons() {
@@ -334,9 +331,6 @@ module.exports = {
             },
             loadPlugin: (url) => {
                 RemoteActions.loadPlugin(url);
-            },
-            unloadTheme: (name) => {
-                RemoteActions.unloadTheme(name);
             },
         };
     },

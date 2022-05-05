@@ -3,6 +3,8 @@ let Quick_Symbol = Symbol("VApi.patch.quick");
 let Internal_Symbol = Symbol("VelocityInternal");
 let ALLpatches = {};
 
+const { internalPatches, InternalSecurityToken } = require("./Stores");
+
 function patch(patchName, moduleToPatch, functionToPatch, callback, opts = {}) {
     let { method = "after", id } = opts;
     let originalFunction = moduleToPatch[functionToPatch];
@@ -17,9 +19,17 @@ function patch(patchName, moduleToPatch, functionToPatch, callback, opts = {}) {
     let patchInfo = { unpatch, patchName: id ?? patchName, moduleToPatch, functionToPatch, callback, method, Symbol: CallbackSymbol };
     patches[method].unshift(Object.assign(callback, { unpatch, Symbol: CallbackSymbol }));
     let DidUnpatch = false;
-    function unpatch() {
+    function unpatch(isInternal) {
         if (DidUnpatch) return;
         DidUnpatch = true;
+        if (isInternal) {
+            let found = patches[method].find((p) => p.Symbol === patchInfo.Symbol);
+            let index = patches[method].indexOf(found);
+            patches[method].splice(index, 1);
+            ALLpatches[Internal_Symbol].find((m) => m.patchName == patchInfo.name).splice(index, 1);
+            if (!ALLpatches[Internal_Symbol].find((m) => m.patchName == patchInfo.name).length) delete ALLpatches[Internal_Symbol].find((m) => m.patchName == patchInfo.name);
+            return;
+        }
         let found = patches[method].find((p) => p.Symbol === patchInfo.Symbol);
         let index = patches[method].indexOf(found);
         patches[method].splice(index, 1);
@@ -54,6 +64,7 @@ function patch(patchName, moduleToPatch, functionToPatch, callback, opts = {}) {
         });
     }
     if (patchName.startsWith && /VelocityInternal-([A-z]+)-Patch/.test(patchName)) {
+        internalPatches.push({ name: patchName, beta: !!opts.beta, warning: !!opts.warning });
         if (!ALLpatches[Internal_Symbol]) ALLpatches[Internal_Symbol] = [patchInfo];
         else ALLpatches[Internal_Symbol].push(patchInfo);
     } else {
@@ -79,7 +90,18 @@ Object.assign(patch, {
             method: "after",
             ...opts,
         }),
-    unpatchAll: function (name) {
+    unpatchAll: function (name, authorisation) {
+        if (authorisation) {
+            if (authorisation === InternalSecurityToken) {
+                try {
+                    if (!ALLpatches[Internal_Symbol].find((m) => m.patchName == name)) return;
+                    ALLpatches[Internal_Symbol].find((m) => m.patchName == name).unpatch(true);
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+        }
+
         if (!ALLpatches[name]) return;
         for (let i = ALLpatches[name].length; i > 0; i--) ALLpatches[name][i - 1].unpatch();
     },

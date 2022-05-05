@@ -1,7 +1,7 @@
 const DataStore = require("../datastore");
 const { info } = require("../../package.json");
 const button = VApi.getModule.find(["ButtonColors"]).default;
-const Text = VApi.getModule.find("Text").default;
+const Text = VApi.getModule.find("LegacyText").default;
 const ButtonColors = VApi.getModule.find(["ButtonColors"]).ButtonColors;
 
 async function prompt(title) {

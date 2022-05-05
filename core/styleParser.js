@@ -57,4 +57,10 @@ function parse(css) {
     return newCSS;
 }
 
-module.exports = { varParser, ifParser, parse };
+function themeParser(css) {
+    let newCSS = css;
+
+    newCSS = parse(newCSS);
+}
+
+module.exports = { varParser, ifParser, parse, themeParser };

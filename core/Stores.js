@@ -1,9 +1,6 @@
-const internalPatches = [
-    { name: "VelocityInternal-GuildTooltip-Patch" },
-    { name: "VelocityInternal-Badge-Patch" },
-    { name: "VelocityInternal-Settings-Patch", warning: true },
-    { name: "VelocityInternal-Settings-Info-Patch" },
-    { name: "VelocityInternal-Protocol-Patch", beta: true, warning: true },
-];
+const { createHash, randomBytes } = require("crypto");
 
-module.exports = { internalPatches };
+const internalPatches = [];
+const InternalSecurityToken = createHash("sha512").update(randomBytes(30).toString()).digest("hex");
+
+module.exports = { internalPatches, InternalSecurityToken };

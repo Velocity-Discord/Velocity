@@ -57,12 +57,19 @@ async function checkForUpdates() {
 
         if (updateData) {
             if (updateData.version !== info.version) {
+                logger.log("Velocity", "Update available");
+                if (updateData.version > info.version) {
+                    process.env.willUpgrade = true;
+                } else if (updateData.version < info.version) {
+                    process.env.willDowngrade = true;
+                }
+
                 async function updatePrompt() {
                     const { React, getModule, modals, showToast } = VApi;
                     const ConfirmationModal = getModule.find("ConfirmModal").default;
                     const Button = getModule.find(["ButtonColors"]);
                     const ButtonEle = Button.default;
-                    const Text = getModule.find("Text").default;
+                    const Text = getModule.find("LegacyText").default;
                     const { Messages } = getModule.find((m) => m.default?.Messages?.OKAY).default;
 
                     return new Promise((resolve) => {
@@ -164,7 +171,7 @@ async function changelogModal(options = {}) {
 
         const ModalComponents = getModule.find(["ModalRoot"]);
         const ChangelogClasses = getModule.find(["fixed", "improved"]);
-        const Text = getModule.find("Text").default;
+        const Text = getModule.find("LegacyText").default;
         const dateClass = getModule.find(["size12", "size32"]).size12;
         const closeModals = getModule.find(["closeAllModals"]).closeAllModals;
         const closeClasses = getModule.find(["root", "close"]);

@@ -1,6 +1,6 @@
 const { React, modals, logger, getModule, showToast, Utilities, AddonManager } = VApi;
 const { ipcRenderer, shell } = require("electron");
-const { internalPatches } = require("../Stores");
+const { internalPatches, InternalSecurityToken } = require("../Stores");
 const { info } = require("../../package.json");
 const DataStore = require("../datastore");
 const request = require("../request");
@@ -11,7 +11,7 @@ const fs = require("fs");
 const Button = getModule.find(["ButtonColors"]).default;
 const ButtonColors = getModule.find(["ButtonColors"]).ButtonColors;
 const ButtonSizes = getModule.find(["ButtonColors"]).ButtonSizes;
-const Text = getModule.find("Text").default;
+const Text = getModule.find("LegacyText").default;
 const Tooltip = getModule.find.prototypes("renderTooltip").default;
 const SwitchEle = getModule.find("Switch").default;
 const TextInput = getModule.find("TextInput").default;
@@ -702,19 +702,29 @@ async function pluginPrompt() {
                         React.createElement(ModalComponents.ModalContent, {
                             children: [
                                 React.createElement("div", { className: "velocity-modal-spacer" }),
-                                React.createElement(
-                                    Button,
-                                    {
-                                        id: "plugins-folder",
-                                        color: ButtonColors.BRAND,
-                                        size: ButtonSizes.SMALL,
-                                        className: ["velocity-button"],
-                                        onClick: () => {
-                                            shell.openPath(AddonManager.plugins.folder);
-                                        },
-                                    },
-                                    "Open Plugins Folder"
-                                ),
+                                React.createElement("div", {
+                                    className: "velocity-addon-modal-body-header",
+                                    children: [
+                                        React.createElement("div", {
+                                            className: "velocity-addon-modal-body-header-buttons",
+                                            children: [
+                                                React.createElement(
+                                                    Button,
+                                                    {
+                                                        id: "plugins-folder",
+                                                        color: ButtonColors.BRAND,
+                                                        size: ButtonSizes.SMALL,
+                                                        className: ["velocity-button"],
+                                                        onClick: () => {
+                                                            shell.openPath(AddonManager.plugins.folder);
+                                                        },
+                                                    },
+                                                    "Open Plugins Folder"
+                                                ),
+                                            ],
+                                        }),
+                                    ],
+                                }),
                                 React.createElement("div", {
                                     id: "velocity-addons-grid",
                                     children: [
@@ -1098,323 +1108,336 @@ async function cssPrompt() {
 
 const UserSettings = getModule.find("SettingsView").default;
 
-VApi.Patcher("VelocityInternal-Settings-Patch", UserSettings.prototype, "getPredicateSections", ([args], returnValue) => {
-    let location = returnValue.findIndex((s) => s.section.toLowerCase() == "discord nitro") - 2;
-    if (location < 0) return;
-    const insert = (section) => {
-        returnValue.splice(location, 0, section);
-        location++;
-    };
+VApi.Patcher(
+    "VelocityInternal-Settings-Patch",
+    UserSettings.prototype,
+    "getPredicateSections",
+    ([args], returnValue) => {
+        let location = returnValue.findIndex((s) => s.section.toLowerCase() == "discord nitro") - 2;
+        if (location < 0) return;
+        const insert = (section) => {
+            returnValue.splice(location, 0, section);
+            location++;
+        };
 
-    insert({ section: "DIVIDER" });
-    insert({ section: "HEADER", label: "Velocity" });
-    insert({
-        section: "updates",
-        label: "Check for Updates",
-        className: `velocity-updates-tab`,
-        onClick: () => {
-            updater.checkForUpdates();
-        },
-    });
-    insert({
-        section: "settings",
-        label: "Settings",
-        className: `velocity-settings-tab`,
-        onClick: () => {
-            settingsPrompt();
-        },
-    });
-
-    if (Settings.CSSEnabled) {
+        insert({ section: "DIVIDER" });
+        insert({ section: "HEADER", label: "Velocity" });
         insert({
-            section: "customcss",
-            label: "Custom CSS",
-            className: `velocity-customcss-tab`,
+            section: "updates",
+            label: "Check for Updates",
+            className: `velocity-updates-tab ${process.env.willDowngrade || process.env.willUpgrade ? "notification" : ""}`,
             onClick: () => {
-                const customCSS = DataStore.getData("VELOCITY_SETTINGS", "CSS");
-                cssPrompt();
-                setTimeout(() => {
-                    window.editor = monaco.editor.create(document.getElementById("editor"), {
-                        language: "css",
-                        theme: document.documentElement.classList.contains("theme-dark") ? "vs-dark" : "vs-light",
-                        value: customCSS,
-                        fontSize: fontsize,
-                    });
-                    window.editor.onDidChangeModelContent(() => {
-                        const content = window.editor.getValue();
-
-                        if (content.includes("/**" && "@name")) {
-                            const warn = document.getElementById("velocity-customcss-warning");
-                            warn.innerHTML = "This looks like a theme... you should put themes in your theme folder, not here.";
-                        } else {
-                            const warn = document.getElementById("velocity-customcss-warning");
-                            warn.innerHTML = "";
-                        }
-                    });
-                }, 50);
+                updater.checkForUpdates();
             },
         });
-    }
-    if (Settings.JSEnabled) {
         insert({
-            section: "ssscript",
-            label: "Startup Script",
-            className: `velocity-ssscript-tab`,
+            section: "settings",
+            label: "Settings",
+            className: `velocity-settings-tab`,
             onClick: () => {
-                const startupJS = DataStore.getData("VELOCITY_SETTINGS", "JS");
-                jsPrompt();
-                setTimeout(() => {
-                    window.editor = monaco.editor.create(document.getElementById("editor"), {
-                        language: "javascript",
-                        theme: document.documentElement.classList.contains("theme-dark") ? "vs-dark" : "vs-light",
-                        value: startupJS,
-                        fontSize: fontsize,
-                    });
-                    window.editor.onDidChangeModelContent(() => {
-                        const content = window.editor.getValue();
-                        const button = document.getElementById("startup-script-save");
-                        if (content.includes("getToken" || "getEmail")) {
-                            const warn = document.querySelector("#velocity-script-warning");
-                            warn.innerHTML = "Be careful what you put in here, this script looks malicious.";
-                            if (button) button.disabled = true;
-                        } else {
-                            const warn = document.querySelector("#velocity-script-warning");
-                            warn.innerHTML = "";
-                            if (button) button.disabled = false;
-                        }
-                    });
-                }, 50);
+                settingsPrompt();
             },
         });
-    }
-    insert({
-        section: "plugins",
-        label: "Plugins",
-        className: `velocity-plugins-tab`,
-        onClick: () => {
-            pluginPrompt();
-        },
-    });
-    insert({
-        section: "themes",
-        label: "Themes",
-        className: `velocity-themes-tab`,
-        onClick: () => {
-            themePrompt();
-        },
-    });
-    if (Settings.DeveloperSettings) {
+
+        if (Settings.CSSEnabled) {
+            insert({
+                section: "customcss",
+                label: "Custom CSS",
+                className: `velocity-customcss-tab`,
+                onClick: () => {
+                    const customCSS = DataStore.getData("VELOCITY_SETTINGS", "CSS");
+                    cssPrompt();
+                    setTimeout(() => {
+                        window.editor = monaco.editor.create(document.getElementById("editor"), {
+                            language: "css",
+                            theme: document.documentElement.classList.contains("theme-dark") ? "vs-dark" : "vs-light",
+                            value: customCSS,
+                            fontSize: fontsize,
+                        });
+                        window.editor.onDidChangeModelContent(() => {
+                            const content = window.editor.getValue();
+
+                            if (content.includes("/**" && "@name")) {
+                                const warn = document.getElementById("velocity-customcss-warning");
+                                warn.innerHTML = "This looks like a theme... you should put themes in your theme folder, not here.";
+                            } else {
+                                const warn = document.getElementById("velocity-customcss-warning");
+                                warn.innerHTML = "";
+                            }
+                        });
+                    }, 50);
+                },
+            });
+        }
+        if (Settings.JSEnabled) {
+            insert({
+                section: "ssscript",
+                label: "Startup Script",
+                className: `velocity-ssscript-tab`,
+                onClick: () => {
+                    const startupJS = DataStore.getData("VELOCITY_SETTINGS", "JS");
+                    jsPrompt();
+                    setTimeout(() => {
+                        window.editor = monaco.editor.create(document.getElementById("editor"), {
+                            language: "javascript",
+                            theme: document.documentElement.classList.contains("theme-dark") ? "vs-dark" : "vs-light",
+                            value: startupJS,
+                            fontSize: fontsize,
+                        });
+                        window.editor.onDidChangeModelContent(() => {
+                            const content = window.editor.getValue();
+                            const button = document.getElementById("startup-script-save");
+                            if (content.includes("getToken" || "getEmail")) {
+                                const warn = document.querySelector("#velocity-script-warning");
+                                warn.innerHTML = "Be careful what you put in here, this script looks malicious.";
+                                if (button) {
+                                    button.disabled = true;
+                                    button.classList.add("disabled");
+                                }
+                            } else {
+                                const warn = document.querySelector("#velocity-script-warning");
+                                warn.innerHTML = "";
+                                if (button) {
+                                    button.disabled = false;
+                                    button.classList.remove("disabled");
+                                }
+                            }
+                        });
+                    }, 50);
+                },
+            });
+        }
         insert({
-            section: "developer",
-            label: "Developer",
-            className: `velocity-developer-tab`,
+            section: "plugins",
+            label: "Plugins",
+            className: `velocity-plugins-tab`,
             onClick: () => {
-                try {
-                    getModule.find(["pushLayer"]).pushLayer(() => [
-                        React.createElement("div", {
-                            className: "velocity-close-conteainer",
-                            style: { top: "60px", right: "60px", position: "absolute" },
-                            children: [
-                                React.createElement(CloseIcon, {
-                                    closeAction: () => {
-                                        getModule.find(["popLayer"]).popLayer();
-                                    },
-                                    keybind: "ESC",
-                                }),
-                            ],
-                        }),
-                        React.createElement("div", {
-                            className: "velocity-developer-container",
-                            children: [
-                                React.createElement(
-                                    Text,
-                                    {
-                                        size: Text.Sizes.SIZE_14,
-                                        className: `velocity-developer-header ${getModule.find(["h1"]).h1}`,
-                                    },
-                                    "Internal Patches"
-                                ),
-                                React.createElement("div", {
-                                    className: "velocity-developer-items-container",
-                                    children: [
-                                        internalPatches.map((patch) =>
-                                            React.createElement("div", {
-                                                className: "velocity-developer-internal-patch",
-                                                children: [
-                                                    React.createElement(TextInput, {
-                                                        value: patch.name,
-                                                        disabled: true,
-                                                    }),
-                                                    React.createElement("div", {
-                                                        className: "velocity-developer-internal-patch-info",
-                                                        children: [
-                                                            patch.warning &&
+                pluginPrompt();
+            },
+        });
+        insert({
+            section: "themes",
+            label: "Themes",
+            className: `velocity-themes-tab`,
+            onClick: () => {
+                themePrompt();
+            },
+        });
+        if (Settings.DeveloperSettings) {
+            insert({
+                section: "developer",
+                label: "Developer",
+                className: `velocity-developer-tab`,
+                onClick: () => {
+                    try {
+                        getModule.find(["pushLayer"]).pushLayer(() => [
+                            React.createElement("div", {
+                                className: "velocity-close-conteainer",
+                                style: { top: "60px", right: "60px", position: "absolute" },
+                                children: [
+                                    React.createElement(CloseIcon, {
+                                        closeAction: () => {
+                                            getModule.find(["popLayer"]).popLayer();
+                                        },
+                                        keybind: "ESC",
+                                    }),
+                                ],
+                            }),
+                            React.createElement("div", {
+                                className: "velocity-developer-container",
+                                children: [
+                                    React.createElement(
+                                        Text,
+                                        {
+                                            size: Text.Sizes.SIZE_14,
+                                            className: `velocity-developer-header ${getModule.find(["h1"]).h1}`,
+                                        },
+                                        "Internal Patches"
+                                    ),
+                                    React.createElement("div", {
+                                        className: "velocity-developer-items-container",
+                                        children: [
+                                            internalPatches.map((patch) =>
+                                                React.createElement("div", {
+                                                    className: "velocity-developer-internal-patch",
+                                                    children: [
+                                                        React.createElement(TextInput, {
+                                                            value: patch.name,
+                                                            disabled: true,
+                                                        }),
+                                                        React.createElement("div", {
+                                                            className: "velocity-developer-internal-patch-info",
+                                                            children: [
+                                                                patch.warning &&
+                                                                    React.createElement(
+                                                                        "div",
+                                                                        {
+                                                                            className: "velocity-developer-internal-warning",
+                                                                        },
+                                                                        "WARNING - Killing this patch is dangerous and can cause issues."
+                                                                    ),
+                                                                patch.beta &&
+                                                                    React.createElement(
+                                                                        "div",
+                                                                        {
+                                                                            className: "velocity-developer-internal-beta-tag",
+                                                                        },
+                                                                        "BETA"
+                                                                    ),
                                                                 React.createElement(
-                                                                    "div",
+                                                                    Button,
                                                                     {
-                                                                        className: "velocity-developer-internal-warning",
+                                                                        size: ButtonSizes.SMALL,
+                                                                        color: ButtonColors.RED,
+                                                                        onClick: (target) => {
+                                                                            target.target.tagName == "BUTTON"
+                                                                                ? target.target.setAttribute("disabled", "true")
+                                                                                : target.target.parentElement.setAttribute("disabled", "true");
+                                                                            VApi.Patcher.unpatchAll(patch.name, InternalSecurityToken);
+                                                                            showToast("Velocity", `Killed <strong>${patch.name}</strong>`, { type: "error" });
+                                                                        },
                                                                     },
-                                                                    "WARNING - Killing this patch is dangerous and can cause issues."
+                                                                    "Kill"
                                                                 ),
-                                                            patch.beta &&
-                                                                React.createElement(
-                                                                    "div",
-                                                                    {
-                                                                        className: "velocity-developer-internal-beta-tag",
-                                                                    },
-                                                                    "BETA"
-                                                                ),
-                                                            React.createElement(
-                                                                Button,
-                                                                {
-                                                                    size: ButtonSizes.SMALL,
-                                                                    color: ButtonColors.RED,
-                                                                    onClick: (target) => {
-                                                                        target.target.tagName == "BUTTON"
-                                                                            ? target.target.setAttribute("disabled", "true")
-                                                                            : target.target.parentElement.setAttribute("disabled", "true");
-                                                                        VApi.Patcher.unpatchAll(patch.name);
-                                                                        showToast("Velocity", `Killed <strong>${patch.name}</strong>`, { type: "error" });
-                                                                    },
-                                                                },
-                                                                "Kill"
-                                                            ),
-                                                        ],
-                                                    }),
-                                                ],
-                                            })
-                                        ),
-                                    ],
-                                }),
-                                React.createElement(
-                                    Text,
-                                    {
-                                        size: Text.Sizes.SIZE_14,
-                                        className: `velocity-developer-header ${getModule.find(["h1"]).h1}`,
-                                    },
-                                    "Backend Status"
-                                ),
-                                React.createElement("div", {
-                                    className: "velocity-developer-status-buttons-container",
-                                    children: [
-                                        React.createElement(
-                                            Button,
-                                            {
-                                                color: ButtonColors.BRAND,
-                                                onClick: async (target) => {
-                                                    request("https://raw.githubusercontent.com/Velocity-Discord/Backend/main/api/Badges.json", (_, res, body) => {
-                                                        if (res.statusCode == 200) {
-                                                            const statusBadgeElement = document.querySelector(".velocity-developer-status-badges-text");
-                                                            statusBadgeElement.innerHTML = `Status - Fine (${res.statusCode})`;
-                                                            statusBadgeElement.style.color = "var(--text-positive)";
-                                                        } else {
-                                                            const statusUpdateElement = document.querySelector(".velocity-developer-status-badges-text");
-                                                            statusUpdateElement.innerHTML = `Status - Unknown (${res.statusCode})`;
-                                                            statusUpdateElement.style.color = "var(--text-danger)";
-                                                        }
-                                                    });
+                                                            ],
+                                                        }),
+                                                    ],
+                                                })
+                                            ),
+                                        ],
+                                    }),
+                                    React.createElement(
+                                        Text,
+                                        {
+                                            size: Text.Sizes.SIZE_14,
+                                            className: `velocity-developer-header ${getModule.find(["h1"]).h1}`,
+                                        },
+                                        "Backend Status"
+                                    ),
+                                    React.createElement("div", {
+                                        className: "velocity-developer-status-buttons-container",
+                                        children: [
+                                            React.createElement(
+                                                Button,
+                                                {
+                                                    color: ButtonColors.BRAND,
+                                                    onClick: async (target) => {
+                                                        request("https://raw.githubusercontent.com/Velocity-Discord/Backend/main/api/Badges.json", (_, res, body) => {
+                                                            if (res.statusCode == 200) {
+                                                                const statusBadgeElement = document.querySelector(".velocity-developer-status-badges-text");
+                                                                statusBadgeElement.innerHTML = `Status - Fine (${res.statusCode})`;
+                                                                statusBadgeElement.style.color = "var(--text-positive)";
+                                                            } else {
+                                                                const statusUpdateElement = document.querySelector(".velocity-developer-status-badges-text");
+                                                                statusUpdateElement.innerHTML = `Status - Unknown (${res.statusCode})`;
+                                                                statusUpdateElement.style.color = "var(--text-danger)";
+                                                            }
+                                                        });
 
-                                                    request("https://raw.githubusercontent.com/Velocity-Discord/Backend/main/api/Updates.json", (_, res, body) => {
-                                                        if (res.statusCode == 200) {
-                                                            const statusUpdateElement = document.querySelector(".velocity-developer-status-update-text");
-                                                            statusUpdateElement.innerHTML = `Status - Fine (${res.statusCode})`;
-                                                            statusUpdateElement.style.color = "var(--text-positive)";
-                                                        } else {
-                                                            const statusUpdateElement = document.querySelector(".velocity-developer-status-update-text");
-                                                            statusUpdateElement.innerHTML = `Status - Unknown (${res.statusCode})`;
-                                                            statusUpdateElement.style.color = "var(--text-danger)";
-                                                        }
-                                                    });
+                                                        request("https://raw.githubusercontent.com/Velocity-Discord/Backend/main/api/Updates.json", (_, res, body) => {
+                                                            if (res.statusCode == 200) {
+                                                                const statusUpdateElement = document.querySelector(".velocity-developer-status-update-text");
+                                                                statusUpdateElement.innerHTML = `Status - Fine (${res.statusCode})`;
+                                                                statusUpdateElement.style.color = "var(--text-positive)";
+                                                            } else {
+                                                                const statusUpdateElement = document.querySelector(".velocity-developer-status-update-text");
+                                                                statusUpdateElement.innerHTML = `Status - Unknown (${res.statusCode})`;
+                                                                statusUpdateElement.style.color = "var(--text-danger)";
+                                                            }
+                                                        });
+                                                    },
                                                 },
-                                            },
-                                            "Re-Request"
-                                        ),
-                                        React.createElement(
-                                            Button,
-                                            {
-                                                color: ButtonColors.RED,
-                                                onClick: () => {
-                                                    const statusBadgeElement = document.querySelector(".velocity-developer-status-badges-text");
-                                                    const statusUpdateElement = document.querySelector(".velocity-developer-status-update-text");
-                                                    statusUpdateElement.innerHTML = "Status";
-                                                    statusBadgeElement.innerHTML = "Status";
-                                                    statusUpdateElement.style.color = null;
-                                                    statusBadgeElement.style.color = null;
+                                                "Re-Request"
+                                            ),
+                                            React.createElement(
+                                                Button,
+                                                {
+                                                    color: ButtonColors.RED,
+                                                    onClick: () => {
+                                                        const statusBadgeElement = document.querySelector(".velocity-developer-status-badges-text");
+                                                        const statusUpdateElement = document.querySelector(".velocity-developer-status-update-text");
+                                                        statusUpdateElement.innerHTML = "Status";
+                                                        statusBadgeElement.innerHTML = "Status";
+                                                        statusUpdateElement.style.color = null;
+                                                        statusBadgeElement.style.color = null;
+                                                    },
                                                 },
-                                            },
-                                            "Clear Cache"
-                                        ),
-                                    ],
-                                }),
-                                React.createElement(
-                                    Text,
-                                    {
-                                        size: Text.Sizes.SIZE_16,
-                                        className: "velocity-developer-status-header",
-                                    },
-                                    "Badges"
-                                ),
-                                React.createElement(
-                                    Text,
-                                    {
-                                        size: Text.Sizes.SIZE_14,
-                                        color: Text.Colors.MUTED,
-                                        className: "velocity-developer-status-badges-text",
-                                    },
-                                    "Status"
-                                ),
-                                React.createElement(
-                                    Text,
-                                    {
-                                        size: Text.Sizes.SIZE_16,
-                                        className: "velocity-developer-status-header",
-                                    },
-                                    "Updates"
-                                ),
-                                React.createElement(
-                                    Text,
-                                    {
-                                        size: Text.Sizes.SIZE_14,
-                                        color: Text.Colors.MUTED,
-                                        className: "velocity-developer-status-update-text",
-                                    },
-                                    "Status"
-                                ),
-                                React.createElement(getModule.find(["EmptyStateImage"]).EmptyStateImage, {
-                                    height: 200,
-                                    width: 415,
-                                    darkSrc: "/assets/c115d59ca13c0f942965a82a0f05bf01.svg",
-                                    lightSrc: "/assets/ad530d02033b87bb89752f915c2fbe3c.svg",
-                                    style: { flex: "none", marginInline: "auto" },
-                                }),
-                            ],
-                        }),
-                    ]);
-                } catch (error) {
-                    console.error(error);
-                }
+                                                "Clear Cache"
+                                            ),
+                                        ],
+                                    }),
+                                    React.createElement(
+                                        Text,
+                                        {
+                                            size: Text.Sizes.SIZE_16,
+                                            className: "velocity-developer-status-header",
+                                        },
+                                        "Badges"
+                                    ),
+                                    React.createElement(
+                                        Text,
+                                        {
+                                            size: Text.Sizes.SIZE_14,
+                                            color: Text.Colors.MUTED,
+                                            className: "velocity-developer-status-badges-text",
+                                        },
+                                        "Status"
+                                    ),
+                                    React.createElement(
+                                        Text,
+                                        {
+                                            size: Text.Sizes.SIZE_16,
+                                            className: "velocity-developer-status-header",
+                                        },
+                                        "Updates"
+                                    ),
+                                    React.createElement(
+                                        Text,
+                                        {
+                                            size: Text.Sizes.SIZE_14,
+                                            color: Text.Colors.MUTED,
+                                            className: "velocity-developer-status-update-text",
+                                        },
+                                        "Status"
+                                    ),
+                                    React.createElement(getModule.find(["EmptyStateImage"]).EmptyStateImage, {
+                                        height: 200,
+                                        width: 415,
+                                        darkSrc: "/assets/c115d59ca13c0f942965a82a0f05bf01.svg",
+                                        lightSrc: "/assets/ad530d02033b87bb89752f915c2fbe3c.svg",
+                                        style: { flex: "none", marginInline: "auto" },
+                                    }),
+                                ],
+                            }),
+                        ]);
+                    } catch (error) {
+                        console.error(error);
+                    }
+                },
+            });
+        }
+        let changeLocation = returnValue.findIndex((s) => s.section.toLowerCase() == "changelog") + 1;
+        if (changeLocation < 0) return;
+        const insertChange = (section) => {
+            returnValue.splice(changeLocation, 0, section);
+            changeLocation++;
+        };
+
+        insertChange({
+            section: "velocity-changelog",
+            label: "Velocity Change Log",
+            className: `velocity-velocity-changelog-tab`,
+            onClick: () => {
+                updater.changelogModal();
             },
         });
-    }
-    let changeLocation = returnValue.findIndex((s) => s.section.toLowerCase() == "changelog") + 1;
-    if (changeLocation < 0) return;
-    const insertChange = (section) => {
-        returnValue.splice(changeLocation, 0, section);
-        changeLocation++;
-    };
-
-    insertChange({
-        section: "velocity-changelog",
-        label: "Velocity Change Log",
-        className: `velocity-velocity-changelog-tab`,
-        onClick: () => {
-            updater.changelogModal();
-        },
-    });
-});
+    },
+    { warning: true }
+);
 
 const TabBar = getModule.find("TabBar").default;
-VApi.Patcher("VelocityInternal-Settings-Info-Patch", TabBar.prototype, "render", ([args], returnValue) => {
+
+VApi.Patcher("VelocityInternal-SettingsInfo-Patch", TabBar.prototype, "render", ([args], returnValue) => {
     let children = returnValue.props.children;
     if (!children || !children.length || children.length < 3) return;
     if (children[children.length - 3].type.displayName !== "Separator") return;

@@ -1,6 +1,6 @@
 {
     "name": "velocity",
-    "version": "0.5.1",
+    "version": "0.5.2",
     "description": "A Client Modification for Discord enhanced by Plugins and Themes!",
     "main": "index.js",
     "author": "TheCommieAxolotl",
@@ -8,12 +8,21 @@
     "info": {
         "name": "Velocity",
         "description": "A Client Modification for Discord enhanced by Plugins and Themes!",
-        "version": "0.5.1",
-        "hash": "e94681b",
+        "version": "0.5.2",
+        "hash": "24938b",
         "api": {
             "version": "1.0.0",
             "channel": "stable"
         }
     },
-    "scripts": {}
+    "scripts": {
+        "hash": "node ./scripts/bumpHash.js",
+        "install": "node ./scripts/install.js",
+        "stylelint": "stylelint \"**/*.css\""
+    },
+    "devDependencies": {
+        "stylelint": "^14.8.1",
+        "stylelint-config-prettier": "^9.0.3",
+        "stylelint-config-standard": "^25.0.0"
+    }
 }

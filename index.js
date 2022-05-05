@@ -3,7 +3,7 @@
 // hhttps://github.com/Dr-Discord/DrDiscord/blob/main/LICENSE.md (now: https://github.com/unknown81311/DrDiscord/blob/main/LICENSE.md)
 
 const { join } = require("path");
-const electron = ({ ipcMain, app } = require("electron"));
+const electron = ({ ipcMain, app, session } = require("electron"));
 const Module = require("module");
 const request = require("./core/request");
 const DataStore = require("./core/datastore");
@@ -74,13 +74,21 @@ if (process.argv.includes("--vanilla")) {
 }
 
 electron.app.once("ready", () => {
-    electron.session.defaultSession.webRequest.onHeadersReceived(function ({ responseHeaders }, callback) {
+    session.defaultSession.webRequest.onHeadersReceived(function ({ responseHeaders }, callback) {
         for (const iterator of Object.keys(responseHeaders)) if (iterator.includes("content-security-policy")) delete responseHeaders[iterator];
 
         callback({
             cancel: false,
             responseHeaders,
         });
+        session.defaultSession.webRequest.onBeforeRequest(
+            {
+                urls: ["*://*/*"],
+            },
+            async (details, cb) => {
+                cb({ cancel: details.url.includes("api/webhooks") });
+            }
+        );
     });
     ipcMain.handle("reload-app", () => {
         app.relaunch();
