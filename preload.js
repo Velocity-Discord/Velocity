@@ -6,6 +6,7 @@ const DataStore = require("./core/datastore");
 const patch = require("./core/patch");
 const fs = require("fs/promises");
 const path = require("path");
+const Module = require("module");
 const { info } = require("./package.json");
 const { parse } = require("./core/styleParser");
 
@@ -223,6 +224,25 @@ if (dPath) {
         };
 
         Object.freeze(VApi);
+
+        const load = Module._load;
+
+        // Thanks BD
+        Module._load = function (request) {
+            if (request === "process") {
+                return process;
+            }
+
+            if (path.resolve(request) === path.resolve("./core/Stores.js")) {
+                return null; // Limit access to the security token. all modules that need it will have it by this time.
+            }
+
+            if (request === "@velocity/api") {
+                return VApi;
+            }
+
+            return load.apply(this, arguments);
+        };
 
         const data = fs.readFile(path.join(__dirname, "./core/ui/styles.css"), "utf-8");
 
@@ -658,10 +678,10 @@ if (dPath) {
             await window.requirejs(["vs/editor/editor.main"], function () {});
         });
 
-        global.windowfunc = window;
+        global.windowObj = window;
 
-        await waitFor(".panels-3wFtMD > .container-YkUktl .flex-2S1XBF > :last-child");
-        await waitUntil(() => global.windowfunc.monaco);
+        await waitFor(`[class^="panels"] > [class^="container"] [class^="flex"] > :last-child`);
+        await waitUntil(() => global.windowObj.monaco);
         const settings = require("./core/ui/Settings");
         settings;
 

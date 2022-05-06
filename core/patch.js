@@ -19,17 +19,19 @@ function patch(patchName, moduleToPatch, functionToPatch, callback, opts = {}) {
     let patchInfo = { unpatch, patchName: id ?? patchName, moduleToPatch, functionToPatch, callback, method, Symbol: CallbackSymbol };
     patches[method].unshift(Object.assign(callback, { unpatch, Symbol: CallbackSymbol }));
     let DidUnpatch = false;
-    function unpatch(isInternal) {
+
+    function unpatch(auth) {
         if (DidUnpatch) return;
         DidUnpatch = true;
-        if (isInternal) {
-            let found = patches[method].find((p) => p.Symbol === patchInfo.Symbol);
-            let index = patches[method].indexOf(found);
-            patches[method].splice(index, 1);
-            ALLpatches[Internal_Symbol].find((m) => m.patchName == patchInfo.name).splice(index, 1);
-            if (!ALLpatches[Internal_Symbol].find((m) => m.patchName == patchInfo.name).length) delete ALLpatches[Internal_Symbol].find((m) => m.patchName == patchInfo.name);
-            return;
+
+        if (patchInfo.internal) {
+            if (auth !== InternalSecurityToken) {
+                return console.error(`You are not authorized to unpatch ${patchInfo.patchName}`);
+            } else {
+                internalPatches.splice(internalPatches.indexOf(patchName), 1);
+            }
         }
+
         let found = patches[method].find((p) => p.Symbol === patchInfo.Symbol);
         let index = patches[method].indexOf(found);
         patches[method].splice(index, 1);
@@ -38,6 +40,7 @@ function patch(patchName, moduleToPatch, functionToPatch, callback, opts = {}) {
         ALLpatches[patchName].splice(index, 1);
         if (!ALLpatches[patchName].length) delete ALLpatches[patchName];
     }
+
     if (!moduleToPatch[functionToPatch][Patch_Symbol]) {
         moduleToPatch[functionToPatch] = function () {
             for (const patch of patches.before) patch([...arguments], this);
@@ -67,6 +70,11 @@ function patch(patchName, moduleToPatch, functionToPatch, callback, opts = {}) {
         internalPatches.push({ name: patchName, beta: !!opts.beta, warning: !!opts.warning });
         if (!ALLpatches[Internal_Symbol]) ALLpatches[Internal_Symbol] = [patchInfo];
         else ALLpatches[Internal_Symbol].push(patchInfo);
+
+        patchInfo.internal = true;
+
+        if (!ALLpatches[patchName]) ALLpatches[patchName] = [patchInfo];
+        else ALLpatches[patchName].push(patchInfo);
     } else {
         if (!ALLpatches[patchName]) ALLpatches[patchName] = [patchInfo];
         else ALLpatches[patchName].push(patchInfo);
@@ -90,12 +98,12 @@ Object.assign(patch, {
             method: "after",
             ...opts,
         }),
-    unpatchAll: function (name, authorisation) {
-        if (authorisation) {
-            if (authorisation === InternalSecurityToken) {
+    unpatchAll: function (name, v) {
+        if (v) {
+            if (v === InternalSecurityToken) {
                 try {
-                    if (!ALLpatches[Internal_Symbol].find((m) => m.patchName == name)) return;
-                    ALLpatches[Internal_Symbol].find((m) => m.patchName == name).unpatch(true);
+                    if (!ALLpatches[Internal_Symbol].find((m) => m?.patchName == name)) return;
+                    ALLpatches[Internal_Symbol].find((m) => m?.patchName == name).unpatch(v);
                 } catch (error) {
                     console.error(error);
                 }

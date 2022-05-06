@@ -23,6 +23,16 @@ async function pushLayer(element) {
     getModule.find(["pushLayer"]).pushLayer(() => element);
 }
 
+function addonSort(x, y) {
+    if (x.name < y.name) {
+        return -1;
+    }
+    if (x.name > y.name) {
+        return 1;
+    }
+    return 0;
+}
+
 async function reloadPrompt(title, content) {
     const ConfirmationModal = getModule.find("ConfirmModal").default;
     const { Messages } = getModule.find((m) => m.default?.Messages?.OKAY).default;
@@ -53,7 +63,7 @@ async function reloadPrompt(title, content) {
     });
 }
 
-const monaco = global.windowfunc.monaco;
+const monaco = global.windowObj.monaco;
 
 const SettingsInputSection = React.memo((props) => {
     const { setting, note, name, warning, placeholder, type, maxLength, vertical } = props;
@@ -728,7 +738,7 @@ async function pluginPrompt() {
                                 React.createElement("div", {
                                     id: "velocity-addons-grid",
                                     children: [
-                                        Plugins.sort().map((plugin) =>
+                                        Plugins.sort(addonSort).map((plugin) =>
                                             React.createElement(Card, {
                                                 meta: plugin,
                                                 type: "plugins",
@@ -831,7 +841,7 @@ async function themePrompt() {
                                 React.createElement("div", {
                                     id: "velocity-addons-grid",
                                     children: [
-                                        Themes.sort().map((theme) =>
+                                        Themes.sort(addonSort).map((theme) =>
                                             React.createElement(Card, {
                                                 meta: theme,
                                                 type: "themes",
