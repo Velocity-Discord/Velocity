@@ -131,7 +131,7 @@ if (dPath) {
             request,
             getModule: find,
             showChangelog: () => {
-                updater.changelogModal();
+                return updater.changelogModal();
             },
             Utilities: {
                 waitFor,
@@ -141,18 +141,18 @@ if (dPath) {
                     const { acceptInvite } = find.find(["acceptInvite"]);
 
                     const res = acceptInvite(code);
-                    if (goTo) res.then(({ guild, channel }) => transitionToGuild(guild.id, channel.id));
+                    if (goTo) return res.then(({ guild, channel }) => transitionToGuild(guild.id, channel.id));
                 },
                 joinOfficialServer: () => {
                     const { transitionToGuild } = find.find(["transitionToGuild"]);
                     const { getGuilds } = find.find(["getGuilds"]);
 
-                    if (Boolean(getGuilds()["959035496707817502"])) transitionToGuild("959035496707817502", "959035497462759436");
+                    if (Boolean(getGuilds()["959035496707817502"])) return transitionToGuild("959035496707817502", "959035497462759436");
                     else {
                         const { acceptInvite } = find.find(["acceptInvite"]);
 
                         const res = acceptInvite("dATuY2F3Bd");
-                        if (goTo) res.then(() => transitionToGuild("959035496707817502", "959035497462759436"));
+                        if (goTo) return res.then(() => transitionToGuild("959035496707817502", "959035497462759436"));
                     }
                 },
             },
@@ -185,7 +185,7 @@ if (dPath) {
                         let style = document.createElement("style");
                         style.innerText = cssBeta ? parse(css) : css;
                         style.id = "customcss";
-                        document.querySelector("velocity-head").appendChild(style);
+                        return document.querySelector("velocity-head").appendChild(style);
                     }
                 },
                 get: () => {
@@ -194,7 +194,7 @@ if (dPath) {
                     return parse(css);
                 },
                 update: (css) => {
-                    DataStore.setData("VELOCITY_SETTINGS", "CSS", css);
+                    return DataStore.setData("VELOCITY_SETTINGS", "CSS", css);
                 },
             },
             Patcher: patch,

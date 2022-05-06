@@ -149,6 +149,92 @@ async function checkForUpdates() {
                 }
 
                 updatePrompt();
+            } else if (updateData.hash !== info.hash) {
+                async function updatePrompt() {
+                    const { React, getModule, modals, showToast } = VApi;
+                    const ConfirmationModal = getModule.find("ConfirmModal").default;
+                    const Button = getModule.find(["ButtonColors"]);
+                    const ButtonEle = Button.default;
+                    const Text = getModule.find("LegacyText").default;
+                    const { Messages } = getModule.find((m) => m.default?.Messages?.OKAY).default;
+
+                    return new Promise((resolve) => {
+                        modals.open((props) => {
+                            if (props.transitionState === 3) resolve(false);
+                            return React.createElement(
+                                ConfirmationModal,
+                                Object.assign(
+                                    {
+                                        header: "Velocity Update Available",
+                                        confirmButtonColor: Button.ButtonColors.BRAND,
+                                        confirmText: "Update",
+                                        cancelText: Messages.CANCEL,
+                                        onConfirm: () => {
+                                            resolve(true);
+
+                                            const VDir = path.join(__dirname, "..");
+
+                                            let targetPackage;
+                                            showToast("Updater", "Requesting package...");
+                                            request("https://raw.githubusercontent.com/Velocity-Discord/Velocity/main/package.json", (err, _, body) => {
+                                                if (err) {
+                                                    showToast("Updater", "Request Failed", { type: "error" });
+                                                } else {
+                                                    try {
+                                                        targetPackage = JSON.parse(body);
+                                                    } catch (error) {
+                                                        showToast("Updater", "Failed to Parse Package", { type: "error" });
+                                                        failModal("Update Failed", [
+                                                            "You can manually update Velocity by opening the Velocity Folder and doing one of the following,",
+                                                            "- Run `git pull` in the terminal (inside the folder)",
+                                                            "- Download the **ZIP** from GitHub and replace the old folder with it uncompressed.",
+                                                            React.createElement(
+                                                                ButtonEle,
+                                                                {
+                                                                    id: "velocity-folder",
+                                                                    color: Button.ButtonColors.BRAND,
+                                                                    className: ["velocity-button"],
+                                                                    onClick: () => {
+                                                                        shell.openPath(VDir);
+                                                                    },
+                                                                },
+                                                                "Open Velocity Folder"
+                                                            ),
+                                                        ]);
+                                                    }
+                                                }
+                                            });
+
+                                            // changelogModal({ subtitle: updateData.changelog.subtitle, description: updateData.changelog.description });
+                                        },
+                                        onCancel: () => resolve(false),
+                                        children: [
+                                            React.createElement(
+                                                Text,
+                                                {
+                                                    color: Text.Colors.HEADER_SECONDARY,
+                                                    size: Text.Sizes.SIZE_16,
+                                                },
+                                                `Our Remote Repository has a newer hash than your version of Velocity, this indicates that there may be an update available. Would you like to Update to ${updateData.hash}?`
+                                            ),
+                                            React.createElement(
+                                                Text,
+                                                {
+                                                    color: Text.Colors.HEADER_SECONDARY,
+                                                    size: Text.Sizes.SIZE_16,
+                                                },
+                                                `Currently ${info.hash}`
+                                            ),
+                                        ],
+                                    },
+                                    props
+                                )
+                            );
+                        });
+                    });
+                }
+
+                updatePrompt();
             } else {
                 VApi.showToast("Updater", "No Updates Found");
             }
