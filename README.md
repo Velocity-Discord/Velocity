@@ -10,4 +10,6 @@
 #### An upcoming Client Modification for [@discord](https://github.com/discord) enhanced by Plugins and Themes!
 
 # License Notice
-The license notice is included at the top of `index.js`
+This Client Mod was originally based on DrDiscord version 1.0.0 as found [here](https://github.com/Dr-Discord/DrDiscord) (now unavailable, an archived version can be found [here](https://github.com/unknown81311/DrDiscord))
+
+A copy of this is included at the top of `index.js`
