@@ -1,6 +1,6 @@
 {
     "name": "velocity",
-    "version": "0.5.2",
+    "version": "0.7.0",
     "description": "A Client Modification for Discord enhanced by Plugins and Themes!",
     "main": "index.js",
     "author": "TheCommieAxolotl",
@@ -8,8 +8,8 @@
     "info": {
         "name": "Velocity",
         "description": "A Client Modification for Discord enhanced by Plugins and Themes!",
-        "version": "0.5.2",
-        "hash": "24938b",
+        "version": "0.7.0",
+        "hash": "6e8e20",
         "api": {
             "version": "1.0.0",
             "channel": "stable"
