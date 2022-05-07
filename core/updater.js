@@ -2,6 +2,7 @@ const { info } = require("../package.json");
 const request = require("./request");
 const logger = require("./logger");
 const path = require("path");
+const { exec } = require("child_process");
 const { ipcRenderer, shell } = require("electron");
 
 const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time));
@@ -86,18 +87,13 @@ async function checkForUpdates() {
                                         onConfirm: () => {
                                             resolve(true);
 
-                                            const VDir = path.join(__dirname, "..");
-
-                                            let targetPackage;
-                                            showToast("Updater", "Requesting package...");
-                                            request("https://raw.githubusercontent.com/Velocity-Discord/Velocity/main/package.json", (err, _, body) => {
-                                                if (err) {
-                                                    showToast("Updater", "Request Failed", { type: "error" });
-                                                } else {
-                                                    try {
-                                                        targetPackage = JSON.parse(body);
-                                                    } catch (error) {
-                                                        showToast("Updater", "Failed to Parse Package", { type: "error" });
+                                            showToast("Updater", "Starting Pull");
+                                            try {
+                                                exec("git pull", (error, stdout, stderr) => {
+                                                    if (error || stderr) {
+                                                        const VDir = path.join(__dirname, "..");
+                                                        logger.error("Updater", error);
+                                                        showToast("Updater", "Failed to Pull from Remote", { type: "error" });
                                                         failModal("Update Failed", [
                                                             "You can manually update Velocity by opening the Velocity Folder and doing one of the following,",
                                                             "- Run `git pull` in the terminal (inside the folder)",
@@ -115,11 +111,15 @@ async function checkForUpdates() {
                                                                 "Open Velocity Folder"
                                                             ),
                                                         ]);
+                                                        return;
                                                     }
-                                                }
-                                            });
+                                                });
 
-                                            // changelogModal({ subtitle: updateData.changelog.subtitle, description: updateData.changelog.description });
+                                                VApi.DataStore.setData("VELOCITY_SETTINGS", "hasShownChangelog", false);
+                                            } catch (e) {
+                                                logger.error("Updater", e);
+                                                showToast("Updater", "Failed to Pull from Remote", { type: "error" });
+                                            }
                                         },
                                         onCancel: () => resolve(false),
                                         children: [

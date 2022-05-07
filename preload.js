@@ -281,6 +281,11 @@ if (dPath) {
         // Patches & Addons
         await waitFor('[class*="guilds"]');
 
+        if (!DataStore.getData("VELOCITY_SETTINGS", "hasShownChangelog")) {
+            VApi.showChangelog();
+            DataStore.setData("VELOCITY_SETTINGS", "hasShownChangelog", true);
+        }
+
         const allThemes = VApi.AddonManager.themes.getAll();
         const allPlugins = VApi.AddonManager.plugins.getAll();
 
