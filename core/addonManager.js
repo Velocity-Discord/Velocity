@@ -247,6 +247,13 @@ fs.readdir(pluginDir, (err, files) => {
             meta.export = plugin;
             meta.type = "plugin";
             meta.file = filePath;
+
+            if (typeof plugin.Plugin === "function") {
+                if (plugin.Plugin().showSettings) meta.hasSettings = true;
+            } else {
+                if (plugin.Plugin.showSettings) meta.hasSettings = true;
+            }
+
             addons.plugins.push(meta);
             function load() {
                 if (plugin.default) plugin = plugin.default;

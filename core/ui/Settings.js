@@ -1426,6 +1426,24 @@ VApi.Patcher(
                 },
             });
         }
+
+        AddonManager.plugins.getAll().forEach((plugin) => {
+            if (plugin.hasSettings) {
+                insert({
+                    section: plugin.name.replace(/^[^a-z]+|[^\w-]+/gi, "-"),
+                    label: plugin.name,
+                    className: `velocity-plugin-${plugin.name.replace(/^[^a-z]+|[^\w-]+/gi, "-")}-tab`,
+                    onClick: () => {
+                        if (typeof plugin.export.Plugin == "function") {
+                            plugin.export.Plugin().showSettings();
+                        } else {
+                            plugin.export.Plugin.showSettings();
+                        }
+                    },
+                });
+            }
+        });
+
         let changeLocation = returnValue.findIndex((s) => s.section.toLowerCase() == "changelog") + 1;
         if (changeLocation < 0) return;
         const insertChange = (section) => {
