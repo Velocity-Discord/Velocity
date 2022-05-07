@@ -275,8 +275,11 @@ velocity-toasts {
 }
 
 .velocity-button {
-    margin-right: 10px;
     margin-top: 5px;
+}
+
+.velocity-button-container .velocity-button {
+    margin-right: 10px;
 }
 
 #startup-script-save.disabled {

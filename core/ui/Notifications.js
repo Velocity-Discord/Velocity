@@ -1,4 +1,4 @@
-const Buttons = VApi.getModule.find(["ButtonColors"]);
+const Buttons = VApi.WebpackModules.find(["ButtonColors"]);
 
 /**
  * Shows a Toast
@@ -51,8 +51,8 @@ async function showToast(title, content, options = {}) {
  */
 function showConfirmationModal(title, content, options = {}) {
     const { React } = VApi;
-    const Markdown = VApi.getModule.find((m) => m.default?.displayName === "Markdown" && m.default.rules).default;
-    const ConfirmationModal = VApi.getModule.find("ConfirmModal").default;
+    const Markdown = VApi.WebpackModules.find((m) => m.default?.displayName === "Markdown" && m.default.rules).default;
+    const ConfirmationModal = VApi.WebpackModules.find("ConfirmModal").default;
 
     const emptyFunction = () => {};
     const { onConfirm = emptyFunction, onCancel = emptyFunction, confirmText = "Okay", cancelText = "Cancel", danger = false, key = undefined } = options;

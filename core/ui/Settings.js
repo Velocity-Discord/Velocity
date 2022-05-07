@@ -1,4 +1,4 @@
-const { React, modals, logger, getModule, showToast, Utilities, AddonManager } = VApi;
+const { React, modals, logger, WebpackModules, showToast, Utilities, AddonManager, Components } = VApi;
 const { ipcRenderer, shell } = require("electron");
 const { internalPatches, InternalSecurityToken } = require("../Stores");
 const { info } = require("../../package.json");
@@ -8,19 +8,19 @@ const updater = require("../updater");
 const path = require("path");
 const fs = require("fs");
 
-const Button = getModule.find(["ButtonColors"]).default;
-const ButtonColors = getModule.find(["ButtonColors"]).ButtonColors;
-const ButtonSizes = getModule.find(["ButtonColors"]).ButtonSizes;
-const Text = getModule.find("LegacyText").default;
-const Tooltip = getModule.find.prototypes("renderTooltip").default;
-const SwitchEle = getModule.find("Switch").default;
-const TextInput = getModule.find("TextInput").default;
-const CloseIcon = getModule.find("CloseIconWithKeybind").default;
-const ModalComponents = getModule.find(["ModalRoot"]);
-const Markdown = getModule.find((m) => m.default?.displayName === "Markdown" && m.default.rules).default;
+const Button = WebpackModules.find(["ButtonColors"]).default;
+const ButtonColors = WebpackModules.find(["ButtonColors"]).ButtonColors;
+const ButtonSizes = WebpackModules.find(["ButtonColors"]).ButtonSizes;
+const Text = WebpackModules.find("LegacyText").default;
+const Tooltip = WebpackModules.find.prototypes("renderTooltip").default;
+const SwitchEle = WebpackModules.find("Switch").default;
+const TextInput = WebpackModules.find("TextInput").default;
+const CloseIcon = WebpackModules.find("CloseIconWithKeybind").default;
+const ModalComponents = WebpackModules.find(["ModalRoot"]);
+const Markdown = WebpackModules.find((m) => m.default?.displayName === "Markdown" && m.default.rules).default;
 
 async function pushLayer(element) {
-    getModule.find(["pushLayer"]).pushLayer(() => element);
+    WebpackModules.find(["pushLayer"]).pushLayer(() => element);
 }
 
 function addonSort(x, y) {
@@ -34,8 +34,8 @@ function addonSort(x, y) {
 }
 
 async function reloadPrompt(title, content) {
-    const ConfirmationModal = getModule.find("ConfirmModal").default;
-    const { Messages } = getModule.find((m) => m.default?.Messages?.OKAY).default;
+    const ConfirmationModal = WebpackModules.find("ConfirmModal").default;
+    const { Messages } = WebpackModules.find((m) => m.default?.Messages?.OKAY).default;
 
     if (!Array.isArray(content)) content = [content];
     content = content.map((c) => (typeof c === "string" ? React.createElement(Markdown, null, c) : c));
@@ -348,7 +348,7 @@ const Card = React.memo((props) => {
                                     React.createElement(Tooltip, {
                                         text: "Source",
                                         children: (props) =>
-                                            React.createElement(getModule.find("Clickable").default, {
+                                            React.createElement(WebpackModules.find("Clickable").default, {
                                                 ...props,
                                                 className: "velocity-clickable",
                                                 children: [
@@ -374,7 +374,7 @@ const Card = React.memo((props) => {
                                     React.createElement(Tooltip, {
                                         text: "Website",
                                         children: (props) =>
-                                            React.createElement(getModule.find("Clickable").default, {
+                                            React.createElement(WebpackModules.find("Clickable").default, {
                                                 ...props,
                                                 className: "velocity-clickable velocity-addon-card-site",
                                                 children: [
@@ -400,7 +400,7 @@ const Card = React.memo((props) => {
                                     React.createElement(Tooltip, {
                                         text: "Server Invite",
                                         children: (props) =>
-                                            React.createElement(getModule.find("Clickable").default, {
+                                            React.createElement(WebpackModules.find("Clickable").default, {
                                                 ...props,
                                                 className: "velocity-clickable",
                                                 children: [
@@ -419,8 +419,8 @@ const Card = React.memo((props) => {
                                                 ],
                                                 onClick: () => {
                                                     if (meta.invite !== "") Utilities.joinServer(meta.invite);
-                                                    getModule.find(["pushLayer"]).popLayer();
-                                                    getModule.find(["closeAllModals"]).closeAllModals();
+                                                    WebpackModules.find(["pushLayer"]).popLayer();
+                                                    WebpackModules.find(["closeAllModals"]).closeAllModals();
                                                 },
                                             }),
                                     }),
@@ -428,7 +428,7 @@ const Card = React.memo((props) => {
                                     React.createElement(Tooltip, {
                                         text: meta.license || "No License",
                                         children: (props) =>
-                                            React.createElement(getModule.find("Clickable").default, {
+                                            React.createElement(WebpackModules.find("Clickable").default, {
                                                 ...props,
                                                 className: "velocity-clickable",
                                                 children: [
@@ -456,7 +456,7 @@ const Card = React.memo((props) => {
                                     React.createElement(Tooltip, {
                                         text: "Sponsor the Developer",
                                         children: (props) =>
-                                            React.createElement(getModule.find("Clickable").default, {
+                                            React.createElement(WebpackModules.find("Clickable").default, {
                                                 ...props,
                                                 className: "velocity-clickable",
                                                 children: [
@@ -539,7 +539,7 @@ async function settingsPrompt() {
                                 {
                                     size: Text.Sizes.SIZE_20,
                                     color: Text.Colors.HEADER_PRIMARY,
-                                    className: getModule.find(["h1"]).h1,
+                                    className: WebpackModules.find(["h1"]).h1,
                                 },
                                 "Velocity Settings"
                             )
@@ -704,7 +704,7 @@ async function pluginPrompt() {
                                 {
                                     size: Text.Sizes.SIZE_20,
                                     color: Text.Colors.HEADER_PRIMARY,
-                                    className: getModule.find(["h1"]).h1,
+                                    className: WebpackModules.find(["h1"]).h1,
                                 },
                                 "Velocity Plugins"
                             )
@@ -787,7 +787,7 @@ async function themePrompt() {
                                 {
                                     size: Text.Sizes.SIZE_20,
                                     color: Text.Colors.HEADER_PRIMARY,
-                                    className: getModule.find(["h1"]).h1,
+                                    className: WebpackModules.find(["h1"]).h1,
                                 },
                                 "Velocity Themes"
                             )
@@ -897,7 +897,7 @@ async function jsPrompt() {
                                 {
                                     size: Text.Sizes.SIZE_20,
                                     color: Text.Colors.HEADER_PRIMARY,
-                                    className: getModule.find(["h1"]).h1,
+                                    className: WebpackModules.find(["h1"]).h1,
                                 },
                                 "Startup Script"
                             )
@@ -918,7 +918,7 @@ async function jsPrompt() {
                                 React.createElement(Tooltip, {
                                     text: "You can still manually add the script...",
                                     children: (props) =>
-                                        React.createElement(getModule.find("Clickable").default, {
+                                        React.createElement(WebpackModules.find("Clickable").default, {
                                             ...props,
                                             className: "warning-clickable",
                                             children: [
@@ -1014,7 +1014,7 @@ async function cssPrompt() {
                                 {
                                     size: Text.Sizes.SIZE_20,
                                     color: Text.Colors.HEADER_PRIMARY,
-                                    className: getModule.find(["h1"]).h1,
+                                    className: WebpackModules.find(["h1"]).h1,
                                 },
                                 "Custom CSS"
                             )
@@ -1035,7 +1035,7 @@ async function cssPrompt() {
                                 React.createElement(Tooltip, {
                                     text: "Click me to open the folder!",
                                     children: (props) =>
-                                        React.createElement(getModule.find("Clickable").default, {
+                                        React.createElement(WebpackModules.find("Clickable").default, {
                                             ...props,
                                             className: "warning-clickable",
                                             children: [
@@ -1116,7 +1116,7 @@ async function cssPrompt() {
     });
 }
 
-const UserSettings = getModule.find("SettingsView").default;
+const UserSettings = WebpackModules.find("SettingsView").default;
 
 VApi.Patcher(
     "VelocityInternal-Settings-Patch",
@@ -1133,9 +1133,9 @@ VApi.Patcher(
         insert({ section: "DIVIDER" });
         insert({ section: "HEADER", label: "Velocity" });
         insert({
-            section: "updates",
-            label: "Check for Updates",
-            className: `velocity-updates-tab ${process.env.willDowngrade || process.env.willUpgrade ? "notification" : ""}`,
+            section: "updater",
+            label: "Updater",
+            className: `velocity-updater-tab ${process.env.willDowngrade || process.env.willUpgrade ? "notification" : ""}`,
             onClick: () => {
                 updater.checkForUpdates();
             },
@@ -1240,14 +1240,14 @@ VApi.Patcher(
                 className: `velocity-developer-tab`,
                 onClick: () => {
                     try {
-                        getModule.find(["pushLayer"]).pushLayer(() => [
+                        WebpackModules.find(["pushLayer"]).pushLayer(() => [
                             React.createElement("div", {
                                 className: "velocity-close-conteainer",
                                 style: { top: "60px", right: "60px", position: "absolute" },
                                 children: [
                                     React.createElement(CloseIcon, {
                                         closeAction: () => {
-                                            getModule.find(["popLayer"]).popLayer();
+                                            WebpackModules.find(["popLayer"]).popLayer();
                                         },
                                         keybind: "ESC",
                                     }),
@@ -1260,7 +1260,7 @@ VApi.Patcher(
                                         Text,
                                         {
                                             size: Text.Sizes.SIZE_14,
-                                            className: `velocity-developer-header ${getModule.find(["h1"]).h1}`,
+                                            className: `velocity-developer-header ${WebpackModules.find(["h1"]).h1}`,
                                         },
                                         "Internal Patches"
                                     ),
@@ -1320,7 +1320,7 @@ VApi.Patcher(
                                         Text,
                                         {
                                             size: Text.Sizes.SIZE_14,
-                                            className: `velocity-developer-header ${getModule.find(["h1"]).h1}`,
+                                            className: `velocity-developer-header ${WebpackModules.find(["h1"]).h1}`,
                                         },
                                         "Backend Status"
                                     ),
@@ -1410,7 +1410,7 @@ VApi.Patcher(
                                         },
                                         "Status"
                                     ),
-                                    React.createElement(getModule.find(["EmptyStateImage"]).EmptyStateImage, {
+                                    React.createElement(WebpackModules.find(["EmptyStateImage"]).EmptyStateImage, {
                                         height: 200,
                                         width: 415,
                                         darkSrc: "/assets/c115d59ca13c0f942965a82a0f05bf01.svg",
@@ -1435,9 +1435,15 @@ VApi.Patcher(
                     className: `velocity-plugin-${plugin.name.replace(/^[^a-z]+|[^\w-]+/gi, "-")}-tab`,
                     onClick: () => {
                         if (typeof plugin.export.Plugin == "function") {
-                            plugin.export.Plugin().showSettings();
+                            Components.ShowAddonSettingsModal({
+                                name: plugin.name,
+                                children: plugin.export.Plugin().getSettingsPanel(),
+                            });
                         } else {
-                            plugin.export.Plugin.showSettings();
+                            Components.ShowAddonSettingsModal({
+                                name: plugin.name,
+                                children: plugin.export.Plugin.getSettingsPanel(),
+                            });
                         }
                     },
                 });
@@ -1463,14 +1469,14 @@ VApi.Patcher(
     { warning: true }
 );
 
-const TabBar = getModule.find("TabBar").default;
+const TabBar = WebpackModules.find("TabBar").default;
 
 VApi.Patcher("VelocityInternal-SettingsInfo-Patch", TabBar.prototype, "render", ([args], returnValue) => {
     let children = returnValue.props.children;
     if (!children || !children.length || children.length < 3) return;
     if (children[children.length - 3].type.displayName !== "Separator") return;
     if (!children[children.length - 2].type.toString().includes("socialLinks")) return;
-    let infoClasses = getModule.find(["versionHash"]);
+    let infoClasses = WebpackModules.find(["versionHash"]);
 
     const infoEle = React.createElement("span", {
         className: `${Text.Colors.MUTED} ${Text.Sizes.SIZE_12} ${infoClasses.line}`,

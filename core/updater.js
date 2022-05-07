@@ -15,11 +15,11 @@ async function waitUntil(condition) {
 const updateURL = "https://raw.githubusercontent.com/Velocity-Discord/Backend/main/api/Updates.json";
 
 async function failModal(title, content) {
-    const { React, getModule, modals } = VApi;
-    const ConfirmationModal = getModule.find("ConfirmModal").default;
-    const Button = getModule.find(["ButtonColors"]);
-    const { Messages } = getModule.find((m) => m.default?.Messages?.OKAY).default;
-    const Markdown = getModule.find((m) => m.default?.displayName === "Markdown" && m.default.rules).default;
+    const { React, WebpackModules, modals } = VApi;
+    const ConfirmationModal = WebpackModules.find("ConfirmModal").default;
+    const Button = WebpackModules.find(["ButtonColors"]);
+    const { Messages } = WebpackModules.find((m) => m.default?.Messages?.OKAY).default;
+    const Markdown = WebpackModules.find((m) => m.default?.displayName === "Markdown" && m.default.rules).default;
 
     if (!Array.isArray(content)) content = [content];
     content = content.map((c) => (typeof c === "string" ? React.createElement(Markdown, null, c) : c));
@@ -65,12 +65,12 @@ async function checkForUpdates() {
                 }
 
                 async function updatePrompt() {
-                    const { React, getModule, modals, showToast } = VApi;
-                    const ConfirmationModal = getModule.find("ConfirmModal").default;
-                    const Button = getModule.find(["ButtonColors"]);
+                    const { React, WebpackModules, modals, showToast } = VApi;
+                    const ConfirmationModal = WebpackModules.find("ConfirmModal").default;
+                    const Button = WebpackModules.find(["ButtonColors"]);
                     const ButtonEle = Button.default;
-                    const Text = getModule.find("LegacyText").default;
-                    const { Messages } = getModule.find((m) => m.default?.Messages?.OKAY).default;
+                    const Text = WebpackModules.find("LegacyText").default;
+                    const { Messages } = WebpackModules.find((m) => m.default?.Messages?.OKAY).default;
 
                     return new Promise((resolve) => {
                         modals.open((props) => {
@@ -151,12 +151,12 @@ async function checkForUpdates() {
                 updatePrompt();
             } else if (updateData.hash !== info.hash) {
                 async function updatePrompt() {
-                    const { React, getModule, modals, showToast } = VApi;
-                    const ConfirmationModal = getModule.find("ConfirmModal").default;
-                    const Button = getModule.find(["ButtonColors"]);
+                    const { React, WebpackModules, modals, showToast } = VApi;
+                    const ConfirmationModal = WebpackModules.find("ConfirmModal").default;
+                    const Button = WebpackModules.find(["ButtonColors"]);
                     const ButtonEle = Button.default;
-                    const Text = getModule.find("LegacyText").default;
-                    const { Messages } = getModule.find((m) => m.default?.Messages?.OKAY).default;
+                    const Text = WebpackModules.find("LegacyText").default;
+                    const { Messages } = WebpackModules.find((m) => m.default?.Messages?.OKAY).default;
 
                     return new Promise((resolve) => {
                         modals.open((props) => {
@@ -253,18 +253,18 @@ async function changelogModal(options = {}) {
             description = updateJson.changelog.description,
         } = options;
 
-        const { React, getModule, modals } = VApi;
+        const { React, WebpackModules, modals } = VApi;
 
-        const ModalComponents = getModule.find(["ModalRoot"]);
-        const ChangelogClasses = getModule.find(["fixed", "improved"]);
-        const Text = getModule.find("LegacyText").default;
-        const dateClass = getModule.find(["size12", "size32"]).size12;
-        const closeModals = getModule.find(["closeAllModals"]).closeAllModals;
-        const closeClasses = getModule.find(["root", "close"]);
-        const contentsClasses = getModule.find(["spinnerItem", "submitting"]);
-        const Tooltip = getModule.find.prototypes("renderTooltip").default;
+        const ModalComponents = WebpackModules.find(["ModalRoot"]);
+        const ChangelogClasses = WebpackModules.find(["fixed", "improved"]);
+        const Text = WebpackModules.find("LegacyText").default;
+        const dateClass = WebpackModules.find(["size12", "size32"]).size12;
+        const closeModals = WebpackModules.find(["closeAllModals"]).closeAllModals;
+        const closeClasses = WebpackModules.find(["root", "close"]);
+        const contentsClasses = WebpackModules.find(["spinnerItem", "submitting"]);
+        const Tooltip = WebpackModules.find.prototypes("renderTooltip").default;
 
-        const Markdown = getModule.find((m) => m.default?.displayName === "Markdown" && m.default.rules).default;
+        const Markdown = WebpackModules.find((m) => m.default?.displayName === "Markdown" && m.default.rules).default;
 
         return new Promise((resolve) => {
             modals.open((props) => {
@@ -288,7 +288,7 @@ async function changelogModal(options = {}) {
                                                     {
                                                         size: Text.Sizes.SIZE_20,
                                                         color: Text.Colors.HEADER_PRIMARY,
-                                                        className: getModule.find(["h1"]).h1,
+                                                        className: WebpackModules.find(["h1"]).h1,
                                                     },
                                                     "What's New"
                                                 ),

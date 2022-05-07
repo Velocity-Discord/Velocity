@@ -94,7 +94,7 @@ if (dPath) {
 
         await window.DiscordNative.window.setDevtoolsCallbacks(null, null);
 
-        const find = require("./core/webpack");
+        const WebpackModules = require("./core/webpack");
         const request = require("./core/request");
         const updater = require("./core/updater");
 
@@ -102,23 +102,23 @@ if (dPath) {
             updater.checkForUpdates();
         }
 
-        t = find.find(["isDeveloper"]);
+        t = WebpackModules.find(["isDeveloper"]);
         Object.defineProperty(t, "isDeveloper", { get: (_) => 1, set: (_) => _, configurable: true });
 
         let Badges;
         request("https://raw.githubusercontent.com/Velocity-Discord/Backend/main/api/Badges.json", (_, __, body) => (Badges = JSON.parse(body)));
 
         const React = await waitUntil(() => {
-            if (!find.find(["createElement", "Component"])?.createElement) return false;
-            return find.find(["createElement", "Component"]);
+            if (!WebpackModules.find(["createElement", "Component"])?.createElement) return false;
+            return WebpackModules.find(["createElement", "Component"]);
         });
         const ReactDOM = await waitUntil(() => {
-            if (!find.find(["render", "hydrate"])?.render) return false;
-            return find.find(["render", "hydrate"]);
+            if (!WebpackModules.find(["render", "hydrate"])?.render) return false;
+            return WebpackModules.find(["render", "hydrate"]);
         });
 
-        const ModalFunctions = find.find(["openModal", "openModalLazy"]);
-        const ModalElements = find.find(["ModalRoot", "ModalListContent"]);
+        const ModalFunctions = WebpackModules.find(["openModal", "openModalLazy"]);
+        const ModalElements = WebpackModules.find(["ModalRoot", "ModalListContent"]);
 
         global.webpackChunkdiscord_app = window.webpackChunkdiscord_app;
         const VApi = {
@@ -130,7 +130,7 @@ if (dPath) {
             React: { ...React },
             ReactDOM: { ...ReactDOM },
             request,
-            getModule: find,
+            WebpackModules: WebpackModules,
             showChangelog: () => {
                 return updater.changelogModal();
             },
@@ -138,19 +138,19 @@ if (dPath) {
                 waitFor,
                 waitUntil,
                 joinServer: (code, goTo = true) => {
-                    const { transitionToGuild } = find.find(["transitionToGuild"]);
-                    const { acceptInvite } = find.find(["acceptInvite"]);
+                    const { transitionToGuild } = WebpackModules.find(["transitionToGuild"]);
+                    const { acceptInvite } = WebpackModules.find(["acceptInvite"]);
 
                     const res = acceptInvite(code);
                     if (goTo) return res.then(({ guild, channel }) => transitionToGuild(guild.id, channel.id));
                 },
                 joinOfficialServer: () => {
-                    const { transitionToGuild } = find.find(["transitionToGuild"]);
-                    const { getGuilds } = find.find(["getGuilds"]);
+                    const { transitionToGuild } = WebpackModules.find(["transitionToGuild"]);
+                    const { getGuilds } = WebpackModules.find(["getGuilds"]);
 
                     if (Boolean(getGuilds()["959035496707817502"])) return transitionToGuild("959035496707817502", "959035497462759436");
                     else {
-                        const { acceptInvite } = find.find(["acceptInvite"]);
+                        const { acceptInvite } = WebpackModules.find(["acceptInvite"]);
 
                         const res = acceptInvite("dATuY2F3Bd");
                         if (goTo) return res.then(() => transitionToGuild("959035496707817502", "959035497462759436"));
@@ -201,14 +201,16 @@ if (dPath) {
             Patcher: patch,
         };
 
-        const FluxDispatcher = find.find(["_currentDispatchActionType", "_processingWaitQueue"]);
+        const FluxDispatcher = WebpackModules.find(["_currentDispatchActionType", "_processingWaitQueue"]);
         VApi.FluxDispatcher = FluxDispatcher;
 
         toWindow("VApi", VApi);
         if (DevMode) logger.log("Velocity", "VApi Added");
 
         const { showToast, showConfirmationModal } = require("./core/ui/Notifications");
+        const Components = require("./core/components");
 
+        VApi.Components = Components;
         VApi.showToast = showToast;
         VApi.showConfirmationModal = showConfirmationModal;
 
@@ -320,11 +322,11 @@ if (dPath) {
 
         if (DevMode) logger.log("Velocity", "Addons Loaded");
 
-        const MessageContent = find.find("MessageContent").default;
-        const Alert = find.find("Alert").default;
-        const ButtonEle = find.find(["ButtonColors"]).default;
-        const ButtonColors = find.find(["ButtonColors"]).ButtonColors;
-        const ButtonSizes = find.find(["ButtonColors"]).ButtonSizes;
+        const MessageContent = WebpackModules.find("MessageContent").default;
+        const Alert = WebpackModules.find("Alert").default;
+        const ButtonEle = WebpackModules.find(["ButtonColors"]).default;
+        const ButtonColors = WebpackModules.find(["ButtonColors"]).ButtonColors;
+        const ButtonSizes = WebpackModules.find(["ButtonColors"]).ButtonSizes;
 
         patch(
             "VelocityInternal-Protocol-Patch",
@@ -355,10 +357,10 @@ if (dPath) {
                                                 },
                                                 "About Velocity"
                                             ),
-                                            React.createElement(find.find("Tooltip").default, {
+                                            React.createElement(WebpackModules.find("Tooltip").default, {
                                                 text: "What's This?",
                                                 children: (props) =>
-                                                    React.createElement(find.find("Clickable").default, {
+                                                    React.createElement(WebpackModules.find("Clickable").default, {
                                                         ...props,
                                                         className: "velocity-about-card-header-info",
                                                         onClick: () => {
@@ -441,10 +443,10 @@ if (dPath) {
                                                     },
                                                     `Update Velocity to v${vNum[1]}`
                                                 ),
-                                                React.createElement(find.find("Tooltip").default, {
+                                                React.createElement(WebpackModules.find("Tooltip").default, {
                                                     text: "What's This?",
                                                     children: (props) =>
-                                                        React.createElement(find.find("Clickable").default, {
+                                                        React.createElement(WebpackModules.find("Clickable").default, {
                                                             ...props,
                                                             className: "velocity-update-card-header-info",
                                                             onClick: () => {
@@ -540,10 +542,10 @@ if (dPath) {
                                                     },
                                                     `Invalid Update URL`
                                                 ),
-                                                React.createElement(find.find("Tooltip").default, {
+                                                React.createElement(WebpackModules.find("Tooltip").default, {
                                                     text: "What's This?",
                                                     children: (props) =>
-                                                        React.createElement(find.find("Clickable").default, {
+                                                        React.createElement(WebpackModules.find("Clickable").default, {
                                                             ...props,
                                                             className: "velocity-update-card-header-info",
                                                             onClick: () => {
@@ -612,7 +614,7 @@ if (dPath) {
             { beta: true, warning: true }
         );
 
-        patch("VelocityInternal-GuildTooltip-Patch", find.find("GuildTooltip"), "default", ([props], res) => {
+        patch("VelocityInternal-GuildTooltip-Patch", WebpackModules.find("GuildTooltip"), "default", ([props], res) => {
             if (
                 !(
                     props.guild.id === "901774051318591508" ||
@@ -623,7 +625,7 @@ if (dPath) {
                 return;
             props.guild.features.add("VERIFIED");
         });
-        patch("VelocityInternal-Badge-Patch", find.find("UserProfileBadgeList"), "default", ([{ user }], res) => {
+        patch("VelocityInternal-Badge-Patch", WebpackModules.find("UserProfileBadgeList"), "default", ([{ user }], res) => {
             const Badge = Badges[user.id];
             if (!Badge) return;
             function makeChildren(children) {
@@ -638,10 +640,10 @@ if (dPath) {
                       );
             }
             res.props.children.push(
-                React.createElement(find.find("Tooltip").default, {
+                React.createElement(WebpackModules.find("Tooltip").default, {
                     text: Badges[user.id].name,
                     children: (props) =>
-                        React.createElement(find.find("Clickable").default, {
+                        React.createElement(WebpackModules.find("Clickable").default, {
                             ...props,
                             className: "velocity-badge",
                             onClick: () => {
@@ -688,7 +690,7 @@ if (dPath) {
         if (DevMode) logger.log("Velocity", "Settings Added");
 
         if (DataStore.getData("VELOCITY_SETTINGS", "ReloadOnLogin")) {
-            VApi.getModule.find(["dirtyDispatch"]).subscribe("LOGIN", (event) => {
+            VApi.WebpackModules.find(["dirtyDispatch"]).subscribe("LOGIN", (event) => {
                 location.reload();
             });
         }

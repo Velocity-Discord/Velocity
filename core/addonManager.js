@@ -249,9 +249,9 @@ fs.readdir(pluginDir, (err, files) => {
             meta.file = filePath;
 
             if (typeof plugin.Plugin === "function") {
-                if (plugin.Plugin().showSettings) meta.hasSettings = true;
+                if (plugin.Plugin().getSettingsPanel) meta.hasSettings = true;
             } else {
-                if (plugin.Plugin.showSettings) meta.hasSettings = true;
+                if (plugin.Plugin.getSettingsPanel) meta.hasSettings = true;
             }
 
             addons.plugins.push(meta);
