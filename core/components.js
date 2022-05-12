@@ -1,7 +1,60 @@
-const { React, WebpackModules, modals } = VApi;
+const { React, ReactDOM, WebpackModules, modals, DataStore } = VApi;
 
 const Text = WebpackModules.findByDisplayNameDefault("LegacyText");
 const ModalComponents = WebpackModules.find(["ModalRoot"]);
+
+const SettingsSection = React.memo((props) => {
+    const { plugin, setting, note, name, warning, action } = props;
+
+    const SwitchEle = WebpackModules.find("Switch").default;
+
+    const [enabled, setEnabled] = React.useState(DataStore.getData(plugin, setting));
+    return React.createElement("div", {
+        id: "velocity-settings-section",
+        children: [
+            React.createElement("div", {
+                id: "velocity-settings-section-info",
+                children: [
+                    React.createElement(
+                        Text,
+                        {
+                            color: Text.Colors.HEADER_PRIMARY,
+                            size: Text.Sizes.SIZE_16,
+                        },
+                        name
+                    ),
+                    React.createElement(
+                        Text,
+                        {
+                            color: Text.Colors.HEADER_SECONDARY,
+                            size: Text.Sizes.SIZE_14,
+                        },
+                        note
+                    ),
+                    React.createElement(
+                        Text,
+                        {
+                            color: Text.Colors.ERROR,
+                            size: Text.Sizes.SIZE_14,
+                            id: `velocity-settings-section-${setting.toLowerCase()}-warning`,
+                        },
+                        warning
+                    ),
+                ],
+            }),
+            React.createElement(SwitchEle, {
+                checked: enabled,
+                onChange: async () => {
+                    if (action) {
+                        action();
+                    }
+                    DataStore.setData(plugin, setting, !enabled);
+                    setEnabled(!enabled);
+                },
+            }),
+        ],
+    });
+});
 
 const ShowAddonSettingsModal = (p) => {
     const Button = WebpackModules.find(["ButtonColors"]).default;
@@ -52,4 +105,4 @@ const ShowAddonSettingsModal = (p) => {
     });
 };
 
-module.exports = { ShowAddonSettingsModal };
+module.exports = { ShowAddonSettingsModal, SettingsSection };

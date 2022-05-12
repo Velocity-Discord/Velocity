@@ -114,12 +114,9 @@ if (!fs.existsSync(themeDir)) fs.mkdirSync(themeDir);
 
 fs.readdir(themeDir, (err, files) => {
     if (err) throw new Error(`Error reading '${themeDir}'`);
-    files = files
-        .filter((file) => filters.themes.test(file))
-        .reverse()
-        .sort();
-
-    files.map((file) => {
+    files = files.filter((file) => filters.themes.test(file));
+    files.sort().map((file) => {
+        VApi.Logger.log("Addon Manager", `Loading ${file}`);
         const filePath = path.join(themeDir, file);
         fs.readFile(filePath, "utf8", (err, data) => {
             if (err) throw new Error(`Error reading '${filePath}'`);
@@ -233,12 +230,9 @@ if (!fs.existsSync(pluginDir)) fs.mkdirSync(pluginDir);
 
 fs.readdir(pluginDir, (err, files) => {
     if (err) throw new Error(`Error reading '${pluginDir}'`);
-    files = files
-        .filter((file) => filters.plugins.test(file))
-        .reverse()
-        .sort();
-    files.map((file) => {
-        console.log(file);
+    files = files.filter((file) => filters.plugins.test(file));
+    files.sort().map((file) => {
+        VApi.Logger.log("Addon Manager", `Loading ${file}`);
         const filePath = path.join(pluginDir, file);
         fs.readFile(filePath, "utf8", (err, data) => {
             if (err) throw new Error(`Error reading '${filePath}'`);
