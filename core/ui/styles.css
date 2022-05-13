@@ -114,8 +114,17 @@ velocity-toasts {
     margin-top: 3px;
     font-weight: 600;
     font-size: 9pt;
-    color: var(--brand-experiment-430);
+    color: var(--text-muted);
     margin-bottom: 1px;
+}
+
+.velocity-card-header-author.clickable {
+    cursor: pointer;
+    color: var(--brand-experiment-430);
+}
+
+.velocity-card-header-author.clickable:hover {
+    text-decoration: underline;
 }
 
 .velocity-card-header-author-text {
@@ -259,7 +268,7 @@ velocity-toasts {
 
 #velocity-settings-section > div:not([class^="input"]):nth-child(2) {
     position: absolute;
-    right: 5%;
+    right: 6%;
 }
 
 #velocity-settings-section-info > div:nth-child(1) {

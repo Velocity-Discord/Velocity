@@ -4,6 +4,8 @@ const button = VApi.WebpackModules.find(["ButtonColors"]).default;
 const Text = VApi.WebpackModules.find("LegacyText").default;
 const ButtonColors = VApi.WebpackModules.find(["ButtonColors"]).ButtonColors;
 
+const { Strings } = require("../i18n");
+
 async function prompt(title) {
     const { React, WebpackModules, modals } = VApi;
     const ConfirmationModal = WebpackModules.find("ConfirmModal").default;
@@ -19,7 +21,7 @@ async function prompt(title) {
                     {
                         header: title,
                         confirmButtonColor: Button.ButtonColors.BRAND,
-                        confirmText: "Done",
+                        confirmText: Strings.Settings.done,
                         onConfirm: () => resolve(true),
                         onCancel: () => resolve(false),
                         children: [
@@ -30,7 +32,7 @@ async function prompt(title) {
                                     color: Text.Colors.HEADER_SECONDARY,
                                     id: "velocity-version",
                                 },
-                                `Version ${info.version} (${info.hash})`
+                                `${Strings.Modals.Info.version} ${info.version} (${info.hash})`
                             ),
                             React.createElement(
                                 Text,

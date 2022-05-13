@@ -1,3 +1,5 @@
+const { Strings } = require("./i18n");
+
 const { React, ReactDOM, WebpackModules, modals, DataStore } = VApi;
 
 const Text = WebpackModules.findByDisplayNameDefault("LegacyText");
@@ -94,7 +96,7 @@ const ShowAddonSettingsModal = (p) => {
                                         onClick: props.onClose,
                                         className: "velocity-button",
                                     },
-                                    "Done"
+                                    Strings.Settings.done
                                 ),
                             ],
                         }),

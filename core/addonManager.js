@@ -5,7 +5,11 @@ const request = require("./request");
 const { parse } = require("./styleParser");
 const cssBeta = DataStore("VELOCITY_SETTINGS").CSSFeatures;
 
+const { Strings } = require("./i18n");
+
 const Velocity = DataStore("VELOCITY_SETTINGS");
+const DevMode = Velocity.DevMode;
+
 Velocity.enabledThemes = Velocity.enabledThemes || {};
 Velocity.enabledPlugins = Velocity.enabledPlugins || {};
 
@@ -55,7 +59,7 @@ const RemoteActions = new (class {
     loadTheme(url) {
         if (!filters.themes.test(url)) {
             VApi.Logger.error("Remote Addon Manager", "Requested File Does not match Theme Filters");
-            return VApi.showToast("Remote Addon Manager", `Failed to load Remote Theme. See Console For More Details`, { type: "error" });
+            return VApi.showToast("Remote Addon Manager", Strings.Toasts.AddonManager.failedremote, { type: "error" });
         }
 
         request(url, async (err, _, body) => {
@@ -69,7 +73,7 @@ const RemoteActions = new (class {
             remoteAddons.themes.push(meta);
             addons.themes.push(meta);
 
-            VApi.showToast("Remote Addon Manager", `Loaded <strong>${meta.name}</strong>`);
+            VApi.showToast("Remote Addon Manager", `${Strings.Toasts.AddonManager.loaded} <strong>${meta.name}</strong>`);
 
             if (!Velocity.remoteThemes.find((m) => m.name === meta.name)) {
                 DataStore.setData("VELOCITY_SETTINGS", "remoteThemes", [...Velocity.remoteThemes, { name: meta.name, url: url }]);
@@ -95,7 +99,7 @@ const RemoteActions = new (class {
                 })
             );
 
-            VApi.showToast("Remote Addon Manager", `Unloaded <strong>${name}</strong>`);
+            VApi.showToast("Remote Addon Manager", `${Strings.Toasts.AddonManager.unloaded} <strong>${name}</strong>`);
         }
     }
 })();
@@ -116,7 +120,7 @@ fs.readdir(themeDir, (err, files) => {
     if (err) throw new Error(`Error reading '${themeDir}'`);
     files = files.filter((file) => filters.themes.test(file));
     files.sort().map((file) => {
-        VApi.Logger.log("Addon Manager", `Loading ${file}`);
+        if (DevMode) VApi.Logger.log("Addon Manager", `Loading ${file}`);
         const filePath = path.join(themeDir, file);
         fs.readFile(filePath, "utf8", (err, data) => {
             if (err) throw new Error(`Error reading '${filePath}'`);
@@ -196,24 +200,24 @@ fs.watch(themeDir, { persistent: false }, async (eventType, filename) => {
 
                 delete addons.themes[getKeyByValue(addons.themes, meta.name)];
 
-                VApi.showToast("Addon Manager", `Unloaded <strong>${meta.name}</strong>`);
+                VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.unloaded} <strong>${meta.name}</strong>`);
 
                 addons.themes.push(meta);
-                VApi.showToast("Addon Manager", `Loaded <strong>${meta.name}</strong>`);
+                VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.loaded} <strong>${meta.name}</strong>`);
 
                 if (enabled) {
                     const ele = document.querySelectorAll(`[velocity-theme-id="${meta.name}"]`);
                     for (let ele1 of ele) {
                         if (ele1) {
                             ele1.remove();
-                            VApi.showToast("Addon Manager", `Disabled <strong>${meta.name}</strong>`, { type: "success" });
+                            VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.disabled} <strong>${meta.name}</strong>`, { type: "success" });
                         }
                     }
                     const style = document.createElement("style");
                     style.innerHTML = meta.css;
                     style.setAttribute("velocity-theme-id", meta.name);
                     document.querySelector("velocity-themes").appendChild(style);
-                    VApi.showToast("Addon Manager", `Enabled <strong>${meta.name}</strong>`, { type: "success" });
+                    VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.enabled} <strong>${meta.name}</strong>`, { type: "success" });
                 }
             } else {
                 addons.themes.push(meta);
@@ -221,7 +225,7 @@ fs.watch(themeDir, { persistent: false }, async (eventType, filename) => {
         });
     } catch (e) {
         Logger.error("Addon Manager", "Error Reading Theme Directory:", e);
-        VApi.showToast("Addon Manager", "Error Reading Theme Directory", { type: "error" });
+        VApi.showToast("Addon Manager", Strings.Toasts.AddonManager.errorreadingtheme, { type: "error" });
     }
 });
 
@@ -232,7 +236,7 @@ fs.readdir(pluginDir, (err, files) => {
     if (err) throw new Error(`Error reading '${pluginDir}'`);
     files = files.filter((file) => filters.plugins.test(file));
     files.sort().map((file) => {
-        VApi.Logger.log("Addon Manager", `Loading ${file}`);
+        if (DevMode) VApi.Logger.log("Addon Manager", `Loading ${file}`);
         const filePath = path.join(pluginDir, file);
         fs.readFile(filePath, "utf8", (err, data) => {
             if (err) throw new Error(`Error reading '${filePath}'`);

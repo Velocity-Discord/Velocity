@@ -5,6 +5,8 @@ const path = require("path");
 const { exec } = require("child_process");
 const { ipcRenderer, shell } = require("electron");
 
+const { Strings } = require("./i18n");
+
 const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time));
 
 async function waitUntil(condition) {
@@ -34,7 +36,7 @@ async function failModal(title, content) {
                     {
                         header: title,
                         confirmButtonColor: Button.ButtonColors.BRAND,
-                        confirmText: "Done",
+                        confirmText: Strings.Settings.done,
                         danger: true,
                         onConfirm: () => resolve(true),
                         onCancel: () => resolve(false),
@@ -54,7 +56,7 @@ async function checkForUpdates() {
         updateData = JSON.parse(body);
 
         await waitUntil(() => window.document.querySelector('[class*="guilds"]'));
-        VApi.showToast("Updater", "Requesting Update Data");
+        VApi.showToast("Updater", Strings.Toasts.Updater.requestingdata);
 
         if (updateData) {
             if (updateData.version !== info.version) {
@@ -80,24 +82,22 @@ async function checkForUpdates() {
                                 ConfirmationModal,
                                 Object.assign(
                                     {
-                                        header: "Velocity Update Available",
+                                        header: Strings.Modals.Updater.header,
                                         confirmButtonColor: Button.ButtonColors.BRAND,
-                                        confirmText: "Update",
+                                        confirmText: Strings.Modals.Updater.update,
                                         cancelText: Messages.CANCEL,
                                         onConfirm: () => {
                                             resolve(true);
 
-                                            showToast("Updater", "Starting Pull");
+                                            showToast("Updater", Strings.Toasts.Updater.startingpull);
                                             try {
                                                 exec("git pull", (error, stdout, stderr) => {
                                                     if (error || stderr) {
                                                         const VDir = path.join(__dirname, "..");
                                                         logger.error("Updater", error);
-                                                        showToast("Updater", "Failed to Pull from Remote", { type: "error" });
-                                                        failModal("Update Failed", [
-                                                            "You can manually update Velocity by opening the Velocity Folder and doing one of the following,",
-                                                            "- Run `git pull` in the terminal (inside the folder)",
-                                                            "- Download the **ZIP** from GitHub and replace the old folder with it uncompressed.",
+                                                        showToast("Updater", Strings.Toasts.Updater.failedpull, { type: "error" });
+                                                        failModal(Strings.Modals.Updater.failedheader, [
+                                                            ...Strings.Modals.Updater.failed,
                                                             React.createElement(
                                                                 ButtonEle,
                                                                 {
@@ -108,7 +108,7 @@ async function checkForUpdates() {
                                                                         shell.openPath(VDir);
                                                                     },
                                                                 },
-                                                                "Open Velocity Folder"
+                                                                Strings.Modals.Updater.openfolder
                                                             ),
                                                         ]);
                                                         return;
@@ -118,7 +118,7 @@ async function checkForUpdates() {
                                                 VApi.DataStore.setData("VELOCITY_SETTINGS", "hasShownChangelog", false);
                                             } catch (e) {
                                                 logger.error("Updater", e);
-                                                showToast("Updater", "Failed to Pull from Remote", { type: "error" });
+                                                showToast("Updater", Strings.Toasts.Updater.failedpull, { type: "error" });
                                             }
                                         },
                                         onCancel: () => resolve(false),
@@ -129,7 +129,7 @@ async function checkForUpdates() {
                                                     color: Text.Colors.HEADER_SECONDARY,
                                                     size: Text.Sizes.SIZE_16,
                                                 },
-                                                `Would you like to Update to v${updateData.version}?`
+                                                `${Strings.Modals.Updater.content[0]} v${updateData.version}?`
                                             ),
                                             React.createElement(
                                                 Text,
@@ -137,7 +137,7 @@ async function checkForUpdates() {
                                                     color: Text.Colors.HEADER_SECONDARY,
                                                     size: Text.Sizes.SIZE_16,
                                                 },
-                                                `Currently v${info.version}`
+                                                `${Strings.Modals.Updater.content[1]} v${info.version}`
                                             ),
                                         ],
                                     },
@@ -165,29 +165,22 @@ async function checkForUpdates() {
                                 ConfirmationModal,
                                 Object.assign(
                                     {
-                                        header: "Velocity Update Available",
+                                        header: Strings.Modals.Updater.header,
                                         confirmButtonColor: Button.ButtonColors.BRAND,
-                                        confirmText: "Update",
+                                        confirmText: Strings.Modals.Updater.update,
                                         cancelText: Messages.CANCEL,
                                         onConfirm: () => {
                                             resolve(true);
 
-                                            const VDir = path.join(__dirname, "..");
-
-                                            let targetPackage;
-                                            showToast("Updater", "Requesting package...");
-                                            request("https://raw.githubusercontent.com/Velocity-Discord/Velocity/main/package.json", (err, _, body) => {
-                                                if (err) {
-                                                    showToast("Updater", "Request Failed", { type: "error" });
-                                                } else {
-                                                    try {
-                                                        targetPackage = JSON.parse(body);
-                                                    } catch (error) {
-                                                        showToast("Updater", "Failed to Parse Package", { type: "error" });
-                                                        failModal("Update Failed", [
-                                                            "You can manually update Velocity by opening the Velocity Folder and doing one of the following,",
-                                                            "- Run `git pull` in the terminal (inside the folder)",
-                                                            "- Download the **ZIP** from GitHub and replace the old folder with it uncompressed.",
+                                            showToast("Updater", Strings.Toasts.Updater.startingpull);
+                                            try {
+                                                exec("git pull", (error, stdout, stderr) => {
+                                                    if (error || stderr) {
+                                                        const VDir = path.join(__dirname, "..");
+                                                        logger.error("Updater", error);
+                                                        showToast("Updater", Strings.Toasts.Updater.failedpull, { type: "error" });
+                                                        failModal(Strings.Modals.Updater.failedheader, [
+                                                            ...Strings.Modals.Updater.failed,
                                                             React.createElement(
                                                                 ButtonEle,
                                                                 {
@@ -198,14 +191,18 @@ async function checkForUpdates() {
                                                                         shell.openPath(VDir);
                                                                     },
                                                                 },
-                                                                "Open Velocity Folder"
+                                                                Strings.Modals.Updater.openfolder
                                                             ),
                                                         ]);
+                                                        return;
                                                     }
-                                                }
-                                            });
+                                                });
 
-                                            // changelogModal({ subtitle: updateData.changelog.subtitle, description: updateData.changelog.description });
+                                                VApi.DataStore.setData("VELOCITY_SETTINGS", "hasShownChangelog", false);
+                                            } catch (e) {
+                                                logger.error("Updater", e);
+                                                showToast("Updater", Strings.Toasts.Updater.failedpull, { type: "error" });
+                                            }
                                         },
                                         onCancel: () => resolve(false),
                                         children: [
@@ -215,7 +212,8 @@ async function checkForUpdates() {
                                                     color: Text.Colors.HEADER_SECONDARY,
                                                     size: Text.Sizes.SIZE_16,
                                                 },
-                                                `Our Remote Repository has a newer hash than your version of Velocity, this indicates that there may be an update available. Would you like to Update to ${updateData.hash}?`
+
+                                                `${Strings.Modals.Updater.content[2]} ${updateData.hash}?`
                                             ),
                                             React.createElement(
                                                 Text,
@@ -223,7 +221,7 @@ async function checkForUpdates() {
                                                     color: Text.Colors.HEADER_SECONDARY,
                                                     size: Text.Sizes.SIZE_16,
                                                 },
-                                                `Currently ${info.hash}`
+                                                `${Strings.Modals.Updater.content[1]} ${info.hash}`
                                             ),
                                         ],
                                     },
@@ -236,7 +234,7 @@ async function checkForUpdates() {
 
                 updatePrompt();
             } else {
-                VApi.showToast("Updater", "No Updates Found");
+                VApi.showToast("Updater", Strings.Toasts.Updater.noupdates);
             }
         }
     });
@@ -248,7 +246,7 @@ async function changelogModal(options = {}) {
         updateJson = JSON.parse(body);
 
         const {
-            image = updateJson.changelog.image || "https://velocity-discord.netlify.app/assets/3.png",
+            image = updateJson.changelog.image || "https://velocity-discord.netlify.app/assets/icon.png",
             subtitle = updateJson.changelog.subtitle,
             description = updateJson.changelog.description,
         } = options;
@@ -290,7 +288,7 @@ async function changelogModal(options = {}) {
                                                         color: Text.Colors.HEADER_PRIMARY,
                                                         className: WebpackModules.find(["h1"]).h1,
                                                     },
-                                                    "What's New"
+                                                    Strings.Titles.whatsnew
                                                 ),
                                                 React.createElement("div", { style: { fontWeight: "400" }, className: `${dateClass} ${ChangelogClasses.date}` }, subtitle),
                                             ],

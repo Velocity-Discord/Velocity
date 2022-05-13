@@ -1,6 +1,6 @@
-const logger = require("./logger");
-const DataStore = require("./DataStore");
-const { parse } = require("./styleParser");
+const logger = require("../logger");
+const DataStore = require("../DataStore");
+const { parse } = require("../styleParser");
 const cssBeta = DataStore("VELOCITY_SETTINGS").CSSFeatures;
 
 function escapeID(id) {

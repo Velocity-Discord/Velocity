@@ -1,0 +1,11 @@
+{
+    "Titles": {
+        "updater": "Актуализация",
+        "settings": "Настройки",
+        "customcss": "Персонализиран CSS",
+        "startupscript": "Стартов скрипт",
+        "plugins": "Плъгини",
+        "themes": "Теми",
+        "developer": "Разработчик"
+    }
+}
