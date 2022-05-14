@@ -42,13 +42,13 @@
             "cannot": "You cannot install this. (Cause it's invalid...)"
         },
         "StartupScript": {
-            "saved": "Saved",
-            "cleared": "Cleard",
+            "saved": "Saved Script",
+            "cleared": "Cleard Script",
             "error": "Error Compiling Startup Script. See Console For More Details"
         },
         "CustomCSS": {
-            "saved": "Saved",
-            "cleared": "Cleared"
+            "saved": "Saved CSS",
+            "cleared": "Cleared CSS"
         },
         "Developer": {
             "killed": "Killed"

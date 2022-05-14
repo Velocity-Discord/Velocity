@@ -9,7 +9,10 @@
         "developer": "Developer",
         "remote": "Remote",
         "changelog": "Changelog",
-        "velocitychangelog": "Velocity Changelog"
+        "velocitychangelog": "Velocity Changelog",
+        "about": "About Velocity",
+        "awkward": "Well, this is awkward",
+        "whatsnew": "What's New"
     },
     "Toasts": {
         "officialserver": "Joined Official Server, Exit settings and have a look!",
@@ -31,16 +34,21 @@
             "failedpull": "Failed to Pull from Remote",
             "failedrequest": "Request Failed",
             "failedparse": "Failed to parse package",
-            "noupdates": "No Updates Available"
+            "noupdates": "No Updates Available",
+            "updateto": "Update Velocity to",
+            "install": "Install",
+            "invalid": "Invalid",
+            "invalidURL": "Invalid Update URL",
+            "cannot": "You cannot install this. (Cause it's invalid...)"
         },
         "StartupScript": {
-            "saved": "Saved",
-            "cleared": "Cleard",
+            "saved": "Saved Script",
+            "cleared": "Cleard Script",
             "error": "Error Compiling Startup Script. See Console For More Details"
         },
         "CustomCSS": {
-            "saved": "Saved",
-            "cleared": "Cleared"
+            "saved": "Saved CSS",
+            "cleared": "Cleared CSS"
         },
         "Developer": {
             "killed": "Killed"
@@ -50,6 +58,32 @@
         "Restart": {
             "header": "Restart Discord?",
             "content": "This Setting Requires a full reload of discord."
+        },
+        "WhatsThis": {
+            "header": "What is This?",
+            "content": ["This is a Velocity Feature. It allows you to Install ", "Updates and get info about Velocity directly from the client."]
+        },
+        "Info": {
+            "version": "Version",
+            "api": "API"
+        },
+        "Updater": {
+            "header": "Velocity Update Available",
+            "failedheader": "Update Failed",
+            "content": [
+                "Would you like to Update to",
+                "Currently",
+                "Our Remote Repository has a newer hash than your version of Velocity, this indicates that there may be an update available. Would you like to Update to"
+            ],
+            "failed": [
+                "You can manually update Velocity by opening the Velocity Folder and doing one of the following,",
+                "- Run `git pull` in the terminal (inside the folder)",
+                "- Download the **ZIP** from GitHub and replace the old folder with it uncompressed."
+            ],
+            "openfolder": "Open Velocity Folder",
+            "update": "Update",
+            "wanttoinstall": "Would you like to install this update?",
+            "notimplemented": "Yeah so... This isn't implemented yet. It probably won't be for a while..."
         }
     },
     "Tooltips": {
@@ -57,7 +91,8 @@
         "website": "Website",
         "invite": "Server Invite",
         "nolicense": "No License",
-        "sponsor": "Sponsor the Developer"
+        "sponsor": "Sponsor the Developer",
+        "whatsthis": "What's This?"
     },
     "Addons": {
         "Card": {
