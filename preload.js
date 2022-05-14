@@ -1,7 +1,7 @@
 const { webFrame, contextBridge, ipcRenderer } = require("electron");
 const logger = require("./core/logger");
-const styling = require("./core/DOM/styling");
-const scripting = require("./core/DOM/scripting");
+const StylingManager = require("./core/DOM/styling");
+const ScriptingManager = require("./core/DOM/scripting");
 const DataStore = require("./core/datastore");
 const patch = require("./core/patch");
 const fs = require("fs/promises");
@@ -167,8 +167,8 @@ if (dPath) {
                 body: document.querySelector("velocity-body"),
             },
             Logger: logger,
-            Styling: styling,
-            Scripting: scripting,
+            Styling: StylingManager,
+            Scripting: ScriptingManager,
             modals: {
                 open: (reactElement, modalOpts) => ModalFunctions.openModal(reactElement, modalOpts),
                 close: (modalId, way) => ModalFunctions.closeModal(modalId, way),
