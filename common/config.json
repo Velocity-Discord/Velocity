@@ -4,6 +4,9 @@
             "type": 0,
             "url": "https://raw.githubusercontent.com/Velocity-Discord/Backend/main/api/Badges.json"
         },
+        "experiments": {
+            "url": "https://raw.githubusercontent.com/Velocity-Discord/Backend/main/api/Experiments.json"
+        },
         "updates": {
             "url": "https://raw.githubusercontent.com/Velocity-Discord/Backend/main/api/Updates.json"
         }

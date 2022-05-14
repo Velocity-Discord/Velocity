@@ -212,10 +212,14 @@ if (dPath) {
         toWindow("VApi", VApi);
         if (DevMode) logger.log("Velocity", "VApi Added");
 
-        const i18n = require("./core/i18n");
-        i18n.initialize();
-        const { Strings, normalizeString } = i18n;
+        const i18nManager = require("./core/i18n");
+        i18nManager.initialize();
+        const { Strings, normalizeString } = i18nManager;
         if (DevMode) logger.log("Velocity", "i18n Initialized");
+
+        const ExperimentManager = require("./core/experiments");
+        ExperimentManager.initialize();
+        if (DevMode) logger.log("Velocity", "Experiments Initialized");
 
         const { showToast, showConfirmationModal } = require("./core/ui/Notifications");
         const Components = require("./core/components");
@@ -288,7 +292,7 @@ if (dPath) {
 
         if (DevMode) logger.log("Velocity", "Custom CSS Injected");
 
-        // Patches & Addons
+        // Wait for Discord to Finish Loading
         await waitFor('[class*="guilds"]');
 
         if (!DataStore.getData("VELOCITY_SETTINGS", "hasShownChangelog")) {
