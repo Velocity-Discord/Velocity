@@ -7,6 +7,7 @@ const patch = require("./core/patch");
 const fs = require("fs/promises");
 const path = require("path");
 const Module = require("module");
+const Config = require("./common/config.json");
 const { info } = require("./package.json");
 const { parse } = require("./core/styleParser");
 
@@ -106,7 +107,11 @@ if (dPath) {
         Object.defineProperty(t, "isDeveloper", { get: (_) => 1, set: (_) => _, configurable: true });
 
         let Badges;
-        request("https://raw.githubusercontent.com/Velocity-Discord/Backend/main/api/Badges.json", (_, __, body) => (Badges = JSON.parse(body)));
+        if (Config.backend.badges.type === 0) {
+            request(Config.backend.badges.url, (_, __, body) => (Badges = JSON.parse(body)));
+        } else if (Config.backend.badges.type === 1) {
+            Badges = require(Config.backend.badges.url);
+        }
 
         const React = await waitUntil(() => {
             if (!WebpackModules.find(["createElement", "Component"])?.createElement) return false;

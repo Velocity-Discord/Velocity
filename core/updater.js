@@ -2,6 +2,7 @@ const { info } = require("../package.json");
 const request = require("./request");
 const logger = require("./logger");
 const path = require("path");
+const Config = require("../common/config.json");
 const { exec } = require("child_process");
 const { ipcRenderer, shell } = require("electron");
 
@@ -15,7 +16,7 @@ async function waitUntil(condition) {
     return item;
 }
 
-const updateURL = "https://raw.githubusercontent.com/Velocity-Discord/Backend/main/api/Updates.json";
+let updateURL = Config.backend.updates.url;
 
 async function failModal(title, content) {
     const { React, WebpackModules, modals } = VApi;

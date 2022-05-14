@@ -10,6 +10,8 @@ const Card = require("./AddonCard");
 const i18n = require("../i18n");
 const path = require("path");
 
+const Config = require("../../common/config.json");
+
 const { Strings, normalizeString } = i18n;
 
 const Button = WebpackModules.find(["ButtonColors"]).default;
@@ -876,26 +878,39 @@ VApi.Patcher(
                                                 {
                                                     color: ButtonColors.BRAND,
                                                     onClick: async (target) => {
-                                                        request("https://raw.githubusercontent.com/Velocity-Discord/Backend/main/api/Badges.json", (_, res, body) => {
-                                                            if (res.statusCode.between(200, 299)) {
+                                                        if (Config.backend.badges.type === 0) {
+                                                            request(Config.backend.badges.url, (_, res, body) => {
+                                                                if (res.statusCode >= 200 && res.statusCode <= 299) {
+                                                                    const statusBadgeElement = document.querySelector(".velocity-developer-status-badges-text");
+                                                                    statusBadgeElement.innerHTML = `${Strings.Settings.Developer.Sections.backendstatus.status.status} - ${Strings.Settings.Developer.Sections.backendstatus.status.fine} (${res.statusCode})`;
+                                                                    statusBadgeElement.style.color = "var(--text-positive)";
+                                                                } else {
+                                                                    const statusBadgeElement = document.querySelector(".velocity-developer-status-badges-text");
+                                                                    statusBadgeElement.innerHTML = `${Strings.Settings.Developer.Sections.backendstatus.status.status} - ${Strings.Settings.Developer.Sections.backendstatus.status.unknown} (${res.statusCode})`;
+                                                                    statusBadgeElement.style.color = "var(--text-danger)";
+                                                                }
+                                                            });
+                                                        } else if (Config.backend.badges.type === 1) {
+                                                            try {
+                                                                require(Config.backend.badges.url);
                                                                 const statusBadgeElement = document.querySelector(".velocity-developer-status-badges-text");
-                                                                statusBadgeElement.innerHTML = `${Strings.Settings.Developer.Sections.backendstatus.status.status} - ${Strings.Settings.Developer.Sections.backendstatus.status.fine} (${res.statusCode})`;
+                                                                statusBadgeElement.innerHTML = `${Strings.Settings.Developer.Sections.backendstatus.status.status} - ${Strings.Settings.Developer.Sections.backendstatus.status.fine} (${Config.backend.badges.url})`;
                                                                 statusBadgeElement.style.color = "var(--text-positive)";
-                                                            } else {
-                                                                const statusUpdateElement = document.querySelector(".velocity-developer-status-badges-text");
-                                                                statusBadgeElement.innerHTML = `${Strings.Settings.Developer.Sections.backendstatus.status.status} - ${Strings.Settings.Developer.Sections.backendstatus.status.unknown} (${res.statusCode})`;
-                                                                statusUpdateElement.style.color = "var(--text-danger)";
+                                                            } catch (e) {
+                                                                const statusBadgeElement = document.querySelector(".velocity-developer-status-badges-text");
+                                                                statusBadgeElement.innerHTML = `${Strings.Settings.Developer.Sections.backendstatus.status.status} - ${Strings.Settings.Developer.Sections.backendstatus.status.unknown} (${e})`;
+                                                                statusBadgeElement.style.color = "var(--text-danger)";
                                                             }
-                                                        });
+                                                        }
 
-                                                        request("https://raw.githubusercontent.com/Velocity-Discord/Backend/main/api/Updates.json", (_, res, body) => {
-                                                            if (res.statusCode.between(200, 299)) {
-                                                                const statusBadgeElement = document.querySelector(".velocity-developer-status-badges-text");
-                                                                statusBadgeElement.innerHTML = `${Strings.Settings.Developer.Sections.backendstatus.status.status} - ${Strings.Settings.Developer.Sections.backendstatus.status.fine} (${res.statusCode})`;
-                                                                statusBadgeElement.style.color = "var(--text-positive)";
+                                                        request(Config.backend.updates.url, (_, res, body) => {
+                                                            if (res.statusCode >= 200 && res.statusCode <= 299) {
+                                                                const statusUpdateElement = document.querySelector(".velocity-developer-status-update-text");
+                                                                statusUpdateElement.innerHTML = `${Strings.Settings.Developer.Sections.backendstatus.status.status} - ${Strings.Settings.Developer.Sections.backendstatus.status.fine} (${res.statusCode})`;
+                                                                statusUpdateElement.style.color = "var(--text-positive)";
                                                             } else {
-                                                                const statusUpdateElement = document.querySelector(".velocity-developer-status-badges-text");
-                                                                statusBadgeElement.innerHTML = `${Strings.Settings.Developer.Sections.backendstatus.status.status} - ${Strings.Settings.Developer.Sections.backendstatus.status.unknown} (${res.statusCode})`;
+                                                                const statusUpdateElement = document.querySelector(".velocity-developer-status-update-text");
+                                                                statusUpdateElement.innerHTML = `${Strings.Settings.Developer.Sections.backendstatus.status.status} - ${Strings.Settings.Developer.Sections.backendstatus.status.unknown} (${res.statusCode})`;
                                                                 statusUpdateElement.style.color = "var(--text-danger)";
                                                             }
                                                         });
