@@ -192,18 +192,16 @@ velocity-toasts {
 }
 
 .velocity-toast {
-    top: 5%;
     display: flex;
     flex-direction: column;
-    max-width: 400px;
-    min-width: 180px;
+    max-width: 500px;
+    min-width: 240px;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin-top: 1%;
-    margin-right: 2.5%;
-    backdrop-filter: blur(15px);
-    padding: 12px 20px;
+    margin: 1.5% 2.5% 0;
+    padding: 12px 30px 12px 20px;
     border-radius: 3px;
+    box-sizing: border-box;
     z-index: 99999;
     position: relative;
     width: fit-content;
@@ -212,8 +210,34 @@ velocity-toasts {
     animation: toast-show 0.15s ease-out;
     color: #fff;
     font-size: 11pt;
-    border-left: 3px solid;
-    border-left-color: var(--text-default);
+}
+
+.velocity-toast-close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    border: none;
+    background: none;
+    color: rgb(201, 201, 201);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    transition: all 0.2s ease;
+    opacity: 0;
+}
+
+.velocity-toast-close:hover {
+    opacity: 0.8;
+}
+
+.velocity-toast:hover .velocity-toast-close {
+    opacity: 1;
 }
 
 .velocity-toast.closing {
@@ -222,30 +246,37 @@ velocity-toasts {
     transform: translateY(-30px) scale(0.3);
 }
 
-.velocity-toast-title {
-    font-weight: 600;
-    margin-bottom: 3px;
-}
-
 .velocity-toast-body {
-    font-weight: 400;
-    color: #d8d8d8;
+    font-weight: 500;
+    font-size: 17px;
+    color: #f3f3f3;
 }
 
-.velocity-toast.type-error {
-    border-left-color: #fd3a5f;
+.velocity-toast-title {
+    font-weight: 500;
+    font-size: 13px;
+    margin-top: 3px;
+    color: #c0c5cc;
+}
+
+.velocity-toast:first-of-type {
+    margin-top: 2.5%;
 }
 
 .velocity-toast.type-success {
-    border-left-color: #38bf5d;
+    background: #254c2f;
+}
+
+.velocity-toast.type-error {
+    background: #522d2d;
 }
 
 .velocity-toast.type-warn {
-    border-left-color: #da8d14;
+    background: #56462e;
 }
 
 .velocity-toast.type-velocity {
-    border-left-color: var(--brand-experiment);
+    background: #404470;
 }
 
 .velocity-badge {
@@ -430,6 +461,7 @@ textarea.velocity-editor {
 .velocity-addon-modal-body-header-buttons {
     display: flex;
     margin-top: 6px;
+    gap: 5px;
 }
 
 .velocity-changelog-modal-footer {

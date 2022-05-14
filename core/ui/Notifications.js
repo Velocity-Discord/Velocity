@@ -17,8 +17,9 @@ async function showToast(title, content, options = {}) {
     }
 
     toast.innerHTML = `
-    <div class="velocity-toast-title">${title || ""}</div>
+    <button class="velocity-toast-close">X</button>
     <div class="velocity-toast-body">${content || ""}</div>
+    <div class="velocity-toast-title">${title || ""}</div>
     `;
 
     const closeToast = () => {
@@ -27,8 +28,10 @@ async function showToast(title, content, options = {}) {
             toast.remove();
 
             clearTimeout(time1);
-        }, 700);
+        }, 160);
     };
+
+    toast.firstChild.nextSibling.addEventListener("click", closeToast);
 
     time2 = setTimeout(() => {
         closeToast();
