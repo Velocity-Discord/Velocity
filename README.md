@@ -2,9 +2,10 @@
   <img width="200" src="https://velocity-discord.netlify.app/assets/icon.png" alt="Velocity Logo">
 </p>
 
-[![Velocity](https://img.shields.io/badge/Velocity-6587F4?style=for-the-badge)](https://velocity-discord.netlify.app/)
-[![Languages](https://img.shields.io/github/languages/count/TheCommieAxolotl/Velocity?style=for-the-badge&color=6587F4)](#)
-[![LICENSE](https://img.shields.io/github/license/Velocity-Discord/Installer?&style=for-the-badge&color=6587F4)](https://github.com/Velocity-Discord/Installer/blob/main/LICENSE)
+[![VELOCITY](https://img.shields.io/badge/Velocity-6587F4?style=for-the-badge)](https://velocity-discord.netlify.app/)
+[![LANGUAGES](https://img.shields.io/github/languages/count/TheCommieAxolotl/Velocity?style=for-the-badge&color=6587F4)](#)
+[![LICENSE](https://img.shields.io/github/license/Velocity-Discord/Velocity?&style=for-the-badge&color=6587F4)](https://github.com/Velocity-Discord/Installer/blob/main/LICENSE)
+[![VERSION](https://img.shields.io/badge/Version-0.7.0-6587F4?style=for-the-badge)](#)
 
 # Velocity
 #### An upcoming Client Modification for [@discord](https://github.com/discord) enhanced by Plugins and Themes!
