@@ -3,7 +3,7 @@
 </p>
 
 [![VELOCITY](https://img.shields.io/badge/Velocity-6587F4?style=for-the-badge)](https://velocity-discord.netlify.app/)
-[![VERSION](https://img.shields.io/badge/Version-0.7.0-6587F4?style=for-the-badge)](#)
+[![VERSION](https://img.shields.io/badge/Version-0.8.0-6587F4?style=for-the-badge)](#)
 [![LANGUAGES](https://img.shields.io/github/languages/count/TheCommieAxolotl/Velocity?style=for-the-badge&color=6587F4)](#)
 [![LICENSE](https://img.shields.io/github/license/Velocity-Discord/Velocity?&style=for-the-badge&color=6587F4)](https://github.com/Velocity-Discord/Installer/blob/main/LICENSE)
 
