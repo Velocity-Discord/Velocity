@@ -2,7 +2,7 @@
     "name": "velocity",
     "version": "0.7.0",
     "description": "A Client Modification for Discord enhanced by Plugins and Themes!",
-    "main": "index.js",
+    "main": "src/index.js",
     "author": "TheCommieAxolotl",
     "license": "MIT",
     "info": {

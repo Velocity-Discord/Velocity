@@ -1,4 +1,4 @@
-const Config = require("../common/config.json");
+const Config = require("../../common/config.json");
 const request = require("./request");
 
 const { WebpackModules } = VApi;

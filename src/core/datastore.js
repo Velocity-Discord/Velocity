@@ -5,14 +5,14 @@ const Logger = require("./logger");
 
 const storage = new (class DataStore {
     get dir() {
-        return _path.join(__dirname, "..", "settings");
+        return _path.join(__dirname, "../../", "settings");
     }
     getFile(name) {
         return _path.join(this.dir, `${name}.json`);
     }
     getAllData(name) {
         try {
-            if (!_fs.existsSync(_path.join(__dirname, "..", "settings"))) _fs.mkdirSync(_path.join(__dirname, "..", "settings"));
+            if (!_fs.existsSync(_path.join(__dirname, "../../", "settings"))) _fs.mkdirSync(_path.join(__dirname, "../../", "settings"));
             const file = this.getFile(name);
             if (!_fs.existsSync(file)) return {};
             return JSON.parse(_fs.readFileSync(file));

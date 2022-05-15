@@ -1,7 +1,7 @@
 const { React, modals, WebpackModules, showToast, Utilities, AddonManager, Components } = VApi;
 const { shell } = require("electron");
 const { internalPatches, InternalSecurityToken } = require("../stores");
-const { info } = require("../../package.json");
+const { info } = require("../../../package.json");
 const { SettingsSwitchSection, SettingsInputSection, SettingsTitle } = require("./SettingsSections");
 const DataStore = require("../datastore");
 const request = require("../request");
@@ -10,7 +10,7 @@ const Card = require("./AddonCard");
 const i18n = require("../i18n");
 const path = require("path");
 
-const Config = require("../../common/config.json");
+const Config = require("../../../common/config.json");
 
 const { Strings, normalizeString } = i18n;
 
@@ -477,8 +477,8 @@ async function jsPrompt() {
                                                 ),
                                             ],
                                             onClick: () => {
-                                                const coreDir = path.join(__dirname, "..");
-                                                const settingsDir = path.join(coreDir, "..", "settings");
+                                                const coreDir = path.join(__dirname, "../../../");
+                                                const settingsDir = path.join(coreDir, "settings");
                                                 shell.openPath(settingsDir);
                                             },
                                         }),
@@ -630,7 +630,7 @@ async function cssPrompt() {
                                                     DataStore.setData("VELOCITY_SETTINGS", "CSS", "");
                                                     VApi.customCSS.reload();
 
-                                                    showToast("Custom CSS", Strings.Toasts.CustomCSS.cleard, { type: "success" });
+                                                    showToast("Custom CSS", Strings.Toasts.CustomCSS.cleared, { type: "success" });
                                                 },
                                             },
                                             Strings.Settings.CustomCSS.Buttons.clear
@@ -987,7 +987,7 @@ VApi.Patcher(
         }
 
         AddonManager.plugins.getAll().forEach((plugin) => {
-            if (plugin.hasSettings) {
+            if (plugin.hasSettings && AddonManager.plugins.isEnabled(plugin.name)) {
                 insert({
                     section: normalizeString(plugin.name),
                     label: plugin.name,

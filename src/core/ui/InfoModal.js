@@ -1,5 +1,5 @@
 const DataStore = require("../datastore");
-const { info } = require("../../package.json");
+const { info } = require("../../../package.json");
 const button = VApi.WebpackModules.find(["ButtonColors"]).default;
 const Text = VApi.WebpackModules.find("LegacyText").default;
 const ButtonColors = VApi.WebpackModules.find(["ButtonColors"]).ButtonColors;
