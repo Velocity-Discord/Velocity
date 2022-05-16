@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const DataStore = require("./datastore");
 const request = require("./request");
+const Logger = require("./logger");
 const { parse } = require("./styleParser");
 const cssBeta = DataStore("VELOCITY_SETTINGS").CSSFeatures;
 
@@ -40,6 +41,14 @@ function getKeyByValue(object, value) {
     return Object.keys(object).find((key) => object[key].name === value);
 }
 
+function readManifest(file) {
+    const contents = require(file);
+    if (typeof contents.main !== "string") {
+        return Logger.error("Addon Manager", `${file} is missing an entrypoint.`);
+    }
+    return contents;
+}
+
 function readMeta(contents) {
     if (typeof contents == "undefined") return null;
     let meta = {};
@@ -58,7 +67,7 @@ function readMeta(contents) {
 const RemoteActions = new (class {
     loadTheme(url) {
         if (!filters.themes.test(url)) {
-            VApi.Logger.error("Remote Addon Manager", "Requested File Does not match Theme Filters");
+            Logger.error("Remote Addon Manager", "Requested File Does not match Theme Filters");
             return VApi.showToast("Remote Addon Manager", Strings.Toasts.AddonManager.failedremote, { type: "error" });
         }
 
@@ -118,9 +127,23 @@ if (!fs.existsSync(themeDir)) fs.mkdirSync(themeDir);
 
 fs.readdir(themeDir, (err, files) => {
     if (err) throw new Error(`Error reading '${themeDir}'`);
+    folders = files.filter((file) => !file.includes("/") && !file.includes("."));
+    folders.sort().map((folder) => {
+        if (DevMode) Logger.log("Addon Manager", `Loading ${folder}`);
+        const filePath = path.join(themeDir, folder, "velocity_manifest.json");
+
+        const meta = readManifest(filePath);
+        fs.readFile(path.join(themeDir, folder, meta.main), "utf8", (err, data) => {
+            if (err) throw new Error(`Error reading '${filePath}'`);
+            meta.file = filePath;
+            meta.css = cssBeta ? parse(data) : data;
+            addons.themes.push(meta);
+        });
+    });
+
     files = files.filter((file) => filters.themes.test(file));
     files.sort().map((file) => {
-        if (DevMode) VApi.Logger.log("Addon Manager", `Loading ${file}`);
+        if (DevMode) Logger.log("Addon Manager", `Loading ${file}`);
         const filePath = path.join(themeDir, file);
         fs.readFile(filePath, "utf8", (err, data) => {
             if (err) throw new Error(`Error reading '${filePath}'`);
@@ -182,6 +205,7 @@ fs.watch(themeDir, { persistent: false }, async (eventType, filename) => {
     if (!eventType || !filename) return;
 
     const absolutePath = path.resolve(themeDir, filename);
+
     if (!filters.themes.test(filename)) return;
 
     const name = filename.replace(".theme.css", "");
@@ -234,9 +258,52 @@ if (!fs.existsSync(pluginDir)) fs.mkdirSync(pluginDir);
 
 fs.readdir(pluginDir, (err, files) => {
     if (err) throw new Error(`Error reading '${pluginDir}'`);
+
+    folders = files.filter((file) => !file.includes("/") && !file.includes("."));
+    folders.sort().map((folder) => {
+        if (DevMode) Logger.log("Addon Manager", `Loading ${folder}`);
+        const filePath = path.join(pluginDir, folder, "velocity_manifest.json");
+
+        const meta = readManifest(filePath);
+        let plugin = require(path.join(pluginDir, folder, meta.main));
+        meta.export = plugin;
+        meta.type = "plugin";
+        meta.file = filePath;
+
+        if (typeof plugin.Plugin === "function") {
+            if (plugin.Plugin().getSettingsPanel) meta.hasSettings = true;
+        } else {
+            if (plugin.Plugin.getSettingsPanel) meta.hasSettings = true;
+        }
+
+        addons.plugins.push(meta);
+        function load() {
+            if (plugin.default) plugin = plugin.default;
+            if (typeof plugin.Plugin === "function") {
+                setTimeout(() => {
+                    if (plugin.Plugin().onLoad) plugin.Plugin().onLoad();
+                }, 2000);
+            } else {
+                setTimeout(() => {
+                    if (plugin.Plugin.onLoad) plugin.Plugin.onLoad();
+                }, 2000);
+            }
+            return plugin;
+        }
+        load();
+        addonsInit.plugins.push(() => {
+            function load() {
+                if (plugin.default) plugin = plugin.default;
+                if (plugin.onLoad) plugin.onLoad();
+                return plugin;
+            }
+            load();
+        });
+    });
+
     files = files.filter((file) => filters.plugins.test(file));
     files.sort().map((file) => {
-        if (DevMode) VApi.Logger.log("Addon Manager", `Loading ${file}`);
+        if (DevMode) Logger.log("Addon Manager", `Loading ${file}`);
         const filePath = path.join(pluginDir, file);
         fs.readFile(filePath, "utf8", (err, data) => {
             if (err) throw new Error(`Error reading '${filePath}'`);
@@ -340,6 +407,7 @@ module.exports = {
         };
     },
     readMeta,
+    readManifest,
     themes: () => {
         for (const theme of addonsInit.themes) theme();
         return {

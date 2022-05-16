@@ -2,6 +2,7 @@ const { React, logger, WebpackModules, showToast, Utilities, AddonManager } = VA
 const { shell } = require("electron");
 const i18n = require("../i18n");
 const fs = require("fs");
+const path = require("path");
 
 const { Strings } = i18n;
 
@@ -32,7 +33,7 @@ module.exports = React.memo((props) => {
                                 children: [
                                     React.createElement("div", {
                                         className: "velocity-card-header-name",
-                                        children: meta.name,
+                                        children: meta.name || Strings.Addons.Card.unknown,
                                     }),
                                     React.createElement("div", {
                                         className: "velocity-card-header-version",
@@ -55,12 +56,12 @@ module.exports = React.memo((props) => {
                                     !meta.authorId &&
                                         React.createElement("div", {
                                             className: "velocity-card-header-author",
-                                            children: meta.author,
+                                            children: meta.author || Strings.Addons.Card.unknown,
                                         }),
                                     meta.authorId &&
                                         React.createElement("div", {
                                             className: "velocity-card-header-author clickable",
-                                            children: meta.author,
+                                            children: meta.authorr || Strings.Addons.Card.unknown,
                                             onClick: () => {
                                                 WebpackModules.findByProps("openPrivateChannel").openPrivateChannel(meta.authorId);
                                                 WebpackModules.find(["pushLayer"]).popLayer();
@@ -102,7 +103,7 @@ module.exports = React.memo((props) => {
                 className: "velocity-card-content-wrapper",
                 children: React.createElement(Markdown, {
                     className: "velocity-content",
-                    children: meta.description,
+                    children: meta.description || Strings.Addons.Card.unknown,
                 }),
             }),
             React.createElement("div", {
@@ -268,9 +269,15 @@ module.exports = React.memo((props) => {
                                                     type == "themes" ? AddonManager.remote.unloadTheme(meta.name) : AddonManager.unloadPlugin(meta.name);
                                                     showToast("Addon Manager", `${Strings.Toasts.AddonManager.deleted} ${meta.name}`, { type: "error" });
                                                 } else {
-                                                    fs.unlink(meta.file, () => {
-                                                        showToast("Addon Manager", `${Strings.Toasts.AddonManager.deleted} ${meta.name}`, { type: "error" });
-                                                    });
+                                                    if (meta.file.includes("/velocity_manifest.json")) {
+                                                        fs.unlink(path.join(meta.file, ".."), () => {
+                                                            showToast("Addon Manager", `${Strings.Toasts.AddonManager.deleted} ${meta.name}`, { type: "error" });
+                                                        });
+                                                    } else {
+                                                        fs.unlink(meta.file, () => {
+                                                            showToast("Addon Manager", `${Strings.Toasts.AddonManager.deleted} ${meta.name}`, { type: "error" });
+                                                        });
+                                                    }
                                                 }
                                             } catch (e) {
                                                 console.error(e);

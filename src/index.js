@@ -10,7 +10,7 @@ const DataStore = require("./core/datastore");
 
 const Settings = DataStore("VELOCITY_SETTINGS");
 
-process.env.VELOCITY_DIRECTORY = __dirname;
+process.env.VELOCITY_DIRECTORY = join(__dirname, "..");
 
 electron.app.commandLine.appendSwitch("no-force-async-hooks-checks");
 

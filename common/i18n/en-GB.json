@@ -99,7 +99,8 @@
             "by": "By ",
             "sponsor": "Sponsor",
             "edit": "Edit",
-            "delete": "Delete"
+            "delete": "Delete",
+            "unknown": "Unknown"
         }
     },
     "Settings": {
