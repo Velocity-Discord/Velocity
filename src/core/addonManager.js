@@ -136,6 +136,7 @@ fs.readdir(themeDir, (err, files) => {
         fs.readFile(path.join(themeDir, folder, meta.main), "utf8", (err, data) => {
             if (err) throw new Error(`Error reading '${filePath}'`);
             meta.file = filePath;
+            meta.type = "module";
             meta.css = cssBeta ? parse(data) : data;
             addons.themes.push(meta);
         });
@@ -267,27 +268,21 @@ fs.readdir(pluginDir, (err, files) => {
         const meta = readManifest(filePath);
         let plugin = require(path.join(pluginDir, folder, meta.main));
         meta.export = plugin;
-        meta.type = "plugin";
+        meta.type = "module";
         meta.file = filePath;
 
-        if (typeof plugin.Plugin === "function") {
-            if (plugin.Plugin().getSettingsPanel) meta.hasSettings = true;
-        } else {
-            if (plugin.Plugin.getSettingsPanel) meta.hasSettings = true;
+        const PluginExport = typeof plugin.Plugin === "function" ? plugin.Plugin() : plugin.Plugin;
+        if (PluginExport.getSettingsPanel) meta.hasSettings = true;
+        if (meta.hasSettings) {
+            PluginExport.settings = DataStore.getAllData(meta.name);
         }
 
         addons.plugins.push(meta);
         function load() {
-            if (plugin.default) plugin = plugin.default;
-            if (typeof plugin.Plugin === "function") {
-                setTimeout(() => {
-                    if (plugin.Plugin().onLoad) plugin.Plugin().onLoad();
-                }, 2000);
-            } else {
-                setTimeout(() => {
-                    if (plugin.Plugin.onLoad) plugin.Plugin.onLoad();
-                }, 2000);
-            }
+            setTimeout(() => {
+                if (PluginExport.onLoad) PluginExport.onLoad();
+            }, 2000);
+
             return plugin;
         }
         load();
@@ -302,6 +297,7 @@ fs.readdir(pluginDir, (err, files) => {
     });
 
     files = files.filter((file) => filters.plugins.test(file));
+    console.log(files.sort());
     files.sort().map((file) => {
         if (DevMode) Logger.log("Addon Manager", `Loading ${file}`);
         const filePath = path.join(pluginDir, file);
@@ -313,24 +309,18 @@ fs.readdir(pluginDir, (err, files) => {
             meta.type = "plugin";
             meta.file = filePath;
 
-            if (typeof plugin.Plugin === "function") {
-                if (plugin.Plugin().getSettingsPanel) meta.hasSettings = true;
-            } else {
-                if (plugin.Plugin.getSettingsPanel) meta.hasSettings = true;
+            const PluginExport = typeof plugin.Plugin === "function" ? plugin.Plugin() : plugin.Plugin;
+            if (PluginExport.getSettingsPanel) meta.hasSettings = true;
+            if (meta.hasSettings) {
+                PluginExport.settings = DataStore.getAllData(meta.name);
             }
 
             addons.plugins.push(meta);
             function load() {
                 if (plugin.default) plugin = plugin.default;
-                if (typeof plugin.Plugin === "function") {
-                    setTimeout(() => {
-                        if (plugin.Plugin().onLoad) plugin.Plugin().onLoad();
-                    }, 2000);
-                } else {
-                    setTimeout(() => {
-                        if (plugin.Plugin.onLoad) plugin.Plugin.onLoad();
-                    }, 2000);
-                }
+                setTimeout(() => {
+                    if (PluginExport.onLoad) PluginExport.onLoad();
+                }, 2000);
                 return plugin;
             }
             load();
@@ -366,10 +356,9 @@ const Plugins = new (class {
         const meta = this.get(name);
         DataStore.setData("VELOCITY_SETTINGS", "enabledPlugins", { ...Velocity.enabledPlugins, [meta.name]: true });
         try {
-            if (typeof meta.export.Plugin === "function") {
-                return meta.export.Plugin().onStart();
-            }
-            meta.export.Plugin.onStart();
+            const PluginExport = typeof meta.export.Plugin === "function" ? meta.export.Plugin() : meta.export.Plugin;
+
+            return PluginExport.onStart();
         } catch (error) {
             console.error(error);
         }
@@ -378,10 +367,8 @@ const Plugins = new (class {
         const meta = this.get(name);
         DataStore.setData("VELOCITY_SETTINGS", "enabledPlugins", { ...Velocity.enabledPlugins, [meta.name]: false });
         try {
-            if (typeof meta.export.Plugin === "function") {
-                return meta.export.Plugin().onStop();
-            }
-            meta.export.Plugin.onStop();
+            const PluginExport = typeof meta.export.Plugin === "function" ? meta.export.Plugin() : meta.export.Plugin;
+            return PluginExport.onStop();
         } catch (error) {
             console.error(error);
         }

@@ -41,8 +41,18 @@ module.exports = React.memo((props) => {
                                     }),
                                     meta.remote &&
                                         React.createElement("div", {
-                                            className: "velocity-card-header-remote-tag",
+                                            className: "velocity-card-header-tag",
                                             children: Strings.Titles.remote,
+                                        }),
+                                    meta.type == "module" &&
+                                        React.createElement(Tooltip, {
+                                            text: Strings.Tooltips.module,
+                                            children: (props) =>
+                                                React.createElement("div", {
+                                                    ...props,
+                                                    className: "velocity-card-header-tag",
+                                                    children: Strings.Titles.module,
+                                                }),
                                         }),
                                 ],
                             }),

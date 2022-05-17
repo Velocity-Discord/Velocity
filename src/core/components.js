@@ -50,12 +50,133 @@ const SettingsSection = React.memo((props) => {
                     if (action) {
                         action();
                     }
+                    const { AddonManager } = VApi;
                     DataStore.setData(plugin, setting, !enabled);
+                    const PluginClass = AddonManager.plugins.get(plugin).export.Plugin;
+                    typeof PluginClass === "function" ? (PluginClass().settings = DataStore.getAllData(plugin)) : (PluginClass.settings = DataStore.getAllData(plugin));
+
                     setEnabled(!enabled);
                 },
             }),
         ],
     });
+});
+
+const SettingsInput = React.memo((props) => {
+    const { plugin, setting, note, name, warning, action, placeholder, type, maxLength, vertical } = props;
+
+    const TextInput = WebpackModules.find("TextInput").default;
+
+    const [value, setValue] = React.useState(React.useState(DataStore.getData(plugin, setting)));
+    console.log(value[0]);
+    if (vertical) {
+        return React.createElement("div", {
+            id: "velocity-settings-section",
+            class: "vertical",
+            children: [
+                React.createElement("div", {
+                    id: "velocity-settings-section-info",
+                    children: [
+                        React.createElement(
+                            Text,
+                            {
+                                color: Text.Colors.HEADER_PRIMARY,
+                                size: Text.Sizes.SIZE_16,
+                            },
+                            name
+                        ),
+                        React.createElement(
+                            Text,
+                            {
+                                color: Text.Colors.HEADER_SECONDARY,
+                                size: Text.Sizes.SIZE_14,
+                            },
+                            note
+                        ),
+                        React.createElement(
+                            Text,
+                            {
+                                color: Text.Colors.ERROR,
+                                size: Text.Sizes.SIZE_14,
+                            },
+                            warning
+                        ),
+                    ],
+                }),
+                React.createElement(TextInput, {
+                    value: Array.isArray(value) ? value[0] || "" : value || "",
+                    placeholder: placeholder || "",
+                    type: type || "text",
+                    maxLength: maxLength || undefined,
+                    onInput: ({ target }) => {
+                        try {
+                            setValue(target.value);
+                            DataStore.setData(plugin, setting, target.value);
+                            if (action) {
+                                action();
+                            }
+                            const { AddonManager } = VApi;
+                            const PluginClass = AddonManager.plugins.get(plugin).export.Plugin;
+                            typeof PluginClass === "function" ? (PluginClass().settings = DataStore.getAllData(plugin)) : (PluginClass.settings = DataStore.getAllData(plugin));
+                        } catch (e) {
+                            console.error(e);
+                        }
+                    },
+                }),
+            ],
+        });
+    } else {
+        return React.createElement("div", {
+            id: "velocity-settings-section",
+            children: [
+                React.createElement("div", {
+                    id: "velocity-settings-section-info",
+                    children: [
+                        React.createElement(
+                            Text,
+                            {
+                                color: Text.Colors.HEADER_PRIMARY,
+                                size: Text.Sizes.SIZE_16,
+                            },
+                            name
+                        ),
+                        React.createElement(
+                            Text,
+                            {
+                                color: Text.Colors.HEADER_SECONDARY,
+                                size: Text.Sizes.SIZE_14,
+                            },
+                            note
+                        ),
+                        React.createElement(
+                            Text,
+                            {
+                                color: Text.Colors.ERROR,
+                                size: Text.Sizes.SIZE_14,
+                            },
+                            warning
+                        ),
+                    ],
+                }),
+                React.createElement(TextInput, {
+                    value: value[0] || "",
+                    placeholder: placeholder || "",
+                    type: type || "text",
+                    maxLength: maxLength || undefined,
+                    onInput: ({ target }) => {
+                        setValue(target.value);
+                        DataStore.setData(plugin, setting, target.value);
+                        if (action) {
+                            action();
+                        }
+                        const { AddonManager } = VApi;
+                        const PluginClass = AddonManager.plugins.get(plugin).export.Plugin;
+                        typeof PluginClass === "function" ? (PluginClass().settings = DataStore.getAllData(plugin)) : (PluginClass.settings = DataStore.getAllData(plugin));
+                    },
+                }),
+            ],
+        });
+    }
 });
 
 const ShowAddonSettingsModal = (p) => {
@@ -107,4 +228,4 @@ const ShowAddonSettingsModal = (p) => {
     });
 };
 
-module.exports = { ShowAddonSettingsModal, SettingsSection };
+module.exports = { ShowAddonSettingsModal, SettingsSection, SettingsInput };

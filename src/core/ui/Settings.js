@@ -1,4 +1,4 @@
-const { React, modals, WebpackModules, showToast, Utilities, AddonManager, Components } = VApi;
+const { React, modals, WebpackModules, showToast, Utilities, AddonManager } = VApi;
 const { shell } = require("electron");
 const { internalPatches, InternalSecurityToken } = require("../stores");
 const { info } = require("../../../package.json");
@@ -986,6 +986,15 @@ VApi.Patcher(
             });
         }
 
+        const Components = require("../components");
+
+        const pluginsHaveSettings = AddonManager.plugins.getAll().filter((m) => m.hasSettings).length > 0;
+
+        if (pluginsHaveSettings) {
+            insert({ section: "DIVIDER" });
+            insert({ section: "HEADER", label: "Velocity Addon Settings" });
+        }
+
         AddonManager.plugins.getAll().forEach((plugin) => {
             if (plugin.hasSettings && AddonManager.plugins.isEnabled(plugin.name)) {
                 insert({
@@ -993,25 +1002,39 @@ VApi.Patcher(
                     label: plugin.name,
                     className: `velocity-plugin-${normalizeString(plugin.name)}-tab`,
                     onClick: () => {
-                        if (typeof plugin.export.Plugin == "function") {
+                        try {
+                            const PluginExport = typeof plugin.export.Plugin === "function" ? plugin.export.Plugin() : plugin.export.Plugin;
                             let settingsItems = [];
-                            if (Array.isArray(plugin.export.Plugin().getSettingsPanel())) {
-                                plugin.export
-                                    .Plugin()
-                                    .getSettingsPanel()
-                                    .forEach((item) => {
-                                        switch (item.type) {
-                                            case "switch":
-                                                return settingsItems.push(
-                                                    React.createElement(Components.SettingsSection, {
-                                                        plugin: item.plugin,
-                                                        setting: item.setting,
-                                                        name: item.name,
-                                                        note: item.note,
-                                                    })
-                                                );
-                                        }
-                                    });
+                            if (Array.isArray(PluginExport.getSettingsPanel())) {
+                                PluginExport.getSettingsPanel().forEach((item) => {
+                                    switch (item.type) {
+                                        case "switch":
+                                            return settingsItems.push(
+                                                React.createElement(Components.SettingsSection, {
+                                                    plugin: item.plugin,
+                                                    setting: item.setting,
+                                                    name: item.name,
+                                                    note: item.note,
+                                                    warning: item.warning,
+                                                    action: item.action,
+                                                })
+                                            );
+                                        case "input":
+                                            return settingsItems.push(
+                                                React.createElement(Components.SettingsInput, {
+                                                    plugin: item.plugin,
+                                                    setting: item.setting,
+                                                    name: item.name,
+                                                    note: item.note,
+                                                    warning: item.warning,
+                                                    action: item.action,
+                                                    placeholder: item.placeholder,
+                                                    maxLength: item.maxLength,
+                                                    vertical: item.vertical || false,
+                                                })
+                                            );
+                                    }
+                                });
                             } else {
                                 settingsItems = plugin.export.Plugin().getSettingsPanel();
                             }
@@ -1019,26 +1042,8 @@ VApi.Patcher(
                                 name: plugin.name,
                                 children: settingsItems,
                             });
-                        } else {
-                            let settingsItems = [];
-                            if (Array.isArray(plugin.export.Plugin.getSettingsPanel())) {
-                                plugin.export.Plugin.getSettingsPanel().forEach((item) => {
-                                    settingsItems.push(
-                                        React.createElement(Components.SettingsSection, {
-                                            plugin: item.plugin,
-                                            setting: item.setting,
-                                            name: item.name,
-                                            note: item.note,
-                                        })
-                                    );
-                                });
-                            } else {
-                                settingsItems = plugin.export.Plugin.getSettingsPanel();
-                            }
-                            Components.ShowAddonSettingsModal({
-                                name: plugin.name,
-                                children: settingsItems,
-                            });
+                        } catch (error) {
+                            console.error(error);
                         }
                     },
                 });

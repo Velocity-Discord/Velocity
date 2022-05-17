@@ -8,6 +8,7 @@
         "themes": "Themes",
         "developer": "Developer",
         "remote": "Remote",
+        "module": "Module",
         "changelog": "Changelog",
         "velocitychangelog": "Velocity Changelog",
         "about": "About Velocity",
@@ -92,7 +93,8 @@
         "invite": "Server Invite",
         "nolicense": "No License",
         "sponsor": "Sponsor the Developer",
-        "whatsthis": "What's This?"
+        "whatsthis": "What's This?",
+        "module": "Your Addon is spread accross multiple files and/or uses our Manifest system."
     },
     "Addons": {
         "Card": {
