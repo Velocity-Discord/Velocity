@@ -249,7 +249,7 @@ if (dPath) {
                 return process;
             }
 
-            if (path.resolve(request) === path.resolve("./core/stores.js")) {
+            if (request.includes("/core/secure.js")) {
                 return null; // Limit access to the security token. all modules that need it will have it by this time.
             }
 
@@ -312,7 +312,7 @@ if (dPath) {
 
         const enabledThemes = DataStore("VELOCITY_SETTINGS").enabledThemes;
         for (let [theme, data] of Object.entries(enabledThemes)) {
-            if (DevMode) console.log(theme, data);
+            if (DevMode) logger.log(theme, data);
             if (data) {
                 if (VApi.AddonManager.themes.get(theme)) {
                     logger.log("Addon Manager", `Enabled ${theme}`);
@@ -324,7 +324,7 @@ if (dPath) {
 
         const enabledPlugins = DataStore("VELOCITY_SETTINGS").enabledPlugins;
         for (let [plugin, data] of Object.entries(enabledPlugins)) {
-            if (DevMode) console.log(plugin, data);
+            if (DevMode) logger.log(plugin, data);
             if (data) {
                 if (VApi.AddonManager.plugins.get(plugin)) {
                     try {

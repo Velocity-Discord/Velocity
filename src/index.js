@@ -3,7 +3,7 @@
 // hhttps://github.com/Dr-Discord/DrDiscord/blob/main/LICENSE.md (now: https://github.com/unknown81311/DrDiscord/blob/main/LICENSE.md)
 
 const { join } = require("path");
-const electron = ({ ipcMain, app, session } = require("electron"));
+const electron = ({ ipcMain, app, session, dialog } = require("electron"));
 const Module = require("module");
 const request = require("./core/request");
 const DataStore = require("./core/datastore");
@@ -12,7 +12,7 @@ const Settings = DataStore("VELOCITY_SETTINGS");
 
 process.env.VELOCITY_DIRECTORY = join(__dirname, "..");
 
-electron.app.commandLine.appendSwitch("no-force-async-hooks-checks");
+app.commandLine.appendSwitch("no-force-async-hooks-checks");
 
 function ipc(ev, func) {
     ipcMain.on(ev, async (event, ...args) => {
@@ -53,19 +53,32 @@ class BrowserWindow extends electron.BrowserWindow {
         }
 
         let win = new electron.BrowserWindow(opt);
+
+        win.webContents.on("dom-ready", () => {
+            if (!hasCrashed) return;
+
+            dialog.showMessageBox({
+                type: "warning",
+                title: "Velocity",
+                message: `The Velocity process has crashed. (${hasCrashed?.details?.reason || "Unknown"})`,
+                detail: "This may be due to a Plugin or Module. Try restarting Discord in vanilla mode and try again.",
+                buttons: ["OK"],
+            });
+            hasCrashed = false;
+        });
+        win.webContents.on("render-process-gone", (e) => {
+            hasCrashed = e;
+        });
+
         return win;
     }
 }
 
-app.on("render-process-gone", () => {
-    hasCrashed = true;
-});
-
 function LoadDiscord() {
     const basePath = join(process.resourcesPath, "app.asar");
     const pkg = require(join(basePath, "package.json"));
-    electron.app.setAppPath(basePath);
-    electron.app.name = pkg.name;
+    app.setAppPath(basePath);
+    app.name = pkg.name;
     Module._load(join(basePath, pkg.main), null, true);
 }
 
@@ -73,7 +86,7 @@ if (process.argv.includes("--vanilla")) {
     return LoadDiscord();
 }
 
-electron.app.once("ready", () => {
+app.once("ready", () => {
     session.defaultSession.webRequest.onHeadersReceived(function ({ responseHeaders }, callback) {
         for (const iterator of Object.keys(responseHeaders)) if (iterator.includes("content-security-policy")) delete responseHeaders[iterator];
 
@@ -93,6 +106,14 @@ electron.app.once("ready", () => {
     ipcMain.handle("reload-app", () => {
         app.relaunch();
         app.exit();
+    });
+    ipcMain.handle("killed-dialog", () => {
+        dialog.showMessageBox({
+            type: "warning",
+            message: "The Velocity process has been killed. This may indicate a security issue so we have Disabled Velocity temporarily.",
+            buttons: ["OK"],
+        });
+        process.argv.push("--vanilla");
     });
 });
 
