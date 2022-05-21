@@ -39,6 +39,7 @@ module.exports = new (class StylingManager {
      */
     clearCSS(id) {
         const style = document.querySelector("#" + this.escapeID(id));
+        if (!style) return;
         if (!style.hasAttribute("internal")) return style.remove();
 
         return logger.warn("Velocity", "Refused to clear internal styles.");

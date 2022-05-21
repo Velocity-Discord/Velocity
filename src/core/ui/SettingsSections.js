@@ -46,11 +46,11 @@ const SettingsSwitchSection = React.memo((props) => {
             React.createElement(SwitchEle, {
                 checked: enabled,
                 onChange: async () => {
+                    DataStore.setData("VELOCITY_SETTINGS", setting, !enabled);
+                    setEnabled(!enabled);
                     if (action) {
                         action();
                     }
-                    DataStore.setData("VELOCITY_SETTINGS", setting, !enabled);
-                    setEnabled(!enabled);
                     if (reload) {
                         const re = await reloadPrompt();
                         if (re) {

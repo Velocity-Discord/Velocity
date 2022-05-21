@@ -22,6 +22,9 @@ const SettingsSection = React.memo((props) => {
                         {
                             color: Text.Colors.HEADER_PRIMARY,
                             size: Text.Sizes.SIZE_16,
+                            onClick: (e) => {
+                                e.target.parentElement.parentElement.querySelector("input").focus();
+                            },
                         },
                         name
                     ),
@@ -30,6 +33,9 @@ const SettingsSection = React.memo((props) => {
                         {
                             color: Text.Colors.HEADER_SECONDARY,
                             size: Text.Sizes.SIZE_14,
+                            onClick: (e) => {
+                                e.target.parentElement.parentElement.querySelector("input").focus();
+                            },
                         },
                         note
                     ),
@@ -47,13 +53,14 @@ const SettingsSection = React.memo((props) => {
             React.createElement(SwitchEle, {
                 checked: enabled,
                 onChange: async () => {
-                    if (action) {
-                        action();
-                    }
                     const { AddonManager } = VApi;
                     DataStore.setData(plugin, setting, !enabled);
                     const PluginClass = AddonManager.plugins.get(plugin).export.Plugin;
                     typeof PluginClass === "function" ? (PluginClass().settings = DataStore.getAllData(plugin)) : (PluginClass.settings = DataStore.getAllData(plugin));
+
+                    if (action) {
+                        action();
+                    }
 
                     setEnabled(!enabled);
                 },
@@ -68,7 +75,6 @@ const SettingsInput = React.memo((props) => {
     const TextInput = WebpackModules.find("TextInput").default;
 
     const [value, setValue] = React.useState(React.useState(DataStore.getData(plugin, setting)));
-    console.log(value[0]);
     if (vertical) {
         return React.createElement("div", {
             id: "velocity-settings-section",
@@ -82,6 +88,9 @@ const SettingsInput = React.memo((props) => {
                             {
                                 color: Text.Colors.HEADER_PRIMARY,
                                 size: Text.Sizes.SIZE_16,
+                                onClick: (e) => {
+                                    e.target.parentElement.parentElement.querySelector("input").focus();
+                                },
                             },
                             name
                         ),
@@ -90,6 +99,9 @@ const SettingsInput = React.memo((props) => {
                             {
                                 color: Text.Colors.HEADER_SECONDARY,
                                 size: Text.Sizes.SIZE_14,
+                                onClick: (e) => {
+                                    e.target.parentElement.parentElement.querySelector("input").focus();
+                                },
                             },
                             note
                         ),
@@ -112,12 +124,13 @@ const SettingsInput = React.memo((props) => {
                         try {
                             setValue(target.value);
                             DataStore.setData(plugin, setting, target.value);
-                            if (action) {
-                                action();
-                            }
                             const { AddonManager } = VApi;
                             const PluginClass = AddonManager.plugins.get(plugin).export.Plugin;
                             typeof PluginClass === "function" ? (PluginClass().settings = DataStore.getAllData(plugin)) : (PluginClass.settings = DataStore.getAllData(plugin));
+
+                            if (action) {
+                                action();
+                            }
                         } catch (e) {
                             console.error(e);
                         }
@@ -137,6 +150,9 @@ const SettingsInput = React.memo((props) => {
                             {
                                 color: Text.Colors.HEADER_PRIMARY,
                                 size: Text.Sizes.SIZE_16,
+                                onClick: (e) => {
+                                    e.target.parentElement.parentElement.querySelector("input").focus();
+                                },
                             },
                             name
                         ),
@@ -145,6 +161,9 @@ const SettingsInput = React.memo((props) => {
                             {
                                 color: Text.Colors.HEADER_SECONDARY,
                                 size: Text.Sizes.SIZE_14,
+                                onClick: (e) => {
+                                    e.target.parentElement.parentElement.querySelector("input").focus();
+                                },
                             },
                             note
                         ),
@@ -166,12 +185,12 @@ const SettingsInput = React.memo((props) => {
                     onInput: ({ target }) => {
                         setValue(target.value);
                         DataStore.setData(plugin, setting, target.value);
-                        if (action) {
-                            action();
-                        }
                         const { AddonManager } = VApi;
                         const PluginClass = AddonManager.plugins.get(plugin).export.Plugin;
                         typeof PluginClass === "function" ? (PluginClass().settings = DataStore.getAllData(plugin)) : (PluginClass.settings = DataStore.getAllData(plugin));
+                        if (action) {
+                            action();
+                        }
                     },
                 }),
             ],

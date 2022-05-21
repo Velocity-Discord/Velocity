@@ -682,3 +682,39 @@ textarea.velocity-editor {
 .velocity-modal-spacer {
     height: 10px;
 }
+
+.velocity-developer-status-table {
+    width: 40%;
+    gap: 0px;
+}
+
+.velocity-developer-status-table-text {
+    width: 50%;
+    font-weight: 600;
+}
+
+.velocity-developer-status-header {
+    color: var(--text-normal);
+}
+
+.velocity-developer-status-table tr:nth-child(odd) {
+    background: var(--background-secondary);
+}
+
+.velocity-developer-status-table td {
+    padding: 6px;
+}
+
+.velocity-developer-status-table {
+    border: 0;
+    background: var(--background-floating);
+}
+
+.velocity-developer-status-table tr:nth-child(even) {
+    background: var(--background-primary);
+}
+
+.velocity-developer-status-table-text {
+    color: var(--text-muted);
+    opacity: 0.4;
+}

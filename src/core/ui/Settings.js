@@ -1,6 +1,6 @@
 const { React, modals, WebpackModules, showToast, Utilities, AddonManager } = VApi;
 const { shell } = require("electron");
-const { internalPatches, InternalSecurityToken } = require("../stores");
+const { internalPatches, InternalSecurityToken } = require("../secure");
 const { info } = require("../../../package.json");
 const { SettingsSwitchSection, SettingsInputSection, SettingsTitle } = require("./SettingsSections");
 const DataStore = require("../datastore");
@@ -935,40 +935,45 @@ VApi.Patcher(
                                             ),
                                         ],
                                     }),
-                                    React.createElement(
-                                        Text,
-                                        {
-                                            size: Text.Sizes.SIZE_16,
-                                            className: "velocity-developer-status-header",
-                                        },
-                                        Strings.Settings.Developer.Sections.backendstatus.urls.badges
-                                    ),
-                                    React.createElement(
-                                        Text,
-                                        {
-                                            size: Text.Sizes.SIZE_14,
-                                            color: Text.Colors.MUTED,
-                                            className: "velocity-developer-status-badges-text",
-                                        },
-                                        Strings.Settings.Developer.Sections.backendstatus.status.status
-                                    ),
-                                    React.createElement(
-                                        Text,
-                                        {
-                                            size: Text.Sizes.SIZE_16,
-                                            className: "velocity-developer-status-header",
-                                        },
-                                        Strings.Settings.Developer.Sections.backendstatus.urls.updates
-                                    ),
-                                    React.createElement(
-                                        Text,
-                                        {
-                                            size: Text.Sizes.SIZE_14,
-                                            color: Text.Colors.MUTED,
-                                            className: "velocity-developer-status-update-text",
-                                        },
-                                        Strings.Settings.Developer.Sections.backendstatus.status.status
-                                    ),
+                                    React.createElement("table", {
+                                        className: "velocity-developer-status-table",
+                                        children: [
+                                            React.createElement("tbody", {
+                                                children: [
+                                                    React.createElement("tr", {
+                                                        children: [
+                                                            React.createElement("td", {
+                                                                className: "velocity-developer-status-header",
+                                                                children: Strings.Settings.Developer.Sections.backendstatus.urls.badges,
+                                                            }),
+                                                            React.createElement("td", {
+                                                                className: "velocity-developer-status-table-text",
+                                                                children: React.createElement("span", {
+                                                                    className: "velocity-developer-status-badges-text",
+                                                                    children: Strings.Settings.Developer.Sections.backendstatus.status.status,
+                                                                }),
+                                                            }),
+                                                        ],
+                                                    }),
+                                                    React.createElement("tr", {
+                                                        children: [
+                                                            React.createElement("td", {
+                                                                className: "velocity-developer-status-header",
+                                                                children: Strings.Settings.Developer.Sections.backendstatus.urls.updates,
+                                                            }),
+                                                            React.createElement("td", {
+                                                                className: "velocity-developer-status-table-text",
+                                                                children: React.createElement("span", {
+                                                                    className: "velocity-developer-status-update-text",
+                                                                    children: Strings.Settings.Developer.Sections.backendstatus.status.status,
+                                                                }),
+                                                            }),
+                                                        ],
+                                                    }),
+                                                ],
+                                            }),
+                                        ],
+                                    }),
                                     React.createElement(WebpackModules.find(["EmptyStateImage"]).EmptyStateImage, {
                                         height: 200,
                                         width: 415,
@@ -988,7 +993,7 @@ VApi.Patcher(
 
         const Components = require("../components");
 
-        const pluginsHaveSettings = AddonManager.plugins.getAll().filter((m) => m.hasSettings).length > 0;
+        const pluginsHaveSettings = AddonManager.plugins.getAll().filter((m) => m.hasSettings && AddonManager.plugins.isEnabled(m.name)).length > 0;
 
         if (pluginsHaveSettings) {
             insert({ section: "DIVIDER" });

@@ -3,7 +3,7 @@ let Quick_Symbol = Symbol("VApi.patch.quick");
 let Internal_Symbol = Symbol("VelocityInternal");
 let ALLpatches = {};
 
-const { internalPatches, InternalSecurityToken } = require("./stores");
+const { internalPatches, InternalSecurityToken } = require("./secure");
 
 function patch(patchName, moduleToPatch, functionToPatch, callback, opts = {}) {
     let { method = "after", id } = opts;

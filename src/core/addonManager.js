@@ -272,8 +272,8 @@ fs.readdir(pluginDir, (err, files) => {
         meta.file = filePath;
 
         const PluginExport = typeof plugin.Plugin === "function" ? plugin.Plugin() : plugin.Plugin;
-        if (PluginExport.getSettingsPanel) meta.hasSettings = true;
-        if (meta.hasSettings) {
+        if (PluginExport.getSettingsPanel) {
+            meta.hasSettings = true;
             PluginExport.settings = DataStore.getAllData(meta.name);
         }
 
@@ -297,7 +297,6 @@ fs.readdir(pluginDir, (err, files) => {
     });
 
     files = files.filter((file) => filters.plugins.test(file));
-    console.log(files.sort());
     files.sort().map((file) => {
         if (DevMode) Logger.log("Addon Manager", `Loading ${file}`);
         const filePath = path.join(pluginDir, file);
@@ -305,13 +304,14 @@ fs.readdir(pluginDir, (err, files) => {
             if (err) throw new Error(`Error reading '${filePath}'`);
             const meta = readMeta(data);
             let plugin = require(filePath);
+            typeof plugin.Plugin === "function" && (plugin.Plugin = plugin.Plugin());
             meta.export = plugin;
             meta.type = "plugin";
             meta.file = filePath;
 
             const PluginExport = typeof plugin.Plugin === "function" ? plugin.Plugin() : plugin.Plugin;
-            if (PluginExport.getSettingsPanel) meta.hasSettings = true;
-            if (meta.hasSettings) {
+            if (PluginExport.getSettingsPanel) {
+                meta.hasSettings = true;
                 PluginExport.settings = DataStore.getAllData(meta.name);
             }
 

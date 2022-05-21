@@ -71,7 +71,7 @@ module.exports = React.memo((props) => {
                                     meta.authorId &&
                                         React.createElement("div", {
                                             className: "velocity-card-header-author clickable",
-                                            children: meta.authorr || Strings.Addons.Card.unknown,
+                                            children: meta.author || Strings.Addons.Card.unknown,
                                             onClick: () => {
                                                 WebpackModules.findByProps("openPrivateChannel").openPrivateChannel(meta.authorId);
                                                 WebpackModules.find(["pushLayer"]).popLayer();
@@ -198,9 +198,12 @@ module.exports = React.memo((props) => {
                                                     }),
                                                 ],
                                                 onClick: () => {
-                                                    if (meta.invite !== "") Utilities.joinServer(meta.invite);
-                                                    WebpackModules.find(["pushLayer"]).popLayer();
-                                                    WebpackModules.find(["closeAllModals"]).closeAllModals();
+                                                    try {
+                                                        WebpackModules.find(["pushLayer"]).popLayer();
+                                                        WebpackModules.find(["closeAllModals"]).closeAllModals();
+                                                    } catch (err) {
+                                                        logger.error(err);
+                                                    }
                                                 },
                                             }),
                                     }),
