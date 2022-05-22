@@ -1,5 +1,5 @@
-let Patch_Symbol = Symbol("VApi.patch");
-let Quick_Symbol = Symbol("VApi.patch.quick");
+let Patch_Symbol = Symbol("VApi.Patcher");
+let Quick_Symbol = Symbol("VApi.Patcher.quick");
 let Internal_Symbol = Symbol("VelocityInternal");
 let ALLpatches = {};
 
