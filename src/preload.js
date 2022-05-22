@@ -249,7 +249,7 @@ if (dPath) {
                 return process;
             }
 
-            if (request.includes("/core/secure.js")) {
+            if (path.resolve(__dirname, request) === path.resolve(__dirname, "./core/secure.js") || path.resolve(__dirname, request) === path.resolve(__dirname, "./core/secure")) {
                 return null; // Limit access to the security token. all modules that need it will have it by this time.
             }
 
