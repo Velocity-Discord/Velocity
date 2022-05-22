@@ -202,14 +202,18 @@ const Themes = new (class {
     }
 })();
 
+let fsThemeTimout;
 fs.watch(themeDir, { persistent: false }, async (eventType, filename) => {
     if (!eventType || !filename) return;
+    if (fsThemeTimout) return;
+
+    fsThemeTimout = setTimeout(function () {
+        fsThemeTimout = null;
+    }, 100);
 
     const absolutePath = path.resolve(themeDir, filename);
 
     if (!filters.themes.test(filename)) return;
-
-    const name = filename.replace(".theme.css", "");
 
     let meta;
 
@@ -224,11 +228,7 @@ fs.watch(themeDir, { persistent: false }, async (eventType, filename) => {
                 const enabled = Velocity.enabledThemes[meta.name] || false;
 
                 delete addons.themes[getKeyByValue(addons.themes, meta.name)];
-
-                VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.unloaded} <strong>${meta.name}</strong>`);
-
                 addons.themes.push(meta);
-                VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.loaded} <strong>${meta.name}</strong>`);
 
                 if (enabled) {
                     const ele = document.querySelectorAll(`[velocity-theme-id="${meta.name}"]`);
