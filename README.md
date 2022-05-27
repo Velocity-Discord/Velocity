@@ -4,6 +4,7 @@
 
 [![VELOCITY](https://img.shields.io/badge/Velocity-6587F4?style=for-the-badge)](https://velocity-discord.netlify.app/)
 [![VERSION](https://img.shields.io/badge/Version-0.8.0-6587F4?style=for-the-badge)](#)
+[![TIME](https://wakatime.com/badge/user/00c7afe5-77ae-4122-9969-8fa677814618/project/1f74c2c2-3a21-419d-87b2-31462a60e9fc.svg?style=for-the-badge&color=6587F4)](#)
 [![LANGUAGES](https://img.shields.io/github/languages/count/TheCommieAxolotl/Velocity?style=for-the-badge&color=6587F4)](#)
 [![LICENSE](https://img.shields.io/github/license/Velocity-Discord/Velocity?&style=for-the-badge&color=6587F4)](https://github.com/Velocity-Discord/Installer/blob/main/LICENSE)
 
