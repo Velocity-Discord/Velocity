@@ -64,6 +64,13 @@ function readMeta(contents) {
     return meta;
 }
 
+function loadTheme(data, remote) {
+    const meta = readMeta(data);
+    meta.file = filePath;
+    meta.css = cssBeta ? parse(data) : data;
+    addons.themes.push(meta);
+}
+
 const RemoteActions = new (class {
     loadTheme(url) {
         if (!filters.themes.test(url)) {
