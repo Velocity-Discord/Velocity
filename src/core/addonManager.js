@@ -395,8 +395,8 @@ module.exports = {
             loadTheme: (url) => {
                 RemoteActions.loadTheme(url);
             },
-            loadPlugin: (url) => {
-                RemoteActions.loadPlugin(url);
+            unloadTheme: (url) => {
+                RemoteActions.unloadTheme(name);
             },
         };
     },

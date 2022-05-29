@@ -20,6 +20,7 @@ let updateURL = Config.backend.updates.url;
 
 async function failModal(title, content) {
     const { React, WebpackModules, modals } = VApi;
+
     const ConfirmationModal = WebpackModules.find("ConfirmModal").default;
     const Button = WebpackModules.find(["ButtonColors"]);
     const { Messages } = WebpackModules.find((m) => m.default?.Messages?.OKAY).default;

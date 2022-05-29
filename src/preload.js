@@ -54,7 +54,7 @@ if (dPath) {
         }
 
         function polyfillWebpack() {
-            if (typeof webpackJsonp !== "undefined") return;
+            if (typeof window.webpackJsonp !== "undefined") return;
 
             window.webpackJsonp = [];
             window.webpackJsonp.length = 10000;
@@ -103,7 +103,7 @@ if (dPath) {
             updater.checkForUpdates();
         }
 
-        t = WebpackModules.find(["isDeveloper"]);
+        let t = WebpackModules.find(["isDeveloper"]);
         Object.defineProperty(t, "isDeveloper", { get: (_) => 1, set: (_) => _, configurable: true });
 
         let Badges;
@@ -126,6 +126,10 @@ if (dPath) {
         const ModalElements = WebpackModules.find(["ModalRoot", "ModalListContent"]);
 
         global.webpackChunkdiscord_app = window.webpackChunkdiscord_app;
+
+        /**
+         * @type {Api}
+         */
         const VApi = {
             Meta: {
                 Discord: `${await DiscordNative.app.getReleaseChannel()} ${await DiscordNative.app.getVersion()}`,
