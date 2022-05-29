@@ -68,6 +68,11 @@
             "version": "Version",
             "api": "API"
         },
+        "Sponsor": {
+            "header": "Sponsor Velocity",
+            "rows": ["Get a shiny Bagde on your profile!", "Show your support for the Modificaiton!"],
+            "button": "Sponsor Velocity on Github"
+        },
         "Updater": {
             "header": "Velocity Update Available",
             "failedheader": "Update Failed",

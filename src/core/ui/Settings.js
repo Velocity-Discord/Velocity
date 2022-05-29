@@ -21,7 +21,6 @@ const Text = WebpackModules.find("LegacyText").default;
 const Tooltip = WebpackModules.find.prototypes("renderTooltip").default;
 const TextInput = WebpackModules.find("TextInput").default;
 const CloseIcon = WebpackModules.find("CloseIconWithKeybind").default;
-const ModalComponents = WebpackModules.find(["ModalRoot"]);
 const Markdown = WebpackModules.find((m) => m.default?.displayName === "Markdown" && m.default.rules).default;
 
 function addonSort(x, y) {
@@ -73,13 +72,13 @@ async function settingsPrompt() {
     return new Promise((resolve) => {
         modals.open((props) =>
             React.createElement(
-                ModalComponents.ModalRoot,
+                modals.ModalRoot,
                 Object.assign(props, {
                     size: "medium",
                     className: "velocity-modal",
                     children: [
                         React.createElement(
-                            ModalComponents.ModalHeader,
+                            modals.ModalHeader,
                             null,
                             React.createElement(
                                 Text,
@@ -91,7 +90,7 @@ async function settingsPrompt() {
                                 Strings.Settings.Settings.title
                             )
                         ),
-                        React.createElement(ModalComponents.ModalContent, {
+                        React.createElement(modals.ModalContent, {
                             children: [
                                 React.createElement(SettingsTitle, {
                                     text: Strings.Settings.Settings.Sections.general.title,
@@ -188,7 +187,7 @@ async function settingsPrompt() {
                                 }),
                             ],
                         }),
-                        React.createElement(ModalComponents.ModalFooter, {
+                        React.createElement(modals.ModalFooter, {
                             className: "velocity-modal-footer",
                             children: [
                                 React.createElement(Text, {
@@ -235,13 +234,13 @@ async function pluginPrompt() {
     return new Promise((resolve) => {
         modals.open((props) =>
             React.createElement(
-                ModalComponents.ModalRoot,
+                modals.ModalRoot,
                 Object.assign(props, {
                     size: "medium",
                     className: "velocity-modal",
                     children: [
                         React.createElement(
-                            ModalComponents.ModalHeader,
+                            modals.ModalHeader,
                             null,
                             React.createElement(
                                 Text,
@@ -253,7 +252,7 @@ async function pluginPrompt() {
                                 Strings.Settings.Plugins.title
                             )
                         ),
-                        React.createElement(ModalComponents.ModalContent, {
+                        React.createElement(modals.ModalContent, {
                             children: [
                                 React.createElement("div", { className: "velocity-modal-spacer" }),
                                 React.createElement("div", {
@@ -292,7 +291,7 @@ async function pluginPrompt() {
                                 }),
                             ],
                         }),
-                        React.createElement(ModalComponents.ModalFooter, {
+                        React.createElement(modals.ModalFooter, {
                             className: "velocity-modal-footer",
                             children: [
                                 React.createElement(
@@ -318,13 +317,13 @@ async function themePrompt() {
     return new Promise((resolve) => {
         modals.open((props) =>
             React.createElement(
-                ModalComponents.ModalRoot,
+                modals.ModalRoot,
                 Object.assign(props, {
                     size: "medium",
                     className: "velocity-modal",
                     children: [
                         React.createElement(
-                            ModalComponents.ModalHeader,
+                            modals.ModalHeader,
                             null,
                             React.createElement(
                                 Text,
@@ -336,7 +335,7 @@ async function themePrompt() {
                                 Strings.Settings.Themes.title
                             )
                         ),
-                        React.createElement(ModalComponents.ModalContent, {
+                        React.createElement(modals.ModalContent, {
                             children: [
                                 React.createElement("div", { className: "velocity-modal-spacer" }),
                                 React.createElement("div", {
@@ -395,7 +394,7 @@ async function themePrompt() {
                                 }),
                             ],
                         }),
-                        React.createElement(ModalComponents.ModalFooter, {
+                        React.createElement(modals.ModalFooter, {
                             className: "velocity-modal-footer",
                             children: [
                                 React.createElement(
@@ -428,13 +427,13 @@ async function jsPrompt() {
     return new Promise((resolve) => {
         modals.open((props) =>
             React.createElement(
-                ModalComponents.ModalRoot,
+                modals.ModalRoot,
                 Object.assign(props, {
                     size: "medium",
                     className: "velocity-modal",
                     children: [
                         React.createElement(
-                            ModalComponents.ModalHeader,
+                            modals.ModalHeader,
                             null,
                             React.createElement(
                                 Text,
@@ -446,7 +445,7 @@ async function jsPrompt() {
                                 Strings.Settings.StartupScript.title
                             )
                         ),
-                        React.createElement(ModalComponents.ModalContent, {
+                        React.createElement(modals.ModalContent, {
                             children: [
                                 React.createElement("div", { className: "velocity-modal-spacer" }),
                                 React.createElement(
@@ -521,7 +520,7 @@ async function jsPrompt() {
                                 React.createElement("div", { className: "velocity-modal-spacer" }),
                             ],
                         }),
-                        React.createElement(ModalComponents.ModalFooter, {
+                        React.createElement(modals.ModalFooter, {
                             className: "velocity-modal-footer",
                             children: [
                                 React.createElement(
@@ -545,13 +544,13 @@ async function cssPrompt() {
     return new Promise((resolve) => {
         modals.open((props) =>
             React.createElement(
-                ModalComponents.ModalRoot,
+                modals.ModalRoot,
                 Object.assign(props, {
                     size: "medium",
                     className: "velocity-modal",
                     children: [
                         React.createElement(
-                            ModalComponents.ModalHeader,
+                            modals.ModalHeader,
                             null,
                             React.createElement(
                                 Text,
@@ -563,7 +562,7 @@ async function cssPrompt() {
                                 Strings.Settings.CustomCSS.title
                             )
                         ),
-                        React.createElement(ModalComponents.ModalContent, {
+                        React.createElement(modals.ModalContent, {
                             children: [
                                 React.createElement("div", { className: "velocity-modal-spacer" }),
                                 React.createElement(
@@ -640,7 +639,7 @@ async function cssPrompt() {
                                 React.createElement("div", { className: "velocity-modal-spacer" }),
                             ],
                         }),
-                        React.createElement(ModalComponents.ModalFooter, {
+                        React.createElement(modals.ModalFooter, {
                             className: "velocity-modal-footer",
                             children: [
                                 React.createElement(

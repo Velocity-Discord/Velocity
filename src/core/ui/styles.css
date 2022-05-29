@@ -458,6 +458,19 @@ textarea.velocity-editor {
     justify-content: space-between;
 }
 
+.velocity-sponsor-modal-center {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 12%;
+}
+
+.velocity-sponsor-modal-button-icon {
+    margin-right: 4px;
+}
+
 .velocity-addon-modal-body-header-buttons {
     display: flex;
     margin-top: 6px;

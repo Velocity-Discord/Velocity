@@ -254,27 +254,24 @@ async function changelogModal(options = {}) {
 
         const { React, WebpackModules, modals } = VApi;
 
-        const ModalComponents = WebpackModules.find(["ModalRoot"]);
         const ChangelogClasses = WebpackModules.find(["fixed", "improved"]);
         const Text = WebpackModules.find("LegacyText").default;
         const dateClass = WebpackModules.find(["size12", "size32"]).size12;
-        const closeModals = WebpackModules.find(["closeAllModals"]).closeAllModals;
-        const closeClasses = WebpackModules.find(["root", "close"]);
         const contentsClasses = WebpackModules.find(["spinnerItem", "submitting"]);
         const Tooltip = WebpackModules.find.prototypes("renderTooltip").default;
 
         const Markdown = WebpackModules.find((m) => m.default?.displayName === "Markdown" && m.default.rules).default;
 
         return new Promise((resolve) => {
-            modals.open((props) => {
+            const closeModal = modals.open((props) => {
                 return React.createElement(
-                    ModalComponents.ModalRoot,
+                    modals.ModalRoot,
                     Object.assign(props, {
                         size: "small",
                         className: "velocity-changelog",
                         children: [
                             React.createElement(
-                                ModalComponents.ModalHeader,
+                                modals.ModalHeader,
                                 null,
                                 React.createElement("div", {
                                     class: "velocity-modal-header-flex",
@@ -294,39 +291,18 @@ async function changelogModal(options = {}) {
                                                 React.createElement("div", { style: { fontWeight: "400" }, className: `${dateClass} ${ChangelogClasses.date}` }, subtitle),
                                             ],
                                         }),
-                                        React.createElement("button", {
-                                            type: "button",
-                                            className: `${closeClasses.close} ${contentsClasses.button} ${contentsClasses.lookBlank} ${contentsClasses.colorBrand} ${contentsClasses.grow}`,
+                                        React.createElement(modals.ModalCloseButton, {
                                             onClick: () => {
-                                                closeModals();
+                                                modals.close(closeModal);
                                             },
-                                            children: [
-                                                React.createElement("div", {
-                                                    class: `${contentsClasses.contents}`,
-                                                    children: [
-                                                        React.createElement("svg", {
-                                                            class: `${closeClasses.closeIcon}`,
-                                                            width: "24",
-                                                            height: "24",
-                                                            viewBox: "0 0 24 24",
-                                                            children: [
-                                                                React.createElement("path", {
-                                                                    fill: "currentColor",
-                                                                    d: "M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z",
-                                                                }),
-                                                            ],
-                                                        }),
-                                                    ],
-                                                }),
-                                            ],
                                         }),
                                     ],
                                 })
                             ),
-                            React.createElement(ModalComponents.ModalContent, {
+                            React.createElement(modals.ModalContent, {
                                 children: [React.createElement("img", { src: image }), React.createElement(Markdown, { className: Text.Colors.HEADER_SECONDARY }, description)],
                             }),
-                            React.createElement(ModalComponents.ModalFooter, {
+                            React.createElement(modals.ModalFooter, {
                                 className: "velocity-changelog-modal-footer",
                                 children: [
                                     React.createElement(

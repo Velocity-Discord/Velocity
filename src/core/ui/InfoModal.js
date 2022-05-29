@@ -1,16 +1,12 @@
-const DataStore = require("../datastore");
 const { info } = require("../../../package.json");
-const button = VApi.WebpackModules.find(["ButtonColors"]).default;
 const Text = VApi.WebpackModules.find("LegacyText").default;
-const ButtonColors = VApi.WebpackModules.find(["ButtonColors"]).ButtonColors;
 
 const { Strings } = require("../i18n");
 
-async function prompt(title) {
+async function InfoModal() {
     const { React, WebpackModules, modals } = VApi;
     const ConfirmationModal = WebpackModules.find("ConfirmModal").default;
     const Button = WebpackModules.find(["ButtonColors"]);
-    const { Messages } = WebpackModules.find((m) => m.default?.Messages?.OKAY).default;
 
     return new Promise((resolve) => {
         modals.open((props) => {
@@ -19,7 +15,7 @@ async function prompt(title) {
                 ConfirmationModal,
                 Object.assign(
                     {
-                        header: title,
+                        header: "Velocity",
                         confirmButtonColor: Button.ButtonColors.BRAND,
                         confirmText: Strings.Settings.done,
                         onConfirm: () => resolve(true),
@@ -61,4 +57,4 @@ async function prompt(title) {
     });
 }
 
-module.exports = { prompt };
+module.exports = { InfoModal };

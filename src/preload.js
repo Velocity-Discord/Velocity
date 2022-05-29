@@ -172,13 +172,13 @@ if (dPath) {
             modals: {
                 open: (reactElement, modalOpts) => ModalFunctions.openModal(reactElement, modalOpts),
                 close: (modalId, way) => ModalFunctions.closeModal(modalId, way),
-                root: ModalElements.ModalRoot,
-                header: ModalElements.ModalHeader,
-                closeButton: ModalElements.ModalCloseButton,
-                content: ModalElements.ModalContent,
-                listContent: ModalElements.ModalListContent,
-                footer: ModalElements.ModalFooter,
-                size: ModalElements.ModalSize,
+                ModalRoot: ModalElements.ModalRoot,
+                ModalHeader: ModalElements.ModalHeader,
+                ModalCloseButton: ModalElements.ModalCloseButton,
+                ModalContent: ModalElements.ModalContent,
+                ModalListContent: ModalElements.ModalListContent,
+                ModalFooter: ModalElements.ModalFooter,
+                ModalSize: ModalElements.ModalSize,
             },
             DataStore: DataStore,
             customCSS: {
@@ -234,10 +234,10 @@ if (dPath) {
             remote: remote(),
         };
 
-        const InfoModal = require("./core/ui/InfoModal");
-        VApi.showInfoModal = function () {
-            InfoModal.prompt("Velocity");
-        };
+        const { InfoModal } = require("./core/ui/InfoModal");
+        const { SponsorModal } = require("./core/ui/SponsorModal");
+        VApi.showInfoModal = InfoModal;
+        VApi.showSponsorModal = SponsorModal;
 
         Object.freeze(VApi);
 
@@ -667,7 +667,7 @@ if (dPath) {
                             ...props,
                             className: "velocity-badge",
                             onClick: () => {
-                                VApi.showInfoModal();
+                                VApi.showSponsorModal();
                             },
                             children: React.createElement(Badge.icon.tag, {
                                 ...Badge.icon,

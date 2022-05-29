@@ -3,7 +3,6 @@ const { Strings } = require("./i18n");
 const { React, ReactDOM, WebpackModules, modals, DataStore } = VApi;
 
 const Text = WebpackModules.findByDisplayNameDefault("LegacyText");
-const ModalComponents = WebpackModules.find(["ModalRoot"]);
 
 const SettingsSection = React.memo((props) => {
     const { plugin, setting, note, name, warning, action } = props;
@@ -205,13 +204,13 @@ const ShowAddonSettingsModal = (p) => {
     return new Promise((resolve) => {
         modals.open((props) =>
             React.createElement(
-                ModalComponents.ModalRoot,
+                modals.ModalRoot,
                 Object.assign(props, {
                     size: "medium",
                     className: "velocity-addon-settings-modal",
                     children: [
                         React.createElement(
-                            ModalComponents.ModalHeader,
+                            modals.ModalHeader,
                             null,
                             React.createElement(
                                 Text,
@@ -223,10 +222,10 @@ const ShowAddonSettingsModal = (p) => {
                                 `${p?.name || "Addon"} Plugin Settings`
                             )
                         ),
-                        React.createElement(ModalComponents.ModalContent, {
+                        React.createElement(modals.ModalContent, {
                             children: p?.children || React.createElement("h1", null, "e"),
                         }),
-                        React.createElement(ModalComponents.ModalFooter, {
+                        React.createElement(modals.ModalFooter, {
                             className: "velocity-modal-footer",
                             children: [
                                 React.createElement(
