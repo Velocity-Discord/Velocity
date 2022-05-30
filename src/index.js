@@ -1,6 +1,6 @@
 // This Client Mod was originally based on DrDiscord version 1.0.0 as found here: https://github.com/Dr-Discord/DrDiscord (now unavailable, an archived version can be found here https://github.com/unknown81311/DrDiscord)
 // Original license: MIT License
-// hhttps://github.com/Dr-Discord/DrDiscord/blob/main/LICENSE.md (now: https://github.com/unknown81311/DrDiscord/blob/main/LICENSE.md)
+// https://github.com/Dr-Discord/DrDiscord/blob/main/LICENSE.md (now: https://github.com/unknown81311/DrDiscord/blob/main/LICENSE.md)
 
 const { join } = require("path");
 const electron = ({ ipcMain, app, session, dialog } = require("electron"));

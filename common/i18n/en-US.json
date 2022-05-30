@@ -228,7 +228,8 @@
                     "clearcache": "Clear Cache",
                     "urls": {
                         "badges": "Badges",
-                        "updates": "Updates"
+                        "updates": "Updates",
+                        "experiments": "Experiments"
                     },
                     "status": {
                         "status": "Status",

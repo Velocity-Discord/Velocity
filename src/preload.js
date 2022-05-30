@@ -107,11 +107,7 @@ if (dPath) {
         Object.defineProperty(t, "isDeveloper", { get: (_) => 1, set: (_) => _, configurable: true });
 
         let Badges;
-        if (Config.backend.badges.type === 0) {
-            request(Config.backend.badges.url, (_, __, body) => (Badges = JSON.parse(body)));
-        } else if (Config.backend.badges.type === 1) {
-            Badges = require(Config.backend.badges.url);
-        }
+        request(Config.backend.badges.url, (_, __, body) => (Badges = JSON.parse(body)));
 
         const React = await waitUntil(() => {
             if (!WebpackModules.find(["createElement", "Component"])?.createElement) return false;

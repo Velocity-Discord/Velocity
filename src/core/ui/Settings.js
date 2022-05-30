@@ -877,30 +877,17 @@ VApi.Patcher(
                                                 {
                                                     color: ButtonColors.BRAND,
                                                     onClick: async (target) => {
-                                                        if (Config.backend.badges.type === 0) {
-                                                            request(Config.backend.badges.url, (_, res, body) => {
-                                                                if (res.statusCode >= 200 && res.statusCode <= 299) {
-                                                                    const statusBadgeElement = document.querySelector(".velocity-developer-status-badges-text");
-                                                                    statusBadgeElement.innerHTML = `${Strings.Settings.Developer.Sections.backendstatus.status.status} - ${Strings.Settings.Developer.Sections.backendstatus.status.fine} (${res.statusCode})`;
-                                                                    statusBadgeElement.style.color = "var(--text-positive)";
-                                                                } else {
-                                                                    const statusBadgeElement = document.querySelector(".velocity-developer-status-badges-text");
-                                                                    statusBadgeElement.innerHTML = `${Strings.Settings.Developer.Sections.backendstatus.status.status} - ${Strings.Settings.Developer.Sections.backendstatus.status.unknown} (${res.statusCode})`;
-                                                                    statusBadgeElement.style.color = "var(--text-danger)";
-                                                                }
-                                                            });
-                                                        } else if (Config.backend.badges.type === 1) {
-                                                            try {
-                                                                require(Config.backend.badges.url);
+                                                        request(Config.backend.badges.url, (_, res, body) => {
+                                                            if (res.statusCode >= 200 && res.statusCode <= 299) {
                                                                 const statusBadgeElement = document.querySelector(".velocity-developer-status-badges-text");
-                                                                statusBadgeElement.innerHTML = `${Strings.Settings.Developer.Sections.backendstatus.status.status} - ${Strings.Settings.Developer.Sections.backendstatus.status.fine} (${Config.backend.badges.url})`;
+                                                                statusBadgeElement.innerHTML = `${Strings.Settings.Developer.Sections.backendstatus.status.status} - ${Strings.Settings.Developer.Sections.backendstatus.status.fine} (${res.statusCode})`;
                                                                 statusBadgeElement.style.color = "var(--text-positive)";
-                                                            } catch (e) {
+                                                            } else {
                                                                 const statusBadgeElement = document.querySelector(".velocity-developer-status-badges-text");
-                                                                statusBadgeElement.innerHTML = `${Strings.Settings.Developer.Sections.backendstatus.status.status} - ${Strings.Settings.Developer.Sections.backendstatus.status.unknown} (${e})`;
+                                                                statusBadgeElement.innerHTML = `${Strings.Settings.Developer.Sections.backendstatus.status.status} - ${Strings.Settings.Developer.Sections.backendstatus.status.unknown} (${res.statusCode})`;
                                                                 statusBadgeElement.style.color = "var(--text-danger)";
                                                             }
-                                                        }
+                                                        });
 
                                                         request(Config.backend.updates.url, (_, res, body) => {
                                                             if (res.statusCode >= 200 && res.statusCode <= 299) {
@@ -911,6 +898,18 @@ VApi.Patcher(
                                                                 const statusUpdateElement = document.querySelector(".velocity-developer-status-update-text");
                                                                 statusUpdateElement.innerHTML = `${Strings.Settings.Developer.Sections.backendstatus.status.status} - ${Strings.Settings.Developer.Sections.backendstatus.status.unknown} (${res.statusCode})`;
                                                                 statusUpdateElement.style.color = "var(--text-danger)";
+                                                            }
+                                                        });
+
+                                                        request(Config.backend.experiments.url, (_, res, body) => {
+                                                            if (res.statusCode >= 200 && res.statusCode <= 299) {
+                                                                const statusExperimentsElement = document.querySelector(".velocity-developer-status-experiments-text");
+                                                                statusExperimentsElement.innerHTML = `${Strings.Settings.Developer.Sections.backendstatus.status.status} - ${Strings.Settings.Developer.Sections.backendstatus.status.fine} (${res.statusCode})`;
+                                                                statusExperimentsElement.style.color = "var(--text-positive)";
+                                                            } else {
+                                                                const statusExperimentsElement = document.querySelector(".velocity-developer-status-experiments-text");
+                                                                statusExperimentsElement.innerHTML = `${Strings.Settings.Developer.Sections.backendstatus.status.status} - ${Strings.Settings.Developer.Sections.backendstatus.status.unknown} (${res.statusCode})`;
+                                                                statusExperimentsElement.style.color = "var(--text-danger)";
                                                             }
                                                         });
                                                     },
@@ -924,10 +923,13 @@ VApi.Patcher(
                                                     onClick: () => {
                                                         const statusBadgeElement = document.querySelector(".velocity-developer-status-badges-text");
                                                         const statusUpdateElement = document.querySelector(".velocity-developer-status-update-text");
+                                                        const statusExperimentsElement = document.querySelector(".velocity-developer-status-experiments-text");
                                                         statusUpdateElement.innerHTML = Strings.Settings.Developer.Sections.backendstatus.status.status;
                                                         statusBadgeElement.innerHTML = Strings.Settings.Developer.Sections.backendstatus.status.status;
+                                                        statusExperimentsElement.innerHTML = Strings.Settings.Developer.Sections.backendstatus.status.status;
                                                         statusUpdateElement.style.color = null;
                                                         statusBadgeElement.style.color = null;
+                                                        statusExperimentsElement.style.color = null;
                                                     },
                                                 },
                                                 Strings.Settings.Developer.Sections.backendstatus.clearcache
@@ -964,6 +966,21 @@ VApi.Patcher(
                                                                 className: "velocity-developer-status-table-text",
                                                                 children: React.createElement("span", {
                                                                     className: "velocity-developer-status-update-text",
+                                                                    children: Strings.Settings.Developer.Sections.backendstatus.status.status,
+                                                                }),
+                                                            }),
+                                                        ],
+                                                    }),
+                                                    React.createElement("tr", {
+                                                        children: [
+                                                            React.createElement("td", {
+                                                                className: "velocity-developer-status-header",
+                                                                children: Strings.Settings.Developer.Sections.backendstatus.urls.experiments,
+                                                            }),
+                                                            React.createElement("td", {
+                                                                className: "velocity-developer-status-table-text",
+                                                                children: React.createElement("span", {
+                                                                    className: "velocity-developer-status-experiments-text",
                                                                     children: Strings.Settings.Developer.Sections.backendstatus.status.status,
                                                                 }),
                                                             }),
