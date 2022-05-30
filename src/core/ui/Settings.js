@@ -429,7 +429,7 @@ async function jsPrompt() {
             React.createElement(
                 modals.ModalRoot,
                 Object.assign(props, {
-                    size: "medium",
+                    size: "large",
                     className: "velocity-modal",
                     children: [
                         React.createElement(
@@ -546,7 +546,7 @@ async function cssPrompt() {
             React.createElement(
                 modals.ModalRoot,
                 Object.assign(props, {
-                    size: "medium",
+                    size: "large",
                     className: "velocity-modal",
                     children: [
                         React.createElement(
