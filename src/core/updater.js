@@ -51,6 +51,30 @@ async function failModal(title, content) {
     });
 }
 
+async function getUpdateStatus() {
+    logger.log("Velocity", "Checking for updates");
+    let updateData;
+    return new Promise((resolve) => {
+        request(updateURL, async (_, __, body) => {
+            updateData = JSON.parse(body);
+            if (updateData) {
+                if (updateData.version !== info.version) {
+                    logger.log("Velocity", "Update available");
+                    if (updateData.version > info.version) {
+                        resolve("up");
+                        process.env.willUpgrade = true;
+                    } else if (updateData.version < info.version) {
+                        resolve("down");
+                        process.env.willDowngrade = true;
+                    }
+                } else if (updateData.hash !== info.hash) {
+                    resolve("hash");
+                }
+            }
+        });
+    });
+}
+
 async function checkForUpdates() {
     logger.log("Velocity", "Checking for updates");
     let updateData;
@@ -348,4 +372,4 @@ async function changelogModal(options = {}) {
     });
 }
 
-module.exports = { checkForUpdates, changelogModal };
+module.exports = { checkForUpdates, changelogModal, getUpdateStatus };

@@ -471,6 +471,40 @@ textarea.velocity-editor {
     margin-right: 4px;
 }
 
+.velocity-updater-modal-headline {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.velocity-updater-modal-headline-text {
+    font-weight: 500;
+}
+
+.velocity-updater-modal-headline-icon svg {
+    color: var(--text-normal);
+    height: 40px !important;
+    width: 40px !important;
+}
+
+.velocity-updater-modal-headline-icon.okay svg {
+    color: var(--info-positive-foreground);
+}
+
+.velocity-updater-modal-headline-icon.info svg {
+    color: var(--info-warning-foreground);
+}
+
+.velocity-updater-modal-headline-icon.danger svg {
+    color: var(--info-danger-foreground);
+}
+
+.velocity-updater-modal-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
 .velocity-addon-modal-body-header-buttons {
     display: flex;
     margin-top: 6px;

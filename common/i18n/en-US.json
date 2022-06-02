@@ -179,6 +179,26 @@
                 }
             }
         },
+        "Updater": {
+            "title": "Velocity Updater",
+            "Content": {
+                "branch": "Branch",
+                "hash": "Hash",
+                "version": "Version"
+            },
+            "Titles": {
+                "available": "Velocity update available.",
+                "down": "Velocity downgrade available.",
+                "uptodate": "Velocity is up to date.",
+                "failed": "Update failed."
+            },
+            "Buttons": {
+                "checkforupdates": "Check for Updates",
+                "update": "Update",
+                "downgrade": "Downgrade",
+                "changelog": "Changelog"
+            }
+        },
         "Plugins": {
             "title": "Velocity Plugins",
             "Buttons": {

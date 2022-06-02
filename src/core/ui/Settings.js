@@ -228,6 +228,127 @@ async function settingsPrompt() {
     });
 }
 
+async function updaterPrompt() {
+    return new Promise((resolve) => {
+        modals.open((props) =>
+            React.createElement(
+                modals.ModalRoot,
+                Object.assign(props, {
+                    size: "medium",
+                    className: "velocity-modal",
+                    children: [
+                        React.createElement(
+                            modals.ModalHeader,
+                            null,
+                            React.createElement(
+                                Text,
+                                {
+                                    size: Text.Sizes.SIZE_20,
+                                    color: Text.Colors.HEADER_PRIMARY,
+                                    className: WebpackModules.find(["h1"]).h1,
+                                },
+                                Strings.Settings.Updater.title
+                            )
+                        ),
+                        React.createElement(modals.ModalContent, {
+                            children: [
+                                React.createElement("div", { className: "velocity-modal-spacer" }),
+                                React.createElement("div", {
+                                    className: "velocity-updater-modal-headline",
+                                    children: [
+                                        React.createElement("div", {
+                                            className: "velocity-updater-modal-headline-icon okay",
+                                            children: [React.createElement(VApi.WebpackModules.find("Checkmark").default, {})],
+                                        }),
+                                        React.createElement("div", {
+                                            className: "velocity-updater-modal-headline-text",
+                                            children: [
+                                                React.createElement(Text, {
+                                                    size: Text.Sizes.SIZE_32,
+                                                    color: Text.Colors.HEADER_PRIMARY,
+                                                    children: Strings.Settings.Updater.Titles.uptodate,
+                                                }),
+                                            ],
+                                        }),
+                                    ],
+                                }),
+                                React.createElement("div", {
+                                    className: "velocity-updater-modal-buttons",
+                                    children: [
+                                        React.createElement(
+                                            Button,
+                                            {
+                                                id: "velocity-updater-modal-button-check",
+                                                className: "velocity-button",
+                                                onClick: async () => {
+                                                    updater.getUpdateStatus().then((status) => {
+                                                        if (status == "up") {
+                                                            document.querySelector(".velocity-updater-modal-headline-icon").classList.remove("okay");
+                                                            document.querySelector(".velocity-updater-modal-headline-icon").classList.remove("danger");
+                                                            document.querySelector(".velocity-updater-modal-headline-icon").classList.add("info");
+                                                            document.querySelector(".velocity-updater-modal-headline-text *").innerHTML = Strings.Settings.Updater.Titles.available;
+                                                            document.querySelector("#velocity-updater-modal-button-update").disabled = false;
+                                                        } else if (status == "down") {
+                                                            document.querySelector(".velocity-updater-modal-headline-icon").classList.remove("okay");
+                                                            document.querySelector(".velocity-updater-modal-headline-icon").classList.remove("danger");
+                                                            document.querySelector(".velocity-updater-modal-headline-icon").classList.add("info");
+                                                            document.querySelector(".velocity-updater-modal-headline-text *").innerHTML = Strings.Settings.Updater.Titles.down;
+                                                            document.querySelector("#velocity-updater-modal-button-update > div").innerHTML =
+                                                                Strings.Settings.Updater.Buttons.downgrade;
+                                                            document.querySelector("#velocity-updater-modal-button-update").disabled = false;
+                                                        }
+                                                    });
+                                                },
+                                            },
+                                            Strings.Settings.Updater.Buttons.checkforupdates
+                                        ),
+                                        React.createElement(
+                                            Button,
+                                            {
+                                                className: `${ButtonColors.RED} velocity-button`,
+                                                onClick: ({ target }) => {
+                                                    if (!target.disabled) {
+                                                        updater.checkForUpdates();
+                                                    }
+                                                },
+                                                id: "velocity-updater-modal-button-update",
+                                            },
+                                            Strings.Settings.Updater.Buttons.update
+                                        ),
+                                        React.createElement(
+                                            Button,
+                                            {
+                                                onClick: () => {
+                                                    updater.changelogModal();
+                                                },
+                                                className: "velocity-button",
+                                            },
+                                            Strings.Settings.Updater.Buttons.changelog
+                                        ),
+                                    ],
+                                }),
+                            ],
+                        }),
+                        React.createElement(modals.ModalFooter, {
+                            className: "velocity-modal-footer",
+                            children: [
+                                React.createElement(
+                                    Button,
+                                    {
+                                        onClick: props.onClose,
+                                        className: "velocity-button",
+                                    },
+                                    Strings.Settings.done
+                                ),
+                            ],
+                        }),
+                    ],
+                })
+            )
+        );
+    });
+}
+
 async function pluginPrompt() {
     const Plugins = AddonManager.plugins.getAll();
 
@@ -680,7 +801,24 @@ VApi.Patcher(
             label: Strings.Titles.updater,
             className: `velocity-updater-tab ${process.env.willDowngrade || process.env.willUpgrade ? "notification" : ""}`,
             onClick: () => {
-                updater.checkForUpdates();
+                updaterPrompt();
+                setTimeout(() => {
+                    document.querySelector("#velocity-updater-modal-button-update").disabled = true;
+                    if (process.env.willUpgrade) {
+                        document.querySelector(".velocity-updater-modal-headline-icon").classList.remove("okay");
+                        document.querySelector(".velocity-updater-modal-headline-icon").classList.remove("danger");
+                        document.querySelector(".velocity-updater-modal-headline-icon").classList.add("info");
+                        document.querySelector(".velocity-updater-modal-headline-text *").innerHTML = Strings.Settings.Updater.Titles.available;
+                        document.querySelector("#velocity-updater-modal-button-update").disabled = false;
+                    } else if (process.env.willDowngrade) {
+                        document.querySelector(".velocity-updater-modal-headline-icon").classList.remove("okay");
+                        document.querySelector(".velocity-updater-modal-headline-icon").classList.remove("danger");
+                        document.querySelector(".velocity-updater-modal-headline-icon").classList.add("info");
+                        document.querySelector(".velocity-updater-modal-headline-text *").innerHTML = Strings.Settings.Updater.Titles.down;
+                        document.querySelector("#velocity-updater-modal-button-update > div").innerHTML = Strings.Settings.Updater.Buttons.downgrade;
+                        document.querySelector("#velocity-updater-modal-button-update").disabled = false;
+                    }
+                }, 100);
             },
         });
         insert({
