@@ -406,7 +406,7 @@ textarea.velocity-editor {
 
 .velocity-changelog strong:not(ul *) {
     text-transform: uppercase;
-    color: var(--text-normal);
+    color: var(--text-positive);
     width: 100%;
     display: flex;
     align-items: center;
@@ -508,6 +508,10 @@ textarea.velocity-editor {
 
 .velocity-updater-modal-headline-icon.danger svg {
     color: var(--info-danger-foreground);
+}
+
+.velocity-updater-modal-headline-icon.hidden {
+    display: none;
 }
 
 .velocity-updater-modal-buttons {

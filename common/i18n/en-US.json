@@ -191,7 +191,7 @@
                 "available": "Velocity update available.",
                 "down": "Velocity downgrade available.",
                 "uptodate": "Velocity is up to date.",
-                "failed": "Update failed."
+                "failed": "Failed to check for updates."
             },
             "Buttons": {
                 "checkforupdates": "Check for Updates",

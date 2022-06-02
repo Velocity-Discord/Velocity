@@ -261,6 +261,14 @@ async function updaterPrompt() {
                                             children: [React.createElement(VApi.WebpackModules.find("Checkmark").default, {})],
                                         }),
                                         React.createElement("div", {
+                                            className: "velocity-updater-modal-headline-icon info hidden",
+                                            children: [React.createElement(VApi.WebpackModules.find("Checkmark").default, {})],
+                                        }),
+                                        React.createElement("div", {
+                                            className: "velocity-updater-modal-headline-icon danger hidden",
+                                            children: [React.createElement(VApi.WebpackModules.find("Close").default, {})],
+                                        }),
+                                        React.createElement("div", {
                                             className: "velocity-updater-modal-headline-text",
                                             children: [
                                                 React.createElement(Text, {
@@ -307,26 +315,35 @@ async function updaterPrompt() {
                                                     document.querySelector(".velocity-updater-modal-spinner").classList.add("visible");
                                                     updater.getUpdateStatus().then((status) => {
                                                         if (status == "up") {
-                                                            document.querySelector(".velocity-updater-modal-headline-icon").classList.remove("okay");
-                                                            document.querySelector(".velocity-updater-modal-headline-icon").classList.remove("danger");
-                                                            document.querySelector(".velocity-updater-modal-headline-icon").classList.add("info");
+                                                            document.querySelector(".velocity-updater-modal-headline-icon.okay").classList.add("hidden");
+                                                            document.querySelector(".velocity-updater-modal-headline-icon.info").classList.remove("hidden");
+                                                            document.querySelector(".velocity-updater-modal-headline-icon.danger").classList.add("hidden");
                                                             document.querySelector(".velocity-updater-modal-headline-text *").innerHTML = Strings.Settings.Updater.Titles.available;
                                                             document.querySelector("#velocity-updater-modal-button-update").disabled = false;
                                                             document.querySelector(".velocity-updater-modal-spinner").classList.remove("visible");
                                                         } else if (status == "down") {
-                                                            document.querySelector(".velocity-updater-modal-headline-icon").classList.remove("okay");
-                                                            document.querySelector(".velocity-updater-modal-headline-icon").classList.remove("danger");
-                                                            document.querySelector(".velocity-updater-modal-headline-icon").classList.add("info");
+                                                            document.querySelector(".velocity-updater-modal-headline-icon.okay").classList.add("hidden");
+                                                            document.querySelector(".velocity-updater-modal-headline-icon.info").classList.remove("hidden");
+                                                            document.querySelector(".velocity-updater-modal-headline-icon.danger").classList.add("hidden");
                                                             document.querySelector(".velocity-updater-modal-headline-text *").innerHTML = Strings.Settings.Updater.Titles.down;
                                                             document.querySelector("#velocity-updater-modal-button-update > div").innerHTML =
                                                                 Strings.Settings.Updater.Buttons.downgrade;
                                                             document.querySelector("#velocity-updater-modal-button-update").disabled = false;
                                                             document.querySelector(".velocity-updater-modal-spinner").classList.remove("visible");
                                                         } else if (status == "none") {
-                                                            document.querySelector(".velocity-updater-modal-headline-icon").classList.add("okay");
-                                                            document.querySelector(".velocity-updater-modal-headline-icon").classList.remove("danger");
-                                                            document.querySelector(".velocity-updater-modal-headline-icon").classList.remove("info");
+                                                            document.querySelector(".velocity-updater-modal-headline-icon.okay").classList.remove("hidden");
+                                                            document.querySelector(".velocity-updater-modal-headline-icon.info").classList.add("hidden");
+                                                            document.querySelector(".velocity-updater-modal-headline-icon.danger").classList.add("hidden");
                                                             document.querySelector(".velocity-updater-modal-headline-text *").innerHTML = Strings.Settings.Updater.Titles.uptodate;
+                                                            document.querySelector("#velocity-updater-modal-button-update > div").innerHTML =
+                                                                Strings.Settings.Updater.Buttons.update;
+                                                            document.querySelector("#velocity-updater-modal-button-update").disabled = true;
+                                                            document.querySelector(".velocity-updater-modal-spinner").classList.remove("visible");
+                                                        } else if (status == "error") {
+                                                            document.querySelector(".velocity-updater-modal-headline-icon.okay").classList.add("hidden");
+                                                            document.querySelector(".velocity-updater-modal-headline-icon.info").classList.add("hidden");
+                                                            document.querySelector(".velocity-updater-modal-headline-icon.danger").classList.remove("hidden");
+                                                            document.querySelector(".velocity-updater-modal-headline-text *").innerHTML = Strings.Settings.Updater.Titles.failed;
                                                             document.querySelector("#velocity-updater-modal-button-update > div").innerHTML =
                                                                 Strings.Settings.Updater.Buttons.update;
                                                             document.querySelector("#velocity-updater-modal-button-update").disabled = true;
@@ -839,18 +856,20 @@ VApi.Patcher(
                 setTimeout(() => {
                     document.querySelector("#velocity-updater-modal-button-update").disabled = true;
                     if (process.env.willUpgrade) {
-                        document.querySelector(".velocity-updater-modal-headline-icon").classList.remove("okay");
-                        document.querySelector(".velocity-updater-modal-headline-icon").classList.remove("danger");
-                        document.querySelector(".velocity-updater-modal-headline-icon").classList.add("info");
+                        document.querySelector(".velocity-updater-modal-headline-icon.okay").classList.add("hidden");
+                        document.querySelector(".velocity-updater-modal-headline-icon.info").classList.remove("hidden");
+                        document.querySelector(".velocity-updater-modal-headline-icon.danger").classList.add("hidden");
                         document.querySelector(".velocity-updater-modal-headline-text *").innerHTML = Strings.Settings.Updater.Titles.available;
                         document.querySelector("#velocity-updater-modal-button-update").disabled = false;
+                        document.querySelector(".velocity-updater-modal-spinner").classList.remove("visible");
                     } else if (process.env.willDowngrade) {
-                        document.querySelector(".velocity-updater-modal-headline-icon").classList.remove("okay");
-                        document.querySelector(".velocity-updater-modal-headline-icon").classList.remove("danger");
-                        document.querySelector(".velocity-updater-modal-headline-icon").classList.add("info");
+                        document.querySelector(".velocity-updater-modal-headline-icon.okay").classList.add("hidden");
+                        document.querySelector(".velocity-updater-modal-headline-icon.info").classList.remove("hidden");
+                        document.querySelector(".velocity-updater-modal-headline-icon.danger").classList.add("hidden");
                         document.querySelector(".velocity-updater-modal-headline-text *").innerHTML = Strings.Settings.Updater.Titles.down;
                         document.querySelector("#velocity-updater-modal-button-update > div").innerHTML = Strings.Settings.Updater.Buttons.downgrade;
                         document.querySelector("#velocity-updater-modal-button-update").disabled = false;
+                        document.querySelector(".velocity-updater-modal-spinner").classList.remove("visible");
                     }
                 }, 100);
             },

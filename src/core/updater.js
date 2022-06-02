@@ -69,9 +69,14 @@ async function getUpdateStatus() {
                     }
                 } else if (updateData.hash !== info.hash) {
                     resolve("hash");
+                    process.env.willUpgrade = true;
                 } else {
                     resolve("none");
+                    process.env.willDowngrade = "";
+                    process.env.willUpgrade = "";
                 }
+            } else {
+                resolve("error");
             }
         });
     });
