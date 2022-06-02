@@ -278,7 +278,7 @@ async function updaterPrompt() {
                                         React.createElement(
                                             Button,
                                             {
-                                                className: `${ButtonColors.YELLOW} velocity-button`,
+                                                className: `velocity-button`,
                                                 onClick: () => {
                                                     updater.changelogModal();
                                                 },
@@ -289,7 +289,7 @@ async function updaterPrompt() {
                                             Button,
                                             {
                                                 id: "velocity-updater-modal-button-check",
-                                                className: "velocity-button",
+                                                className: `${ButtonColors.YELLOW} velocity-button`,
                                                 onClick: async () => {
                                                     updater.getUpdateStatus().then((status) => {
                                                         if (status == "up") {
