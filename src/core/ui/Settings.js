@@ -278,6 +278,16 @@ async function updaterPrompt() {
                                         React.createElement(
                                             Button,
                                             {
+                                                className: `${ButtonColors.YELLOW} velocity-button`,
+                                                onClick: () => {
+                                                    updater.changelogModal();
+                                                },
+                                            },
+                                            Strings.Settings.Updater.Buttons.changelog
+                                        ),
+                                        React.createElement(
+                                            Button,
+                                            {
                                                 id: "velocity-updater-modal-button-check",
                                                 className: "velocity-button",
                                                 onClick: async () => {
@@ -314,16 +324,6 @@ async function updaterPrompt() {
                                                 id: "velocity-updater-modal-button-update",
                                             },
                                             Strings.Settings.Updater.Buttons.update
-                                        ),
-                                        React.createElement(
-                                            Button,
-                                            {
-                                                onClick: () => {
-                                                    updater.changelogModal();
-                                                },
-                                                className: "velocity-button",
-                                            },
-                                            Strings.Settings.Updater.Buttons.changelog
                                         ),
                                     ],
                                 }),
