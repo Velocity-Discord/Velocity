@@ -481,6 +481,17 @@ textarea.velocity-editor {
     font-weight: 500;
 }
 
+.velocity-updater-modal-spinner {
+    display: none;
+    height: 100px;
+    align-items: center;
+    justify-content: center;
+}
+
+.velocity-updater-modal-spinner.visible {
+    display: flex;
+}
+
 .velocity-updater-modal-headline-icon svg {
     color: var(--text-normal);
     height: 40px !important;

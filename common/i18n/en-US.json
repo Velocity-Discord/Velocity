@@ -184,7 +184,8 @@
             "Content": {
                 "branch": "Branch",
                 "hash": "Hash",
-                "version": "Version"
+                "version": "Version",
+                "fetchingfrom": "Fetching updates from"
             },
             "Titles": {
                 "available": "Velocity update available.",

@@ -69,6 +69,8 @@ async function getUpdateStatus() {
                     }
                 } else if (updateData.hash !== info.hash) {
                     resolve("hash");
+                } else {
+                    resolve("none");
                 }
             }
         });
