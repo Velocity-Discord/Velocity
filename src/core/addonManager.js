@@ -271,6 +271,7 @@ fs.readdir(pluginDir, (err, files) => {
     folders.sort().map((folder) => {
         if (DevMode) Logger.log("Addon Manager", `Loading ${folder}`);
         const filePath = path.join(pluginDir, folder, "velocity_manifest.json");
+        if (folder == "node_modules") return;
 
         const meta = readManifest(filePath);
         let plugin = require(path.join(pluginDir, folder, meta.main));
