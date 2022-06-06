@@ -1,6 +1,6 @@
-const logger = require("../logger");
-const DataStore = require("../DataStore");
-const { parse } = require("../styleParser");
+const logger = require("../logger.js");
+const DataStore = require("../datastore");
+const { parse } = require("../styleParser.js");
 const cssBeta = DataStore("VELOCITY_SETTINGS").CSSFeatures;
 
 module.exports = new (class StylingManager {

@@ -1,4 +1,4 @@
-const { info } = require("../../package.json");
+const { info } = require("../../../package.json");
 
 function print({ type = "info", title = info.name, input = "" }) {
     const i = console[type];

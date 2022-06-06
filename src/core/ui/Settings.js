@@ -1,7 +1,7 @@
 const { React, modals, WebpackModules, showToast, Utilities, AddonManager } = VApi;
 const { shell } = require("electron");
 const { internalPatches, InternalSecurityToken } = require("../secure");
-const { info } = require("../../../package.json");
+const { info } = require("../../../../package.json");
 const { SettingsSwitchSection, SettingsInputSection, SettingsTitle } = require("./SettingsSections");
 const DataStore = require("../datastore");
 const request = require("../request");
@@ -10,7 +10,7 @@ const Card = require("./AddonCard");
 const i18n = require("../i18n");
 const path = require("path");
 
-const Config = require("../../../common/config.json");
+const Config = require("../../../../common/config.json");
 
 const { Strings, normalizeString } = i18n;
 

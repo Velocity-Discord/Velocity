@@ -1,4 +1,4 @@
-const { info } = require("../../../package.json");
+const { info } = require("../../../../package.json");
 const Text = VApi.WebpackModules.find("LegacyText").default;
 
 const { Strings } = require("../i18n");

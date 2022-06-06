@@ -129,7 +129,7 @@ function loadRemoteAddons() {
     });
 }
 
-const themeDir = path.join(__dirname, "../../", "themes");
+const themeDir = path.join(__dirname, "../../../", "themes");
 if (!fs.existsSync(themeDir)) fs.mkdirSync(themeDir);
 
 fs.readdir(themeDir, (err, files) => {
@@ -261,7 +261,7 @@ fs.watch(themeDir, { persistent: false }, async (eventType, filename) => {
     }
 });
 
-const pluginDir = path.join(__dirname, "../../", "plugins");
+const pluginDir = path.join(__dirname, "../../../", "plugins");
 if (!fs.existsSync(pluginDir)) fs.mkdirSync(pluginDir);
 
 fs.readdir(pluginDir, (err, files) => {

@@ -2,7 +2,7 @@
     "name": "velocity",
     "version": "0.9.1",
     "description": "A Client Modification for Discord enhanced by Plugins and Themes!",
-    "main": "src/index.js",
+    "main": "./dist/velocity.asar",
     "author": "TheCommieAxolotl",
     "license": "MIT",
     "info": {
@@ -16,11 +16,13 @@
         }
     },
     "scripts": {
+        "package": "asar pack src dist/velocity.asar",
         "hash": "node ./scripts/bumpHash.js",
         "install": "node ./scripts/install.js",
         "stylelint": "stylelint \"**/*.css\""
     },
     "devDependencies": {
+        "asar": "^3.1.0",
         "stylelint": "^14.8.1",
         "stylelint-config-prettier": "^9.0.3",
         "stylelint-config-standard": "^25.0.0"

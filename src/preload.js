@@ -7,8 +7,8 @@ const patch = require("./core/patch");
 const fs = require("fs/promises");
 const path = require("path");
 const Module = require("module");
-const Config = require("../common/config.json");
-const { info } = require("../package.json");
+const Config = require("../../common/config.json");
+const { info } = require("../../package.json");
 const { parse } = require("./core/styleParser");
 
 const dPath = process.env.DISCORD_PRELOAD;

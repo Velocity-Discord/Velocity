@@ -1,8 +1,8 @@
-const { info } = require("../../package.json");
+const { info } = require("../../../package.json");
 const request = require("./request");
 const logger = require("./logger");
 const path = require("path");
-const Config = require("../../common/config.json");
+const Config = require("../../../common/config.json");
 const { exec } = require("child_process");
 const { ipcRenderer, shell } = require("electron");
 
@@ -126,7 +126,7 @@ async function checkForUpdates() {
                                             try {
                                                 exec("git pull", (error, stdout, stderr) => {
                                                     if (error || stderr) {
-                                                        const VDir = path.join(__dirname, "../../");
+                                                        const VDir = path.join(__dirname, "../../../");
                                                         logger.error("Updater", error);
                                                         showToast("Updater", Strings.Toasts.Updater.failedpull, { type: "error" });
                                                         failModal(Strings.Modals.Updater.failedheader, [
@@ -209,7 +209,7 @@ async function checkForUpdates() {
                                             try {
                                                 exec("git pull", (error, stdout, stderr) => {
                                                     if (error || stderr) {
-                                                        const VDir = path.join(__dirname, "../../");
+                                                        const VDir = path.join(__dirname, "../../../");
                                                         logger.error("Updater", error);
                                                         showToast("Updater", Strings.Toasts.Updater.failedpull, { type: "error" });
                                                         failModal(Strings.Modals.Updater.failedheader, [

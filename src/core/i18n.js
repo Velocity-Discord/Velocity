@@ -1,5 +1,5 @@
 const WebpackModules = require("./webpack");
-const Locales = require("../../common/i18n/");
+const Locales = require("../../../common/i18n/");
 const Logger = require("./logger");
 
 const Dispatcher = WebpackModules.find(["subscribe", "dirtyDispatch"]);
