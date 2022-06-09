@@ -781,7 +781,7 @@ async function cssPrompt() {
                                                     try {
                                                         const content = window.editor.getValue();
                                                         DataStore.setData("VELOCITY_SETTINGS", "CSS", content);
-                                                        VApi.customCSS.reload();
+                                                        VApi.CustomCSS.reload();
 
                                                         showToast("Custom CSS", Strings.Toasts.CustomCSS.saved, { type: "success" });
                                                     } catch (error) {
@@ -799,7 +799,7 @@ async function cssPrompt() {
                                                 onClick: () => {
                                                     window.editor.setValue("");
                                                     DataStore.setData("VELOCITY_SETTINGS", "CSS", "");
-                                                    VApi.customCSS.reload();
+                                                    VApi.CustomCSS.reload();
 
                                                     showToast("Custom CSS", Strings.Toasts.CustomCSS.cleared, { type: "success" });
                                                 },
@@ -889,13 +889,13 @@ VApi.Patcher(
                 label: Strings.Titles.customcss,
                 className: `velocity-customcss-tab`,
                 onClick: () => {
-                    const customCSS = DataStore.getData("VELOCITY_SETTINGS", "CSS");
+                    const CustomCSS = DataStore.getData("VELOCITY_SETTINGS", "CSS");
                     cssPrompt();
                     setTimeout(() => {
                         window.editor = monaco.editor.create(document.getElementById("editor"), {
                             language: "css",
                             theme: document.documentElement.classList.contains("theme-dark") ? "vs-dark" : "vs-light",
-                            value: customCSS,
+                            value: CustomCSS,
                             fontSize: fontsize,
                         });
                         window.editor.onDidChangeModelContent(() => {

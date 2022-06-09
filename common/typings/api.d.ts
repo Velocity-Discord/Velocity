@@ -49,10 +49,14 @@ declare interface Api {
         setData: (name: string, key: string, value: any) => void;
         deleteData: (name: string, key: string) => void;
     };
-    customCSS: {
+    CustomCSS: {
         reload: () => void;
         get: () => string;
         update: (css: string) => void;
+    };
+    StartupScript: {
+        get: () => string;
+        update: (script: string) => void;
     };
     Patcher: {
         before: (patchName: string, moduleToPatch: any, functionToPatch: string, callback: () => any, opts?: any) => any;

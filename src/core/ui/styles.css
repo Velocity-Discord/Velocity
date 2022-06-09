@@ -780,3 +780,7 @@ textarea.velocity-editor {
     color: var(--text-muted);
     opacity: 0.4;
 }
+
+.velocity-code-block-button {
+    margin-top: 7px;
+}
