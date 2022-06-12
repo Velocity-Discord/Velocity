@@ -1,4 +1,4 @@
-const { webFrame, contextBridge, ipcRenderer } = require("electron");
+const { webFrame } = require("electron");
 const logger = require("./core/logger");
 const StylingManager = require("./core/DOM/styling");
 const ScriptingManager = require("./core/DOM/scripting");
@@ -9,7 +9,7 @@ const path = require("path");
 const Module = require("module");
 const Config = require("../../common/config.json");
 const { info } = require("../../package.json");
-const { parse } = require("./core/styleParser");
+const StyleManager = require("./core/styleParser");
 
 const dPath = process.env.DISCORD_PRELOAD;
 
@@ -189,7 +189,7 @@ if (dPath) {
 
                     if (DataStore("VELOCITY_SETTINGS").CSSEnabled) {
                         let style = document.createElement("style");
-                        style.innerText = cssBeta ? parse(css) : css;
+                        style.innerText = cssBeta ? StyleManager.parse(css) : css;
                         style.id = "customcss";
                         return document.querySelector("velocity-head").appendChild(style);
                     }
@@ -197,7 +197,7 @@ if (dPath) {
                 get: () => {
                     const css = DataStore("VELOCITY_SETTINGS").CSS;
 
-                    return parse(css);
+                    return css;
                 },
                 update: (css) => {
                     return DataStore.setData("VELOCITY_SETTINGS", "CSS", css);
@@ -229,12 +229,12 @@ if (dPath) {
         ExperimentManager.initialize();
         if (DevMode) logger.log("Velocity", "Experiments Initialized");
 
-        const { showToast, showConfirmationModal } = require("./core/ui/Notifications");
+        const NotificationManager = require("./core/ui/Notifications");
         const Components = require("./core/components");
 
         VApi.Components = Components;
-        VApi.showToast = showToast;
-        VApi.showConfirmationModal = showConfirmationModal;
+        VApi.showToast = NotificationManager.showToast;
+        VApi.showConfirmationModal = NotificationManager.showConfirmationModal;
 
         VApi.AddonManager = {
             plugins: plugins(),
@@ -242,8 +242,8 @@ if (dPath) {
             remote: remote(),
         };
 
-        const { InfoModal } = require("./core/ui/InfoModal");
-        const { SponsorModal } = require("./core/ui/SponsorModal");
+        const InfoModal = require("./core/ui/InfoModal");
+        const SponsorModal = require("./core/ui/SponsorModal");
         VApi.showInfoModal = InfoModal;
         VApi.showSponsorModal = SponsorModal;
 
@@ -293,7 +293,7 @@ if (dPath) {
 
         if (cssChecked) {
             var style = document.createElement("style");
-            style.innerText = cssBeta ? parse(CustomCSS) : CustomCSS;
+            style.innerText = cssBeta ? StyleManager.parse(CustomCSS) : CustomCSS;
             style.id = "customcss";
             document.querySelector("velocity-head").appendChild(style);
         }

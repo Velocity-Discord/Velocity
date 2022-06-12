@@ -1,3 +1,8 @@
+/**
+ * @type {Api}
+ */
+const VApi = window.VApi;
+
 const { React, modals, WebpackModules, showToast, Utilities, AddonManager } = VApi;
 const { shell } = require("electron");
 const { internalPatches, InternalSecurityToken } = require("../secure");
@@ -833,6 +838,7 @@ async function cssPrompt() {
 
 const UserSettings = WebpackModules.find("SettingsView").default;
 
+// TODO: Open in sidebar, not modals
 VApi.Patcher(
     "VelocityInternal-Settings-Patch",
     UserSettings.prototype,

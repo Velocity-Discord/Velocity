@@ -1,3 +1,8 @@
+/**
+ * @type {Api}
+ */
+const VApi = window.VApi;
+
 const Config = require("../../../common/config.json");
 const request = require("./request");
 

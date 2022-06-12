@@ -1,10 +1,15 @@
+/**
+ * @type {Api}
+ */
+const VApi = window.VApi;
+
+const { WebpackModules, React, modals } = VApi;
 const { info } = require("../../../../package.json");
-const Text = VApi.WebpackModules.find("LegacyText").default;
+const Text = WebpackModules.find("LegacyText").default;
 
 const { Strings } = require("../i18n");
 
-async function InfoModal() {
-    const { React, WebpackModules, modals } = VApi;
+module.exports = async function InfoModal() {
     const ConfirmationModal = WebpackModules.find("ConfirmModal").default;
     const Button = WebpackModules.find(["ButtonColors"]);
 
@@ -55,6 +60,4 @@ async function InfoModal() {
             );
         });
     });
-}
-
-module.exports = { InfoModal };
+};

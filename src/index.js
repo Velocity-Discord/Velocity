@@ -5,23 +5,11 @@
 const { join } = require("path");
 const electron = ({ ipcMain, app, session, dialog } = require("electron"));
 const Module = require("module");
-const request = require("./core/request");
 const DataStore = require("./core/datastore");
-
-const Settings = DataStore("VELOCITY_SETTINGS");
 
 process.env.VELOCITY_DIRECTORY = join(__dirname, "..");
 
 app.commandLine.appendSwitch("no-force-async-hooks-checks");
-
-function ipc(ev, func) {
-    ipcMain.on(ev, async (event, ...args) => {
-        event.IS_ON = true;
-        const res = await func(event, ...args);
-        if (!event.returnValue) event.returnValue = res ?? "No response";
-    });
-    ipcMain.handle(ev, func);
-}
 
 let hasCrashed = false;
 

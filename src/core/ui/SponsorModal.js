@@ -1,9 +1,16 @@
-const { React, WebpackModules, modals } = VApi;
+/**
+ * @type {Api}
+ */
+const VApi = window.VApi;
+
+const { React, WebpackModules, modals, Logger } = VApi;
 const Text = WebpackModules.findByDisplayNameDefault("LegacyText");
 
 const { Strings } = require("../i18n");
 
-async function SponsorModal() {
+module.exports = async function SponsorModal() {
+    if (!WebpackModules.find("PremiumUpsellPerkRow")) return Logger.warn("Velocity", "Premium Upsell Perk Row not found");
+
     const Button = WebpackModules.find(["ButtonColors"]).default;
     const ButtonColors = WebpackModules.find(["ButtonColors"]).ButtonColors;
     const PremiumUpsellPerkRow = WebpackModules.find("PremiumUpsellPerkRow").default;
@@ -69,6 +76,4 @@ async function SponsorModal() {
             )
         );
     });
-}
-
-module.exports = { SponsorModal };
+};

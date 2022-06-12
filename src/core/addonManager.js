@@ -3,7 +3,7 @@ const path = require("path");
 const DataStore = require("./datastore");
 const request = require("./request");
 const Logger = require("./logger");
-const { parse } = require("./styleParser");
+const StyleManager = require("./styleParser");
 const cssBeta = DataStore("VELOCITY_SETTINGS").CSSFeatures;
 
 const { Strings } = require("./i18n");
@@ -67,7 +67,7 @@ function readMeta(contents) {
 function loadTheme(data, remote) {
     const meta = readMeta(data);
     meta.file = filePath;
-    meta.css = cssBeta ? parse(data) : data;
+    meta.css = cssBeta ? StyleManager.parse(data) : data;
     addons.themes.push(meta);
 }
 
@@ -84,7 +84,7 @@ const RemoteActions = new (class {
             const meta = readMeta(data);
             meta.remote = true;
             meta.sessionId = remoteAddons.themes.length + 1;
-            meta.css = cssBeta ? parse(data) : data;
+            meta.css = cssBeta ? StyleManager.parse(data) : data;
 
             remoteAddons.themes.push(meta);
             addons.themes.push(meta);
@@ -144,7 +144,7 @@ fs.readdir(themeDir, (err, files) => {
             if (err) throw new Error(`Error reading '${filePath}'`);
             meta.file = filePath;
             meta.type = "module";
-            meta.css = cssBeta ? parse(data) : data;
+            meta.css = cssBeta ? StyleManager.parse(data) : data;
             addons.themes.push(meta);
         });
     });
@@ -157,7 +157,7 @@ fs.readdir(themeDir, (err, files) => {
             if (err) throw new Error(`Error reading '${filePath}'`);
             const meta = readMeta(data);
             meta.file = filePath;
-            meta.css = cssBeta ? parse(data) : data;
+            meta.css = cssBeta ? StyleManager.parse(data) : data;
             addons.themes.push(meta);
         });
     });
@@ -229,7 +229,7 @@ fs.watch(themeDir, { persistent: false }, async (eventType, filename) => {
             if (err) throw new Error(`Error reading '${absolutePath}'`);
             meta = readMeta(data);
             meta.file = absolutePath;
-            meta.css = cssBeta ? parse(data) : data;
+            meta.css = cssBeta ? StyleManager.parse(data) : data;
 
             if (Themes.get(meta.name)) {
                 const enabled = Velocity.enabledThemes[meta.name] || false;

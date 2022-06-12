@@ -2,9 +2,9 @@
 // Original license: MIT License (c) GooseMod
 // https://github.com/GooseMod/OpenAsar/blob/main/LICENSE
 
-const querystring = require("querystring"),
-    https = require("https"),
-    http = require("http");
+const querystring = require("querystring");
+const https = require("https");
+const http = require("http");
 
 function requ({ request }, resolve, { method, url, headers, qs, timeout, body, stream }) {
     const fullUrl = `${url}${qs != null ? `?${querystring.stringify(qs)}` : ""}`;

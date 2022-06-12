@@ -1,6 +1,6 @@
 const logger = require("../logger.js");
 const DataStore = require("../datastore");
-const { parse } = require("../styleParser.js");
+const StyleManager = require("../styleParser.js");
 const cssBeta = DataStore("VELOCITY_SETTINGS").CSSFeatures;
 
 module.exports = new (class StylingManager {
@@ -15,7 +15,7 @@ module.exports = new (class StylingManager {
      */
     injectCSS(id, css) {
         var style = document.createElement("style");
-        style.innerText = cssBeta ? parse(css) : css;
+        style.innerText = cssBeta ? StyleManager.parse(css) : css;
         style.id = id;
         return document.querySelector("velocity-head").appendChild(style);
     }
@@ -27,7 +27,7 @@ module.exports = new (class StylingManager {
      */
     injectInternalCSS(id, css) {
         var style = document.createElement("style");
-        style.innerText = parse(css);
+        style.innerText = StyleManager.parse(css);
         style.id = this.escapeID(id);
         style.setAttribute("internal", true);
         return document.querySelector("velocity-head").appendChild(style);

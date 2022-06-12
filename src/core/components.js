@@ -1,83 +1,22 @@
-const { Strings } = require("./i18n");
+/**
+ * @type {Api}
+ */
+const VApi = window.VApi;
 
-const { React, ReactDOM, WebpackModules, modals, DataStore } = VApi;
+const { React, WebpackModules, modals, DataStore } = VApi;
+const { Strings } = require("./i18n");
 
 const Text = WebpackModules.findByDisplayNameDefault("LegacyText");
 
-const SettingsSection = React.memo((props) => {
-    const { plugin, setting, note, name, warning, action } = props;
+module.exports = new (class Components {
+    SettingsSection = React.memo((props) => {
+        const { plugin, setting, note, name, warning, action } = props;
 
-    const SwitchEle = WebpackModules.find("Switch").default;
+        const SwitchEle = WebpackModules.find("Switch").default;
 
-    const [enabled, setEnabled] = React.useState(DataStore.getData(plugin, setting));
-    return React.createElement("div", {
-        id: "velocity-settings-section",
-        children: [
-            React.createElement("div", {
-                id: "velocity-settings-section-info",
-                children: [
-                    React.createElement(
-                        Text,
-                        {
-                            color: Text.Colors.HEADER_PRIMARY,
-                            size: Text.Sizes.SIZE_16,
-                            onClick: (e) => {
-                                e.target.parentElement.parentElement.querySelector("input").focus();
-                            },
-                        },
-                        name
-                    ),
-                    React.createElement(
-                        Text,
-                        {
-                            color: Text.Colors.HEADER_SECONDARY,
-                            size: Text.Sizes.SIZE_14,
-                            onClick: (e) => {
-                                e.target.parentElement.parentElement.querySelector("input").focus();
-                            },
-                        },
-                        note
-                    ),
-                    React.createElement(
-                        Text,
-                        {
-                            color: Text.Colors.ERROR,
-                            size: Text.Sizes.SIZE_14,
-                            id: `velocity-settings-section-${setting.toLowerCase()}-warning`,
-                        },
-                        warning
-                    ),
-                ],
-            }),
-            React.createElement(SwitchEle, {
-                checked: enabled,
-                onChange: async () => {
-                    const { AddonManager } = VApi;
-                    DataStore.setData(plugin, setting, !enabled);
-                    const PluginClass = AddonManager.plugins.get(plugin).export.Plugin;
-                    typeof PluginClass === "function" ? (PluginClass().settings = DataStore.getAllData(plugin)) : (PluginClass.settings = DataStore.getAllData(plugin));
-
-                    if (action) {
-                        action();
-                    }
-
-                    setEnabled(!enabled);
-                },
-            }),
-        ],
-    });
-});
-
-const SettingsInput = React.memo((props) => {
-    const { plugin, setting, note, name, warning, action, placeholder, type, maxLength, vertical } = props;
-
-    const TextInput = WebpackModules.find("TextInput").default;
-
-    const [value, setValue] = React.useState(React.useState(DataStore.getData(plugin, setting)));
-    if (vertical) {
+        const [enabled, setEnabled] = React.useState(DataStore.getData(plugin, setting));
         return React.createElement("div", {
             id: "velocity-settings-section",
-            class: "vertical",
             children: [
                 React.createElement("div", {
                     id: "velocity-settings-section-info",
@@ -109,141 +48,206 @@ const SettingsInput = React.memo((props) => {
                             {
                                 color: Text.Colors.ERROR,
                                 size: Text.Sizes.SIZE_14,
+                                id: `velocity-settings-section-${setting.toLowerCase()}-warning`,
                             },
                             warning
                         ),
                     ],
                 }),
-                React.createElement(TextInput, {
-                    value: Array.isArray(value) ? value[0] || "" : value || "",
-                    placeholder: placeholder || "",
-                    type: type || "text",
-                    maxLength: maxLength || undefined,
-                    onInput: ({ target }) => {
-                        try {
+                React.createElement(SwitchEle, {
+                    checked: enabled,
+                    onChange: async () => {
+                        const { AddonManager } = VApi;
+                        DataStore.setData(plugin, setting, !enabled);
+                        const PluginClass = AddonManager.plugins.get(plugin).export.Plugin;
+                        typeof PluginClass === "function" ? (PluginClass().settings = DataStore.getAllData(plugin)) : (PluginClass.settings = DataStore.getAllData(plugin));
+
+                        if (action) {
+                            action();
+                        }
+
+                        setEnabled(!enabled);
+                    },
+                }),
+            ],
+        });
+    });
+
+    SettingsInput = React.memo((props) => {
+        const { plugin, setting, note, name, warning, action, placeholder, type, maxLength, vertical } = props;
+
+        const TextInput = WebpackModules.find("TextInput").default;
+
+        const [value, setValue] = React.useState(React.useState(DataStore.getData(plugin, setting)));
+        if (vertical) {
+            return React.createElement("div", {
+                id: "velocity-settings-section",
+                class: "vertical",
+                children: [
+                    React.createElement("div", {
+                        id: "velocity-settings-section-info",
+                        children: [
+                            React.createElement(
+                                Text,
+                                {
+                                    color: Text.Colors.HEADER_PRIMARY,
+                                    size: Text.Sizes.SIZE_16,
+                                    onClick: (e) => {
+                                        e.target.parentElement.parentElement.querySelector("input").focus();
+                                    },
+                                },
+                                name
+                            ),
+                            React.createElement(
+                                Text,
+                                {
+                                    color: Text.Colors.HEADER_SECONDARY,
+                                    size: Text.Sizes.SIZE_14,
+                                    onClick: (e) => {
+                                        e.target.parentElement.parentElement.querySelector("input").focus();
+                                    },
+                                },
+                                note
+                            ),
+                            React.createElement(
+                                Text,
+                                {
+                                    color: Text.Colors.ERROR,
+                                    size: Text.Sizes.SIZE_14,
+                                },
+                                warning
+                            ),
+                        ],
+                    }),
+                    React.createElement(TextInput, {
+                        value: Array.isArray(value) ? value[0] || "" : value || "",
+                        placeholder: placeholder || "",
+                        type: type || "text",
+                        maxLength: maxLength || undefined,
+                        onInput: ({ target }) => {
+                            try {
+                                setValue(target.value);
+                                DataStore.setData(plugin, setting, target.value);
+                                const { AddonManager } = VApi;
+                                const PluginClass = AddonManager.plugins.get(plugin).export.Plugin;
+                                typeof PluginClass === "function" ? (PluginClass().settings = DataStore.getAllData(plugin)) : (PluginClass.settings = DataStore.getAllData(plugin));
+
+                                if (action) {
+                                    action();
+                                }
+                            } catch (e) {
+                                console.error(e);
+                            }
+                        },
+                    }),
+                ],
+            });
+        } else {
+            return React.createElement("div", {
+                id: "velocity-settings-section",
+                children: [
+                    React.createElement("div", {
+                        id: "velocity-settings-section-info",
+                        children: [
+                            React.createElement(
+                                Text,
+                                {
+                                    color: Text.Colors.HEADER_PRIMARY,
+                                    size: Text.Sizes.SIZE_16,
+                                    onClick: (e) => {
+                                        e.target.parentElement.parentElement.querySelector("input").focus();
+                                    },
+                                },
+                                name
+                            ),
+                            React.createElement(
+                                Text,
+                                {
+                                    color: Text.Colors.HEADER_SECONDARY,
+                                    size: Text.Sizes.SIZE_14,
+                                    onClick: (e) => {
+                                        e.target.parentElement.parentElement.querySelector("input").focus();
+                                    },
+                                },
+                                note
+                            ),
+                            React.createElement(
+                                Text,
+                                {
+                                    color: Text.Colors.ERROR,
+                                    size: Text.Sizes.SIZE_14,
+                                },
+                                warning
+                            ),
+                        ],
+                    }),
+                    React.createElement(TextInput, {
+                        value: value[0] || "",
+                        placeholder: placeholder || "",
+                        type: type || "text",
+                        maxLength: maxLength || undefined,
+                        onInput: ({ target }) => {
                             setValue(target.value);
                             DataStore.setData(plugin, setting, target.value);
                             const { AddonManager } = VApi;
                             const PluginClass = AddonManager.plugins.get(plugin).export.Plugin;
                             typeof PluginClass === "function" ? (PluginClass().settings = DataStore.getAllData(plugin)) : (PluginClass.settings = DataStore.getAllData(plugin));
-
                             if (action) {
                                 action();
                             }
-                        } catch (e) {
-                            console.error(e);
-                        }
-                    },
-                }),
-            ],
-        });
-    } else {
-        return React.createElement("div", {
-            id: "velocity-settings-section",
-            children: [
-                React.createElement("div", {
-                    id: "velocity-settings-section-info",
-                    children: [
-                        React.createElement(
-                            Text,
-                            {
-                                color: Text.Colors.HEADER_PRIMARY,
-                                size: Text.Sizes.SIZE_16,
-                                onClick: (e) => {
-                                    e.target.parentElement.parentElement.querySelector("input").focus();
-                                },
-                            },
-                            name
-                        ),
-                        React.createElement(
-                            Text,
-                            {
-                                color: Text.Colors.HEADER_SECONDARY,
-                                size: Text.Sizes.SIZE_14,
-                                onClick: (e) => {
-                                    e.target.parentElement.parentElement.querySelector("input").focus();
-                                },
-                            },
-                            note
-                        ),
-                        React.createElement(
-                            Text,
-                            {
-                                color: Text.Colors.ERROR,
-                                size: Text.Sizes.SIZE_14,
-                            },
-                            warning
-                        ),
-                    ],
-                }),
-                React.createElement(TextInput, {
-                    value: value[0] || "",
-                    placeholder: placeholder || "",
-                    type: type || "text",
-                    maxLength: maxLength || undefined,
-                    onInput: ({ target }) => {
-                        setValue(target.value);
-                        DataStore.setData(plugin, setting, target.value);
-                        const { AddonManager } = VApi;
-                        const PluginClass = AddonManager.plugins.get(plugin).export.Plugin;
-                        typeof PluginClass === "function" ? (PluginClass().settings = DataStore.getAllData(plugin)) : (PluginClass.settings = DataStore.getAllData(plugin));
-                        if (action) {
-                            action();
-                        }
-                    },
-                }),
-            ],
-        });
-    }
-});
-
-const ShowAddonSettingsModal = (p) => {
-    const Button = WebpackModules.find(["ButtonColors"]).default;
-    const ButtonColors = WebpackModules.find(["ButtonColors"]).ButtonColors;
-
-    return new Promise((resolve) => {
-        modals.open((props) =>
-            React.createElement(
-                modals.ModalRoot,
-                Object.assign(props, {
-                    size: "medium",
-                    className: "velocity-addon-settings-modal",
-                    children: [
-                        React.createElement(
-                            modals.ModalHeader,
-                            null,
-                            React.createElement(
-                                Text,
-                                {
-                                    size: Text.Sizes.SIZE_20,
-                                    color: Text.Colors.HEADER_PRIMARY,
-                                    className: WebpackModules.find(["h1"]).h1,
-                                },
-                                `${p?.name || "Addon"} Plugin Settings`
-                            )
-                        ),
-                        React.createElement(modals.ModalContent, {
-                            children: p?.children || React.createElement("h1", null, "e"),
-                        }),
-                        React.createElement(modals.ModalFooter, {
-                            className: "velocity-modal-footer",
-                            children: [
-                                React.createElement(
-                                    Button,
-                                    {
-                                        color: ButtonColors.BRAND,
-                                        onClick: props.onClose,
-                                        className: "velocity-button",
-                                    },
-                                    Strings.Settings.done
-                                ),
-                            ],
-                        }),
-                    ],
-                })
-            )
-        );
+                        },
+                    }),
+                ],
+            });
+        }
     });
-};
 
-module.exports = { ShowAddonSettingsModal, SettingsSection, SettingsInput };
+    ShowAddonSettingsModal = (p) => {
+        const Button = WebpackModules.find(["ButtonColors"]).default;
+        const ButtonColors = WebpackModules.find(["ButtonColors"]).ButtonColors;
+
+        return new Promise((resolve) => {
+            modals.open((props) =>
+                React.createElement(
+                    modals.ModalRoot,
+                    Object.assign(props, {
+                        size: "medium",
+                        className: "velocity-addon-settings-modal",
+                        children: [
+                            React.createElement(
+                                modals.ModalHeader,
+                                null,
+                                React.createElement(
+                                    Text,
+                                    {
+                                        size: Text.Sizes.SIZE_20,
+                                        color: Text.Colors.HEADER_PRIMARY,
+                                        className: WebpackModules.find(["h1"]).h1,
+                                    },
+                                    `${p?.name || "Addon"} Plugin Settings`
+                                )
+                            ),
+                            React.createElement(modals.ModalContent, {
+                                children: p?.children || React.createElement("h1", null, "e"),
+                            }),
+                            React.createElement(modals.ModalFooter, {
+                                className: "velocity-modal-footer",
+                                children: [
+                                    React.createElement(
+                                        Button,
+                                        {
+                                            color: ButtonColors.BRAND,
+                                            onClick: props.onClose,
+                                            className: "velocity-button",
+                                        },
+                                        Strings.Settings.done
+                                    ),
+                                ],
+                            }),
+                        ],
+                    })
+                )
+            );
+        });
+    };
+})();
