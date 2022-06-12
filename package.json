@@ -19,6 +19,7 @@
         "package": "asar pack src dist/velocity.asar",
         "hash": "node ./scripts/bumpHash.js",
         "install": "node ./scripts/install.js",
+        "watch": "node ./scripts/watch.js",
         "stylelint": "stylelint \"**/*.css\""
     },
     "devDependencies": {
