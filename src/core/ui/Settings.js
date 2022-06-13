@@ -73,6 +73,37 @@ const monaco = global.windowObj.monaco;
 const Settings = DataStore("VELOCITY_SETTINGS");
 const headerClasses = "velocity-header-display";
 
+const SettingsManager = new (class {
+    get contentClassName() {
+        return WebpackModules.find(["contentColumn"]).contentColumn;
+    }
+    get itemClassNames() {
+        return WebpackModules.find(["item", "themed", "topPill"]);
+    }
+    get DOMNode() {
+        return document.querySelector(`.${this.contentClassName}`);
+    }
+
+    updateSidebar(panelId) {
+        const node = document.querySelector(`.${this.itemClassNames.item}.${this.itemClassNames.selected}`);
+
+        node.classList.remove(this.itemClassNames.selected);
+        node.setAttribute("aria-selected", false);
+
+        document.querySelector(`.${panelId}.${this.itemClassNames.item}`).classList.add(this.itemClassNames.selected);
+    }
+    updateContent(reactElement, panel) {
+        this.DOMNode.querySelector("div").remove();
+        this.DOMNode.id = `velocity-${panel || "settings"}-tab`;
+        let elem = document.createElement("div");
+        this.DOMNode.appendChild(elem);
+
+        ReactDOM.render(reactElement, elem);
+    }
+})();
+
+module.exports = SettingsManager;
+
 async function settingsPrompt() {
     return new Promise((resolve) => {
         modals.open((props) =>
