@@ -10,7 +10,7 @@ async function run() {
     const data = fs.readFileSync(pkjPath, "utf8");
 
     let pkj = JSON.parse(data);
-    console.log(`Writing new Hash to ${pkjPath}`);
+    console.log(`Writing new Version to ${pkjPath}`);
     let newVersion;
 
     if (process.argv.includes("--major")) {
