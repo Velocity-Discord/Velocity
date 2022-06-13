@@ -18,7 +18,7 @@ async function run() {
 
     try {
         pkj.info.hash = newHash;
-        fs.writeFileSync(pkjPath, JSON.stringify(pkj, null, "\t"));
+        fs.writeFileSync(pkjPath, JSON.stringify(pkj, null, "    "));
         console.log("Updated package.json hash to:", newHash);
     } catch (e) {
         console.error(`\x1b[1;91mError while updating package.json: ${e} \x1b[0m `);
