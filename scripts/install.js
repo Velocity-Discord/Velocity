@@ -2,6 +2,9 @@ const path = require("path");
 const fs = require("fs");
 const { mkdir, writeFile, readdir } = require("fs").promises;
 
+console.log("\x1b[1;94mVelocity \x1b[0m");
+console.log("Starting installation process...");
+
 async function run() {
     const readline = require("readline").createInterface({
         input: process.stdin,
