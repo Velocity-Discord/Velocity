@@ -103,6 +103,15 @@ app.once("ready", () => {
         });
         process.argv.push("--vanilla");
     });
+    ipcMain.handle("crashed-dialog", (e, a) => {
+        dialog.showMessageBox({
+            type: "warning",
+            title: "Velocity",
+            message: `The Velocity process has crashed. ("${a.reason || "Unknown"}")`,
+            detail: "This may be due to a Plugin or Module. Try restarting Discord in vanilla mode and try again. \n ERR_CODE:" + (a.code || "0"),
+            buttons: ["OK"],
+        });
+    });
 });
 
 const electronPath = require.resolve("electron");

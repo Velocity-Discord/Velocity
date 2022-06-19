@@ -10,6 +10,7 @@ const Module = require("module");
 const Config = require("../../common/config.json");
 const { info } = require("../../package.json");
 const StyleManager = require("./core/styleParser");
+const Neptune = require("./core/neptune");
 
 const dPath = process.env.DISCORD_PRELOAD;
 
@@ -33,6 +34,17 @@ if (dPath) {
 
     window.global = global;
     toWindow(require);
+
+    class PermissionError extends Error {
+        constructor(message) {
+            super(message);
+            this.name = "PermissionError";
+        }
+    }
+
+    window.PermissionError = PermissionError;
+    toWindow(PermissionError);
+
     async function DomLoaded() {
         if (DataStore.getData("VELOCITY_SETTINGS", "DegubberKey")) {
             window.addEventListener(
@@ -248,6 +260,7 @@ if (dPath) {
         VApi.showSponsorModal = SponsorModal;
 
         Object.freeze(VApi);
+        Neptune.initialise();
 
         const load = Module._load;
 
@@ -257,7 +270,10 @@ if (dPath) {
                 return process;
             }
 
-            if (path.resolve(__dirname, request) === path.resolve(__dirname, "./core/secure.js") || path.resolve(__dirname, request) === path.resolve(__dirname, "./core/secure")) {
+            if (
+                path.resolve(__dirname, request) === path.resolve(__dirname, "./core/neptune.js") ||
+                path.resolve(__dirname, request) === path.resolve(__dirname, "./core/neptune")
+            ) {
                 return null; // Limit access to the security token. all modules that need it will have it by this time.
             }
 

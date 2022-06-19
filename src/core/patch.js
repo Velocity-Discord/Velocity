@@ -3,7 +3,7 @@ let Quick_Symbol = Symbol("VApi.Patcher.quick");
 let Internal_Symbol = Symbol("VelocityInternal");
 let ALLpatches = {};
 
-const { internalPatches, InternalSecurityToken } = require("./secure");
+const { InternalPatches, InternalSecurityToken } = require("./neptune");
 
 function patch(patchName, moduleToPatch, functionToPatch, callback, opts = {}) {
     let { method = "after", id } = opts;
@@ -28,7 +28,7 @@ function patch(patchName, moduleToPatch, functionToPatch, callback, opts = {}) {
             if (auth !== InternalSecurityToken) {
                 return console.error(`You are not authorized to unpatch ${patchInfo.patchName}`);
             } else {
-                internalPatches.splice(internalPatches.indexOf(patchName), 1);
+                InternalPatches.splice(InternalPatches.indexOf(patchName), 1);
             }
         }
 
@@ -67,7 +67,7 @@ function patch(patchName, moduleToPatch, functionToPatch, callback, opts = {}) {
         });
     }
     if (patchName.startsWith && /VelocityInternal-([A-z]+)-Patch/.test(patchName)) {
-        internalPatches.push({ name: patchName, beta: !!opts.beta, warning: !!opts.warning });
+        InternalPatches.push({ name: patchName, beta: !!opts.beta, warning: !!opts.warning });
         if (!ALLpatches[Internal_Symbol]) ALLpatches[Internal_Symbol] = [patchInfo];
         else ALLpatches[Internal_Symbol].push(patchInfo);
 

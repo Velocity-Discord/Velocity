@@ -1,6 +1,10 @@
 const { webFrame } = require("electron");
+const logger = require("./logger");
 
 const { webpackChunkdiscord_app } = webFrame.top.context;
+
+// REMINDER: Do not blacklist _modules
+const Blacklisted = ["setToken", "getToken", "showToken", "removeToken", "hideToken", "getEmail"];
 
 if (Boolean(webpackChunkdiscord_app.Velocity_getModule)) module.exports = webpackChunkdiscord_app.Velocity_getModule;
 else {
@@ -14,8 +18,61 @@ else {
             if (!ele) continue;
             if (filter(ele)) modules.push(ele);
         }
-        if (first) return modules[0];
-        return modules;
+        let safeExports = [];
+        modules.forEach((ite) => {
+            if (typeof ite !== "object") {
+                return safeExports.push(ite);
+            }
+            const isFlagged = Blacklisted.some((m) => {
+                return Boolean(ite[m] || ite.default?.[m]);
+            });
+            if (isFlagged) {
+                if (ite.default) {
+                    return safeExports.push(
+                        new Proxy(ite.default, {
+                            get: (t, p, r) => {
+                                try {
+                                    let shadow = undefined;
+                                    if (t[p]) shadow = new t[p].constructor();
+
+                                    if (Blacklisted.includes(p)) return shadow;
+                                    return Reflect.get(t, p, r);
+                                } catch (e) {
+                                    return Reflect.get(t, p, r);
+                                }
+                            },
+                            getOwnPropertyDescriptor: (t, p, r) => {
+                                if (Blacklisted.includes(p)) return undefined;
+                                return Reflect.getOwnPropertyDescriptor(t, p, r);
+                            },
+                        })
+                    );
+                }
+                return safeExports.push(
+                    new Proxy(ite, {
+                        get: (t, p, r) => {
+                            try {
+                                let shadow = undefined;
+                                if (t[p]) shadow = new t[p].constructor();
+
+                                if (Blacklisted.includes(p)) return shadow;
+                                return Reflect.get(t, p, r);
+                            } catch (e) {
+                                return Reflect.get(t, p, r);
+                            }
+                        },
+                        getOwnPropertyDescriptor: (t, p, r) => {
+                            if (Blacklisted.includes(p)) return undefined;
+                            return Reflect.getOwnPropertyDescriptor(t, p, r);
+                        },
+                    })
+                );
+            }
+            return safeExports.push(ite);
+        });
+
+        if (first) return safeExports[0];
+        return safeExports;
     }
 
     function find(filter) {
@@ -106,6 +163,9 @@ else {
     function byDisplayNameTypeRender(displayName) {
         return getModule((m) => m.default?.type?.render?.displayName === displayName);
     }
+    function findAll(filter) {
+        return getModule(filter, false);
+    }
     Object.assign(byDisplayName, {
         type: byDisplayNameType,
         typeRender: byDisplayNameTypeRender,
@@ -138,5 +198,13 @@ else {
         },
     });
     webpackChunkdiscord_app.Velocity_getModule = { find, getLazy };
-    module.exports = { find, getLazy, findByDisplayName: byDisplayName, findByDisplayNameDefault: byDisplayNameDefault, findByProps: byProps, findByPropsDefault: byPropsDefault };
+    module.exports = {
+        find,
+        findAll,
+        getLazy,
+        findByDisplayName: byDisplayName,
+        findByDisplayNameDefault: byDisplayNameDefault,
+        findByProps: byProps,
+        findByPropsDefault: byPropsDefault,
+    };
 }

@@ -11,7 +11,32 @@
 # Velocity
 #### An upcoming Client Modification for [@discord](https://github.com/discord) enhanced by Plugins and Themes!
 
-# License Notice
+---
+## Installation
+
+### Manual
+
+Prerequisites: [Node.js](https://nodejs.org/en/) v12+, [git](https://git-scm.com/) and [npm](https://www.npmjs.com/).
+
+1. Git clone this repository to your machine. `git clone https://github.com/BetterDiscord/BetterDiscord.git`
+
+2. Run the install script with `npm run install` (optionally add flags like `--mac` or `--win`)
+
+---
+## Development
+
+Prerequisites: [Node.js](https://nodejs.org/en/) v12+, [git](https://git-scm.com/) and [npm](https://www.npmjs.com/).
+
+1. Git clone this repository to your machine. `git clone https://github.com/BetterDiscord/BetterDiscord.git`
+
+2. Run the install script with `npm run install` (optionally add flags like `--mac` or `--win`)
+
+3. To automatically compile the asar, run `npm run watch`
+
+
+
+---
+## License Notice
 This Client Mod was originally based on DrDiscord version 1.0.0 as found [here](https://github.com/Dr-Discord/DrDiscord) (now unavailable, an archived version can be found [here](https://github.com/unknown81311/DrDiscord))
 
 A copy of this is included at the top of `index.js`

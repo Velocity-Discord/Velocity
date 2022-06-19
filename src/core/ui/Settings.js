@@ -5,12 +5,12 @@ const VApi = window.VApi;
 
 const { React, modals, WebpackModules, showToast, Utilities, AddonManager } = VApi;
 const { shell } = require("electron");
-const { internalPatches, InternalSecurityToken } = require("../secure");
 const { info } = require("../../../../package.json");
 const { SettingsSwitchSection, SettingsInputSection, SettingsTitle } = require("./SettingsSections");
 const DataStore = require("../datastore");
 const request = require("../request");
 const updater = require("../updater");
+const Neptune = require("../neptune");
 const Card = require("./AddonCard");
 const i18n = require("../i18n");
 const path = require("path");
@@ -1038,7 +1038,7 @@ VApi.Patcher(
                                     React.createElement("div", {
                                         className: "velocity-developer-items-container",
                                         children: [
-                                            internalPatches.map((patch) =>
+                                            Neptune.InternalPatches.map((patch) =>
                                                 React.createElement("div", {
                                                     className: "velocity-developer-internal-patch",
                                                     children: [
@@ -1074,7 +1074,7 @@ VApi.Patcher(
                                                                             target.target.tagName == "BUTTON"
                                                                                 ? target.target.setAttribute("disabled", "true")
                                                                                 : target.target.parentElement.setAttribute("disabled", "true");
-                                                                            VApi.Patcher.unpatchAll(patch.name, InternalSecurityToken);
+                                                                            VApi.Patcher.unpatchAll(patch.name, Neptune.InternalSecurityToken);
                                                                             showToast("Velocity", `${Strings.Toasts.Developer.killed} <strong>${patch.name}</strong>`, {
                                                                                 type: "error",
                                                                             });
