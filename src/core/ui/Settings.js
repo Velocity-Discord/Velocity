@@ -14,8 +14,9 @@ const Neptune = require("../neptune");
 const Card = require("./AddonCard");
 const i18n = require("../i18n");
 const path = require("path");
+const fs = require("fs");
 
-const Config = require("../../../../common/config.json");
+const Config = require("../../common/config.json");
 
 const { Strings, normalizeString } = i18n;
 
@@ -38,37 +39,30 @@ function addonSort(x, y) {
     return 0;
 }
 
-async function reloadPrompt() {
-    const ConfirmationModal = WebpackModules.find("ConfirmModal").default;
-    const { Messages } = WebpackModules.find((m) => m.default?.Messages?.OKAY).default;
-
-    if (!Array.isArray(content)) content = [content];
-    content = content.map((c) => (typeof c === "string" ? React.createElement(Markdown, null, c) : c));
-
-    return new Promise((resolve) => {
-        modals.open((props) => {
-            if (props.transitionState === 3) resolve(false);
-            return React.createElement(
-                ConfirmationModal,
-                Object.assign(
-                    {
-                        header: Strings.Modals.Restart.header,
-                        confirmButtonColor: ButtonColors.BRAND,
-                        confirmText: "Reload",
-                        danger: true,
-                        cancelText: Messages.CANCEL,
-                        onConfirm: () => resolve(true),
-                        onCancel: () => resolve(false),
-                        children: Strings.Modals.Restart.content,
-                    },
-                    props
-                )
-            );
-        });
-    });
-}
-
 const monaco = global.windowObj.monaco;
+
+monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
+    noSemanticValidation: true,
+    noSyntaxValidation: false,
+});
+
+monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
+    target: monaco.languages.typescript.ScriptTarget.ES6,
+    allowNonTsExtensions: true,
+});
+const VApiTypings = fs.readFileSync(path.join(__dirname, "../../", "common", "typings", "monaco.d.ts"), "utf8");
+
+var libSource = [VApiTypings].join("\n");
+
+console.log(libSource);
+
+var libUri = "ts:filename/monaco.d.ts";
+monaco.languages.typescript.javascriptDefaults.addExtraLib(libSource, libUri);
+
+monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
+    target: monaco.languages.typescript.ScriptTarget.ES6,
+    allowNonTsExtensions: true,
+});
 
 const Settings = DataStore("VELOCITY_SETTINGS");
 const headerClasses = "velocity-header-display";
@@ -965,6 +959,7 @@ VApi.Patcher(
                             value: startupJS,
                             fontSize: fontsize,
                         });
+
                         window.editor.onDidChangeModelContent(() => {
                             const content = window.editor.getValue();
                             const button = document.getElementById("startup-script-save");

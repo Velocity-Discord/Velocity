@@ -2,7 +2,7 @@ const { info } = require("../../../package.json");
 const request = require("./request");
 const logger = require("./logger");
 const path = require("path");
-const Config = require("../../../common/config.json");
+const Config = require("../common/config.json");
 const { exec } = require("child_process");
 const { shell } = require("electron");
 
