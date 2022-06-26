@@ -37,6 +37,10 @@ const addonsInit = {
     plugins: [],
 };
 
+const escapeID = (id) => {
+    return id.replace(/^[^a-z]+|[^\w-]+/gi, "-");
+};
+
 function getKeyByValue(object, value) {
     return Object.keys(object).find((key) => object[key].name === value);
 }
@@ -187,6 +191,7 @@ const Themes = new (class {
         style.innerHTML = meta.css;
         style.setAttribute("velocity-theme-id", meta.name);
         document.querySelector("velocity-themes").appendChild(style);
+        document.body.classList.add(`velocity-theme-${escapeID(meta.name)}`);
     }
     disable(name) {
         try {
@@ -194,6 +199,7 @@ const Themes = new (class {
             if (!meta) return;
             DataStore.setData("VELOCITY_SETTINGS", "enabledThemes", { ...Velocity.enabledThemes, [meta.name]: false });
             const ele = document.querySelectorAll(`[velocity-theme-id="${meta.name}"]`);
+            document.body.classList.remove(`velocity-theme-${escapeID(meta.name)}`);
             for (let ele1 of ele) {
                 if (ele1) ele1.remove();
             }
@@ -247,6 +253,7 @@ fs.watch(themeDir, { persistent: false }, async (eventType, filename) => {
                     }
                     const style = document.createElement("style");
                     style.innerHTML = meta.css;
+                    document.body.classList.add(`velocity-theme-${escapeID(meta.name)}`);
                     style.setAttribute("velocity-theme-id", meta.name);
                     document.querySelector("velocity-themes").appendChild(style);
                     VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.enabled} <strong>${meta.name}</strong>`, { type: "success" });

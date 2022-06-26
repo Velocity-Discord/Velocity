@@ -54,8 +54,6 @@ const VApiTypings = fs.readFileSync(path.join(__dirname, "../../", "common", "ty
 
 var libSource = [VApiTypings].join("\n");
 
-console.log(libSource);
-
 var libUri = "ts:filename/monaco.d.ts";
 monaco.languages.typescript.javascriptDefaults.addExtraLib(libSource, libUri);
 
