@@ -1278,7 +1278,7 @@ VApi.Patcher(
                                     }
                                 });
                             } else {
-                                settingsItems = plugin.export.Plugin().getSettingsPanel();
+                                settingsItems = PluginExport.getSettingsPanel();
                             }
                             Components.ShowAddonSettingsModal({
                                 name: plugin.name,
