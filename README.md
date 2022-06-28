@@ -9,31 +9,68 @@
 [![LICENSE](https://img.shields.io/github/license/Velocity-Discord/Velocity?color=6587F4&style=for-the-badge)](https://github.com/Velocity-Discord/Velocity/blob/main/LICENSE)
 
 # Velocity
-#### An upcoming Client Modification for [@discord](https://github.com/discord) enhanced by Plugins and Themes!
+Velocity is an upcoming Discord Client modification that allows you to extend discord's functionality and capabilities. 
 
 ---
 ## Installation
 
-### Manual
-
 Prerequisites: [Node.js](https://nodejs.org/en/) v12+, [git](https://git-scm.com/) and [npm](https://www.npmjs.com/).
 
-1. Git clone this repository to your machine. `git clone https://github.com/Velocity-Discord/Velocity.git`
+### 1. Clone the repository.
+```ps
+git clone https://github.com/Velocity-Discord/Velocity.git
+```
 
-2. Run the install script with `npm run install` (optionally add flags like `--mac` or `--win`)
+### 2 Run the install script.
+(optionally add `--win` or `--mac` to install for Windows or Mac respectively)
+
+#### Stable 
+```ps
+npm run install
+```
+
+#### PTB
+```ps
+npm run install --ptb
+```
+
+#### Canary
+```ps
+npm run install --canary
+```
 
 ---
 ## Development
-
 Prerequisites: [Node.js](https://nodejs.org/en/) v12+, [git](https://git-scm.com/) and [npm](https://www.npmjs.com/).
 
-1. Git clone this repository to your machine. `git clone https://github.com/Velocity-Discord/Velocity.git`
+### 1. Clone the repository.
+```ps
+git clone https://github.com/Velocity-Discord/Velocity.git
+```
 
-2. Run the install script with `npm run install` (optionally add flags like `--mac` or `--win`)
+### 2. Run the install script.
+(optionally add `--win` or `--mac` to install for Windows or Mac respectively)
 
-3. To automatically compile the asar, run `npm run watch`
+#### Stable 
+```ps
+npm run install
+```
 
+#### PTB
+```ps
+npm run install --ptb
+```
 
+#### Canary
+```ps
+npm run install --canary
+```
+
+### 3. Development. 
+To automatically compile the asar, run 
+```ps
+npm run watch
+```
 
 ---
 ## License Notice
