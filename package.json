@@ -16,11 +16,11 @@
         }
     },
     "scripts": {
-        "dist": "node ./scripts/dist",
+        "dist": "node ./scripts/dist --",
         "bump": "npm run bump:hash && npm run bump:version",
-        "watch": "node ./scripts/watch.js",
-        "install": "node ./scripts/install.js",
-        "bump:hash": "node ./scripts/bumpHash.js",
+        "watch": "node ./scripts/watch.js --",
+        "install": "node ./scripts/install.js --",
+        "bump:hash": "node ./scripts/bumpHash.js --",
         "bump:version": "node ./scripts/bumpVersion.js",
         "stylelint": "stylelint \"**/*.css\""
     },
