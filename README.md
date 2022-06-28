@@ -18,7 +18,7 @@
 
 Prerequisites: [Node.js](https://nodejs.org/en/) v12+, [git](https://git-scm.com/) and [npm](https://www.npmjs.com/).
 
-1. Git clone this repository to your machine. `git clone https://github.com/BetterDiscord/BetterDiscord.git`
+1. Git clone this repository to your machine. `git clone https://github.com/Velocity-Discord/Velocity.git`
 
 2. Run the install script with `npm run install` (optionally add flags like `--mac` or `--win`)
 
@@ -27,7 +27,7 @@ Prerequisites: [Node.js](https://nodejs.org/en/) v12+, [git](https://git-scm.com
 
 Prerequisites: [Node.js](https://nodejs.org/en/) v12+, [git](https://git-scm.com/) and [npm](https://www.npmjs.com/).
 
-1. Git clone this repository to your machine. `git clone https://github.com/BetterDiscord/BetterDiscord.git`
+1. Git clone this repository to your machine. `git clone https://github.com/Velocity-Discord/Velocity.git`
 
 2. Run the install script with `npm run install` (optionally add flags like `--mac` or `--win`)
 
