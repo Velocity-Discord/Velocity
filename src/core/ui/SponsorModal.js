@@ -7,9 +7,13 @@ const { React, WebpackModules, modals, Logger } = VApi;
 const Text = WebpackModules.findByDisplayNameDefault("LegacyText");
 
 const { Strings } = require("../i18n");
+const InfoModal = require("./InfoModal");
 
 module.exports = async function SponsorModal() {
-    if (!WebpackModules.find("PremiumUpsellPerkRow")) return Logger.warn("Velocity", "Premium Upsell Perk Row not found");
+    if (!WebpackModules.find("PremiumUpsellPerkRow")) {
+        InfoModal();
+        return Logger.warn("Velocity", "Premium Upsell Perk Row not found");
+    }
 
     const Button = WebpackModules.find(["ButtonColors"]).default;
     const ButtonColors = WebpackModules.find(["ButtonColors"]).ButtonColors;

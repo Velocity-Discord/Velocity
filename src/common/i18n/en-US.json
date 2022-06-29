@@ -10,6 +10,7 @@
         "remote": "Remote",
         "module": "Module",
         "changelog": "Changelog",
+        "checkusout": "Check us out Here!",
         "velocitychangelog": "Velocity Changelog",
         "about": "About Velocity",
         "awkward": "Well, this is awkward",
@@ -19,6 +20,7 @@
         "officialserver": "Joined Official Server, Exit settings and have a look!",
         "AddonManager": {
             "errorreadingtheme": "Error Reading Theme Directory",
+            "errorreadingplugin": "Error Reading Plugin Directory",
             "failedstart": "Failed to start",
             "failedstop": "Failed to stop",
             "failedremote": "Failed to load Remote Theme. See Console For More Details",
@@ -258,6 +260,27 @@
                         "unknown": "Unknown"
                     }
                 }
+            }
+        }
+    },
+    "Components": {
+        "BuiltIns": {
+            "addtocustomcss": "Add to Custom CSS",
+            "addtostartupscript": "Add to Startup Script"
+        },
+        "ErrorBoundary": {
+            "headers": {
+                "uncaught": "Uncaught Error while rendering",
+                "showdetails": "Show Details",
+                "hidedetails": "Hide Details",
+                "errorstack": "Error Stack"
+            },
+            "buttons": {
+                "retry": "Retry",
+                "refresh": "Refresh App"
+            },
+            "errors": {
+                "nochildren": "No children provided to ErrorBoundary."
             }
         }
     }

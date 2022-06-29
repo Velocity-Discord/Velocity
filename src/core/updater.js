@@ -344,7 +344,7 @@ module.exports = new (class Updater {
                                                 size: Text.Sizes.SIZE_12,
                                                 color: Text.Colors.STANDARD,
                                             },
-                                            "Check us Out Here!"
+                                            Strings.Titles.checkusout
                                         ),
                                         React.createElement(Tooltip, {
                                             text: "Velocity",

@@ -784,3 +784,32 @@ textarea.velocity-editor {
 .velocity-code-block-button {
     margin-top: 7px;
 }
+
+.velocity-error-boundary {
+    display: flex;
+    flex-direction: column;
+    color: var(--text-muted);
+    margin-top: 10px;
+}
+
+* + .velocity-error-boundary {
+    margin-top: 0;
+}
+
+.velocity-error-boundary-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.velocity-error-boundary-dropdown {
+    width: 24px !important;
+}
+
+.velocity-error-boundary-details {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    margin-top: 7px;
+    cursor: pointer;
+    justify-content: flex-start;
+}

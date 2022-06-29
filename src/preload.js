@@ -677,7 +677,7 @@ ${props.content}
                                         VApi.CustomCSS.reload();
                                     },
                                 },
-                                "Add to Custom CSS"
+                                Strings.Components.BuiltIns.addtocustomcss
                             )
                         );
                         props.lang = "css";
@@ -697,7 +697,7 @@ ${props.content}
                                         `);
                                     },
                                 },
-                                "Add to Startup JS"
+                                Strings.Components.BuiltIns.addtostartupscript
                             )
                         );
                         props.lang = "js";
