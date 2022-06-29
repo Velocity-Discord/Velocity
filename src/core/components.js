@@ -7,8 +7,173 @@ const { React, WebpackModules, modals, DataStore } = VApi;
 const { Strings } = require("./i18n");
 
 const Text = WebpackModules.findByDisplayNameDefault("LegacyText");
+const FormTitle = WebpackModules.findByDisplayNameDefault("FormTitle");
+const DropdownArrow = WebpackModules.findByDisplayNameDefault("DropdownArrow");
 
 module.exports = new (class Components {
+    ErrorBoundary = class ErrorBoundary extends React.PureComponent {
+        get Button() {
+            return WebpackModules.findByProps("Sizes", "Colors", "Looks", "DropdownSizes");
+        }
+        get Markdown() {
+            return WebpackModules.find((m) => m.default?.displayName === "Markdown" && m.default?.rules).default;
+        }
+
+        constructor(props) {
+            super(props);
+
+            this.state = {
+                error: false,
+            };
+
+            if (!props.children) {
+                this.state = {
+                    error: true,
+
+                    errorStack: Strings.Components.ErrorBoundary.errors.nochildren,
+                };
+            }
+
+            this.props.originalChildren = props.children;
+
+            if (props.error) {
+                this.state = {
+                    error: true,
+                };
+            }
+        }
+
+        static getDerivedStateFromError(error) {
+            return {
+                error: true,
+
+                errorStack: error,
+            };
+        }
+
+        componentDidCatch(error, errorInfo) {
+            this.setState({
+                error: true,
+
+                errorStack: error.stack,
+            });
+        }
+
+        render() {
+            if (this.state.toRetry) {
+                this.state.error = false;
+            }
+
+            let header = this.state.header || Strings.Components.ErrorBoundary.headers.uncaught;
+
+            if (this.props.originalChildren?.type) {
+                header = `${Strings.Components.ErrorBoundary.headers.uncaught} ${
+                    this.props.originalChildren.type.displayName ?? this.props.originalChildren.type.name ?? this.props.originalChildren.type
+                }`;
+            }
+
+            if (this.state.error) {
+                return React.createElement(
+                    "div",
+                    {
+                        className: "velocity-error-boundary",
+                    },
+                    React.createElement(
+                        "div",
+                        {
+                            className: "velocity-error-boundary-title",
+                        },
+                        React.createElement(
+                            FormTitle,
+                            {
+                                tag: "h1",
+                            },
+                            header
+                        )
+                    ),
+
+                    React.createElement(
+                        "div",
+                        {
+                            className: "velocity-error-boundary-actions",
+                        },
+                        React.createElement(
+                            this.Button,
+                            {
+                                size: this.Button.Sizes.SMALL,
+                                onClick: () => {
+                                    this.state.toRetry = true;
+                                    this.forceUpdate();
+                                },
+                            },
+                            Strings.Components.ErrorBoundary.buttons.retry
+                        ),
+
+                        React.createElement(
+                            this.Button,
+                            {
+                                color: this.Button.Colors.RED,
+                                size: this.Button.Sizes.SMALL,
+
+                                onClick: () => {
+                                    location.reload();
+                                },
+                            },
+                            Strings.Components.ErrorBoundary.buttons.refresh
+                        )
+                    ),
+
+                    React.createElement(
+                        "div",
+                        {
+                            onClick: () => {
+                                this.state.toRetry = false;
+                                this.state.showDetails = !this.state.showDetails;
+                                this.forceUpdate();
+                            },
+                            className: "velocity-error-boundary-details",
+                        },
+                        this.state.showDetails ? Strings.Components.ErrorBoundary.headers.hidedetails : Strings.Components.ErrorBoundary.headers.showdetails,
+                        React.createElement(
+                            "div",
+                            {
+                                style: {
+                                    transform: `rotate(${this.state.showDetails ? "0" : "90"}deg)`,
+                                },
+                                className: "velocity-error-boundary-dropdown",
+                            },
+                            React.createElement(DropdownArrow, {
+                                width: 24,
+                                height: 24,
+                            })
+                        )
+                    ),
+
+                    this.state.showDetails
+                        ? React.createElement(
+                              "div",
+                              {
+                                  className: "velocity-error-boundary-markdown",
+                              },
+                              React.createElement(this.Markdown, {}, `# ${Strings.Components.ErrorBoundary.headers.errorstack}`),
+                              React.createElement(
+                                  this.Markdown,
+                                  {},
+                                  `
+\`\`\`ts
+${this.state.errorStack}
+\`\`\`
+                                    `
+                              )
+                          )
+                        : null
+                );
+            }
+
+            return this.props.children;
+        }
+    };
+
     SettingsSection = React.memo((props) => {
         const { plugin, setting, note, name, warning, action } = props;
 
