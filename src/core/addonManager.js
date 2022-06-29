@@ -142,6 +142,7 @@ fs.readdir(themeDir, (err, files) => {
     folders.sort().map((folder) => {
         if (DevMode) Logger.log("Addon Manager", `Loading ${folder}`);
         const filePath = path.join(themeDir, folder, "velocity_manifest.json");
+        if (!fs.existsSync(filePath)) return;
 
         const meta = readManifest(filePath);
         fs.readFile(path.join(themeDir, folder, meta.main), "utf8", (err, data) => {
@@ -215,13 +216,13 @@ const Themes = new (class {
     }
 })();
 
-let fsThemeTimout;
+let fsThemeTimeout;
 fs.watch(themeDir, { persistent: false }, async (eventType, filename) => {
     if (!eventType || !filename) return;
-    if (fsThemeTimout) return;
+    if (fsThemeTimeout) return;
 
-    fsThemeTimout = setTimeout(function () {
-        fsThemeTimout = null;
+    fsThemeTimeout = setTimeout(function () {
+        fsThemeTimeout = null;
     }, 100);
 
     const absolutePath = path.resolve(themeDir, filename);
@@ -243,6 +244,7 @@ fs.watch(themeDir, { persistent: false }, async (eventType, filename) => {
                 delete addons.themes[getKeyByValue(addons.themes, meta.name)];
                 addons.themes.push(meta);
 
+                VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.unloaded} <strong>${meta.name}</strong>`);
                 if (enabled) {
                     const ele = document.querySelectorAll(`[velocity-theme-id="${meta.name}"]`);
                     for (let ele1 of ele) {
@@ -258,6 +260,7 @@ fs.watch(themeDir, { persistent: false }, async (eventType, filename) => {
                     document.querySelector("velocity-themes").appendChild(style);
                     VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.enabled} <strong>${meta.name}</strong>`, { type: "success" });
                 }
+                VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.loaded} <strong>${meta.name}</strong>`);
             } else {
                 addons.themes.push(meta);
             }
@@ -279,6 +282,7 @@ fs.readdir(pluginDir, (err, files) => {
         if (DevMode) Logger.log("Addon Manager", `Loading ${folder}`);
         const filePath = path.join(pluginDir, folder, "velocity_manifest.json");
         if (folder == "node_modules") return;
+        if (!fs.existsSync(filePath)) return;
 
         const meta = readManifest(filePath);
         let plugin = require(path.join(pluginDir, folder, meta.main));
@@ -331,6 +335,7 @@ fs.readdir(pluginDir, (err, files) => {
             }
 
             addons.plugins.push(meta);
+
             function load() {
                 if (plugin.default) plugin = plugin.default;
                 setTimeout(() => {
@@ -353,16 +358,16 @@ fs.readdir(pluginDir, (err, files) => {
 
 const Plugins = new (class {
     delete(name) {
-        return delete addons.plugins.find((p) => p.name === name);
+        return delete addons.plugins.find((p) => p?.name === name);
     }
     get(name) {
-        return addons.plugins.find((p) => p.name === name);
+        return addons.plugins.find((p) => p?.name === name);
     }
     getAll() {
         return addons.plugins;
     }
     getEnabled() {
-        return addons.plugins.filter((p) => this.isEnabled[p.name]);
+        return addons.plugins.filter((p) => this.isEnabled[p?.name]);
     }
     isEnabled(name) {
         return Velocity.enabledPlugins[name] ?? false;
@@ -395,6 +400,81 @@ const Plugins = new (class {
         return this.getAll().find((p) => p.file.endsWith(name));
     }
 })();
+
+let fsPluginTimeout;
+fs.watch(pluginDir, { persistent: false }, async (eventType, filename) => {
+    if (!eventType || !filename) return;
+    if (fsPluginTimeout) return;
+
+    console.log(`Plugin ${filename} was ${eventType}`);
+
+    fsPluginTimeout = setTimeout(function () {
+        fsPluginTimeout = null;
+    }, 100);
+
+    const absolutePath = path.resolve(pluginDir, filename);
+
+    if (!filters.plugins.test(filename)) return;
+
+    let meta;
+
+    try {
+        fs.readFile(absolutePath, "utf8", (err, data) => {
+            if (err) throw new Error(`Error reading '${absolutePath}'`);
+            const meta = readMeta(data);
+            let plugin = require(absolutePath);
+            typeof plugin.Plugin === "function" && (plugin.Plugin = plugin.Plugin());
+            meta.export = plugin;
+            meta.type = "plugin";
+            meta.file = absolutePath;
+
+            const PluginExport = typeof plugin.Plugin === "function" ? plugin.Plugin() : plugin.Plugin;
+            if (PluginExport.getSettingsPanel) {
+                meta.hasSettings = true;
+                PluginExport.settings = DataStore.getAllData(meta.name);
+            }
+            function load() {
+                if (plugin.default) plugin = plugin.default;
+                setTimeout(() => {
+                    if (PluginExport.onLoad) PluginExport.onLoad();
+                }, 2000);
+                return plugin;
+            }
+            load();
+            addonsInit.plugins.push(() => {
+                function load() {
+                    if (plugin.default) plugin = plugin.default;
+                    if (plugin.onLoad) plugin.onLoad();
+                    return plugin;
+                }
+                load();
+            });
+
+            if (Plugins.get(meta.name)) {
+                delete addons.plugins[getKeyByValue(addons.plugins, meta.name)];
+                addons.plugins.push(meta);
+            } else {
+                addons.plugins.push(meta);
+            }
+
+            if (Plugins.get(meta.name)) {
+                const enabled = Velocity.enabledPlugins[meta.name] || false;
+
+                VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.unloaded} <strong>${meta.name}</strong>`);
+                if (enabled) {
+                    Plugins.disable(meta.name);
+                    VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.disabled} <strong>${meta.name}</strong>`, { type: "success" });
+                    Plugins.enable(meta.name);
+                    VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.enabled} <strong>${meta.name}</strong>`, { type: "success" });
+                }
+                VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.loaded} <strong>${meta.name}</strong>`);
+            }
+        });
+    } catch (e) {
+        Logger.error("Addon Manager", "Error Reading Plugin Directory:", e);
+        VApi.showToast("Addon Manager", Strings.Toasts.AddonManager.errorreadingplugin, { type: "error" });
+    }
+});
 
 module.exports = {
     remote: () => {
