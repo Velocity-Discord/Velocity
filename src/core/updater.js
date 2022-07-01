@@ -18,40 +18,40 @@ async function waitUntil(condition) {
 
 let updateURL = Config.backend.updates.url;
 
-module.exports = new (class Updater {
-    async failModal(title, content) {
-        const { React, WebpackModules, modals } = VApi;
+async function failModal(title, content) {
+    const { React, WebpackModules, modals } = VApi;
 
-        const ConfirmationModal = WebpackModules.find("ConfirmModal").default;
-        const Button = WebpackModules.find(["ButtonColors"]);
-        const { Messages } = WebpackModules.find((m) => m.default?.Messages?.OKAY).default;
-        const Markdown = WebpackModules.find((m) => m.default?.displayName === "Markdown" && m.default.rules).default;
+    const ConfirmationModal = WebpackModules.find("ConfirmModal").default;
+    const Button = WebpackModules.find(["ButtonColors"]);
+    const { Messages } = WebpackModules.find((m) => m.default?.Messages?.OKAY).default;
+    const Markdown = WebpackModules.find((m) => m.default?.displayName === "Markdown" && m.default.rules).default;
 
-        if (!Array.isArray(content)) content = [content];
-        content = content.map((c) => (typeof c === "string" ? React.createElement(Markdown, null, c) : c));
+    if (!Array.isArray(content)) content = [content];
+    content = content.map((c) => (typeof c === "string" ? React.createElement(Markdown, null, c) : c));
 
-        return new Promise((resolve) => {
-            modals.open((props) => {
-                if (props.transitionState === 3) resolve(false);
-                return React.createElement(
-                    ConfirmationModal,
-                    Object.assign(
-                        {
-                            header: title,
-                            confirmButtonColor: Button.ButtonColors.BRAND,
-                            confirmText: Strings.Settings.done,
-                            danger: true,
-                            onConfirm: () => resolve(true),
-                            onCancel: () => resolve(false),
-                            children: content,
-                        },
-                        props
-                    )
-                );
-            });
+    return new Promise((resolve) => {
+        modals.open((props) => {
+            if (props.transitionState === 3) resolve(false);
+            return React.createElement(
+                ConfirmationModal,
+                Object.assign(
+                    {
+                        header: title,
+                        confirmButtonColor: Button.ButtonColors.BRAND,
+                        confirmText: Strings.Settings.done,
+                        danger: true,
+                        onConfirm: () => resolve(true),
+                        onCancel: () => resolve(false),
+                        children: content,
+                    },
+                    props
+                )
+            );
         });
-    }
+    });
+}
 
+module.exports = new (class Updater {
     async getUpdateStatus() {
         logger.log("Velocity", "Checking for updates");
         let updateData;
@@ -125,13 +125,13 @@ module.exports = new (class Updater {
 
                                                 showToast("Updater", Strings.Toasts.Updater.startingpull);
                                                 try {
-                                                    exec("git pull", (error, stdout, stderr) => {
+                                                    exec(`cd ${process.env.VELOCITY_DIRECTORY} && cd ../ && git pull`, (error, stdout, stderr) => {
                                                         if (error || stderr) {
                                                             const VDir = path.join(__dirname, "../../../");
                                                             logger.error("Updater", error);
                                                             showToast("Updater", Strings.Toasts.Updater.failedpull, { type: "error" });
-                                                            this.failModal(Strings.Modals.Updater.failedheader, [
-                                                                ...Strings.Modals.Updater.failed,
+                                                            failModal(Strings.Modals.Updater.failedheader, [
+                                                                ...Array.from(Object.values(Strings.Modals.Updater.failed)),
                                                                 React.createElement(
                                                                     ButtonEle,
                                                                     {
@@ -213,8 +213,8 @@ module.exports = new (class Updater {
                                                             const VDir = path.join(__dirname, "../../../");
                                                             logger.error("Updater", error);
                                                             showToast("Updater", Strings.Toasts.Updater.failedpull, { type: "error" });
-                                                            this.failModal(Strings.Modals.Updater.failedheader, [
-                                                                ...Strings.Modals.Updater.failed,
+                                                            failModal(Strings.Modals.Updater.failedheader, [
+                                                                ...Array.from(Object.values(Strings.Modals.Updater.failed)),
                                                                 React.createElement(
                                                                     ButtonEle,
                                                                     {
