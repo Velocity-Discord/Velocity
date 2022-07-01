@@ -50,7 +50,7 @@ ${c}
     }
 
     parse(css) {
-        let newCSS = css;
+        let newCSS = css || "";
 
         newCSS = this.ifParser(newCSS);
         newCSS = this.varParser(newCSS);
@@ -59,7 +59,7 @@ ${c}
     }
 
     themeParser(css) {
-        let newCSS = css;
+        let newCSS = css || "";
 
         newCSS = this.parse(newCSS);
     }
