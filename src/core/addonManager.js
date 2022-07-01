@@ -159,6 +159,7 @@ fs.readdir(themeDir, (err, files) => {
         if (DevMode) Logger.log("Addon Manager", `Loading ${file}`);
         const filePath = path.join(themeDir, file);
         fs.readFile(filePath, "utf8", (err, data) => {
+            if (!data.match(/^\/\*\*/)) return;
             if (err) throw new Error(`Error reading '${filePath}'`);
             const meta = readMeta(data);
             meta.file = filePath;
