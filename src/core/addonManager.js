@@ -406,8 +406,6 @@ fs.watch(pluginDir, { persistent: false }, async (eventType, filename) => {
     if (!eventType || !filename) return;
     if (fsPluginTimeout) return;
 
-    console.log(`Plugin ${filename} was ${eventType}`);
-
     fsPluginTimeout = setTimeout(function () {
         fsPluginTimeout = null;
     }, 100);
@@ -451,10 +449,14 @@ fs.watch(pluginDir, { persistent: false }, async (eventType, filename) => {
             });
 
             if (Plugins.get(meta.name)) {
+                console.log(addons.plugins[getKeyByValue(addons.plugins, meta.name)]);
                 delete addons.plugins[getKeyByValue(addons.plugins, meta.name)];
                 addons.plugins.push(meta);
+                console.log(addons.plugins[getKeyByValue(addons.plugins, meta.name)]);
             } else {
+                console.log(addons.plugins[getKeyByValue(addons.plugins, meta.name)]);
                 addons.plugins.push(meta);
+                console.log(addons.plugins[getKeyByValue(addons.plugins, meta.name)]);
             }
 
             if (Plugins.get(meta.name)) {

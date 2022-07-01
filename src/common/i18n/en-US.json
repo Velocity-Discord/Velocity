@@ -248,6 +248,7 @@
                 "backendstatus": {
                     "title": "Backend Status",
                     "rerequest": "Re-Request",
+                    "request": "Request",
                     "clearcache": "Clear Cache",
                     "urls": {
                         "badges": "Badges",
@@ -258,6 +259,10 @@
                         "status": "Status",
                         "fine": "Fine",
                         "unknown": "Unknown"
+                    },
+                    "table": {
+                        "name": "Name",
+                        "status": "Status"
                     }
                 }
             }

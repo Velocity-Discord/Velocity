@@ -254,8 +254,8 @@ if (dPath) {
             remote: remote(),
         };
 
-        const InfoModal = require("./core/ui/InfoModal");
-        const SponsorModal = require("./core/ui/SponsorModal");
+        const InfoModal = require("./core/ui/components/InfoModal");
+        const SponsorModal = require("./core/ui/components/SponsorModal");
         VApi.showInfoModal = InfoModal;
         VApi.showSponsorModal = SponsorModal;
 

@@ -29,8 +29,9 @@ velocity-toasts {
 /* stylelint-enable */
 
 #editor {
-    height: 400px;
+    height: 600px;
     margin: 5px 0;
+    overflow: hidden;
 }
 
 .velocity-card {
@@ -660,7 +661,7 @@ textarea.velocity-editor {
     gap: 10px;
     padding: 10px;
     box-sizing: border-box;
-    border-bottom: thin solid var(--background-modifier-accent);
+    border-top: 1px solid var(--background-modifier-accent);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -673,9 +674,6 @@ textarea.velocity-editor {
 .velocity-developer-container {
     display: flex;
     flex-direction: column;
-    padding: 60px 130px 80px 40px;
-    flex: 1 1 auto;
-    overflow-y: scroll;
 }
 
 .velocity-developer-internal-patch-info {
@@ -717,6 +715,12 @@ textarea.velocity-editor {
 .velocity-developer-status-header {
     font-size: 18px;
     font-weight: 500;
+    color: var(--header-primary);
+    font-weight: 500;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 16px;
 }
 
 .velocity-developer-container::-webkit-scrollbar {
@@ -745,40 +749,42 @@ textarea.velocity-editor {
     height: 10px;
 }
 
-.velocity-developer-status-table {
-    width: 40%;
-    gap: 0px;
-}
-
 .velocity-developer-status-table-text {
     width: 50%;
     font-weight: 600;
 }
 
-.velocity-developer-status-header {
+.velocity-developer-status-table {
     color: var(--text-normal);
 }
 
-.velocity-developer-status-table tr:nth-child(odd) {
-    background: var(--background-secondary);
-}
-
 .velocity-developer-status-table td {
-    padding: 6px;
+    border-top: 1px solid var(--background-modifier-accent);
+    height: 61px;
+    padding-block: 20px;
+    box-sizing: border-box;
 }
 
-.velocity-developer-status-table {
-    border: 0;
-    background: var(--background-floating);
+.velocity-developer-status-table td:last-child {
+    text-align: end;
 }
 
-.velocity-developer-status-table tr:nth-child(even) {
-    background: var(--background-primary);
+.velocity-developer-status-table th {
+    padding-block: 8px;
+    font-size: 12px;
+    color: var(--header-secondary);
+    text-transform: uppercase;
+    font-weight: 700;
+    text-align: start;
+    margin-top: 32px;
+}
+
+.velocity-developer-status-table th:last-child {
+    text-align: end;
 }
 
 .velocity-developer-status-table-text {
     color: var(--text-muted);
-    opacity: 0.4;
 }
 
 .velocity-code-block-button {
