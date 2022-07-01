@@ -291,11 +291,7 @@ velocity-toasts {
 #velocity-settings-section {
     display: flex;
     padding: 5%;
-    border-bottom: thin solid var(--background-modifier-accent);
-}
-
-#velocity-settings-section:nth-child(1) {
-    border-top: thin solid var(--background-modifier-accent);
+    border-top: 1px solid var(--background-modifier-accent);
 }
 
 #velocity-settings-section > div:not([class^="input"]):nth-child(2) {

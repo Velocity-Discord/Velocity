@@ -797,50 +797,44 @@ VApi.Patcher(
                     section: normalizeString(plugin.name),
                     label: plugin.name,
                     className: `velocity-plugin-${normalizeString(plugin.name)}-tab`,
-                    onClick: () => {
-                        try {
-                            const PluginExport = typeof plugin.export.Plugin === "function" ? plugin.export.Plugin() : plugin.export.Plugin;
-                            let settingsItems = [];
-                            if (Array.isArray(PluginExport.getSettingsPanel())) {
-                                PluginExport.getSettingsPanel().forEach((item) => {
-                                    switch (item.type) {
-                                        case "switch":
-                                            return settingsItems.push(
-                                                React.createElement(Components.SettingsSection, {
-                                                    plugin: item.plugin,
-                                                    setting: item.setting,
-                                                    name: item.name,
-                                                    note: item.note,
-                                                    warning: item.warning,
-                                                    action: item.action,
-                                                })
-                                            );
-                                        case "input":
-                                            return settingsItems.push(
-                                                React.createElement(Components.SettingsInput, {
-                                                    plugin: item.plugin,
-                                                    setting: item.setting,
-                                                    name: item.name,
-                                                    note: item.note,
-                                                    warning: item.warning,
-                                                    action: item.action,
-                                                    placeholder: item.placeholder,
-                                                    maxLength: item.maxLength,
-                                                    vertical: item.vertical || false,
-                                                })
-                                            );
-                                    }
-                                });
-                            } else {
-                                settingsItems = PluginExport.getSettingsPanel();
-                            }
-                            Components.ShowAddonSettingsModal({
-                                name: plugin.name,
-                                children: settingsItems,
+                    element: () => {
+                        const PluginExport = typeof plugin.export.Plugin === "function" ? plugin.export.Plugin() : plugin.export.Plugin;
+                        let settingsItems = [];
+                        if (Array.isArray(PluginExport.getSettingsPanel())) {
+                            PluginExport.getSettingsPanel().forEach((item) => {
+                                switch (item.type) {
+                                    case "switch":
+                                        return settingsItems.push(
+                                            React.createElement(Components.SettingsSection, {
+                                                plugin: item.plugin,
+                                                setting: item.setting,
+                                                name: item.name,
+                                                note: item.note,
+                                                warning: item.warning,
+                                                action: item.action,
+                                            })
+                                        );
+                                    case "input":
+                                        return settingsItems.push(
+                                            React.createElement(Components.SettingsInput, {
+                                                plugin: item.plugin,
+                                                setting: item.setting,
+                                                name: item.name,
+                                                note: item.note,
+                                                warning: item.warning,
+                                                action: item.action,
+                                                placeholder: item.placeholder,
+                                                maxLength: item.maxLength,
+                                                vertical: item.vertical || false,
+                                            })
+                                        );
+                                }
                             });
-                        } catch (error) {
-                            console.error(error);
+                        } else {
+                            settingsItems = PluginExport.getSettingsPanel();
                         }
+
+                        return [React.createElement(FormTitle, { tag: "h1" }, plugin.name), settingsItems];
                     },
                 });
             }

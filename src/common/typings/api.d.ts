@@ -65,7 +65,6 @@ declare interface Api {
         unpatchAll: (name: string, verification?: any) => void;
     };
     Components: {
-        ShowAddonSettingsModal: (name: string, children: any) => void;
         SettingsSection: (plugin: string, setting: string, note: string, name: string, warning: string, action: any) => void;
         SettingsInput: (
             plugin: string,
