@@ -1,6 +1,6 @@
 {
     "name": "velocity",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "A Client Modification for Discord enhanced by Plugins and Themes!",
     "main": "./dist/velocity.asar",
     "author": "TheCommieAxolotl",
@@ -8,8 +8,8 @@
     "info": {
         "name": "Velocity",
         "description": "A Client Modification for Discord enhanced by Plugins and Themes!",
-        "version": "1.0.0",
-        "hash": "bdbd3b",
+        "version": "1.0.1",
+        "hash": "26e135",
         "api": {
             "version": "1.0.0",
             "channel": "stable"
