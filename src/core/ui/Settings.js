@@ -307,12 +307,12 @@ VApi.Patcher(
                     divider: true,
                 }),
                 React.createElement(SettingsSwitchSection, {
-                    setting: "DegubberKey",
+                    setting: "DebuggerKey",
                     name: Strings.Settings.Settings.Sections.developer.debuggerkey.name,
                     note: Strings.Settings.Settings.Sections.developer.debuggerkey.note,
                     reload: true,
                     action: () => {
-                        const warning = document.getElementById("velocity-settings-section-degubberkey-warning");
+                        const warning = document.getElementById("velocity-settings-section-debuggerkey-warning");
                         warning.innerHTML = Strings.Settings.requiresrestart;
                     },
                 }),

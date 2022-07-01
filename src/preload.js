@@ -46,7 +46,7 @@ if (dPath) {
     toWindow(PermissionError);
 
     async function DomLoaded() {
-        if (DataStore.getData("VELOCITY_SETTINGS", "DegubberKey")) {
+        if (DataStore.getData("VELOCITY_SETTINGS", "DebuggerKey")) {
             window.addEventListener(
                 "keydown",
                 (event) =>
