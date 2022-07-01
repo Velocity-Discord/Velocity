@@ -5,7 +5,7 @@ const VApi = window.VApi;
 
 const { React, WebpackModules } = VApi;
 const { ipcRenderer } = require("electron");
-const DataStore = require("../datastore");
+const DataStore = require("../../datastore");
 
 const Text = WebpackModules.find("LegacyText").default;
 const SwitchEle = WebpackModules.find("Switch").default;

@@ -7,12 +7,6 @@ const { React, WebpackModules, request } = VApi;
 
 const Button = WebpackModules.find(["ButtonColors"]).default;
 const ButtonColors = WebpackModules.find(["ButtonColors"]).ButtonColors;
-const ButtonSizes = WebpackModules.find(["ButtonColors"]).ButtonSizes;
-const Text = WebpackModules.find("LegacyText").default;
-const Tooltip = WebpackModules.find.prototypes("renderTooltip").default;
-const TextInput = WebpackModules.find("TextInput").default;
-const FormTitle = WebpackModules.find("FormTitle").default;
-const Table = WebpackModules.find("Table").default;
 
 const i18n = require("../../i18n");
 
@@ -21,8 +15,6 @@ const { Strings } = i18n;
 class StatusTable extends React.Component {
     constructor(props) {
         super(props);
-
-        console.log(props.items);
 
         this.props = props;
         this.props.originalItems = props.items;

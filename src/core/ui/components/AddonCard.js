@@ -3,7 +3,7 @@
  */
 const VApi = window.VApi;
 
-const { React, logger, WebpackModules, showToast, Utilities, AddonManager } = VApi;
+const { React, logger, WebpackModules, showToast, AddonManager } = VApi;
 const { shell } = require("electron");
 const i18n = require("../../i18n");
 const fs = require("fs");
