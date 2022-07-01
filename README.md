@@ -31,12 +31,12 @@ npm run install
 
 #### PTB
 ```ps
-npm run install --ptb
+npm run install -- --ptb
 ```
 
 #### Canary
 ```ps
-npm run install --canary
+npm run install -- --canary
 ```
 
 ---
@@ -58,12 +58,12 @@ npm run install
 
 #### PTB
 ```ps
-npm run install --ptb
+npm run install -- --ptb
 ```
 
 #### Canary
 ```ps
-npm run install --canary
+npm run install -- --canary
 ```
 
 ### 3. Development. 
