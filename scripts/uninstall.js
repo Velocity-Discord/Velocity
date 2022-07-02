@@ -1,9 +1,9 @@
 const path = require("path");
 const fs = require("fs");
-const { mkdir, writeFile, readdir } = require("fs").promises;
+const { readdir, unlink, rmdir } = require("fs").promises;
 
 console.log("\x1b[1;94mVelocity \x1b[0m");
-console.log("Starting installation process...");
+console.log("Starting uninstallation...");
 
 async function run() {
     const readline = require("readline").createInterface({
@@ -22,30 +22,23 @@ async function run() {
             appPath = "/Applications/Discord.app/Contents/Resources/";
         }
 
-        console.log(`Preparing to install to '${appPath}'`);
+        console.log(`Preparing to uninstall from '${appPath}'`);
 
         readline.question("Is this ok? (y/n) ", async (answer) => {
             if (answer == "y") {
                 if (fs.existsSync(path.join(appPath, "app"))) {
-                    console.error("A Discord Client Modification is already installed in this directory.");
-                    console.log("Overwriting existing files...");
+                    await unlink(path.join(appPath, "app", "index.js"));
+                    await unlink(path.join(appPath, "app", "package.json"));
+                    await rmdir(path.join(appPath, "app"));
                 } else {
-                    await mkdir(path.join(appPath, "app"));
+                    console.error("No Discord Client Modification is installed in this directory.");
+                    readline.close();
                 }
-                await Promise.all([
-                    writeFile(path.join(appPath, "app", "index.js"), `require(\`${path.join(__dirname, "../").replace(RegExp(path.sep.repeat(2), "g"), "/")}\`)`),
-                    writeFile(
-                        path.join(appPath, "app", "package.json"),
-                        JSON.stringify({
-                            main: "index.js",
-                            name: "discord",
-                        })
-                    ),
-                ]);
+
                 console.log("Done!");
                 readline.close();
             } else {
-                console.log("Exiting Install.");
+                console.log("Exiting Uninstall.");
                 process.exit();
             }
         });
@@ -72,30 +65,23 @@ async function run() {
             appPath = path.join(discordPath, currentBuild, "resources");
         }
 
-        console.log(`Preparing to install to '${appPath}'`);
+        console.log(`Preparing to uninstall from '${appPath}'`);
 
         readline.question("Is this ok? (y/n) ", async (answer) => {
             if (answer == "y") {
                 if (fs.existsSync(path.join(appPath, "app"))) {
-                    console.error("A Discord Client Modification is already installed in this directory.");
-                    console.log("Overwriting existing files...");
+                    await unlink(path.join(appPath, "app", "index.js"));
+                    await unlink(path.join(appPath, "app", "package.json"));
+                    await rmdir(path.join(appPath, "app"));
                 } else {
-                    await mkdir(path.join(appPath, "app"));
+                    console.error("No Discord Client Modification is installed in this directory.");
+                    readline.close();
                 }
-                await Promise.all([
-                    writeFile(path.join(appPath, "app", "index.js"), `require(\`${path.join(__dirname, "../").replace(RegExp(path.sep.repeat(2), "g"), "/")}\`)`),
-                    writeFile(
-                        path.join(appPath, "app", "package.json"),
-                        JSON.stringify({
-                            main: "index.js",
-                            name: "discord",
-                        })
-                    ),
-                ]);
+
                 console.log("Done!");
                 readline.close();
             } else {
-                console.log("Exiting Install.");
+                console.log("Exiting Uninstall.");
                 process.exit();
             }
         });
@@ -103,7 +89,7 @@ async function run() {
         return true;
     }
 
-    readline.question("Please enter the absolute path to the discord folder you would like to install Velocity. (filePath) ", (paths) => {
+    readline.question("Please enter the absolute path to the discord folder you would like to uninstall Velocity from. (filePath) ", (paths) => {
         const proposedPath = path.resolve(paths);
         if (!fs.existsSync(proposedPath)) {
             console.error("Requested path does not exist.");
@@ -137,31 +123,23 @@ async function run() {
             else appPath = proposedPath;
         }
 
-        console.log(`Preparing to install to '${appPath}'`);
+        console.log(`Preparing to uninstall from '${appPath}'`);
 
         readline.question("Is this ok? (y/n) ", async (answer) => {
             if (answer == "y") {
                 if (fs.existsSync(path.join(appPath, "app"))) {
-                    console.error("A Discord Client Modification is already installed in this directory.");
-                    console.log("Overwriting existing files...");
-                    // return false;
+                    await unlink(path.join(appPath, "app", "index.js"));
+                    await unlink(path.join(appPath, "app", "package.json"));
+                    await rmdir(path.join(appPath, "app"));
                 } else {
-                    await mkdir(path.join(appPath, "app"));
+                    console.error("No Discord Client Modification is installed in this directory.");
+                    readline.close();
                 }
-                await Promise.all([
-                    writeFile(path.join(appPath, "app", "index.js"), `require(\`${path.join(__dirname, "../").replace(RegExp(path.sep.repeat(2), "g"), "/")}\`)`),
-                    writeFile(
-                        path.join(appPath, "app", "package.json"),
-                        JSON.stringify({
-                            main: "index.js",
-                            name: "discord",
-                        })
-                    ),
-                ]);
+
                 console.log("Done!");
                 readline.close();
             } else {
-                console.log("Exiting Install.");
+                console.log("Exiting Uninstall.");
                 process.exit();
             }
         });

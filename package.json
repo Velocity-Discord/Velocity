@@ -20,6 +20,7 @@
         "bump": "npm run bump:hash && npm run bump:version",
         "watch": "node ./scripts/watch.js --",
         "install": "node ./scripts/install.js --",
+        "uninstall": "node ./scripts/uninstall.js --",
         "bump:hash": "node ./scripts/bumpHash.js --",
         "bump:version": "node ./scripts/bumpVersion.js",
         "stylelint": "stylelint \"**/*.css\""
