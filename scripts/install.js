@@ -53,7 +53,7 @@ async function run() {
         return true;
     } else if (process.argv.includes("--win")) {
         if (process.argv.includes("--canary")) {
-            const discordPath = path.join(process.env.LOCALAPPDATA, "Discord Canary");
+            const discordPath = path.join(process.env.LOCALAPPDATA, "DiscordCanary");
             const discordDirectory = await readdir(discordPath);
 
             const currentBuild = discordDirectory.filter((paths) => paths.startsWith("app-")).reverse()[0];
@@ -118,7 +118,7 @@ async function run() {
         else channelName = "Discord";
 
         if (process.platform == "win32") {
-            const isBaseDir = Boolean(selected === channelName);
+            const isBaseDir = Boolean(selected === channelName || selected === channelName.replace(" ", ""));
             if (isBaseDir) {
                 const version = fs
                     .readdirSync(proposedPath)
