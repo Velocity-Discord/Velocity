@@ -16,9 +16,9 @@ declare interface Api {
         body: HTMLElement;
     };
     Logger: {
-        log: (title: string, message: any) => void;
-        error: (title: string, message: any) => void;
-        warn: (title: string, message: any) => void;
+        log: (title: string, ...message: any) => void;
+        error: (title: string, ...message: any) => void;
+        warn: (title: string, ...message: any) => void;
     };
     Styling: {
         escapeID: (id: string) => string;
@@ -79,7 +79,7 @@ declare interface Api {
             vertical: boolean
         ) => void;
     };
-    showToast: (title: string, content: string, options: { type: string; timeout: number; color: string }) => void;
+    showToast: (title: string, content: string, options: { type: "success" | "error" | "velocity" | "warn"; timeout: number }) => void;
     showConfirmationModal: (
         title: string,
         content: string,

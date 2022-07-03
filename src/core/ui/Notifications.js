@@ -11,11 +11,11 @@ module.exports = new (class NotificationManager {
     /**
      * Shows a Toast
      * @param {string} content - The Toast Content.
-     * @param {object} [options] - Type Color and Timeout=3000
+     * @param {object} [options] - Type and Timeout=3000
      */
     async showToast(title, content, options = {}) {
         const container = document.querySelector("velocity-toasts");
-        const { type = "", timeout = 3000, color = "" } = options;
+        const { type = "", timeout = 3000 } = options;
         let time1, time2;
 
         const toast = document.createElement("div");
@@ -45,10 +45,6 @@ module.exports = new (class NotificationManager {
             closeToast();
             clearTimeout(time2);
         }, timeout);
-
-        if (color) {
-            toast.style.color = color;
-        }
 
         container.appendChild(toast);
 
