@@ -211,6 +211,7 @@ velocity-toasts {
     animation: toast-show 0.15s ease-out;
     color: #fff;
     font-size: 11pt;
+    border-left: 4px solid;
 }
 
 .velocity-toast-close {
@@ -249,15 +250,15 @@ velocity-toasts {
 
 .velocity-toast-body {
     font-weight: 500;
-    font-size: 17px;
-    color: #f3f3f3;
+    font-size: 13px;
+    margin-top: 3px;
+    color: #c0c5cc;
 }
 
 .velocity-toast-title {
     font-weight: 500;
-    font-size: 13px;
-    margin-top: 3px;
-    color: #c0c5cc;
+    font-size: 17px;
+    color: #f3f3f3;
 }
 
 .velocity-toast:first-of-type {
@@ -265,19 +266,19 @@ velocity-toasts {
 }
 
 .velocity-toast.type-success {
-    background: #254c2f;
+    border-left-color: #61ed99;
 }
 
 .velocity-toast.type-error {
-    background: #522d2d;
+    border-left-color: #e44e4e;
 }
 
 .velocity-toast.type-warn {
-    background: #56462e;
+    border-left-color: #daad2c;
 }
 
 .velocity-toast.type-velocity {
-    background: #404470;
+    border-left-color: #5b88fc;
 }
 
 .velocity-badge {
@@ -814,4 +815,80 @@ textarea.velocity-editor {
     margin-top: 7px;
     cursor: pointer;
     justify-content: flex-start;
+}
+
+.velocity-editor {
+    background: var(--background-secondary);
+    border-radius: 4px;
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+}
+
+.velocity-editor-header {
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: 10px;
+}
+
+.velocity-editor-header-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.velocity-editor-body {
+    height: 600px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    background: var(--background-secondary-alt);
+}
+
+.velocity-editor-body-sidebar {
+    width: 52px;
+    height: 100%;
+    z-index: 1;
+    position: absolute;
+    background: var(--background-secondary-alt);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: all 0.2s ease;
+    padding: 11px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.velocity-editor-body-sidebar-item {
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.velocity-editor-body-sidebar-item-options:not(.selected > *, .velocity-editor-body-sidebar-item:hover *) {
+    display: none;
+}
+
+.velocity-editor-body-sidebar:hover,
+.velocity-editor-body-sidebar:focus-within {
+    width: 175px;
+}
+
+.velocity-editor-body-monaco {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    margin-left: 52px;
 }

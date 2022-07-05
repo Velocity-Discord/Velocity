@@ -3,7 +3,7 @@
  */
 const VApi = window.VApi;
 
-const { WebpackModules, React, modals } = VApi;
+const { WebpackModules, React, modals, ReactDOM } = VApi;
 
 const Buttons = WebpackModules.find(["ButtonColors"]);
 
@@ -26,9 +26,11 @@ module.exports = new (class NotificationManager {
 
         toast.innerHTML = `
     <button class="velocity-toast-close">X</button>
-    <div class="velocity-toast-body">${content || ""}</div>
     <div class="velocity-toast-title">${title || ""}</div>
+    <div class="velocity-toast-body"></div>
     `;
+
+        ReactDOM.render(content instanceof React.Component ? React.createElement(Markdown, null, content) : content, toast.querySelector(".velocity-toast-body"));
 
         const closeToast = () => {
             toast.classList.add("closing");
