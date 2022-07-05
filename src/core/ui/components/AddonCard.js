@@ -284,7 +284,8 @@ module.exports = React.memo((props) => {
                                             try {
                                                 event.target.parentNode.parentNode.parentNode.parentNode.remove();
                                                 if (meta.remote) {
-                                                    type == "themes" ? AddonManager.remote.unloadTheme(meta.name) : AddonManager.unloadPlugin(meta.name);
+                                                    AddonManager.remote.unloadTheme(meta.name);
+
                                                     showToast("Addon Manager", `${Strings.Toasts.AddonManager.deleted} ${meta.name}`, { type: "error" });
                                                 } else {
                                                     if (meta.file.includes("/velocity_manifest.json")) {

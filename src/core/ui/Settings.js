@@ -67,9 +67,6 @@ monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
 const Settings = DataStore("VELOCITY_SETTINGS");
 const headerClasses = "velocity-header-display";
 
-const Themes = AddonManager.themes.getAll();
-const Plugins = AddonManager.plugins.getAll();
-
 let fontsize = DataStore.getData("VELOCITY_SETTINGS", "FontSize") || 14;
 if (fontsize > 14) {
     fontsize = 14;
@@ -602,12 +599,15 @@ VApi.Patcher(
                 React.createElement("div", {
                     id: "velocity-addons-grid",
                     children: [
-                        Plugins.sort(addonSort).map((plugin) =>
-                            React.createElement(Card, {
-                                meta: plugin,
-                                type: "plugins",
-                            })
-                        ),
+                        AddonManager.plugins
+                            .getAll()
+                            .sort(addonSort)
+                            .map((plugin) =>
+                                React.createElement(Card, {
+                                    meta: plugin,
+                                    type: "plugins",
+                                })
+                            ),
                     ],
                 }),
             ],
@@ -664,12 +664,15 @@ VApi.Patcher(
                 React.createElement("div", {
                     id: "velocity-addons-grid",
                     children: [
-                        Themes.sort(addonSort).map((theme) =>
-                            React.createElement(Card, {
-                                meta: theme,
-                                type: "themes",
-                            })
-                        ),
+                        AddonManager.themes
+                            .getAll()
+                            .sort(addonSort)
+                            .map((theme) =>
+                                React.createElement(Card, {
+                                    meta: theme,
+                                    type: "themes",
+                                })
+                            ),
                     ],
                 }),
             ],

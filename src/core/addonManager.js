@@ -102,14 +102,20 @@ const RemoteActions = new (class {
     }
 
     unloadTheme(name) {
-        const entry = remoteAddons.themes.filter((m) => m.name == name);
+        const entry = Velocity.remoteThemes.filter((m) => {
+            return m.name === name;
+        });
 
         if (entry[0]) {
             Themes.disable(name);
+
             remoteAddons.themes = remoteAddons.themes.filter((m) => m.name !== name);
+
             addons.themes = addons.themes.filter((m) => {
-                return Boolean(m !== entry[0]);
+                if (!m.remote) return true;
+                return m.name !== name;
             });
+
             DataStore.setData(
                 "VELOCITY_SETTINGS",
                 "remoteThemes",
@@ -127,9 +133,6 @@ const RemoteActions = new (class {
 function loadRemoteAddons() {
     Velocity.remoteThemes.forEach((theme) => {
         RemoteActions.loadTheme(theme.url);
-    });
-    Velocity.remotePlugins.forEach((plugin) => {
-        RemoteActions.loadPlugin(plugin.url);
     });
 }
 
@@ -482,7 +485,7 @@ module.exports = {
             loadTheme: (url) => {
                 RemoteActions.loadTheme(url);
             },
-            unloadTheme: (url) => {
+            unloadTheme: (name) => {
                 RemoteActions.unloadTheme(name);
             },
         };
