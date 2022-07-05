@@ -30,7 +30,7 @@ module.exports = new (class NotificationManager {
     <div class="velocity-toast-body"></div>
     `;
 
-        ReactDOM.render(content instanceof React.Component ? React.createElement(Markdown, null, content) : content, toast.querySelector(".velocity-toast-body"));
+        ReactDOM.render(content instanceof React.Component ? React.createElement(React.Fragment, null, content) : content, toast.querySelector(".velocity-toast-body"));
 
         const closeToast = () => {
             toast.classList.add("closing");

@@ -96,16 +96,16 @@ module.exports = React.memo((props) => {
                                     AddonManager[type].toggle(meta.name);
                                     setEnabled(!enabled);
                                     if (!enabled) {
-                                        showToast("Addon Manager", `${Strings.Toasts.AddonManager.enabled} <strong>${meta.name}</strong>`, { type: "success" });
+                                        showToast("Addon Manager", `${Strings.Toasts.AddonManager.enabled} ${meta.name}`, { type: "success" });
                                     } else {
-                                        showToast("Addon Manager", `${Strings.Toasts.AddonManager.disabled} <strong>${meta.name}</strong>`, { type: "success" });
+                                        showToast("Addon Manager", `${Strings.Toasts.AddonManager.disabled} ${meta.name}`, { type: "success" });
                                     }
                                 } catch (e) {
                                     if (!enabled) {
-                                        showToast("Addon Manager", `${Strings.Toasts.AddonManager.failedstart} <strong>${meta.name}</strong>`, { type: "error" });
+                                        showToast("Addon Manager", `${Strings.Toasts.AddonManager.failedstart} ${meta.name}`, { type: "error" });
                                         logger.error("Addon Manager", `Failed to start ${meta.name}`, e);
                                     } else {
-                                        showToast("Addon Manager", `${Strings.Toasts.AddonManager.failedstop} <strong>${meta.name}</strong>`, { type: "error" });
+                                        showToast("Addon Manager", `${Strings.Toasts.AddonManager.failedstop} ${meta.name}`, { type: "error" });
                                         logger.error("Addon Manager", `Failed to stop ${meta.name}`, e);
                                     }
                                 }

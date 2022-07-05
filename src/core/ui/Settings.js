@@ -18,6 +18,7 @@ const path = require("path");
 const fs = require("fs");
 
 const Config = require("../../common/config.json");
+const { ErrorBoundary } = require("../components");
 
 const { Strings, normalizeString } = i18n;
 
@@ -731,7 +732,7 @@ VApi.Patcher(
                                                                         ? target.target.setAttribute("disabled", "true")
                                                                         : target.target.parentElement.setAttribute("disabled", "true");
                                                                     VApi.Patcher.unpatchAll(patch.name, Neptune.InternalSecurityToken);
-                                                                    showToast("Velocity", `${Strings.Toasts.Developer.killed} <strong>${patch.name}</strong>`, {
+                                                                    showToast("Velocity", `${Strings.Toasts.Developer.killed} ${patch.name}`, {
                                                                         type: "error",
                                                                     });
                                                                 },
@@ -834,7 +835,7 @@ VApi.Patcher(
                             settingsItems = PluginExport.getSettingsPanel();
                         }
 
-                        return [React.createElement(FormTitle, { tag: "h1" }, plugin.name), settingsItems];
+                        return [React.createElement(FormTitle, { tag: "h1" }, plugin.name), React.createElement(ErrorBoundary, { children: settingsItems })];
                     },
                 });
             }

@@ -328,10 +328,10 @@ if (dPath) {
         const allPlugins = VApi.AddonManager.plugins.getAll();
 
         for (let meta of Object.values(allThemes)) {
-            VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.loaded} <strong>${meta.name} ${meta.version}</strong>`);
+            VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.loaded} ${meta.name} ${meta.version}`);
         }
         for (let meta of Object.values(allPlugins)) {
-            VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.loaded} <strong>${meta.name} ${meta.version}</strong>`);
+            VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.loaded} ${meta.name} ${meta.version}`);
         }
 
         const enabledThemes = DataStore("VELOCITY_SETTINGS").enabledThemes;
@@ -341,7 +341,7 @@ if (dPath) {
                 if (VApi.AddonManager.themes.get(theme)) {
                     logger.log("Addon Manager", `Enabled ${theme}`);
                     VApi.AddonManager.themes.enable(theme);
-                    VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.enabled} <strong>${theme}</strong>`, { type: "success" });
+                    VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.enabled} ${theme}`, { type: "success" });
                 }
             }
         }
@@ -354,9 +354,9 @@ if (dPath) {
                     try {
                         logger.log("Addon Manager", `Enabled ${plugin}`);
                         VApi.AddonManager.plugins.enable(plugin);
-                        VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.enabled} <strong>${plugin}</strong>`, { type: "success" });
+                        VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.enabled} ${plugin}`, { type: "success" });
                     } catch (e) {
-                        VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.failedstart} <strong>${plugin}</strong>`, { type: "error" });
+                        VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.failedstart} ${plugin}`, { type: "error" });
                         logger.error("Addon Manager", `Failed to start ${plugin}:`, e);
                     }
                 }

@@ -93,7 +93,7 @@ const RemoteActions = new (class {
             remoteAddons.themes.push(meta);
             addons.themes.push(meta);
 
-            VApi.showToast("Remote Addon Manager", `${Strings.Toasts.AddonManager.loaded} <strong>${meta.name}</strong>`);
+            VApi.showToast("Remote Addon Manager", `${Strings.Toasts.AddonManager.loaded} ${meta.name}`);
 
             if (!Velocity.remoteThemes.find((m) => m.name === meta.name)) {
                 DataStore.setData("VELOCITY_SETTINGS", "remoteThemes", [...Velocity.remoteThemes, { name: meta.name, url: url }]);
@@ -119,7 +119,7 @@ const RemoteActions = new (class {
                 })
             );
 
-            VApi.showToast("Remote Addon Manager", `${Strings.Toasts.AddonManager.unloaded} <strong>${name}</strong>`);
+            VApi.showToast("Remote Addon Manager", `${Strings.Toasts.AddonManager.unloaded} ${name}`);
         }
     }
 })();
@@ -245,13 +245,13 @@ fs.watch(themeDir, { persistent: false }, async (eventType, filename) => {
                 delete addons.themes[getKeyByValue(addons.themes, meta.name)];
                 addons.themes.push(meta);
 
-                VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.unloaded} <strong>${meta.name}</strong>`);
+                VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.unloaded} ${meta.name}`);
                 if (enabled) {
                     const ele = document.querySelectorAll(`[velocity-theme-id="${meta.name}"]`);
                     for (let ele1 of ele) {
                         if (ele1) {
                             ele1.remove();
-                            VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.disabled} <strong>${meta.name}</strong>`, { type: "success" });
+                            VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.disabled} ${meta.name}`, { type: "success" });
                         }
                     }
                     const style = document.createElement("style");
@@ -259,9 +259,9 @@ fs.watch(themeDir, { persistent: false }, async (eventType, filename) => {
                     document.body.classList.add(`velocity-theme-${escapeID(meta.name)}`);
                     style.setAttribute("velocity-theme-id", meta.name);
                     document.querySelector("velocity-themes").appendChild(style);
-                    VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.enabled} <strong>${meta.name}</strong>`, { type: "success" });
+                    VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.enabled} ${meta.name}`, { type: "success" });
                 }
-                VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.loaded} <strong>${meta.name}</strong>`);
+                VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.loaded} ${meta.name}`);
             } else {
                 addons.themes.push(meta);
             }
@@ -459,14 +459,14 @@ fs.watch(pluginDir, { persistent: false }, async (eventType, filename) => {
             if (Plugins.get(meta.name)) {
                 const enabled = Velocity.enabledPlugins[meta.name] || false;
 
-                VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.unloaded} <strong>${meta.name}</strong>`);
+                VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.unloaded} ${meta.name}`);
                 if (enabled) {
                     Plugins.disable(meta.name);
-                    VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.disabled} <strong>${meta.name}</strong>`, { type: "success" });
+                    VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.disabled} ${meta.name}`, { type: "success" });
                     Plugins.enable(meta.name);
-                    VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.enabled} <strong>${meta.name}</strong>`, { type: "success" });
+                    VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.enabled} ${meta.name}`, { type: "success" });
                 }
-                VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.loaded} <strong>${meta.name}</strong>`);
+                VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.loaded} ${meta.name}`);
             }
         });
     } catch (e) {
