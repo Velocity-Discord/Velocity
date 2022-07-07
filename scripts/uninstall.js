@@ -13,7 +13,7 @@ async function run() {
 
     let appPath;
 
-    if (process.argv.includes("--mac")) {
+    if (process.argv.includes("--mac") || (process.platform === "darwin" && !process.argv.includes("--manual"))) {
         if (process.argv.includes("--canary")) {
             appPath = "/Applications/Discord Canary.app/Contents/Resources/";
         } else if (process.argv.includes("--ptb")) {
@@ -44,7 +44,7 @@ async function run() {
         });
 
         return true;
-    } else if (process.argv.includes("--win")) {
+    } else if (process.argv.includes("--win") || (process.platform === "win32" && !process.argv.includes("--manual"))) {
         if (process.argv.includes("--canary")) {
             const discordPath = path.join(process.env.LOCALAPPDATA, "Discord Canary");
             const discordDirectory = await readdir(discordPath);
