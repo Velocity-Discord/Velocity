@@ -135,6 +135,8 @@ async function run() {
             else if (selected === "Contents") appPath = path.join(proposedPath, "Resources");
             else if (selected === "Resources") appPath = proposedPath;
             else appPath = proposedPath;
+        } else {
+            appPath = proposedPath;
         }
 
         console.log(`Preparing to install to '${appPath}'`);
@@ -144,7 +146,6 @@ async function run() {
                 if (fs.existsSync(path.join(appPath, "app"))) {
                     console.error("A Discord Client Modification is already installed in this directory.");
                     console.log("Overwriting existing files...");
-                    // return false;
                 } else {
                     await mkdir(path.join(appPath, "app"));
                 }

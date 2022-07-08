@@ -121,6 +121,8 @@ async function run() {
             else if (selected === "Contents") appPath = path.join(proposedPath, "Resources");
             else if (selected === "Resources") appPath = proposedPath;
             else appPath = proposedPath;
+        } else {
+            appPath = proposedPath;
         }
 
         console.log(`Preparing to uninstall from '${appPath}'`);
