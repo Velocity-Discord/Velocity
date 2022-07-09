@@ -466,7 +466,7 @@ if (dPath) {
                 }
                 if (updateRegex.test(props.message.content)) {
                     if (updateVersionRegex.test(props.message.content)) {
-                        const vNum = getVersionRegex.exec(props.message.content);
+                        const version = getVersionRegex.exec(props.message.content)[1];
                         delete res.props.children[0];
                         res.props.children.push([
                             React.createElement("div", {
@@ -480,7 +480,7 @@ if (dPath) {
                                                 {
                                                     className: "velocity-update-card-header-title",
                                                 },
-                                                `${Strings.Toasts.Updater.updateto} v${vNum[1]}`
+                                                `${Strings.Toasts.Updater.updateto} v${version}`
                                             ),
 
                                             React.createElement(WebpackModules.find("Tooltip").default, {
@@ -507,7 +507,7 @@ if (dPath) {
                                                                     })
                                                                 );
                                                             } catch (error) {
-                                                                logger.error(error);
+                                                                logger.error("Velocity", error);
                                                             }
                                                         },
                                                         children: [
@@ -555,7 +555,7 @@ if (dPath) {
                                                                 })
                                                             );
                                                         } catch (error) {
-                                                            logger.error(error);
+                                                            logger.error("Velocity", error);
                                                         }
                                                     },
                                                 },
@@ -606,7 +606,7 @@ if (dPath) {
                                                                     })
                                                                 );
                                                             } catch (error) {
-                                                                logger.error(error);
+                                                                logger.error("Velocity", error);
                                                             }
                                                         },
                                                         children: [
