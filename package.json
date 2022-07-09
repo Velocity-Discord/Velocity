@@ -1,6 +1,6 @@
 {
     "name": "velocity",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "A Client Modification for Discord enhanced by Plugins and Themes!",
     "main": "./dist/velocity.asar",
     "author": "TheCommieAxolotl",
@@ -8,8 +8,8 @@
     "info": {
         "name": "Velocity",
         "description": "A Client Modification for Discord enhanced by Plugins and Themes!",
-        "version": "1.0.2",
-        "hash": "bc013a",
+        "version": "1.0.3",
+        "hash": "9e7bfe",
         "api": {
             "version": "1.0.0",
             "channel": "stable"
@@ -17,13 +17,13 @@
     },
     "scripts": {
         "dist": "node ./scripts/dist --",
-        "bump": "npm run bump:hash && npm run bump:version",
+        "bump": "npm run bump:hash && npm run bump:version -- --minor",
         "watch": "node ./scripts/watch.js --",
         "install": "node ./scripts/install.js --",
         "uninstall": "node ./scripts/uninstall.js --",
         "bump:hash": "node ./scripts/bumpHash.js --",
         "bump:version": "node ./scripts/bumpVersion.js",
-        "stylelint": "stylelint \"**/*.css\""
+        "stylelint": "stylelint \"/src/core/ui/**/*.css\""
     },
     "devDependencies": {
         "asar": "^3.1.0",
