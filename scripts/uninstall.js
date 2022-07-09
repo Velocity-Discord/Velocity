@@ -46,23 +46,62 @@ async function run() {
         return true;
     } else if (process.argv.includes("--win") || (process.platform === "win32" && !process.argv.includes("--manual"))) {
         if (process.argv.includes("--canary")) {
-            const discordPath = path.join(process.env.LOCALAPPDATA, "Discord Canary");
+            const discordPath = path.join(process.env.LOCALAPPDATA, "discordcanary");
             const discordDirectory = await readdir(discordPath);
 
             const currentBuild = discordDirectory.filter((paths) => paths.startsWith("app-")).reverse()[0];
             appPath = path.join(discordPath, currentBuild, "resources");
         } else if (process.argv.includes("--ptb")) {
-            const discordPath = path.join(process.env.LOCALAPPDATA, "DiscordPTB");
+            const discordPath = path.join(process.env.LOCALAPPDATA, "discordptb");
             const discordDirectory = await readdir(discordPath);
 
             const currentBuild = discordDirectory.filter((paths) => paths.startsWith("app-")).reverse()[0];
             appPath = path.join(discordPath, currentBuild, "resources");
         } else {
-            const discordPath = path.join(process.env.LOCALAPPDATA, "Discord");
+            const discordPath = path.join(process.env.LOCALAPPDATA, "discord");
             const discordDirectory = await readdir(discordPath);
 
             const currentBuild = discordDirectory.filter((paths) => paths.startsWith("app-")).reverse()[0];
             appPath = path.join(discordPath, currentBuild, "resources");
+        }
+
+        console.log(`Preparing to uninstall from '${appPath}'`);
+
+        readline.question("Is this ok? (y/n) ", async (answer) => {
+            if (answer == "y") {
+                if (fs.existsSync(path.join(appPath, "app"))) {
+                    await unlink(path.join(appPath, "app", "index.js"));
+                    await unlink(path.join(appPath, "app", "package.json"));
+                    await rmdir(path.join(appPath, "app"));
+                } else {
+                    console.error("No Discord Client Modification is installed in this directory.");
+                    readline.close();
+                }
+
+                console.log("Done!");
+                readline.close();
+            } else {
+                console.log("Exiting Uninstall.");
+                process.exit();
+            }
+        });
+
+        return true;
+    } else if (process.argv.includes("--linux") || (process.platform === "linux" && !process.argv.includes("--manual"))) {
+        if (process.argv.includes("--canary")) {
+            const discordPath = path.join("/usr/share/", "discordcanary");
+            const discordDirectory = await readdir(discordPath);
+
+            appPath = path.join(discordPath, "resources");
+        } else if (process.argv.includes("--ptb")) {
+            const discordPath = path.join("/usr/share/", "discordptb");
+            const discordDirectory = await readdir(discordPath);
+
+            appPath = path.join(discordPath, "resources");
+        } else {
+            const discordPath = path.join("/usr/share/", "discord");
+            const discordDirectory = await readdir(discordPath);
+            appPath = path.join(discordPath, "resources");
         }
 
         console.log(`Preparing to uninstall from '${appPath}'`);
@@ -96,34 +135,7 @@ async function run() {
 
             return readline.close();
         }
-
-        const selected = path.basename(proposedPath);
-        let channelName;
-        if (proposedPath.toLowerCase().includes("canary")) channelName = "Discord Canary";
-        else if (proposedPath.toLowerCase().includes("ptb")) channelName = "Discord PTB";
-        else channelName = "Discord";
-
-        if (process.platform == "win32") {
-            const isBaseDir = Boolean(selected === channelName);
-            if (isBaseDir) {
-                const version = fs
-                    .readdirSync(proposedPath)
-                    .filter((f) => fs.lstatSync(path.join(proposedPath, f)).isDirectory() && f.split(".").length > 1)
-                    .sort()
-                    .reverse()[0];
-                if (!version) return "";
-                appPath = path.join(proposedPath, version, "resources");
-            } else if (selected.startsWith("app-") && selected.split(".").length > 2) appPath = path.join(proposedPath, "resources");
-            else if (selected === "resources") appPath = proposedPath;
-            else appPath = proposedPath;
-        } else if (process.platform == "darwin") {
-            if (selected === `${channelName}.app`) appPath = path.join(proposedPath, "Contents", "Resources");
-            else if (selected === "Contents") appPath = path.join(proposedPath, "Resources");
-            else if (selected === "Resources") appPath = proposedPath;
-            else appPath = proposedPath;
-        } else {
-            appPath = proposedPath;
-        }
+        appPath = proposedPath;
 
         console.log(`Preparing to uninstall from '${appPath}'`);
 

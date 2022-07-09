@@ -53,19 +53,19 @@ async function run() {
         return true;
     } else if (process.argv.includes("--win") || process.platform === "win32") {
         if (process.argv.includes("--canary")) {
-            const discordPath = path.join(process.env.LOCALAPPDATA, "DiscordCanary");
+            const discordPath = path.join(process.env.LOCALAPPDATA, "discordcanary");
             const discordDirectory = await readdir(discordPath);
 
             const currentBuild = discordDirectory.filter((paths) => paths.startsWith("app-")).reverse()[0];
             appPath = path.join(discordPath, currentBuild, "resources");
         } else if (process.argv.includes("--ptb")) {
-            const discordPath = path.join(process.env.LOCALAPPDATA, "DiscordPTB");
+            const discordPath = path.join(process.env.LOCALAPPDATA, "discordptb");
             const discordDirectory = await readdir(discordPath);
 
             const currentBuild = discordDirectory.filter((paths) => paths.startsWith("app-")).reverse()[0];
             appPath = path.join(discordPath, currentBuild, "resources");
         } else {
-            const discordPath = path.join(process.env.LOCALAPPDATA, "Discord");
+            const discordPath = path.join(process.env.LOCALAPPDATA, "discord");
             const discordDirectory = await readdir(discordPath);
 
             const currentBuild = discordDirectory.filter((paths) => paths.startsWith("app-")).reverse()[0];
@@ -101,6 +101,58 @@ async function run() {
         });
 
         return true;
+    } else if (process.argv.includes("--linux") || process.platform === "linux") {
+        if (process.argv.includes("--canary")) {
+            const discordPath = path.join("/usr/share/", "discordcanary");
+            const discordDirectory = await readdir(discordPath);
+
+            appPath = path.join(discordPath, "resources");
+        } else if (process.argv.includes("--ptb")) {
+            const discordPath = path.join("/usr/share/", "discordptb");
+            const discordDirectory = await readdir(discordPath);
+
+            appPath = path.join(discordPath, "resources");
+        } else {
+            const discordPath = path.join("/usr/share/", "discord");
+            const discordDirectory = await readdir(discordPath);
+            appPath = path.join(discordPath, "resources");
+        }
+
+        console.log(`Preparing to install to '${appPath}'`);
+
+        readline.question("Is this ok? (y/n) ", async (answer) => {
+            if (answer == "y") {
+                if (!fs.existsSync(path.join(appPath))) {
+                    console.error(`Discord is not installed in the requested path (${appPath}).`);
+                    console.log("Exiting Install.");
+                    readline.close();
+                }
+
+                if (fs.existsSync(path.join(appPath, "app"))) {
+                    console.error("A Discord Client Modification is already installed in this directory.");
+                    console.log("Overwriting existing files...");
+                } else {
+                    await mkdir(path.join(appPath, "app"));
+                }
+                await Promise.all([
+                    writeFile(path.join(appPath, "app", "index.js"), `require(\`${path.join(__dirname, "../").replace(RegExp(path.sep.repeat(2), "g"), "/")}\`)`),
+                    writeFile(
+                        path.join(appPath, "app", "package.json"),
+                        JSON.stringify({
+                            main: "index.js",
+                            name: "discord",
+                        })
+                    ),
+                ]);
+                console.log("Done!");
+                readline.close();
+            } else {
+                console.log("Exiting Install.");
+                process.exit();
+            }
+        });
+
+        return true;
     }
 
     readline.question("Please enter the absolute path to the discord folder you would like to install Velocity. (filePath) ", (paths) => {
@@ -111,33 +163,7 @@ async function run() {
             return readline.close();
         }
 
-        const selected = path.basename(proposedPath);
-        let channelName;
-        if (proposedPath.toLowerCase().includes("canary")) channelName = "Discord Canary";
-        else if (proposedPath.toLowerCase().includes("ptb")) channelName = "Discord PTB";
-        else channelName = "Discord";
-
-        if (process.platform == "win32") {
-            const isBaseDir = Boolean(selected === channelName || selected === channelName.replace(" ", ""));
-            if (isBaseDir) {
-                const version = fs
-                    .readdirSync(proposedPath)
-                    .filter((f) => fs.lstatSync(path.join(proposedPath, f)).isDirectory() && f.split(".").length > 1)
-                    .sort()
-                    .reverse()[0];
-                if (!version) return "";
-                appPath = path.join(proposedPath, version, "resources");
-            } else if (selected.startsWith("app-") && selected.split(".").length > 2) appPath = path.join(proposedPath, "resources");
-            else if (selected === "resources") appPath = proposedPath;
-            else appPath = proposedPath;
-        } else if (process.platform == "darwin") {
-            if (selected === `${channelName}.app`) appPath = path.join(proposedPath, "Contents", "Resources");
-            else if (selected === "Contents") appPath = path.join(proposedPath, "Resources");
-            else if (selected === "Resources") appPath = proposedPath;
-            else appPath = proposedPath;
-        } else {
-            appPath = proposedPath;
-        }
+        appPath = proposedPath;
 
         console.log(`Preparing to install to '${appPath}'`);
 
