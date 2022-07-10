@@ -375,7 +375,7 @@ if (dPath) {
             const regex = /velocity\:\/\/(about)?(update)?/gi;
             const aboutRegex = /velocity\:\/\/(about)/gi;
             const updateRegex = /velocity\:\/\/(update)/gi;
-            const getVersionRegex = /velocity\:\/\/update\?v(.*)>(.*)/gi;
+            const getVersionRegex = /velocity\:\/\/update\?v(.*)/gi;
             const updateVersionRegex = /velocity\:\/\/(update\?v[0-9].[0-9].[0-9])/gi;
             let containsProtocol = regex.test(props.message.content);
 
