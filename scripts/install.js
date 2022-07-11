@@ -13,7 +13,7 @@ async function run() {
 
     let appPath;
 
-    if (process.argv.includes("--mac") || process.platform === "darwin") {
+    if (process.argv.includes("--mac") || (process.platform === "darwin" && !process.argv.includes("--manual"))) {
         if (process.argv.includes("--canary")) {
             appPath = "/Applications/Discord Canary.app/Contents/Resources/";
         } else if (process.argv.includes("--ptb")) {
@@ -51,7 +51,7 @@ async function run() {
         });
 
         return true;
-    } else if (process.argv.includes("--win") || process.platform === "win32") {
+    } else if (process.argv.includes("--win") || (process.platform === "win32" && !process.argv.includes("--manual"))) {
         if (process.argv.includes("--canary")) {
             const discordPath = path.join(process.env.LOCALAPPDATA, "discordcanary");
             const discordDirectory = await readdir(discordPath);
@@ -101,7 +101,7 @@ async function run() {
         });
 
         return true;
-    } else if (process.argv.includes("--linux") || process.platform === "linux") {
+    } else if (process.argv.includes("--linux")) {
         if (process.argv.includes("--canary")) {
             const discordPath = path.join("/usr/share/", "discordcanary");
             const discordDirectory = await readdir(discordPath);
