@@ -338,6 +338,16 @@ VApi.Patcher(
                     name: Strings.Settings.Settings.Sections.developer.developersettings.name,
                     note: Strings.Settings.Settings.Sections.developer.developersettings.note,
                 }),
+                React.createElement(SettingsTitle, {
+                    text: Strings.Settings.Settings.Sections.advanced.title,
+                    divider: true,
+                }),
+                React.createElement(SettingsSwitchSection, {
+                    setting: "ValidityChecks",
+                    name: Strings.Settings.Settings.Sections.advanced.validitychecks.name,
+                    note: Strings.Settings.Settings.Sections.advanced.validitychecks.note,
+                    warning: Strings.Settings.Settings.Sections.advanced.validitychecks.warning,
+                }),
 
                 React.createElement(Text, {
                     color: Text.Colors.HEADER_SECONDARY,

@@ -30,6 +30,9 @@
             "disabled": "Disabled",
             "deleted": "Deleted"
         },
+        "Neptune": {
+            "disabledvaliditychecks": "Disabled Validity Checks"
+        },
         "Updater": {
             "requestingdata": "Requesting Update Data",
             "startingpull": "Starting Pull",
@@ -177,6 +180,14 @@
                     "developersettings": {
                         "name": "Developer Settings",
                         "note": "Only enable if you know what you are doing."
+                    }
+                },
+                "advanced": {
+                    "title": "Advanced",
+                    "validitychecks": {
+                        "name": "Validity Checks",
+                        "note": "Enables Validity Checks.",
+                        "warning": "If you disable this, we will be unable to detect invalid installations."
                     }
                 }
             }

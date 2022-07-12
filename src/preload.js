@@ -78,6 +78,7 @@ if (dPath) {
         polyfillWebpack();
 
         const DevMode = DataStore("VELOCITY_SETTINGS").DevMode;
+        const ValidityChecks = DataStore("VELOCITY_SETTINGS").ValidityChecks;
 
         const vhead = document.createElement("velocity-head");
         const vthemes = document.createElement("velocity-themes");
@@ -318,6 +319,8 @@ if (dPath) {
 
         // Wait for Discord to Finish Loading
         await waitFor('[class*="guilds"]');
+
+        if (ValidityChecks) Neptune.initialiseChecks();
 
         if (!DataStore.getData("VELOCITY_SETTINGS", "hasShownChangelog")) {
             VApi.showChangelog();
