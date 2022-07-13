@@ -1,14 +1,14 @@
 name: Bug Report
 description: File a bug report
-title: "[Bug]: "
-labels: ["bug", "triage"]
+title: "[Bug] "
+labels: ["bug"]
+
 assignees:
   - TheCommieAxolotl
 body:
   - type: markdown
     attributes:
-      value: |
-        Thanks for filling out this report!
+      value: "Thanks for filling out this report!"
   - type: textarea
     id: what-happened
     attributes:
