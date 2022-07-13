@@ -15,7 +15,7 @@ body:
           label: What happened?
           description: Tell us what happened and what you expected to happen!
           placeholder: ...Happened
-          value: ""
+          value: "...Happened"
       validations:
           required: true
     - type: input
@@ -23,7 +23,8 @@ body:
       attributes:
           label: Version
           description: What version of Velocity are you using?
-          value: ""
+          placeholder: v1.0.0
+          value: "v1.0.4"
       validations:
           required: true
     - type: textarea
