@@ -18,7 +18,7 @@ body:
           value: "I would like to see..."
       validations:
           required: true
-    - type: input
+    - type: textarea
       id: implementation
       attributes:
           label: Implementation
@@ -27,7 +27,7 @@ body:
           value: "We could..."
       validations:
           required: false
-    - type: textarea
+    - type: input
       id: bug
       attributes:
           label: Does this feature relate to a bug?
