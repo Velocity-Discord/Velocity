@@ -320,7 +320,7 @@ if (dPath) {
         // Wait for Discord to Finish Loading
         await waitFor('[class*="guilds"]');
 
-        if (ValidityChecks) Neptune.initialiseChecks();
+        // if (ValidityChecks) Neptune.initialiseChecks();
 
         if (!DataStore.getData("VELOCITY_SETTINGS", "hasShownChangelog")) {
             VApi.showChangelog();
@@ -378,8 +378,8 @@ if (dPath) {
             const regex = /velocity\:\/\/(about)?(update)?/gi;
             const aboutRegex = /velocity\:\/\/(about)/gi;
             const updateRegex = /velocity\:\/\/(update)/gi;
-            const getVersionRegex = /velocity\:\/\/update\?v(.*)/gi;
-            const updateVersionRegex = /velocity\:\/\/(update\?v[0-9].[0-9].[0-9])/gi;
+            const getVersionRegex = /velocity\:\/\/update\?v([0-9][0-9]?\.[0-9][0-9]?\.[0-9][0-9]?)/gi;
+            const updateVersionRegex = /velocity\:\/\/(update\?v[0-9][0-9]?\.[0-9][0-9]?\.[0-9][0-9]?)/gi;
             let containsProtocol = regex.test(props.message.content);
 
             if (containsProtocol) {
