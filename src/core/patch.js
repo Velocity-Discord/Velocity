@@ -4,6 +4,7 @@ let Internal_Symbol = Symbol("VelocityInternal");
 let ALLpatches = {};
 
 const { InternalPatches, InternalSecurityToken } = require("./neptune");
+const Logger = require("./logger");
 
 function patch(patchName, moduleToPatch, functionToPatch, callback, opts = {}) {
     let { method = "after", id } = opts;
@@ -26,7 +27,7 @@ function patch(patchName, moduleToPatch, functionToPatch, callback, opts = {}) {
 
         if (patchInfo.internal) {
             if (auth !== InternalSecurityToken) {
-                return console.error(`You are not authorized to unpatch ${patchInfo.patchName}`);
+                return Logger.error(`You are not authorized to unpatch ${patchInfo.patchName}`);
             } else {
                 InternalPatches.splice(InternalPatches.indexOf(patchName), 1);
             }
@@ -105,7 +106,7 @@ Object.assign(patch, {
                     if (!ALLpatches[Internal_Symbol].find((m) => m?.patchName == name)) return;
                     ALLpatches[Internal_Symbol].find((m) => m?.patchName == name).unpatch(v);
                 } catch (error) {
-                    console.error(error);
+                    Logger.error("Patcher", "Error while handling secure patch", error);
                 }
             }
         }

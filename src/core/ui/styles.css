@@ -13,11 +13,6 @@ velocity-toasts {
     margin-top: 5px;
 }
 
-#velocity-customcss-warning,
-#velocity-script-warning {
-    cursor: pointer;
-}
-
 /* stylelint-disable */
 .monaco-editor .decorationsOverviewRuler,
 .monaco-editor .editor-scrollable,
@@ -220,7 +215,7 @@ velocity-toasts {
     right: 5px;
     border: none;
     background: none;
-    color: rgb(201, 201, 201);
+    color: rgb(201 201 201);
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
@@ -318,32 +313,6 @@ velocity-toasts {
 
 .velocity-button-container .velocity-button {
     margin-right: 10px;
-}
-
-#startup-script-save.disabled {
-    pointer-events: none;
-}
-
-textarea.velocity-editor::-webkit-scrollbar-thumb {
-    background: var(--background-tertiary);
-    border-radius: 50px;
-}
-
-textarea.velocity-editor::-webkit-scrollbar {
-    background: transparent;
-    width: 5px;
-}
-
-textarea.velocity-editor {
-    color: var(--text-normal) !important;
-    height: 200px;
-    width: 100%;
-    overflow-y: scroll;
-    align-items: start;
-    justify-content: left;
-    background: var(--background-secondary);
-    border: none;
-    resize: none;
 }
 
 .velocity-settings-title-container {
@@ -713,11 +682,9 @@ textarea.velocity-editor {
     font-size: 18px;
     font-weight: 500;
     color: var(--header-primary);
-    font-weight: 500;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    font-size: 16px;
 }
 
 .velocity-developer-container::-webkit-scrollbar {
@@ -746,9 +713,15 @@ textarea.velocity-editor {
     height: 10px;
 }
 
+.velocity-modal-flex-content {
+    display: flex;
+    flex-direction: column;
+}
+
 .velocity-developer-status-table-text {
     width: 50%;
     font-weight: 600;
+    color: var(--text-muted);
 }
 
 .velocity-developer-status-table {
@@ -778,10 +751,6 @@ textarea.velocity-editor {
 
 .velocity-developer-status-table th:last-child {
     text-align: end;
-}
-
-.velocity-developer-status-table-text {
-    color: var(--text-muted);
 }
 
 .velocity-code-block-button {
@@ -877,8 +846,23 @@ textarea.velocity-editor {
     justify-content: space-between;
 }
 
-.velocity-editor-body-sidebar-item-options:not(.selected > *, .velocity-editor-body-sidebar-item:hover *) {
-    display: none;
+.velocity-editor-body-sidebar-item-text {
+    max-width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.velocity-editor-body-sidebar-item-options {
+    max-height: 12px;
+    max-width: 12px;
+}
+
+/* .selected > .velocity-editor-body-sidebar-item-options {
+    display: block;
+} */
+
+.velocity-editor-body-sidebar-item-options:not(.selected > *, .velocity-editor-body-sidebar:hover .velocity-editor-body-sidebar-item:hover *) {
+    display: none !important;
 }
 
 .velocity-editor-body-sidebar:hover,
@@ -886,9 +870,19 @@ textarea.velocity-editor {
     width: 175px;
 }
 
+.velocity-editor-body-sidebar-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .velocity-editor-body-monaco {
     width: 100%;
     height: 100%;
-    overflow: hidden;
     margin-left: 52px;
+}
+
+.velocity-editor-body-sidebar:hover .velocity-editor-body-sidebar-item-text,
+.velocity-editor-body-sidebar:focus-within .velocity-editor-body-sidebar-item-text {
+    max-width: 100px;
 }

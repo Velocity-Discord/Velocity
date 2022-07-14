@@ -209,7 +209,7 @@ const Themes = new (class {
                 if (ele1) ele1.remove();
             }
         } catch (error) {
-            console.error(error);
+            Logger.error("Addon Manager", "Error while disabling theme:", error);
         }
     }
     toggle(name) {
@@ -384,7 +384,7 @@ const Plugins = new (class {
 
             return PluginExport.onStart();
         } catch (error) {
-            console.error(error);
+            Logger.error("Addon Manager", "Error while enabling plugin:", error);
         }
     }
     disable(name) {
@@ -394,7 +394,7 @@ const Plugins = new (class {
             const PluginExport = typeof meta.export.Plugin === "function" ? meta.export.Plugin() : meta.export.Plugin;
             return PluginExport.onStop();
         } catch (error) {
-            console.error(error);
+            Logger.error("Addon Manager", "Error while disabling plugin:", error);
         }
     }
     toggle(name) {

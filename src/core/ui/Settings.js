@@ -13,6 +13,8 @@ const updater = require("../updater");
 const Neptune = require("../neptune");
 const Card = require("./components/AddonCard");
 const StatusTable = require("./components/StatusTable");
+const Editor = require("./components/Editor");
+const Components = require("../components");
 const i18n = require("../i18n");
 const path = require("path");
 const fs = require("fs");
@@ -52,6 +54,9 @@ monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
     target: monaco.languages.typescript.ScriptTarget.ES6,
     allowNonTsExtensions: true,
 });
+
+monaco.languages.css.cssDefaults.setDiagnosticsOptions({ lint: { universalSelector: "warn" } });
+
 const VApiTypings = fs.readFileSync(path.join(__dirname, "../../", "common", "typings", "monaco.d.ts"), "utf8");
 
 var libSource = [VApiTypings].join("\n");
@@ -79,21 +84,21 @@ if (fontsize < 2) {
 
 const UserSettings = WebpackModules.find("SettingsView").default;
 
-class MonacoEditor extends React.Component {
-    constructor(props) {
-        super(props);
+// class MonacoEditor extends React.Component {
+//     constructor(props) {
+//         super(props);
 
-        this.props = props;
-    }
-    componentDidMount() {
-        this.props.onLoad?.();
-    }
-    render() {
-        return React.createElement("div", {
-            id: "editor",
-        });
-    }
-}
+//         this.props = props;
+//     }
+//     componentDidMount() {
+//         this.props.onLoad?.();
+//     }
+//     render() {
+//         return React.createElement("div", {
+//             id: "editor",
+//         });
+//     }
+// }
 
 VApi.Patcher(
     "VelocityInternal-Settings-Patch",
@@ -379,97 +384,7 @@ VApi.Patcher(
                 label: Strings.Titles.customcss,
 
                 className: `velocity-customcss-tab`,
-                element: () => [
-                    React.createElement(FormTitle, { tag: "h1" }, Strings.Settings.CustomCSS.title),
-                    React.createElement(MonacoEditor, {
-                        onLoad: () => {
-                            const CustomCSS = DataStore.getData("VELOCITY_SETTINGS", "CSS");
-                            try {
-                                window.editor = monaco.editor.create(document.getElementById("editor"), {
-                                    language: "css",
-                                    theme: document.documentElement.classList.contains("theme-dark") ? "vs-dark" : "vs-light",
-                                    value: CustomCSS,
-                                    fontSize: fontsize,
-                                });
-                                window.editor.onDidChangeModelContent(() => {
-                                    const content = window.editor.getValue();
-
-                                    if (content.includes("/**" && "@name")) {
-                                        const warn = document.getElementById("velocity-customcss-warning");
-                                        warn.innerHTML = Strings.Settings.CustomCSS.Warning.text;
-                                    } else {
-                                        const warn = document.getElementById("velocity-customcss-warning");
-                                        warn.innerHTML = "";
-                                    }
-                                });
-                            } catch (e) {
-                                console.error(e);
-                            }
-                        },
-                    }),
-                    React.createElement(Tooltip, {
-                        text: Strings.Settings.CustomCSS.Warning.tooltip,
-                        children: (props) =>
-                            React.createElement(WebpackModules.find("Clickable").default, {
-                                ...props,
-                                className: "warning-clickable",
-                                children: [
-                                    React.createElement(
-                                        Text,
-                                        {
-                                            color: Text.Colors.ERROR,
-                                            size: Text.Sizes.SIZE_14,
-                                            id: `velocity-customcss-warning`,
-                                        },
-                                        ""
-                                    ),
-                                ],
-                                onClick: () => {
-                                    shell.openPath(AddonManager.themes.folder);
-                                },
-                            }),
-                    }),
-                    React.createElement("div", {
-                        class: "velocity-button-container",
-                        children: [
-                            React.createElement(
-                                Button,
-                                {
-                                    id: "custom-css-save",
-                                    className: [ButtonColors.BRAND, "velocity-button"],
-                                    onClick: () => {
-                                        try {
-                                            const content = window.editor.getValue();
-                                            DataStore.setData("VELOCITY_SETTINGS", "CSS", content);
-                                            VApi.CustomCSS.reload();
-
-                                            showToast("Custom CSS", Strings.Toasts.CustomCSS.saved, { type: "success" });
-                                        } catch (error) {
-                                            console.error(error);
-                                        }
-                                    },
-                                },
-                                Strings.Settings.CustomCSS.Buttons.save
-                            ),
-                            React.createElement(
-                                Button,
-                                {
-                                    id: "custom-css-clear",
-                                    className: [ButtonColors.RED, "velocity-button"],
-                                    onClick: () => {
-                                        window.editor.setValue("");
-                                        DataStore.setData("VELOCITY_SETTINGS", "CSS", "");
-                                        VApi.CustomCSS.reload();
-
-                                        showToast("Custom CSS", Strings.Toasts.CustomCSS.cleared, { type: "success" });
-                                    },
-                                },
-                                Strings.Settings.CustomCSS.Buttons.clear
-                            ),
-                        ],
-                    }),
-                    React.createElement("div", { className: "velocity-modal-spacer" }),
-                ],
+                element: () => [React.createElement(FormTitle, { tag: "h1" }, Strings.Settings.CustomCSS.title), React.createElement(Editor, { type: "customcss" })],
             });
         }
         if (Settings.JSEnabled) {
@@ -477,103 +392,7 @@ VApi.Patcher(
                 section: normalizeString(Strings.Titles.startupscript),
                 label: Strings.Titles.startupscript,
                 className: `velocity-startupscript-tab`,
-                element: () => [
-                    React.createElement(FormTitle, { tag: "h1" }, Strings.Settings.StartupScript.title),
-                    React.createElement(MonacoEditor, {
-                        onLoad: () => {
-                            const startupJS = DataStore.getData("VELOCITY_SETTINGS", "JS");
-                            try {
-                                window.editor = monaco.editor.create(document.getElementById("editor"), {
-                                    language: "javascript",
-                                    theme: document.documentElement.classList.contains("theme-dark") ? "vs-dark" : "vs-light",
-                                    value: startupJS,
-                                    fontSize: fontsize,
-                                });
-
-                                window.editor.onDidChangeModelContent(() => {
-                                    const content = window.editor.getValue();
-                                    const button = document.getElementById("startup-script-save");
-                                    if (content.includes("getToken" || "getEmail")) {
-                                        const warn = document.querySelector("#velocity-script-warning");
-                                        warn.innerHTML = Strings.Settings.StartupScript.Warning.text;
-                                        if (button) {
-                                            button.disabled = true;
-                                            button.classList.add("disabled");
-                                        }
-                                    } else {
-                                        const warn = document.querySelector("#velocity-script-warning");
-                                        warn.innerHTML = "";
-                                        if (button) {
-                                            button.disabled = false;
-                                            button.classList.remove("disabled");
-                                        }
-                                    }
-                                });
-                            } catch (e) {
-                                console.error(e);
-                            }
-                        },
-                    }),
-                    React.createElement(Tooltip, {
-                        text: Strings.Settings.StartupScript.Warning.tooltip,
-                        children: (props) =>
-                            React.createElement(WebpackModules.find("Clickable").default, {
-                                ...props,
-                                className: "warning-clickable",
-                                children: [
-                                    React.createElement(
-                                        Text,
-                                        {
-                                            color: Text.Colors.ERROR,
-                                            size: Text.Sizes.SIZE_14,
-                                            id: `velocity-script-warning`,
-                                        },
-                                        ""
-                                    ),
-                                ],
-                                onClick: () => {
-                                    const coreDir = path.join(__dirname, "../../../");
-                                    const settingsDir = path.join(coreDir, "settings");
-                                    shell.openPath(settingsDir);
-                                },
-                            }),
-                    }),
-                    (this.save = React.createElement("div", {
-                        class: "velocity-button-container",
-                        children: [
-                            React.createElement(
-                                Button,
-                                {
-                                    id: "startup-script-save",
-                                    disabled: false,
-                                    className: [ButtonColors.BRAND, "velocity-button"],
-                                    onClick: ({ target }) => {
-                                        const content = window.editor.getValue();
-                                        if (!target.disabled) {
-                                            DataStore.setData("VELOCITY_SETTINGS", "JS", content);
-                                            showToast("Startup Script", Strings.Toasts.StartupScript.saved, { type: "success" });
-                                        }
-                                    },
-                                },
-                                Strings.Settings.StartupScript.Buttons.save
-                            ),
-                            React.createElement(
-                                Button,
-                                {
-                                    id: "startup-script-clear",
-                                    className: [ButtonColors.RED, "velocity-button"],
-                                    onClick: () => {
-                                        window.editor.setValue("");
-                                        DataStore.setData("VELOCITY_SETTINGS", "JS", "");
-
-                                        showToast("Startup Script", Strings.Toasts.StartupScript.cleared, { type: "success" });
-                                    },
-                                },
-                                Strings.Settings.StartupScript.Buttons.clear
-                            ),
-                        ],
-                    })),
-                ],
+                element: () => [React.createElement(FormTitle, { tag: "h1" }, Strings.Settings.StartupScript.title), React.createElement(Editor, { type: "startupjs" })],
             });
         }
         insert({
@@ -795,8 +614,6 @@ VApi.Patcher(
                 ],
             });
         }
-
-        const Components = require("../components");
 
         const pluginsHaveSettings = AddonManager.plugins.getAll().filter((m) => m.hasSettings && AddonManager.plugins.isEnabled(m.name)).length > 0;
 

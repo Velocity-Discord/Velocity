@@ -196,24 +196,26 @@ if (dPath) {
             DataStore: DataStore,
             CustomCSS: {
                 reload: () => {
-                    if (document.querySelector("#customcss")) document.querySelector("#customcss").remove();
-                    const css = DataStore("VELOCITY_SETTINGS").CSS;
+                    const currentCustomCSSInjected = document.querySelectorAll(`[id*="customcss-tab-"]`);
+                    currentCustomCSSInjected.forEach((el) => {
+                        el.remove();
+                    });
+
+                    let cssChecked = DataStore("VELOCITY_SETTINGS").CSSEnabled;
+                    let CSSTabs = DataStore("VELOCITY_SETTINGS").CSSTabs;
                     const cssBeta = DataStore("VELOCITY_SETTINGS").CSSFeatures;
 
-                    if (DataStore("VELOCITY_SETTINGS").CSSEnabled) {
-                        let style = document.createElement("style");
-                        style.innerText = cssBeta ? StyleManager.parse(css) : css;
-                        style.id = "customcss";
-                        return document.querySelector("velocity-head").appendChild(style);
-                    }
-                },
-                get: () => {
-                    const css = DataStore("VELOCITY_SETTINGS").CSS;
+                    if (cssChecked) {
+                        let index = 0;
+                        CSSTabs.forEach((css) => {
+                            var style = document.createElement("style");
+                            style.innerText = cssBeta ? StyleManager.parse(css.content) : css.content;
+                            style.id = `customcss-tab-${index}`;
+                            document.querySelector("velocity-head").appendChild(style);
 
-                    return css;
-                },
-                update: (css) => {
-                    return DataStore.setData("VELOCITY_SETTINGS", "CSS", css);
+                            index++;
+                        });
+                    }
                 },
             },
             StartupScript: {
@@ -290,29 +292,36 @@ if (dPath) {
         VApi.Styling.injectInternalCSS("velocity_internal_styles", await data);
 
         let jsChecked = DataStore("VELOCITY_SETTINGS").JSEnabled;
-        let js = DataStore("VELOCITY_SETTINGS").JS;
+        let jsTabs = DataStore("VELOCITY_SETTINGS").JSTabs;
 
         if (jsChecked) {
-            try {
-                await waitFor('[class*="guilds"]');
-                eval(js);
-            } catch (e) {
-                VApi.showToast("Startup Script", Strings.Toasts.StartupScript.error, { type: "error", timeout: 4000 });
+            await waitFor('[class*="guilds"]');
+            jsTabs.forEach((js) => {
+                try {
+                    eval(js.content);
+                } catch (e) {
+                    VApi.showToast("Startup Script", Strings.Toasts.StartupScript.error, { type: "error", timeout: 4000 });
 
-                logger.error("Startup Script", "Error Compiling Startup Script:", e);
-            }
+                    logger.error("Startup Script", "Error Compiling Startup Script:", e);
+                }
+            });
         }
         if (DevMode) logger.log("Velocity", "Startup JS Run");
 
         let cssChecked = DataStore("VELOCITY_SETTINGS").CSSEnabled;
-        let CustomCSS = DataStore("VELOCITY_SETTINGS").CSS;
+        let CSSTabs = DataStore("VELOCITY_SETTINGS").CSSTabs;
         const cssBeta = DataStore("VELOCITY_SETTINGS").CSSFeatures;
 
         if (cssChecked) {
-            var style = document.createElement("style");
-            style.innerText = cssBeta ? StyleManager.parse(CustomCSS) : CustomCSS;
-            style.id = "customcss";
-            document.querySelector("velocity-head").appendChild(style);
+            let index = 0;
+            CSSTabs.forEach((css) => {
+                var style = document.createElement("style");
+                style.innerText = cssBeta ? StyleManager.parse(css.content) : css.content;
+                style.id = `customcss-tab-${index}`;
+                document.querySelector("velocity-head").appendChild(style);
+
+                index++;
+            });
         }
 
         if (DevMode) logger.log("Velocity", "Custom CSS Injected");
@@ -423,7 +432,7 @@ if (dPath) {
                                                                 })
                                                             );
                                                         } catch (error) {
-                                                            logger.error(error);
+                                                            logger.error("Velocity", error);
                                                         }
                                                     },
                                                     children: [
@@ -655,61 +664,6 @@ if (dPath) {
             }
         });
 
-        patch(
-            "VelocityInternal-CodeBlock-Patch",
-            VApi.WebpackModules.findByProps("parse", "parseTopic").defaultRules.codeBlock,
-            "react",
-            ([props], parRes) => {
-                if (props.type !== "codeBlock") return;
-
-                patch("Velocity-InnerCodeBlock-Patch", parRes.props, "render", (newProps, res) => {
-                    res.props.children = [res.props.children];
-                    if (props.lang == "customcss") {
-                        res.props.children.push(
-                            React.createElement(
-                                ButtonEle,
-                                {
-                                    className: "velocity-code-block-button",
-                                    color: ButtonColors.GREY,
-                                    size: ButtonSizes.TINY,
-                                    onClick: () => {
-                                        VApi.CustomCSS.update(`
-${VApi.CustomCSS.get()}
-${props.content}
-                                        `);
-                                        VApi.CustomCSS.reload();
-                                    },
-                                },
-                                Strings.Components.BuiltIns.addtocustomcss
-                            )
-                        );
-                        props.lang = "css";
-                    }
-                    if (props.lang == "startupjs") {
-                        res.props.children.push(
-                            React.createElement(
-                                ButtonEle,
-                                {
-                                    className: "velocity-code-block-button",
-                                    color: ButtonColors.GREY,
-                                    size: ButtonSizes.TINY,
-                                    onClick: () => {
-                                        VApi.StartupScript.update(`
-${VApi.StartupScript.get()}
-${props.content}
-                                        `);
-                                    },
-                                },
-                                Strings.Components.BuiltIns.addtostartupscript
-                            )
-                        );
-                        props.lang = "js";
-                    }
-                });
-            },
-            { beta: true }
-        );
-
         patch("VelocityInternal-GuildTooltip-Patch", WebpackModules.find("GuildTooltip"), "default", ([props], res) => {
             if (
                 !(
@@ -723,6 +677,7 @@ ${props.content}
         });
 
         patch("VelocityInternal-Badge-Patch", WebpackModules.find("UserProfileBadgeList"), "default", ([{ user }], res) => {
+            console.log({ user, res, Badges });
             const Badge = Badges[user.id];
             if (!Badge) return;
             function makeChildren(children) {

@@ -90,7 +90,7 @@ module.exports = new (class Updater {
             updateData = JSON.parse(body);
 
             await waitUntil(() => window.document.querySelector('[class*="guilds"]'));
-            VApi.showToast("Updater", Strings.Toasts.Updater.requestingdata);
+            VApi.showToast("Updater", Strings.Toasts.Updater.requestingdata, { type: "velocity" });
 
             if (updateData) {
                 if (updateData.version !== info.version) {
@@ -123,7 +123,7 @@ module.exports = new (class Updater {
                                             onConfirm: () => {
                                                 resolve(true);
 
-                                                showToast("Updater", Strings.Toasts.Updater.startingpull);
+                                                showToast("Updater", Strings.Toasts.Updater.startingpull, { type: "velocity" });
                                                 try {
                                                     exec(`cd ${process.env.VELOCITY_DIRECTORY} && cd ../ && git pull`, (error, stdout, stderr) => {
                                                         if (error || stderr) {
@@ -206,7 +206,7 @@ module.exports = new (class Updater {
                                             onConfirm: () => {
                                                 resolve(true);
 
-                                                showToast("Updater", Strings.Toasts.Updater.startingpull);
+                                                showToast("Updater", Strings.Toasts.Updater.startingpull, { type: "velocity" });
                                                 try {
                                                     exec("git pull", (error, stdout, stderr) => {
                                                         if (error || stderr) {
@@ -268,7 +268,7 @@ module.exports = new (class Updater {
 
                     updatePrompt();
                 } else {
-                    VApi.showToast("Updater", Strings.Toasts.Updater.noupdates);
+                    VApi.showToast("Updater", Strings.Toasts.Updater.noupdates, { type: "velocity" });
                 }
             }
         });

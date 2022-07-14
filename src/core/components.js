@@ -3,7 +3,7 @@
  */
 const VApi = window.VApi;
 
-const { React, WebpackModules, modals, DataStore } = VApi;
+const { React, WebpackModules, modals, DataStore, Logger } = VApi;
 const { Strings } = require("./i18n");
 
 const Text = WebpackModules.findByDisplayNameDefault("LegacyText");
@@ -301,7 +301,7 @@ ${this.state.errorStack}
                                     action();
                                 }
                             } catch (e) {
-                                console.error(e);
+                                Logger.error("Velocity", e);
                             }
                         },
                     }),

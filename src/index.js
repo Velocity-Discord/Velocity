@@ -49,7 +49,7 @@ class BrowserWindow extends electron.BrowserWindow {
                 type: "warning",
                 title: "Velocity",
                 message: `The Velocity process has crashed. (${hasCrashed?.details?.reason || "Unknown"})`,
-                detail: "This may be due to a Plugin or Module. Try restarting Discord in vanilla mode and try again. \n ERR_CODE:" + (hasCrashed?.details?.exitCode || "0"),
+                detail: "This may be due to a Plugin or Module. Try restarting Discord in vanilla mode and try again. \n ERR_CODE:" + (hasCrashed?.details?.exitCode || "1"),
                 buttons: ["OK"],
             });
             hasCrashed = false;
@@ -108,7 +108,7 @@ app.once("ready", () => {
             type: "warning",
             title: "Velocity",
             message: `The Velocity process has crashed. ("${a.reason || "Unknown"}")`,
-            detail: "This may be due to a Plugin or Module. Try restarting Discord in vanilla mode and try again. \n ERR_CODE:" + (a.code || "0"),
+            detail: "This may be due to a Plugin or Module. Try restarting Discord in vanilla mode and try again. \n ERR_CODE:" + (a.code || "1"),
             buttons: ["OK"],
         });
     });
