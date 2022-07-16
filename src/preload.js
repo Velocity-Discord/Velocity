@@ -246,8 +246,11 @@ if (dPath) {
 
         const NotificationManager = require("./core/ui/Notifications");
         const Components = require("./core/components");
+        const CommandManager = require("./core/commands");
 
         VApi.Components = Components;
+        VApi.Commands = CommandManager;
+        VApi.Strings = Strings;
         VApi.showToast = NotificationManager.showToast;
         VApi.showConfirmationModal = NotificationManager.showConfirmationModal;
 
