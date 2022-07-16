@@ -246,10 +246,8 @@ if (dPath) {
 
         const NotificationManager = require("./core/ui/Notifications");
         const Components = require("./core/components");
-        const CommandManager = require("./core/commands");
 
         VApi.Components = Components;
-        VApi.Commands = CommandManager;
         VApi.Strings = Strings;
         VApi.showToast = NotificationManager.showToast;
         VApi.showConfirmationModal = NotificationManager.showConfirmationModal;
@@ -331,6 +329,9 @@ if (dPath) {
 
         // Wait for Discord to Finish Loading
         await waitFor('[class*="guilds"]');
+
+        const CommandManager = require("./core/commands");
+        VApi.Commands = CommandManager;
 
         // if (ValidityChecks) Neptune.initialiseChecks();
 
