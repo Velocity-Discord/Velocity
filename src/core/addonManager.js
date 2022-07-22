@@ -4,18 +4,18 @@ const DataStore = require("./datastore");
 const request = require("./request");
 const Logger = require("./logger");
 const StyleManager = require("./styleParser");
-const cssBeta = DataStore("VELOCITY_SETTINGS").CSSFeatures;
-
 const { Strings } = require("./i18n");
 
-const Velocity = DataStore("VELOCITY_SETTINGS");
-const DevMode = Velocity.DevMode;
+const { ghost: settingsGhost, store: settingsStore } = DataStore("VELOCITY_SETTINGS");
 
-Velocity.enabledThemes = Velocity.enabledThemes || {};
-Velocity.enabledPlugins = Velocity.enabledPlugins || {};
+const DevMode = settingsGhost.DevMode;
+const cssBeta = settingsGhost.CSSFeatures;
 
-Velocity.remoteThemes = Velocity.remoteThemes || [];
-Velocity.remotePlugins = Velocity.remotePlugins || [];
+settingsGhost.enabledThemes ??= {};
+settingsGhost.enabledPlugins ??= {};
+
+settingsGhost.remoteThemes ??= [];
+settingsGhost.remotePlugins ??= [];
 
 const filters = {
     themes: /(\.theme.css)$/,
@@ -95,14 +95,14 @@ const RemoteActions = new (class {
 
             VApi.showToast("Remote Addon Manager", `${Strings.Toasts.AddonManager.loaded} ${meta.name}`);
 
-            if (!Velocity.remoteThemes.find((m) => m.name === meta.name)) {
-                DataStore.setData("VELOCITY_SETTINGS", "remoteThemes", [...Velocity.remoteThemes, { name: meta.name, url: url }]);
+            if (!settingsGhost.remoteThemes.find((m) => m.name === meta.name)) {
+                settingsStore.remoteThemes = [...settingsGhost.remoteThemes, { name: meta.name, url: url }];
             }
         });
     }
 
     unloadTheme(name) {
-        const entry = Velocity.remoteThemes.filter((m) => {
+        const entry = settingsGhost.remoteThemes.filter((m) => {
             return m.name === name;
         });
 
@@ -116,14 +116,10 @@ const RemoteActions = new (class {
                 return m.name !== name;
             });
 
-            DataStore.setData(
-                "VELOCITY_SETTINGS",
-                "remoteThemes",
-                Velocity.remoteThemes.filter((m) => {
-                    const val = m.name !== name;
-                    return val;
-                })
-            );
+            settingsStore.remoteThemes = settingsGhost.remoteThemes.filter((m) => {
+                const val = m.name !== name;
+                return val;
+            });
 
             VApi.showToast("Remote Addon Manager", `${Strings.Toasts.AddonManager.unloaded} ${name}`);
         }
@@ -131,7 +127,7 @@ const RemoteActions = new (class {
 })();
 
 function loadRemoteAddons() {
-    Velocity.remoteThemes.forEach((theme) => {
+    settingsGhost.remoteThemes.forEach((theme) => {
         RemoteActions.loadTheme(theme.url);
     });
 }
@@ -186,12 +182,12 @@ const Themes = new (class {
         return addons.themes.filter((p) => this.isEnabled[p?.name]);
     }
     isEnabled(name) {
-        return Velocity.enabledThemes[name] || false;
+        return settingsGhost.enabledThemes[name] ?? false;
     }
     enable(name) {
         const meta = this.get(name);
         if (!meta) return;
-        DataStore.setData("VELOCITY_SETTINGS", "enabledThemes", { ...Velocity.enabledThemes, [meta.name]: true });
+        settingsStore.enabledThemes = { ...settingsGhost.enabledThemes, [meta.name]: true };
         const style = document.createElement("style");
         style.innerHTML = meta.css;
         style.setAttribute("velocity-theme-id", meta.name);
@@ -202,7 +198,7 @@ const Themes = new (class {
         try {
             const meta = this.get(name);
             if (!meta) return;
-            DataStore.setData("VELOCITY_SETTINGS", "enabledThemes", { ...Velocity.enabledThemes, [meta.name]: false });
+            settingsStore.enabledThemes = { ...settingsGhost.enabledThemes, [meta.name]: false };
             const ele = document.querySelectorAll(`[velocity-theme-id="${meta.name}"]`);
             document.body.classList.remove(`velocity-theme-${escapeID(meta.name)}`);
             for (let ele1 of ele) {
@@ -243,7 +239,7 @@ fs.watch(themeDir, { persistent: false }, async (eventType, filename) => {
             meta.css = cssBeta ? StyleManager.parse(data) : data;
 
             if (Themes.get(meta.name)) {
-                const enabled = Velocity.enabledThemes[meta.name] || false;
+                const enabled = settingsGhost.enabledThemes[meta.name] || false;
 
                 delete addons.themes[getKeyByValue(addons.themes, meta.name)];
                 addons.themes.push(meta);
@@ -374,11 +370,11 @@ const Plugins = new (class {
         return addons.plugins.filter((p) => this.isEnabled[p?.name]);
     }
     isEnabled(name) {
-        return Velocity.enabledPlugins[name] ?? false;
+        return settingsGhost.enabledPlugins[name] ?? false;
     }
     enable(name) {
         const meta = this.get(name);
-        DataStore.setData("VELOCITY_SETTINGS", "enabledPlugins", { ...Velocity.enabledPlugins, [meta.name]: true });
+        settingsStore.enabledPlugins = { ...settingsGhost.enabledPlugins, [meta.name]: true };
         try {
             const PluginExport = typeof meta.export.Plugin === "function" ? meta.export.Plugin() : meta.export.Plugin;
 
@@ -389,7 +385,7 @@ const Plugins = new (class {
     }
     disable(name) {
         const meta = this.get(name);
-        DataStore.setData("VELOCITY_SETTINGS", "enabledPlugins", { ...Velocity.enabledPlugins, [meta.name]: false });
+        settingsStore.enabledPlugins = { ...settingsGhost.enabledPlugins, [meta.name]: false };
         try {
             const PluginExport = typeof meta.export.Plugin === "function" ? meta.export.Plugin() : meta.export.Plugin;
             return PluginExport.onStop();
@@ -460,7 +456,7 @@ fs.watch(pluginDir, { persistent: false }, async (eventType, filename) => {
             }
 
             if (Plugins.get(meta.name)) {
-                const enabled = Velocity.enabledPlugins[meta.name] || false;
+                const enabled = settingsGhost.enabledPlugins[meta.name] || false;
 
                 VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.unloaded} ${meta.name}`);
                 if (enabled) {
