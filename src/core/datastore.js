@@ -1,7 +1,9 @@
 const _fs = require("fs");
 const _path = require("path");
+const { make, Events } = require("nests");
 
 const Logger = require("./logger");
+const logger = require("./logger");
 
 const storage = new (class DataStore {
     get dir() {
@@ -53,14 +55,24 @@ const storage = new (class DataStore {
     }
 })();
 
-const Storage = (pluginName) =>
-    new Proxy(storage.getAllData(pluginName) || {}, {
-        get: (_, key) => storage.getData(pluginName, key),
-        set: (_, key, value) => {
-            if (value === undefined || value === null) return storage.deleteData(pluginName, key);
-            return storage.setData(pluginName, key, value);
-        },
-    });
+const nestCache = {};
+const Storage = (pluginName) => {
+    if (!nestCache[pluginName]) {
+        const update = (data) => {
+            try {
+                _fs.writeFileSync(storage.getFile(pluginName), JSON.stringify(data, null, 2));
+            } catch (e) {
+                Logger.error("Velocity", e);
+            }
+        };
+        const nest = make(storage.getAllData(pluginName));
+        nest.on(Events.SET, () => update(nest.ghost));
+        nest.on(Events.DELETE, () => update(nest.ghost));
+        nest.on(Events.UPDATE, () => update(nest.ghost));
+        nestCache[pluginName] = nest;
+    }
+    return nestCache[pluginName];
+};
 
 Object.assign(Storage, {
     getData: (name, key) => storage.getData(name, key),

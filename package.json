@@ -30,5 +30,8 @@
         "stylelint": "^14.9.1",
         "stylelint-config-prettier": "^9.0.3",
         "stylelint-config-standard": "^25.0.0"
+    },
+    "dependencies": {
+        "nests": "^2.3.1"
     }
 }
