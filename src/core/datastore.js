@@ -3,7 +3,6 @@ const _path = require("path");
 const { make, Events } = require("nests");
 
 const Logger = require("./logger");
-const logger = require("./logger");
 
 const storage = new (class DataStore {
     get dir() {

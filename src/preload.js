@@ -12,6 +12,8 @@ const { info } = require("../../package.json");
 const StyleManager = require("./core/styleParser");
 const Neptune = require("./core/neptune");
 
+const { store: settingsStore, ghost: settingsGhost } = DataStore("VELOCITY_SETTINGS");
+
 const dPath = process.env.DISCORD_PRELOAD;
 
 if (dPath) {
@@ -46,7 +48,7 @@ if (dPath) {
     toWindow(PermissionError);
 
     async function DomLoaded() {
-        if (DataStore.getData("VELOCITY_SETTINGS", "DebuggerKey")) {
+        if (settingsGhost.DebuggerKey) {
             window.addEventListener(
                 "keydown",
                 (event) =>
@@ -77,8 +79,8 @@ if (dPath) {
         }
         polyfillWebpack();
 
-        const DevMode = DataStore("VELOCITY_SETTINGS").DevMode;
-        const ValidityChecks = DataStore("VELOCITY_SETTINGS").ValidityChecks;
+        const DevMode = settingsGhost.DevMode;
+        const ValidityChecks = settingsGhost.ValidityChecks;
 
         const vhead = document.createElement("velocity-head");
         const vthemes = document.createElement("velocity-themes");
@@ -112,7 +114,7 @@ if (dPath) {
         const request = require("./core/request");
         const updater = require("./core/updater");
 
-        if (DataStore.getData("VELOCITY_SETTINGS", "CheckForUpdates")) {
+        if (settingsGhost.CheckForUpdates) {
             updater.checkForUpdates();
         }
 
@@ -201,11 +203,9 @@ if (dPath) {
                         el.remove();
                     });
 
-                    let cssChecked = DataStore("VELOCITY_SETTINGS").CSSEnabled;
-                    let CSSTabs = DataStore("VELOCITY_SETTINGS").CSSTabs;
-                    const cssBeta = DataStore("VELOCITY_SETTINGS").CSSFeatures;
-
-                    if (cssChecked) {
+                    const CSSTabs = settingsGhost.CSSTabs;
+                    const cssBeta = settingsGhost.CSSFeatures;
+                    if (settingsGhost.CSSEnabled) {
                         let index = 0;
                         CSSTabs.forEach((css) => {
                             var style = document.createElement("style");
@@ -220,10 +220,10 @@ if (dPath) {
             },
             StartupScript: {
                 get: () => {
-                    return DataStore.getData("VELOCITY_SETTINGS", "JS");
+                    return settingsGhost.JS;
                 },
                 update: (script) => {
-                    return DataStore.setData("VELOCITY_SETTINGS", "JS", script);
+                    return (settingsStore.JS = script);
                 },
             },
             Patcher: patch,
@@ -292,10 +292,8 @@ if (dPath) {
 
         VApi.Styling.injectInternalCSS("velocity_internal_styles", await data);
 
-        let jsChecked = DataStore("VELOCITY_SETTINGS").JSEnabled;
-        let jsTabs = DataStore("VELOCITY_SETTINGS").JSTabs;
-
-        if (jsChecked) {
+        const jsTabs = settingsGhost.JSTabs;
+        if (settingsGhost.JSEnabled) {
             await waitFor('[class*="guilds"]');
             jsTabs.forEach((js) => {
                 try {
@@ -309,11 +307,9 @@ if (dPath) {
         }
         if (DevMode) logger.log("Velocity", "Startup JS Run");
 
-        let cssChecked = DataStore("VELOCITY_SETTINGS").CSSEnabled;
-        let CSSTabs = DataStore("VELOCITY_SETTINGS").CSSTabs;
-        const cssBeta = DataStore("VELOCITY_SETTINGS").CSSFeatures;
-
-        if (cssChecked) {
+        const CSSTabs = settingsGhost.CSSTabs;
+        const cssBeta = settingsGhost.CSSFeatures;
+        if (settingsGhost.CSSEnabled) {
             let index = 0;
             CSSTabs.forEach((css) => {
                 var style = document.createElement("style");
@@ -335,9 +331,9 @@ if (dPath) {
 
         // if (ValidityChecks) Neptune.initialiseChecks();
 
-        if (!DataStore.getData("VELOCITY_SETTINGS", "hasShownChangelog")) {
+        if (!settingsGhost.hasShownChangelog) {
             VApi.showChangelog();
-            DataStore.setData("VELOCITY_SETTINGS", "hasShownChangelog", true);
+            settingsStore.hasShownChangelog = true;
         }
 
         const allThemes = VApi.AddonManager.themes.getAll();
@@ -350,7 +346,7 @@ if (dPath) {
             VApi.showToast("Addon Manager", `${Strings.Toasts.AddonManager.loaded} ${meta.name} ${meta.version}`);
         }
 
-        const enabledThemes = DataStore("VELOCITY_SETTINGS").enabledThemes;
+        const enabledThemes = settingsGhost.enabledThemes;
         for (let [theme, data] of Object.entries(enabledThemes)) {
             if (DevMode) logger.log(theme, data);
             if (data) {
@@ -362,7 +358,7 @@ if (dPath) {
             }
         }
 
-        const enabledPlugins = DataStore("VELOCITY_SETTINGS").enabledPlugins;
+        const enabledPlugins = settingsGhost.enabledPlugins;
         for (let [plugin, data] of Object.entries(enabledPlugins)) {
             if (DevMode) logger.log(plugin, data);
             if (data) {
@@ -745,7 +741,7 @@ if (dPath) {
 
         if (DevMode) logger.log("Velocity", "Settings Added");
 
-        if (DataStore.getData("VELOCITY_SETTINGS", "ReloadOnLogin")) {
+        if (settingsGhost.ReloadOnLogin) {
             VApi.WebpackModules.find(["dirtyDispatch"]).subscribe("LOGIN", (event) => {
                 location.reload();
             });
