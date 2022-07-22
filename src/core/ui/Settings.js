@@ -69,17 +69,17 @@ monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
     allowNonTsExtensions: true,
 });
 
-const Settings = DataStore("VELOCITY_SETTINGS");
+const { ghost: settingsGhost, store: settingsStore } = DataStore("VELOCITY_SETTINGS");
 const headerClasses = "velocity-header-display";
 
-let fontsize = DataStore.getData("VELOCITY_SETTINGS", "FontSize") || 14;
+let fontsize = settingsGhost.FontSize || 14;
 if (fontsize > 14) {
     fontsize = 14;
-    DataStore.setData("VELOCITY_SETTINGS", "FontSize", 14);
+    settingsStore.Fontsize = 14;
 }
 if (fontsize < 2) {
     fontsize = 2;
-    DataStore.setData("VELOCITY_SETTINGS", "FontSize", 2);
+    settingsStore.Fontsize = 2;
 }
 
 const UserSettings = WebpackModules.find("SettingsView").default;
@@ -274,7 +274,7 @@ VApi.Patcher(
                     note: Strings.Settings.Settings.Sections.window.transparency.note,
                     reload: true,
                     action: () => {
-                        DataStore.setData("VELOCITY_SETTINGS", "Vibrancy", false);
+                        settingsStore.Vibrancy = false;
                         const warning = document.getElementById("velocity-settings-section-transparency-warning");
                         warning.innerHTML = Strings.Settings.requiresrestart;
                     },
@@ -285,7 +285,7 @@ VApi.Patcher(
                     note: Strings.Settings.Settings.Sections.window.vibrancy.note,
                     reload: true,
                     action: () => {
-                        DataStore.setData("VELOCITY_SETTINGS", "Transparency", false);
+                        settingsStore.Transparency = false;
                         const warning = document.getElementById("velocity-settings-section-vibrancy-warning");
                         warning.innerHTML = Strings.Settings.requiresrestart;
                     },
@@ -378,7 +378,7 @@ VApi.Patcher(
             ],
         });
 
-        if (Settings.CSSEnabled) {
+        if (settingsGhost.CSSEnabled) {
             insert({
                 section: normalizeString(Strings.Titles.customcss),
                 label: Strings.Titles.customcss,
@@ -387,7 +387,7 @@ VApi.Patcher(
                 element: () => [React.createElement(FormTitle, { tag: "h1" }, Strings.Settings.CustomCSS.title), React.createElement(Editor, { type: "customcss" })],
             });
         }
-        if (Settings.JSEnabled) {
+        if (settingsGhost.JSEnabled) {
             insert({
                 section: normalizeString(Strings.Titles.startupscript),
                 label: Strings.Titles.startupscript,
@@ -506,7 +506,7 @@ VApi.Patcher(
                 }),
             ],
         });
-        if (Settings.DeveloperSettings) {
+        if (settingsGhost.DeveloperSettings) {
             insert({
                 section: normalizeString(Strings.Titles.developer),
                 label: Strings.Titles.developer,

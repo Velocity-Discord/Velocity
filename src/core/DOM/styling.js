@@ -1,7 +1,7 @@
 const logger = require("../logger.js");
 const DataStore = require("../datastore");
 const StyleManager = require("../styleParser.js");
-const cssBeta = DataStore("VELOCITY_SETTINGS").CSSFeatures;
+const cssBeta = DataStore.getData("VELOCITY_SETTINGS", "CSSFeatures");
 
 module.exports = new (class StylingManager {
     escapeID(id) {
