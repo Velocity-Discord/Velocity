@@ -4,3 +4,4 @@ themes/**/*
 !themes/.exists
 plugins/**/*
 !plugins/.exists
+settings/
