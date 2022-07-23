@@ -333,7 +333,7 @@ if (dPath) {
         const CommandManager = require("./core/commands");
         VApi.Commands = CommandManager;
 
-        // if (ValidityChecks) Neptune.initialiseChecks();
+        if (ValidityChecks) Neptune.initialiseChecks();
 
         if (!DataStore.getData("VELOCITY_SETTINGS", "hasShownChangelog")) {
             VApi.showChangelog();
