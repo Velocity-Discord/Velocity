@@ -1,9 +1,10 @@
 const WebpackModules = require("./webpack");
 const Locales = require("../common/i18n/");
 const Logger = require("./logger");
+const DataStore = require("./datastore");
 
 const Dispatcher = WebpackModules.find(["subscribe", "dirtyDispatch"]);
-const UserSettingsStore = WebpackModules.findByProps("guildPositions");
+const UserSettingsStore = WebpackModules.find(["guildPositions"]);
 
 function extend(extendee, ...extenders) {
     for (let i = 0; i < extenders.length; i++) {
@@ -25,7 +26,7 @@ function extend(extendee, ...extenders) {
 
 module.exports = new (class i18nManager {
     get currentLocale() {
-        return UserSettingsStore.locale;
+        return DataStore.getData("VELOCITY_SETTINGS", "locale") == "en-AUS" ? "en-AUS" : UserSettingsStore.locale;
     }
     get defaultLocale() {
         return "en-US";
@@ -40,6 +41,25 @@ module.exports = new (class i18nManager {
         Dispatcher.subscribe("USER_SETTINGS_UPDATE", ({ settings }) => {
             const update = settings.locale;
             if (update) this.setLocale(update);
+
+            if (update == "en-GB" && DataStore.getData("VELOCITY_SETTINGS", "locale") !== "en-AUS") {
+                const { showConfirmationModal } = require("./ui/Notifications");
+
+                showConfirmationModal(
+                    "Super Duper Secret Locale",
+                    "You've chosen en-GB as your discord language, boring!! \n\n But worry no more: Velocity's gotcha covered, press \"Proceed\" below to anable the **en-AUS** locale!",
+                    {
+                        confirmText: "Proceed",
+                        onConfirm: () => {
+                            this.setLocale("en-AUS");
+                            DataStore.setData("VELOCITY_SETTINGS", "locale", "en-AUS");
+                            location.reload();
+                        },
+                    }
+                );
+            } else {
+                DataStore.setData("VELOCITY_SETTINGS", "locale", update);
+            }
         });
     }
 

@@ -1,4 +1,5 @@
 module.exports = {
+    "en-AUS": require("./en-AUS.json"),
     "en-US": require("./en-US.json"),
     "en-GB": require("./en-GB.json"),
     "zh-CN": require("./zh-CN.json"),
