@@ -79,8 +79,8 @@
             "button": "Unterstütze Velocity auf Github"
         },
         "Updater": {
-            "header": "Velocity Update Available",
-            "failedheader": "Update Failed",
+            "header": "Velocity Update verfügbar",
+            "failedheader": "Update fehlgeschlagen",
             "content": [
                 "Would you like to Update to",
                 "Currently",
@@ -91,56 +91,56 @@
                 "- Run `git pull` in the terminal (inside the folder)",
                 "- Download the **ZIP** from GitHub and replace the old folder with it uncompressed."
             ],
-            "openfolder": "Open Velocity Folder",
+            "openfolder": "Öffne denVelocity Ordner",
             "update": "Update",
-            "wanttoinstall": "Would you like to install this update?",
+            "wanttoinstall": "Möchtest du dieses Update installieren?",
             "notimplemented": "Yeah so... This isn't implemented yet. It probably won't be for a while..."
         }
     },
     "Tooltips": {
-        "source": "Source",
+        "source": "Quelle",
         "website": "Website",
-        "invite": "Server Invite",
-        "nolicense": "No License",
-        "sponsor": "Sponsor the Developer",
-        "whatsthis": "What's This?",
-        "module": "Your Addon is spread accross multiple files and/or uses our Manifest system."
+        "invite": "Server Einladung",
+        "nolicense": "Keine Lizenz",
+        "sponsor": "Unterstütze den Developer",
+        "whatsthis": "Was ist das?",
+        "module": "Dein Addon ist über mehrere Dateien verteilt und/oder verwendet unser Manifest-System."
     },
     "Addons": {
         "Card": {
-            "by": "By ",
-            "sponsor": "Sponsor",
-            "edit": "Edit",
-            "delete": "Delete",
-            "unknown": "Unknown"
+            "by": "Von ",
+            "sponsor": "Unterstützen",
+            "edit": "Bearbeiten",
+            "delete": "Löschen",
+            "unknown": "Unbekannt"
         }
     },
     "Settings": {
-        "requiresrestart": "Requires Restart.",
-        "done": "Done",
+        "requiresrestart": "Erfordert Neustart.",
+        "done": "Fertig",
         "Settings": {
-            "title": "Velocity Settings",
+            "title": "Velocity Einstellungen",
             "footer": {
-                "text": "psst, need some help? Join our ",
-                "link": "Official Server"
+                "text": "Psst, brauchst du Hilfe? Join unserem ",
+                "link": "offiziellen Server"
             },
             "Sections": {
                 "general": {
-                    "title": "General",
+                    "title": "Allgemein",
                     "checkforupdates": {
-                        "name": "Check for Updates",
-                        "note": "Check for updates on startup."
+                        "name": "Überprüfe auf Updates",
+                        "note": "Überprüfe auf Updates beim Start"
                     },
                     "reloadonlogin": {
-                        "name": "Reload on Login",
-                        "note": "Fixes some issues with logins."
+                        "name": "Lade neu beim Login",
+                        "note": "Behebt manche Fehler mit Logins."
                     }
                 },
                 "window": {
-                    "title": "Window",
+                    "title": "Fenster",
                     "transparency": {
-                        "name": "Transparency",
-                        "note": "Makes the main window transparent."
+                        "name": "Transparenz",
+                        "note": "Macht das Hauptfenster transparent."
                     },
                     "vibrancy": {
                         "name": "Vibrancy",
