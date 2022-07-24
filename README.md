@@ -22,7 +22,6 @@ git clone https://github.com/Velocity-Discord/Velocity.git
 ```
 
 ### 2 Run the install script.
-(optionally add `--win` or `--mac` to install for Windows or Mac respectively)
 
 #### Stable 
 ```ps
