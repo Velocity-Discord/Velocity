@@ -2,10 +2,302 @@
     "Titles": {
         "updater": "Updater",
         "settings": "Einstellungen",
-        "customcss": "Benutzerdefinierte CSS",
-        "startupscript": "Startskript",
+        "customcss": "Custom CSS",
+        "startupscript": "Autostart Skript",
         "plugins": "Plugins",
-        "themes": "Themen",
-        "developer": "Entwicklerin"
+        "themes": "Themes",
+        "developer": "Entwickler",
+        "remote": "Remote",
+        "module": "Modul",
+        "changelog": "Changelog",
+        "checkusout": "Besuche uns hier!",
+        "velocitychangelog": "Velocity Changelog",
+        "about": "Über Velocity",
+        "awkward": "Oha, was ist denn hier los?",
+        "whatsnew": "Neuigkeiten"
+    },
+    "Toasts": {
+        "officialserver": "Offiziellem Server beigetreten, verlasse die Einstellungen und werfe einen Blick drauf!",
+        "AddonManager": {
+            "errorreadingtheme": "Fehler beim lesen des Theme Ordners",
+            "errorreadingplugin": "Fehler beim lesen des Plugin Ordners",
+            "failedstart": "Fehler beim starten",
+            "failedstop": "Fehler beim stoppen",
+            "failedremote": "Fehler beim laden des Remote Themes. Seh in der Konsole nach, für mehr Infos",
+            "loaded": "Geladen",
+            "unloaded": "Entladen",
+            "enabled": "Aktiviert",
+            "disabled": "Deaktiviert",
+            "deleted": "Gelöscht"
+        },
+        "Neptune": {
+            "disabledvaliditychecks": "Gültigkeitchecks deaktiviert"
+        },
+        "Updater": {
+            "requestingdata": "Requesting Update Data",
+            "startingpull": "Starting Pull",
+            "requesting": "Requesting package...",
+            "failedpull": "Failed to Pull from Remote",
+            "failedrequest": "Request Failed",
+            "failedparse": "Failed to parse package",
+            "noupdates": "No Updates Available",
+            "updateto": "Update Velocity to",
+            "install": "Install",
+            "invalid": "Invalid",
+            "invalidURL": "Invalid Update URL",
+            "cannot": "You cannot install this. (Cause it's invalid...)"
+        },
+        "StartupScript": {
+            "saved": "Saved Script",
+            "cleared": "Cleard Script",
+            "error": "Error Compiling Startup Script. See Console For More Details"
+        },
+        "CustomCSS": {
+            "saved": "Saved CSS",
+            "cleared": "Cleared CSS"
+        },
+        "Developer": {
+            "killed": "Killed"
+        }
+    },
+    "Modals": {
+        "Restart": {
+            "header": "Restart Discord?",
+            "content": "This Setting Requires a full reload of discord."
+        },
+        "WhatsThis": {
+            "header": "What is This?",
+            "content": ["This is a Velocity Feature. It allows you to Install ", "Updates and get info about Velocity directly from the client."]
+        },
+        "Info": {
+            "version": "Version",
+            "api": "API"
+        },
+        "Sponsor": {
+            "header": "Sponsor Velocity",
+            "rows": ["Get a shiny Bagde on your profile!", "Show your support for the Modificaiton!"],
+            "button": "Sponsor Velocity on Github"
+        },
+        "Updater": {
+            "header": "Velocity Update Available",
+            "failedheader": "Update Failed",
+            "content": [
+                "Would you like to Update to",
+                "Currently",
+                "Our Remote Repository has a newer hash than your version of Velocity, this indicates that there may be an update available. Would you like to Update to"
+            ],
+            "failed": [
+                "You can manually update Velocity by opening the Velocity Folder and doing one of the following,",
+                "- Run `git pull` in the terminal (inside the folder)",
+                "- Download the **ZIP** from GitHub and replace the old folder with it uncompressed."
+            ],
+            "openfolder": "Open Velocity Folder",
+            "update": "Update",
+            "wanttoinstall": "Would you like to install this update?",
+            "notimplemented": "Yeah so... This isn't implemented yet. It probably won't be for a while..."
+        }
+    },
+    "Tooltips": {
+        "source": "Source",
+        "website": "Website",
+        "invite": "Server Invite",
+        "nolicense": "No License",
+        "sponsor": "Sponsor the Developer",
+        "whatsthis": "What's This?",
+        "module": "Your Addon is spread accross multiple files and/or uses our Manifest system."
+    },
+    "Addons": {
+        "Card": {
+            "by": "By ",
+            "sponsor": "Sponsor",
+            "edit": "Edit",
+            "delete": "Delete",
+            "unknown": "Unknown"
+        }
+    },
+    "Settings": {
+        "requiresrestart": "Requires Restart.",
+        "done": "Done",
+        "Settings": {
+            "title": "Velocity Settings",
+            "footer": {
+                "text": "psst, need some help? Join our ",
+                "link": "Official Server"
+            },
+            "Sections": {
+                "general": {
+                    "title": "General",
+                    "checkforupdates": {
+                        "name": "Check for Updates",
+                        "note": "Check for updates on startup."
+                    },
+                    "reloadonlogin": {
+                        "name": "Reload on Login",
+                        "note": "Fixes some issues with logins."
+                    }
+                },
+                "window": {
+                    "title": "Window",
+                    "transparency": {
+                        "name": "Transparency",
+                        "note": "Makes the main window transparent."
+                    },
+                    "vibrancy": {
+                        "name": "Vibrancy",
+                        "note": "Makes the main window have a vibrancy effect. (MacOS)"
+                    }
+                },
+                "tools": {
+                    "title": "Tools",
+                    "customcss": {
+                        "name": "Custom CSS",
+                        "note": "Enables Custom CSS."
+                    },
+                    "startupscript": {
+                        "name": "Startup Script",
+                        "note": "Enables Startup Script.",
+                        "warning": "You can easily add malicious scripts! Be careful!"
+                    }
+                },
+                "developer": {
+                    "title": "Developer",
+                    "debuggerkey": {
+                        "name": "Debugger Hotkey",
+                        "note": "Press f8 to freeze discord with DevTools open."
+                    },
+                    "debugmode": {
+                        "name": "Debugging Mode",
+                        "note": "Sends startup logs to the developer console."
+                    },
+                    "cssfeatures": {
+                        "name": "Beta CSS Features",
+                        "note": "Adds Velocity's beta CSS @ Rules."
+                    },
+                    "fontsize": {
+                        "name": "Editor Font Size",
+                        "note": "A value between 2-14 is best."
+                    },
+                    "developersettings": {
+                        "name": "Developer Settings",
+                        "note": "Only enable if you know what you are doing."
+                    }
+                },
+                "advanced": {
+                    "title": "Advanced",
+                    "validitychecks": {
+                        "name": "Validity Checks",
+                        "note": "Enables Validity Checks.",
+                        "warning": "If you disable this, we will be unable to detect invalid installations."
+                    }
+                }
+            }
+        },
+        "Updater": {
+            "title": "Velocity Updater",
+            "Content": {
+                "branch": "Branch",
+                "hash": "Hash",
+                "version": "Version",
+                "fetchingfrom": "Fetching updates from"
+            },
+            "Titles": {
+                "available": "Velocity update available.",
+                "down": "Velocity downgrade available.",
+                "uptodate": "Velocity is up to date.",
+                "failed": "Failed to check for updates."
+            },
+            "Buttons": {
+                "checkforupdates": "Check for Updates",
+                "update": "Update",
+                "downgrade": "Downgrade",
+                "changelog": "Changelog"
+            }
+        },
+        "Plugins": {
+            "title": "Velocity Plugins",
+            "Buttons": {
+                "openfolder": "Open Plugins Folder"
+            }
+        },
+        "Themes": {
+            "title": "Velocity Themes",
+            "Buttons": {
+                "openfolder": "Open Theme Folder",
+                "loadremote": "Load Remote Theme",
+                "remoteurlplaceholder": "Remote URL (.theme.css)"
+            }
+        },
+        "StartupScript": {
+            "title": "Startup Script",
+            "Buttons": {
+                "save": "Save",
+                "clear": "Clear"
+            },
+            "Warning": {
+                "text": "Be careful what you put in here, this script looks malicious.",
+                "tooltip": "You can still manually add the script..."
+            }
+        },
+        "CustomCSS": {
+            "title": "Custom CSS",
+            "Buttons": {
+                "save": "Save",
+                "clear": "Clear"
+            },
+            "Warning": {
+                "text": "This looks like a theme... you should put themes in your theme folder, not here.",
+                "tooltip": "Click me to open the themes folder!"
+            }
+        },
+        "Developer": {
+            "title": "Developer Settings",
+            "Sections": {
+                "internalpatches": {
+                    "title": "Internal Patches",
+                    "warning": "WARNING - Killing this patch is dangerous and can cause issues."
+                },
+                "backendstatus": {
+                    "title": "Backend Status",
+                    "rerequest": "Re-Request",
+                    "request": "Request",
+                    "clearcache": "Clear Cache",
+                    "urls": {
+                        "badges": "Badges",
+                        "updates": "Updates",
+                        "experiments": "Experiments"
+                    },
+                    "status": {
+                        "status": "Status",
+                        "fine": "Fine",
+                        "unknown": "Unknown"
+                    },
+                    "table": {
+                        "name": "Name",
+                        "status": "Status"
+                    }
+                }
+            }
+        }
+    },
+    "Components": {
+        "BuiltIns": {
+            "addtocustomcss": "Add to Custom CSS",
+            "addtostartupscript": "Add to Startup Script"
+        },
+        "ErrorBoundary": {
+            "headers": {
+                "uncaught": "Uncaught Error while rendering",
+                "showdetails": "Show Details",
+                "hidedetails": "Hide Details",
+                "errorstack": "Error Stack"
+            },
+            "buttons": {
+                "retry": "Retry",
+                "refresh": "Refresh App"
+            },
+            "errors": {
+                "nochildren": "No children provided to ErrorBoundary."
+            }
+        }
     }
 }
