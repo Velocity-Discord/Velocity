@@ -65,7 +65,7 @@ npm run install -- --ptb
 npm run install -- --canary
 ```
 ### 3. Use. 
-To use the latest Velocity version 
+To use latest changes
 ```ps
 npm run dist
 ```
