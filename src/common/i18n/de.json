@@ -34,18 +34,18 @@
             "disabledvaliditychecks": "Gültigkeitchecks deaktiviert"
         },
         "Updater": {
-            "requestingdata": "Requesting Update Data",
-            "startingpull": "Starting Pull",
-            "requesting": "Requesting package...",
-            "failedpull": "Failed to Pull from Remote",
-            "failedrequest": "Request Failed",
-            "failedparse": "Failed to parse package",
-            "noupdates": "No Updates Available",
-            "updateto": "Update Velocity to",
-            "install": "Install",
-            "invalid": "Invalid",
-            "invalidURL": "Invalid Update URL",
-            "cannot": "You cannot install this. (Cause it's invalid...)"
+            "requestingdata": "Anfordern von Aktualisierungsdaten",
+            "startingpull": "Starte Pull",
+            "requesting": "Paket anfordern...",
+            "failedpull": "Pull vom Remote fehlgeschlagen",
+            "failedrequest": "Anfordern fehlgeschlagen",
+            "failedparse": "Fehler beim parsen des Pakets",
+            "noupdates": "Keine Updates verfügbar",
+            "updateto": "Aktualisiere Velocity auf",
+            "install": "Installieren",
+            "invalid": "Ungültigkeit",
+            "invalidURL": "Ungültige Update URL",
+            "cannot": "Du kannst das nicht installieren. (Weil es ungültig ist...)"
         },
         "StartupScript": {
             "saved": "Saved Script",
