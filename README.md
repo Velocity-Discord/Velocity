@@ -14,7 +14,7 @@ Velocity is an upcoming Discord Client modification that allows you to extend di
 ---
 ## Installation
 
-Prerequisites: [Node.js](https://nodejs.org/en/) v12+, [git](https://git-scm.com/) and [npm](https://www.npmjs.com/).
+## Prerequisites: [Node.js](https://nodejs.org/en/) v12+, [git](https://git-scm.com/) and [npm](https://www.npmjs.com/).
 
 ### 1. Clone the repository.
 ```ps
@@ -40,7 +40,6 @@ npm run install -- --canary
 
 ---
 ## Development
-Prerequisites: [Node.js](https://nodejs.org/en/) v12+, [git](https://git-scm.com/) and [npm](https://www.npmjs.com/).
 
 ### 1. Clone the repository.
 ```ps
@@ -48,7 +47,6 @@ git clone https://github.com/Velocity-Discord/Velocity.git
 ```
 
 ### 2. Run the install script.
-(optionally add `--win` or `--mac` to install for Windows or Mac respectively)
 
 #### Stable 
 ```ps
@@ -64,8 +62,8 @@ npm run install -- --ptb
 ```ps
 npm run install -- --canary
 ```
-### 3. Comple.
-To use latest changes
+### 3. Compile.
+To use latest changes, run
 ```ps
 npm run dist
 ```
