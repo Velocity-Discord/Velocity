@@ -65,12 +65,18 @@ npm run install -- --ptb
 ```ps
 npm run install -- --canary
 ```
+### 3. Use. 
+To use the latest Velocity version 
+```ps
+npm run dist
+```
 
-### 3. Development. 
+### 4. Development.
 To automatically compile the asar, run 
 ```ps
 npm run watch
 ```
+
 
 ---
 ## License Notice
