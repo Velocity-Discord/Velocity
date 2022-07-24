@@ -281,19 +281,19 @@
     },
     "Components": {
         "BuiltIns": {
-            "addtocustomcss": "Add to Custom CSS",
-            "addtostartupscript": "Add to Startup Script"
+            "addtocustomcss": "Zum Custom CSS hinzufügen",
+            "addtostartupscript": "Zu Startup-Skripts hinzufügen"
         },
         "ErrorBoundary": {
             "headers": {
-                "uncaught": "Uncaught Error while rendering",
-                "showdetails": "Show Details",
-                "hidedetails": "Hide Details",
+                "uncaught": "Unerwarteter Fehler beim Rendern",
+                "showdetails": "Details anzeigen",
+                "hidedetails": "Details ausblenden",
                 "errorstack": "Error Stack"
             },
             "buttons": {
-                "retry": "Retry",
-                "refresh": "Refresh App"
+                "retry": "Erneut versuchen",
+                "refresh": "App neu laden"
             },
             "errors": {
                 "nochildren": "No children provided to ErrorBoundary."
