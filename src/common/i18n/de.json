@@ -3,7 +3,7 @@
         "updater": "Updater",
         "settings": "Einstellungen",
         "customcss": "Custom CSS",
-        "startupscript": "Autostart Skript",
+        "startupscript": "Startup-Skripts",
         "plugins": "Plugins",
         "themes": "Themes",
         "developer": "Entwickler",
@@ -48,35 +48,35 @@
             "cannot": "Du kannst das nicht installieren. (Weil es ungültig ist...)"
         },
         "StartupScript": {
-            "saved": "Saved Script",
-            "cleared": "Cleard Script",
-            "error": "Error Compiling Startup Script. See Console For More Details"
+            "saved": "Gespeicherte Skripte",
+            "cleared": "Skripte gelöscht",
+            "error": "Fehler beim Kompilieren des Startup-Skripts. Seh in der Konsole nach, für mehr Infos"
         },
         "CustomCSS": {
-            "saved": "Saved CSS",
-            "cleared": "Cleared CSS"
+            "saved": "Gespeichertes CSS",
+            "cleared": "CSS gelöscht"
         },
         "Developer": {
-            "killed": "Killed"
+            "killed": "Getötet"
         }
     },
     "Modals": {
         "Restart": {
-            "header": "Restart Discord?",
-            "content": "This Setting Requires a full reload of discord."
+            "header": "Discord neustarten?",
+            "content": "Diese Einstellungen benötigt einen kompletten Neustart von Discord."
         },
         "WhatsThis": {
-            "header": "What is This?",
-            "content": ["This is a Velocity Feature. It allows you to Install ", "Updates and get info about Velocity directly from the client."]
+            "header": "Was ist das?",
+            "content": ["Das ist ein Velocity Feature. Es erlaubt dir Updates ", "zu installieren und gibt dir Infos über Velocity direkt im Client."]
         },
         "Info": {
             "version": "Version",
             "api": "API"
         },
         "Sponsor": {
-            "header": "Sponsor Velocity",
-            "rows": ["Get a shiny Bagde on your profile!", "Show your support for the Modificaiton!"],
-            "button": "Sponsor Velocity on Github"
+            "header": "Unterstütze Velocity",
+            "rows": ["Bekomme ein glänzendes Badge für dein Profil!", "Zeige deinen Support für die Modificaiton!"],
+            "button": "Unterstütze Velocity auf Github"
         },
         "Updater": {
             "header": "Velocity Update Available",
