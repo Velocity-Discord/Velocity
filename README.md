@@ -64,7 +64,7 @@ npm run install -- --ptb
 ```ps
 npm run install -- --canary
 ```
-### 3. Use. 
+### 3. Comple.
 To use latest changes
 ```ps
 npm run dist
