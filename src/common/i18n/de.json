@@ -94,7 +94,7 @@
             "openfolder": "Öffne denVelocity Ordner",
             "update": "Update",
             "wanttoinstall": "Möchtest du dieses Update installieren?",
-            "notimplemented": "Yeah so... This isn't implemented yet. It probably won't be for a while..."
+            "notimplemented": "Ja, also... Das ist noch nicht implementiert. Das wird wahrscheinlich für eine Weile auch nicht passieren..."
         }
     },
     "Tooltips": {
@@ -151,43 +151,43 @@
                     "title": "Tools",
                     "customcss": {
                         "name": "Custom CSS",
-                        "note": "Enables Custom CSS."
+                        "note": "Aktiviert Custom CSS."
                     },
                     "startupscript": {
-                        "name": "Startup Script",
-                        "note": "Enables Startup Script.",
-                        "warning": "You can easily add malicious scripts! Be careful!"
+                        "name": "Startup-Skripts",
+                        "note": "Aktiviert Startup-Skripts.",
+                        "warning": "Du kannst leicht gefährliche Skripts hinzufügen! Pass auf!"
                     }
                 },
                 "developer": {
-                    "title": "Developer",
+                    "title": "Entwickler",
                     "debuggerkey": {
                         "name": "Debugger Hotkey",
-                        "note": "Press f8 to freeze discord with DevTools open."
+                        "note": "Drücke F8 um Discord mit geöffneten DevTools einzufrieren."
                     },
                     "debugmode": {
                         "name": "Debugging Mode",
-                        "note": "Sends startup logs to the developer console."
+                        "note": "Sendet Startlogs an die Konsole."
                     },
                     "cssfeatures": {
                         "name": "Beta CSS Features",
-                        "note": "Adds Velocity's beta CSS @ Rules."
+                        "note": "Fügt Velocitys Beta-CSS @ Regeln hinzu."
                     },
                     "fontsize": {
-                        "name": "Editor Font Size",
-                        "note": "A value between 2-14 is best."
+                        "name": "Editor Schriftgröße",
+                        "note": "Ein Wert zwischen 2 und 24 ist am besten."
                     },
                     "developersettings": {
-                        "name": "Developer Settings",
-                        "note": "Only enable if you know what you are doing."
+                        "name": "Entwickler Einstellungen",
+                        "note": "Aktiviere es nur, wenn du weißt was du tust."
                     }
                 },
                 "advanced": {
-                    "title": "Advanced",
+                    "title": "Erweitert",
                     "validitychecks": {
-                        "name": "Validity Checks",
-                        "note": "Enables Validity Checks.",
-                        "warning": "If you disable this, we will be unable to detect invalid installations."
+                        "name": "Gültigkeitchecks",
+                        "note": "Aktiviert Gültigkeitchecks.",
+                        "warning": "Wenn du das deaktivierst, können wir keine ungültigen Installationen mehr erkennen."
                     }
                 }
             }
@@ -198,16 +198,16 @@
                 "branch": "Branch",
                 "hash": "Hash",
                 "version": "Version",
-                "fetchingfrom": "Fetching updates from"
+                "fetchingfrom": "Fetching updates von"
             },
             "Titles": {
-                "available": "Velocity update available.",
-                "down": "Velocity downgrade available.",
-                "uptodate": "Velocity is up to date.",
-                "failed": "Failed to check for updates."
+                "available": "Velocity Update verfügbar.",
+                "down": "Velocity downgrade verfügbar.",
+                "uptodate": "Velocity ist aktuell.",
+                "failed": "Überprüfen auf Updates fehlgeschlagen."
             },
             "Buttons": {
-                "checkforupdates": "Check for Updates",
+                "checkforupdates": "Überprüfe auf Updates",
                 "update": "Update",
                 "downgrade": "Downgrade",
                 "changelog": "Changelog"
@@ -216,60 +216,60 @@
         "Plugins": {
             "title": "Velocity Plugins",
             "Buttons": {
-                "openfolder": "Open Plugins Folder"
+                "openfolder": "Öffne den Plugins Ordner"
             }
         },
         "Themes": {
             "title": "Velocity Themes",
             "Buttons": {
-                "openfolder": "Open Theme Folder",
-                "loadremote": "Load Remote Theme",
+                "openfolder": "Öffne den Themes Ordner",
+                "loadremote": "Lade Remote Theme",
                 "remoteurlplaceholder": "Remote URL (.theme.css)"
             }
         },
         "StartupScript": {
-            "title": "Startup Script",
+            "title": "Startup-Skript",
             "Buttons": {
-                "save": "Save",
-                "clear": "Clear"
+                "save": "Speichern",
+                "clear": "Löschen"
             },
             "Warning": {
-                "text": "Be careful what you put in here, this script looks malicious.",
-                "tooltip": "You can still manually add the script..."
+                "text": "Pass auf was du hier einfügst, das Skript sieht gefährlich aus.",
+                "tooltip": "Du kannst das Skript trotzdem manuell hinzufügen..."
             }
         },
         "CustomCSS": {
             "title": "Custom CSS",
             "Buttons": {
-                "save": "Save",
-                "clear": "Clear"
+                "save": "Speichern",
+                "clear": "Löschen"
             },
             "Warning": {
-                "text": "This looks like a theme... you should put themes in your theme folder, not here.",
-                "tooltip": "Click me to open the themes folder!"
+                "text": "Das sieht wie ein Theme aus... Du solltest das in dein Themes Ordner hinzufügen, nicht hier.",
+                "tooltip": "Click mich um den Themes Ordner zu öffnen."
             }
         },
         "Developer": {
-            "title": "Developer Settings",
+            "title": "Entwickler Einstellungen",
             "Sections": {
                 "internalpatches": {
-                    "title": "Internal Patches",
-                    "warning": "WARNING - Killing this patch is dangerous and can cause issues."
+                    "title": "Interne Patches",
+                    "warning": "WARNUNG - Das beenden dieses Patches ist gefährlich und kann Probleme verursachen."
                 },
                 "backendstatus": {
                     "title": "Backend Status",
                     "rerequest": "Re-Request",
                     "request": "Request",
-                    "clearcache": "Clear Cache",
+                    "clearcache": "Cache löschen",
                     "urls": {
                         "badges": "Badges",
                         "updates": "Updates",
-                        "experiments": "Experiments"
+                        "experiments": "Experiemente"
                     },
                     "status": {
                         "status": "Status",
-                        "fine": "Fine",
-                        "unknown": "Unknown"
+                        "fine": "OK",
+                        "unknown": "Unbekannt"
                     },
                     "table": {
                         "name": "Name",
