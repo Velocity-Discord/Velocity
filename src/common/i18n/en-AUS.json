@@ -1,5 +1,310 @@
 {
     "Titles": {
-        "updater": "JOHIUGYF"
+        "updater": "Updater",
+        "settings": "Settings",
+        "customcss": "Custom CSS",
+        "startupscript": "Startup Script",
+        "plugins": "Plugins",
+        "themes": "Themes",
+        "developer": "Virgin",
+        "remote": "Remote",
+        "module": "Module",
+        "changelog": "Changelog",
+        "checkusout": "Chuck us a geez!",
+        "velocitychangelog": "Velocity Changelog",
+        "about": "About Velocity",
+        "awkward": "Cunt's fucked mate",
+        "whatsnew": "What's New"
+    },
+    "Toasts": {
+        "officialserver": "Joined official server, now piss off from settings to have a gander!",
+        "AddonManager": {
+            "errorreadingtheme": "Can't read theme directory, it's probably fucked",
+            "errorreadingplugin": "Can't read plugin directory, it's probably fucked",
+            "failedstart": "Cunt can't start",
+            "failedstop": "Cunt can't stop",
+            "failedremote": "Can't load remote themes, have a geez at the console to see what's garn on",
+            "loaded": "Loaded",
+            "unloaded": "Unloaded",
+            "enabled": "Enabled",
+            "disabled": "Cabbaged",
+            "deleted": "Fucked off"
+        },
+        "Neptune": {
+            "disabledvaliditychecks": "Validity checks are cabbaged"
+        },
+        "Updater": {
+            "requestingdata": "Tryna find the bloody update data",
+            "startingpull": "Starting to pull the fucking bastard",
+            "requesting": "Tryna find the bloody package...",
+            "failedpull": "Tried to pull from remote but failed because it's fucked",
+            "failedrequest": "Request is fucked",
+            "failedparse": "Parsing the pacakge is fucked",
+            "noupdates": "No bloody updates available",
+            "updateto": "Update Velocity to",
+            "install": "Install",
+            "invalid": "Fucked",
+            "invalidURL": "Update URL is fucked",
+            "cannot": "You can't install this because it's fucked"
+        },
+        "StartupScript": {
+            "saved": "Saved Script",
+            "cleared": "Fucked the script off",
+            "error": "Startup script is fucked. Have a geez at the console to see what's garn on"
+        },
+        "CustomCSS": {
+            "saved": "Saved CSS",
+            "cleared": "Fucked off CSS"
+        },
+        "Developer": {
+            "killed": "Shanked"
+        }
+    },
+    "Modals": {
+        "Restart": {
+            "header": "Restart the bastard?",
+            "content": "This Setting Requires a full fuckin reboot of Discord."
+        },
+        "WhatsThis": {
+            "header": "What the fuck is this?",
+            "content": [
+                "This is a Velocity Feature. It allows you to Install ",
+                "Updates and get some cool shit about Velocity directly from the client."
+            ]
+        },
+        "Info": {
+            "version": "Version",
+            "api": "API"
+        },
+        "Sponsor": {
+            "header": "Sponsor Velocity",
+            "rows": [
+                "Get a fuckin' shiny badge for your profile!",
+                "Show your bloody support for the Modification!"
+            ],
+            "button": "Don't be a shit cunt and sponsor Velocity on GitHub"
+        },
+        "Updater": {
+            "header": "Velocity Update Available",
+            "failedheader": "Cunt's fucked",
+            "content": [
+                "Would you like to Update to",
+                "Currently",
+                "Our Remote Repository has a newer hash than your version of Velocity, this indicates that there may be an update available. ",
+                "Would you like to Update to"
+            ],
+            "failed": [
+                "You can manually update the bastard by opening the Velocity Folder and doing one of the following,",
+                "- Run `git pull` in the terminal (inside the folder)",
+                "- Download the **ZIP** from GitHub and replace the old folder with it uncompressed."
+            ],
+            "openfolder": "Open the bastard's folder",
+            "update": "Get the fuckin latest features",
+            "wanttoinstall": "Install this new bad boy?",
+            "notimplemented": "Yeah so... This doesn't fuckin work at the moment. It probably won't be for a while..."
+        }
+    },
+    "Tooltips": {
+        "source": "Source",
+        "website": "Website",
+        "invite": "Server Invite",
+        "nolicense": "No Licence",
+        "sponsor": "Sponsor the Virgin",
+        "whatsthis": "What the fuck is this?",
+        "module": "Just like your ex misso, your addon is all over multiple files and/or uses our Manifest system.\n"
+    },
+    "Addons": {
+        "Card": {
+            "by": "By ",
+            "sponsor": "Sponsor ",
+            "edit": "Edit",
+            "delete": "Fuck it off",
+            "unknown": "No fuckin clue"
+        }
+    },
+    "Settings": {
+        "requiresrestart": "The bastard needs a rebbot.",
+        "done": "Yeah easy",
+        "Settings": {
+            "title": "Velocity Settings",
+            "footer": {
+                "text": "Oi cockhead, need some help? Join our",
+                "link": "Primo Server"
+            },
+            "Sections": {
+                "general": {
+                    "title": "General",
+                    "checkforupdates": {
+                        "name": "Have a geez for updates",
+                        "note": "Velocity will have a gander for updates on startup."
+                    },
+                    "reloadonlogin": {
+                        "name": "Reload on Login",
+                        "note": "Fixes logins being cheeky bastards."
+                    }
+                },
+                "window": {
+                    "title": "Window",
+                    "transparency": {
+                        "name": "Transparency",
+                        "note": "Makes the main window fuckin see through"
+                    },
+                    "vibrancy": {
+                        "name": "Vibrancy",
+                        "note": "Makes the main window vibrant n shit (MacOS)"
+                    }
+                },
+                "tools": {
+                    "title": "My mates",
+                    "customcss": {
+                        "name": "Custom CSS",
+                        "note": "Enables Custom CSS."
+                    },
+                    "startupscript": {
+                        "name": "Startup Script",
+                        "note": "Enables Startup Script.",
+                        "warning": "You can easily add scripts that'll fuck you over! Don't be a dumb cunt."
+                    }
+                },
+                "developer": {
+                    "title": "Virgin",
+                    "debuggerkey": {
+                        "name": "Debugger Hotkey",
+                        "note": "Press F8 to freeze Discord with DevTools open."
+                    },
+                    "debugmode": {
+                        "name": "Virgin mode",
+                        "note": "Sends startup logs to the virgin console."
+                    },
+                    "cssfeatures": {
+                        "name": "Beta CSS Features",
+                        "note": "Adds Velocity's beta CSS @ Rules.\n"
+                    },
+                    "fontsize": {
+                        "name": "Editor Font Size",
+                        "note": "Don't be a shit cunt and input a value between 2-14."
+                    },
+                    "developersettings": {
+                        "name": "Virgin Settings",
+                        "note": "Only enable if you are a virgin.\n"
+                    }
+                },
+                "advanced": {
+                    "title": "Fancy shit",
+                    "validitychecks": {
+                        "name": "Validity Checks",
+                        "note": "Enables Validity Checks",
+                        "warning": "If you disable this, we will be unable to detect fucked installations"
+                    }
+                }
+            }
+        },
+        "Updater": {
+            "title": "Velocity Updater",
+            "Content": {
+                "branch": "Branch",
+                "hash": "Bud",
+                "version": "Version",
+                "fetchingfrom": "Having a gander for updates from"
+            },
+            "Titles": {
+                "available": "Velocity has new shit available.",
+                "down": "Make Velocity a shit cunt.",
+                "uptodate": "Velocity is up to date.",
+                "failed": "Tried to find updates but it's fucked."
+            },
+            "Buttons": {
+                "checkforupdates": "Have a gander for updates",
+                "update": "Get fresh stuff",
+                "downgrade": "Become a degenerate",
+                "changelog": "Changelog"
+            }
+        },
+        "Plugins": {
+            "title": "Velocity Plugins",
+            "Buttons": {
+                "openfolder": "Open Plugins Folder"
+            }
+        },
+        "Themes": {
+            "title": "Velocity Themes",
+            "Buttons": {
+                "openfolder": "Open Theme Folder",
+                "loadremote": "Load Remote Theme",
+                "remoteurlplaceholder": "Remote URL (.theme.css)"
+            }
+        },
+        "StartupScript": {
+            "title": "Startup Script",
+            "Buttons": {
+                "save": "Save",
+                "clear": "Fuck it off"
+            },
+            "Warning": {
+                "text": "This script looks like a slimy bastard, it might fuck you over.",
+                "tooltip": "You can still add the bastard"
+            }
+        },
+        "CustomCSS": {
+            "title": "Custom CSS",
+            "Buttons": {
+                "save": "Save",
+                "clear": "Fuck it off"
+            },
+            "Warning": {
+                "text": "This is a theme dumbass, put it in the themes folder not here you fuckin idiot.",
+                "tooltip": "Click this bitch to open the themes folder!"
+            }
+        },
+        "Developer": {
+            "title": "Virgin settings",
+            "Sections": {
+                "internalpatches": {
+                    "title": "Internal Patches",
+                    "warning": "FUCKHEAD - Killing this patch is dangerous and can cause major fuckery."
+                },
+                "backendstatus": {
+                    "title": "Backend Status",
+                    "rerequest": "Have another gander",
+                    "request": "Have a gander",
+                    "clearcache": "Fuck Cache off",
+                    "urls": {
+                        "badges": "Badges",
+                        "updates": "Updates",
+                        "experiments": "Trying shit out"
+                    },
+                    "status": {
+                        "status": "How's she looking",
+                        "fine": "Gucci",
+                        "unknown": "No fuckin clue"
+                    },
+                    "table": {
+                        "name": "Name",
+                        "status": "How's she looking"
+                    }
+                }
+            }
+        }
+    },
+    "Components": {
+        "BuiltIns": {
+            "addtocustomcss": "Add to Custom CSS",
+            "addtostartupscript": "Add to Startup Script"
+        },
+        "ErrorBoundary": {
+            "headers": {
+                "uncaught": "Caught a fucker whilst rendering",
+                "showdetails": "Gimme Details",
+                "hidedetails": "Fuck Details Off",
+                "errorstack": "Fucked Stack"
+            },
+            "buttons": {
+                "retry": "Have another crack",
+                "refresh": "Reload the bastard"
+            },
+            "errors": {
+                "nochildren": "No ankle biters were provided to ErrorBoundary."
+            }
+        }
     }
 }
