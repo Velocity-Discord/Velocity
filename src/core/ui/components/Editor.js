@@ -8,7 +8,7 @@ const { useState, useEffect } = React;
 const StyleManager = require("../../styleParser");
 
 const monaco = global.windowObj.monaco;
-const Settings = DataStore("VELOCITY_SETTINGS");
+const { ghost: settingsGhost, store: settingsStore } = DataStore("VELOCITY_SETTINGS");
 
 let activeIndex = 0;
 
@@ -34,14 +34,14 @@ const Gear = WebpackModules.find("Gear").default;
 const Trash = WebpackModules.find("Trash").default;
 const Plus = WebpackModules.find("Plus").default;
 
-let fontsize = Settings.FontSize || 14;
+let fontsize = settingsGhost.FontSize || 14;
 if (fontsize > 14) {
     fontsize = 14;
-    Settings.FontSize = 14;
+    settingsStore.FontSize = 14;
 }
 if (fontsize < 2) {
     fontsize = 2;
-    Settings.FontSize = 2;
+    settingsStore.FontSize = 2;
 }
 
 class MonacoEditor extends React.Component {
@@ -63,22 +63,22 @@ class MonacoEditor extends React.Component {
     }
 }
 
-let CSSTabsToRender = Settings.CSSTabs;
-let JSTabsToRender = Settings.JSTabs;
+let CSSTabsToRender = settingsGhost.CSSTabs;
+let JSTabsToRender = settingsGhost.JSTabs;
 
 if (CSSTabsToRender === null || CSSTabsToRender === undefined) {
-    Settings.CSSTabs = [];
-    CSSTabsToRender = Settings.CSSTabs;
+    settingsStore.CSSTabs = [];
+    CSSTabsToRender = settingsGhost.CSSTabs;
 }
 
 if (JSTabsToRender === null || JSTabsToRender === undefined) {
-    Settings.JSTabs = [];
-    JSTabsToRender = Settings.JSTabs;
+    settingsStore.JSTabs = [];
+    JSTabsToRender = settingsGhost.JSTabs;
 }
 
 const updateTabsInSettings = () => {
-    Settings.CSSTabs = CSSTabsToRender;
-    Settings.JSTabs = JSTabsToRender;
+    settingsStore.CSSTabs = CSSTabsToRender;
+    settingsStore.JSTabs = JSTabsToRender;
 };
 
 module.exports = function Editor(props) {
@@ -277,7 +277,7 @@ module.exports = function Editor(props) {
                                         CSSTabsToRender[activeIndex].content = value;
                                         updateTabsInSettings();
 
-                                        const cssBeta = DataStore("VELOCITY_SETTINGS").CSSFeatures;
+                                        const cssBeta = settingsGhost.CSSFeatures;
 
                                         const currentCustomCSSInjected = document.querySelectorAll(`[id*="customcss-tab-"]`);
                                         currentCustomCSSInjected.forEach((el) => {

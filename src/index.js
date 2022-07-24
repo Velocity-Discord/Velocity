@@ -6,6 +6,7 @@ const { join } = require("path");
 const electron = ({ ipcMain, app, session, dialog } = require("electron"));
 const Module = require("module");
 const DataStore = require("./core/datastore");
+const { ghost: settingsGhost } = DataStore("VELOCITY_SETTINGS");
 
 process.env.VELOCITY_DIRECTORY = join(__dirname, "..");
 
@@ -25,14 +26,14 @@ class BrowserWindow extends electron.BrowserWindow {
             devTools: true,
         });
 
-        if (DataStore.getData("VELOCITY_SETTINGS", "Transparency")) {
+        if (settingsGhost.Transparency) {
             opt = Object.assign(opt, {
                 transparent: true,
                 backgroundColor: "#00000000",
             });
         }
 
-        if (DataStore.getData("VELOCITY_SETTINGS", "Vibrancy")) {
+        if (settingsGhost.Vibrancy) {
             opt = Object.assign(opt, {
                 transparent: true,
                 backgroundColor: "#00000000",
