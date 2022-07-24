@@ -329,7 +329,7 @@ if (dPath) {
         const CommandManager = require("./core/commands");
         VApi.Commands = CommandManager;
 
-        // if (ValidityChecks) Neptune.initialiseChecks();
+        if (ValidityChecks) Neptune.initialiseChecks();
 
         if (!settingsGhost.hasShownChangelog) {
             VApi.showChangelog();

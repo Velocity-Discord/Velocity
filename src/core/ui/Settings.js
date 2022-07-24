@@ -13,6 +13,7 @@ const updater = require("../updater");
 const Neptune = require("../neptune");
 const Card = require("./components/AddonCard");
 const StatusTable = require("./components/StatusTable");
+const UpdaterDisplay = require("./components/Updater");
 const Editor = require("./components/Editor");
 const Components = require("../components");
 const i18n = require("../i18n");
@@ -118,131 +119,7 @@ VApi.Patcher(
             section: normalizeString(Strings.Titles.updater),
             label: Strings.Titles.updater,
             className: `velocity-updater-tab ${process.env.willDowngrade || process.env.willUpgrade ? "notification" : ""}`,
-            element: () => [
-                React.createElement(FormTitle, { tag: "h1" }, Strings.Settings.Updater.title),
-                React.createElement("div", {
-                    className: "velocity-updater-modal-headline",
-                    children: [
-                        React.createElement("div", {
-                            className: "velocity-updater-modal-headline-icon okay",
-                            children: [React.createElement(VApi.WebpackModules.find("Checkmark").default, {})],
-                        }),
-                        React.createElement("div", {
-                            className: "velocity-updater-modal-headline-icon info hidden",
-                            children: [React.createElement(VApi.WebpackModules.find("Checkmark").default, {})],
-                        }),
-                        React.createElement("div", {
-                            className: "velocity-updater-modal-headline-icon danger hidden",
-                            children: [React.createElement(VApi.WebpackModules.find("Close").default, {})],
-                        }),
-                        React.createElement("div", {
-                            className: "velocity-updater-modal-headline-text",
-                            children: [
-                                React.createElement(Text, {
-                                    size: Text.Sizes.SIZE_32,
-                                    color: Text.Colors.HEADER_PRIMARY,
-                                    children: Strings.Settings.Updater.Titles.uptodate,
-                                }),
-                                React.createElement(Text, {
-                                    size: Text.Sizes.SIZE_12,
-                                    color: Text.Colors.MUTED,
-                                    children: `${Strings.Settings.Updater.Content.fetchingfrom}:`,
-                                }),
-                                React.createElement(Text, {
-                                    size: Text.Sizes.SIZE_12,
-                                    color: Text.Colors.MUTED,
-                                    children: Config.backend.updates.url,
-                                }),
-                            ],
-                        }),
-                    ],
-                }),
-                React.createElement("div", {
-                    className: "velocity-updater-modal-buttons",
-                    children: [
-                        React.createElement(
-                            Button,
-                            {
-                                className: `velocity-button`,
-                                onClick: () => {
-                                    updater.changelogModal();
-                                },
-                                size: ButtonSizes.SMALL,
-                            },
-                            Strings.Settings.Updater.Buttons.changelog
-                        ),
-                        React.createElement(
-                            Button,
-                            {
-                                id: "velocity-updater-modal-button-check",
-                                color: ButtonColors.YELLOW,
-                                size: ButtonSizes.SMALL,
-                                className: `velocity-button`,
-                                onClick: async () => {
-                                    document.querySelector(".velocity-updater-modal-spinner").classList.add("visible");
-                                    updater.getUpdateStatus().then((status) => {
-                                        if (status == "up") {
-                                            document.querySelector(".velocity-updater-modal-headline-icon.okay").classList.add("hidden");
-                                            document.querySelector(".velocity-updater-modal-headline-icon.info").classList.remove("hidden");
-                                            document.querySelector(".velocity-updater-modal-headline-icon.danger").classList.add("hidden");
-                                            document.querySelector(".velocity-updater-modal-headline-text *").innerHTML = Strings.Settings.Updater.Titles.available;
-                                            document.querySelector("#velocity-updater-modal-button-update").disabled = false;
-                                            document.querySelector(".velocity-updater-modal-spinner").classList.remove("visible");
-                                        } else if (status == "down") {
-                                            document.querySelector(".velocity-updater-modal-headline-icon.okay").classList.add("hidden");
-                                            document.querySelector(".velocity-updater-modal-headline-icon.info").classList.remove("hidden");
-                                            document.querySelector(".velocity-updater-modal-headline-icon.danger").classList.add("hidden");
-                                            document.querySelector(".velocity-updater-modal-headline-text *").innerHTML = Strings.Settings.Updater.Titles.down;
-                                            document.querySelector("#velocity-updater-modal-button-update > div").innerHTML = Strings.Settings.Updater.Buttons.downgrade;
-                                            document.querySelector("#velocity-updater-modal-button-update").disabled = false;
-                                            document.querySelector(".velocity-updater-modal-spinner").classList.remove("visible");
-                                        } else if (status == "none") {
-                                            document.querySelector(".velocity-updater-modal-headline-icon.okay").classList.remove("hidden");
-                                            document.querySelector(".velocity-updater-modal-headline-icon.info").classList.add("hidden");
-                                            document.querySelector(".velocity-updater-modal-headline-icon.danger").classList.add("hidden");
-                                            document.querySelector(".velocity-updater-modal-headline-text *").innerHTML = Strings.Settings.Updater.Titles.uptodate;
-                                            document.querySelector("#velocity-updater-modal-button-update > div").innerHTML = Strings.Settings.Updater.Buttons.update;
-                                            document.querySelector("#velocity-updater-modal-button-update").disabled = true;
-                                            document.querySelector(".velocity-updater-modal-spinner").classList.remove("visible");
-                                        } else if (status == "error") {
-                                            document.querySelector(".velocity-updater-modal-headline-icon.okay").classList.add("hidden");
-                                            document.querySelector(".velocity-updater-modal-headline-icon.info").classList.add("hidden");
-                                            document.querySelector(".velocity-updater-modal-headline-icon.danger").classList.remove("hidden");
-                                            document.querySelector(".velocity-updater-modal-headline-text *").innerHTML = Strings.Settings.Updater.Titles.failed;
-                                            document.querySelector("#velocity-updater-modal-button-update > div").innerHTML = Strings.Settings.Updater.Buttons.update;
-                                            document.querySelector("#velocity-updater-modal-button-update").disabled = true;
-                                            document.querySelector(".velocity-updater-modal-spinner").classList.remove("visible");
-                                        }
-                                    });
-                                },
-                            },
-                            Strings.Settings.Updater.Buttons.checkforupdates
-                        ),
-                        React.createElement(
-                            Button,
-                            {
-                                color: ButtonColors.RED,
-                                size: ButtonSizes.SMALL,
-                                className: `velocity-button`,
-                                onClick: ({ target }) => {
-                                    if (!target.disabled) {
-                                        updater.checkForUpdates();
-                                    }
-                                },
-                                id: "velocity-updater-modal-button-update",
-                            },
-                            Strings.Settings.Updater.Buttons.update
-                        ),
-                    ],
-                }),
-                React.createElement(
-                    "div",
-                    {
-                        className: "velocity-updater-modal-spinner",
-                    },
-                    React.createElement(WebpackModules.find("Spinner").default)
-                ),
-            ],
+            element: () => [React.createElement(FormTitle, { tag: "h1" }, Strings.Settings.Updater.title), React.createElement(UpdaterDisplay)],
         });
         insert({
             section: normalizeString(Strings.Titles.settings),

@@ -1,7 +1,7 @@
 const { createHash, randomBytes } = require("crypto");
 const { EventEmitter } = require("events");
 const path = require("path");
-const fs = require("fs/promises");
+const fs = require("original-fs").promises;
 const request = require("./request");
 
 let InternalSecurityTokenVar = createHash("sha512").update(randomBytes(30).toString()).digest("hex");
@@ -53,10 +53,10 @@ module.exports = new (class Neptune {
         const Markdown = WebpackModules.find((m) => m.default?.displayName === "Markdown" && m.default?.rules).default;
         const Anchor = WebpackModules.find("Anchor").default;
 
-        const currentAsar = (await fs.readFile(path.resolve(__dirname, "../../velocity.asar/preload.js"), { encoding: "utf8" })).trim().normalize();
+        const currentAsar = (await fs.readFile(path.resolve(__dirname, "../../velocity.asar"), { encoding: "utf8" })).trim().normalize();
         let remoteAsar;
 
-        request("https://raw.githubusercontent.com/Velocity-Discord/Velocity/main/src/preload.js", async (err, _, body) => {
+        request("https://raw.githubusercontent.com/Velocity-Discord/Velocity/main/dist/velocity.asar", async (err, _, body) => {
             remoteAsar = body.trim().normalize();
         });
 
