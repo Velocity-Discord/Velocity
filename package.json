@@ -23,7 +23,7 @@
         "uninstall": "node ./scripts/uninstall.js --",
         "bump:hash": "node ./scripts/bumpHash.js --",
         "bump:version": "node ./scripts/bumpVersion.js",
-        "stylelint": "stylelint \"/src/core/ui/**/*.css\""
+        "stylelint": "stylelint ./src/**/*.css"
     },
     "devDependencies": {
         "asar": "^3.1.0",
