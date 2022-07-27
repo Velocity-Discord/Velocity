@@ -14,7 +14,7 @@ module.exports = new (class StylingManager {
      * @param {string} css - CSS to inject.
      */
     injectCSS(id, css) {
-        var style = document.createElement("style");
+        const style = document.createElement("style");
         style.innerText = cssBeta ? StyleManager.parse(css) : css;
         style.id = id;
         return document.querySelector("velocity-head").appendChild(style);
@@ -26,7 +26,7 @@ module.exports = new (class StylingManager {
      * @param {string} css - CSS to inject.
      */
     injectInternalCSS(id, css) {
-        var style = document.createElement("style");
+        const style = document.createElement("style");
         style.innerText = StyleManager.parse(css);
         style.id = this.escapeID(id);
         style.setAttribute("internal", true);

@@ -60,9 +60,9 @@ monaco.languages.css.cssDefaults.setDiagnosticsOptions({ lint: { universalSelect
 
 const VApiTypings = fs.readFileSync(path.join(__dirname, "../../", "common", "typings", "monaco.d.ts"), "utf8");
 
-var libSource = [VApiTypings].join("\n");
+const libSource = [VApiTypings].join("\n");
 
-var libUri = "ts:filename/monaco.d.ts";
+const libUri = "ts:filename/monaco.d.ts";
 monaco.languages.typescript.javascriptDefaults.addExtraLib(libSource, libUri);
 
 monaco.languages.typescript.javascriptDefaults.setCompilerOptions({

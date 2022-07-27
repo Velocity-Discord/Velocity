@@ -208,7 +208,7 @@ if (dPath) {
                     if (cssChecked) {
                         let index = 0;
                         CSSTabs.forEach((css) => {
-                            var style = document.createElement("style");
+                            const style = document.createElement("style");
                             style.innerText = cssBeta ? StyleManager.parse(css.content) : css.content;
                             style.id = `customcss-tab-${index}`;
                             document.querySelector("velocity-head").appendChild(style);
@@ -316,11 +316,12 @@ if (dPath) {
         if (cssChecked) {
             let index = 0;
             CSSTabs.forEach((css) => {
-                var style = document.createElement("style");
-                style.innerText = cssBeta ? StyleManager.parse(css.content) : css.content;
-                style.id = `customcss-tab-${index}`;
-                document.querySelector("velocity-head").appendChild(style);
-
+                if (css.scope == "main") {
+                    const style = document.createElement("style");
+                    style.innerText = cssBeta ? StyleManager.parse(css.content) : css.content;
+                    style.id = `customcss-tab-${index}`;
+                    document.querySelector("velocity-head").appendChild(style);
+                }
                 index++;
             });
         }

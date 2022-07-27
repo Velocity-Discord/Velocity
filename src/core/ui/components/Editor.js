@@ -21,6 +21,8 @@ function useForceUpdate() {
     return () => setValue((value) => !value);
 }
 
+const CSSScopeRegex = /\/\*[\s]*@scope[\s]*"(.*)"[\s]*\*\//;
+
 const PanelButton = WebpackModules.find("PanelButton").default;
 const Tooltip = WebpackModules.find("Tooltip").default;
 const Text = WebpackModules.find("LegacyText").default;
@@ -106,6 +108,7 @@ module.exports = function Editor(props) {
                                             name: "newFile",
                                             content: "",
                                             ext: "css",
+                                            scope: "main",
                                         };
                                         showConfirmationModal(
                                             "New Tab",
@@ -188,7 +191,7 @@ module.exports = function Editor(props) {
                             className: "velocity-editor-body-sidebar",
                             children: CSSTabsToRender[0]
                                 ? CSSTabsToRender.map((props) => {
-                                      const { name = "", ext = "" } = props;
+                                      const { name = "", ext = "", scope = "main" } = props;
 
                                       const index = CSSTabsToRender.indexOf(props);
 
@@ -273,8 +276,8 @@ module.exports = function Editor(props) {
                                 window.editor.onDidChangeModelContent((e) => {
                                     if (CSSTabsToRender[activeIndex]) {
                                         if (e.changes?.[0]?.forceMoveMarkers !== false) return;
-                                        const value = window.editor.getValue();
-                                        CSSTabsToRender[activeIndex].content = value;
+                                        CSSTabsToRender[activeIndex].scope = window.editor.getValue().match(CSSScopeRegex)[1];
+                                        CSSTabsToRender[activeIndex].content = window.editor.getValue();
                                         updateTabsInSettings();
 
                                         const cssBeta = DataStore("VELOCITY_SETTINGS").CSSFeatures;
@@ -286,11 +289,12 @@ module.exports = function Editor(props) {
 
                                         let index = 0;
                                         CSSTabsToRender.forEach((css) => {
-                                            var style = document.createElement("style");
-                                            style.innerText = cssBeta ? StyleManager.parse(css.content) : css.content;
-                                            style.id = `customcss-tab-${index}`;
-                                            document.querySelector("velocity-head").appendChild(style);
-
+                                            if (css.scope == "main") {
+                                                const style = document.createElement("style");
+                                                style.innerText = cssBeta ? StyleManager.parse(css.content) : css.content;
+                                                style.id = `customcss-tab-${index}`;
+                                                document.querySelector("velocity-head").appendChild(style);
+                                            }
                                             index++;
                                         });
                                     }
