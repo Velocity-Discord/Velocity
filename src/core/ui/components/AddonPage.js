@@ -59,6 +59,117 @@ request("https://velocity-discord.netlify.app/api/store/plugins.json", (err, res
     console.log(STORE_PLUGINS);
 });
 
+const AddonBody = (props) => {
+    const { addon, setAddon } = props;
+
+    return React.createElement("div", {
+        id: "velocity-addon-store-body",
+        children: [
+            React.createElement("div", {
+                className: "velocity-addon-store-body-breadcrumbs",
+                onClick: () => {
+                    setAddon(null);
+                },
+                children: [
+                    React.createElement(LeftCaret, {
+                        width: 20,
+                        height: 20,
+                        style: {
+                            color: "var(--text-muted)",
+                        },
+                    }),
+                    React.createElement(
+                        FormTitle,
+                        {
+                            tag: "h3",
+                            style: {
+                                margin: "0",
+                                cursor: "pointer",
+                            },
+                        },
+                        "Store"
+                    ),
+                ],
+            }),
+            React.createElement("div", {
+                className: "velocity-addon-store-body-header",
+                children: [
+                    React.createElement("div", {
+                        className: "velocity-addon-store-body-header-title",
+                        children: addon.NAME,
+                    }),
+                    React.createElement("div", {
+                        className: "velocity-addon-store-body-header-separator",
+                    }),
+                    React.createElement("div", {
+                        className: "velocity-addon-store-body-header-author",
+                        children: addon.AUTHOR,
+                    }),
+                    React.createElement("div", {
+                        className: "velocity-addon-store-body-header-separator",
+                    }),
+                    React.createElement("div", {
+                        className: "velocity-addon-store-body-header-version",
+                        children: addon.VERSION,
+                    }),
+                ],
+            }),
+            React.createElement("div", {
+                className: "velocity-addon-store-body-description",
+                children: addon.DESCRIPTION,
+            }),
+            !addon.IMAGE.includes("uploads/blank.png") &&
+                React.createElement("img", {
+                    className: "velocity-addon-store-body-image",
+                    src: `https://velocity-discord.netlify.app${addon.IMAGE}`,
+                    alt: addon.NAME,
+                }),
+            React.createElement("div", {
+                className: "velocity-addon-store-body-actions",
+                children: [
+                    React.createElement(
+                        FormTitle,
+                        {
+                            tag: "h1",
+                        },
+                        "Actions"
+                    ),
+                    React.createElement("div", {
+                        className: "velocity-addon-store-body-actions-buttons",
+                        children: [
+                            React.createElement(
+                                Button,
+                                {
+                                    id: "addon-install",
+                                    color: ButtonColors.BRAND,
+                                    size: ButtonSizes.SMALL,
+                                },
+                                "Install"
+                            ),
+                            React.createElement(
+                                Button,
+                                {
+                                    id: "addon-source",
+                                    color: ButtonColors.GREEN,
+                                    size: ButtonSizes.SMALL,
+                                    onClick: () => {
+                                        try {
+                                            shell.openExternal(addon.SOURCE.URL);
+                                        } catch (e) {
+                                            console.error(e);
+                                        }
+                                    },
+                                },
+                                "Source"
+                            ),
+                        ],
+                    }),
+                ],
+            }),
+        ],
+    });
+};
+
 module.exports = (props) => {
     const { type } = props;
 
@@ -215,110 +326,9 @@ module.exports = (props) => {
                       ],
                   })
                 : addon
-                ? React.createElement("div", {
-                      id: "velocity-addon-store-body",
-                      children: [
-                          React.createElement("div", {
-                              className: "velocity-addon-store-body-breadcrumbs",
-                              onClick: () => {
-                                  setAddon(null);
-                              },
-                              children: [
-                                  React.createElement(LeftCaret, {
-                                      width: 20,
-                                      height: 20,
-                                      style: {
-                                          color: "var(--text-muted)",
-                                      },
-                                  }),
-                                  React.createElement(
-                                      FormTitle,
-                                      {
-                                          tag: "h3",
-                                          style: {
-                                              margin: "0",
-                                              cursor: "pointer",
-                                          },
-                                      },
-                                      "Store"
-                                  ),
-                              ],
-                          }),
-                          React.createElement("div", {
-                              className: "velocity-addon-store-body-header",
-                              children: [
-                                  React.createElement("div", {
-                                      className: "velocity-addon-store-body-header-title",
-                                      children: addon.NAME,
-                                  }),
-                                  React.createElement("div", {
-                                      className: "velocity-addon-store-body-header-separator",
-                                  }),
-                                  React.createElement("div", {
-                                      className: "velocity-addon-store-body-header-author",
-                                      children: addon.AUTHOR,
-                                  }),
-                                  React.createElement("div", {
-                                      className: "velocity-addon-store-body-header-separator",
-                                  }),
-                                  React.createElement("div", {
-                                      className: "velocity-addon-store-body-header-version",
-                                      children: addon.VERSION,
-                                  }),
-                              ],
-                          }),
-                          React.createElement("div", {
-                              className: "velocity-addon-store-body-description",
-                              children: addon.DESCRIPTION,
-                          }),
-                          React.createElement("img", {
-                              className: "velocity-addon-store-body-image",
-                              src: `https://velocity-discord.netlify.app${addon.IMAGE}`,
-                              alt: addon.NAME,
-                          }),
-                          React.createElement("div", {
-                              className: "velocity-addon-store-body-actions",
-                              children: [
-                                  React.createElement(
-                                      FormTitle,
-                                      {
-                                          tag: "h1",
-                                      },
-                                      "Actions"
-                                  ),
-                                  React.createElement("div", {
-                                      className: "velocity-addon-store-body-actions-buttons",
-                                      children: [
-                                          React.createElement(
-                                              Button,
-                                              {
-                                                  id: "addon-install",
-                                                  color: ButtonColors.BRAND,
-                                                  size: ButtonSizes.SMALL,
-                                              },
-                                              "Install"
-                                          ),
-                                          React.createElement(
-                                              Button,
-                                              {
-                                                  id: "addon-source",
-                                                  color: ButtonColors.GREEN,
-                                                  size: ButtonSizes.SMALL,
-                                                  onClick: () => {
-                                                      try {
-                                                          shell.openExternal(addon.SOURCE.URL);
-                                                      } catch (e) {
-                                                          console.error(e);
-                                                      }
-                                                  },
-                                              },
-                                              "Source"
-                                          ),
-                                      ],
-                                  }),
-                              ],
-                          }),
-                      ],
+                ? React.createElement(AddonBody, {
+                      addon,
+                      setAddon,
                   })
                 : React.createElement("div", {
                       id: "velocity-store-grid",
@@ -407,7 +417,10 @@ module.exports = (props) => {
                       ],
                   })
                 : addon
-                ? React.createElement("div")
+                ? React.createElement(AddonBody, {
+                      addon,
+                      setAddon,
+                  })
                 : React.createElement("div", {
                       id: "velocity-store-grid",
                       children: [
