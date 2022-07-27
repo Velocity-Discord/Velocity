@@ -174,7 +174,7 @@ ${this.state.errorStack}
         }
     };
 
-    SettingsSection = React.memo((props) => {
+    SettingsSection = (props) => {
         const { plugin, setting, note, name, warning, action } = props;
 
         const SwitchEle = WebpackModules.find("Switch").default;
@@ -236,9 +236,9 @@ ${this.state.errorStack}
                 }),
             ],
         });
-    });
+    };
 
-    SettingsInput = React.memo((props) => {
+    SettingsInput = (props) => {
         const { plugin, setting, note, name, warning, action, placeholder, type, maxLength, vertical } = props;
 
         const TextInput = WebpackModules.find("TextInput").default;
@@ -365,5 +365,5 @@ ${this.state.errorStack}
                 ],
             });
         }
-    });
+    };
 })();

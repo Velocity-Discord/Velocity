@@ -87,6 +87,8 @@
                 "Our Remote Repository has a newer hash than your version of Velocity, this indicates that there may be an update available. Would you like to Update to"
             ],
             "failed": [
+                "If you installed Velocity through the Installer Application,",
+                "- You can update Velocity by opening the installer and running the Installation again.\n",
                 "You can manually update Velocity by opening the Velocity Folder and doing one of the following,",
                 "- Run `git pull` in the terminal (inside the folder)",
                 "- Download the **ZIP** from GitHub and replace the old folder with it uncompressed."
@@ -201,10 +203,15 @@
                 "fetchingfrom": "Fetching updates from"
             },
             "Titles": {
-                "available": "Velocity update available.",
-                "down": "Velocity downgrade available.",
-                "uptodate": "Velocity is up to date.",
-                "failed": "Failed to check for updates."
+                "available": "Update Available",
+                "uptodate": "You're all up to date!",
+                "failed": "Failed to check for updates",
+                "nogit": "Error: Git not found."
+            },
+            "Descriptions": {
+                "fetchingupstream": "Fetching Upstream",
+                "latestcommit": "Latest Commit",
+                "currentcommit": "Current Commit"
             },
             "Buttons": {
                 "checkforupdates": "Check for Updates",

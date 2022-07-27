@@ -8,6 +8,10 @@
         },
         "updates": {
             "url": "https://raw.githubusercontent.com/Velocity-Discord/Backend/main/api/Updates.json"
+        },
+        "upstream": {
+            "url": "https://api.github.com/repos/Velocity-Discord/Velocity/git/trees/main",
+            "commitsUrl": "https://api.github.com/repos/Velocity-Discord/Velocity/commits"
         }
     }
 }

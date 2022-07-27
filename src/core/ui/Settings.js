@@ -6,12 +6,12 @@ const VApi = window.VApi;
 const { React, modals, WebpackModules, showToast, Utilities, AddonManager } = VApi;
 const { shell } = require("electron");
 const { info } = require("../../../../package.json");
-const { SettingsSwitchSection, SettingsInputSection, SettingsTitle } = require("./components/SettingsSections");
+const { SettingsSwitchSection, SettingsInputSection, SettingsCollection } = require("./components/SettingsSections");
 const DataStore = require("../datastore");
 const request = require("../request");
 const updater = require("../updater");
 const Neptune = require("../neptune");
-const Card = require("./components/AddonCard");
+const AddonPage = require("./components/AddonPage");
 const StatusTable = require("./components/StatusTable");
 const UpdaterDisplay = require("./components/Updater");
 const Editor = require("./components/Editor");
@@ -32,7 +32,7 @@ const Text = WebpackModules.find("LegacyText").default;
 const Tooltip = WebpackModules.find.prototypes("renderTooltip").default;
 const TextInput = WebpackModules.find("TextInput").default;
 const FormTitle = WebpackModules.find("FormTitle").default;
-const Table = WebpackModules.find("Table").default;
+const TabBar = WebpackModules.find("TabBar").default;
 
 function addonSort(x, y) {
     if (x.name < y.name) {
@@ -127,108 +127,102 @@ VApi.Patcher(
             className: `velocity-settings-tab`,
             element: () => [
                 React.createElement(FormTitle, { tag: "h1" }, Strings.Settings.Settings.title),
-                React.createElement(SettingsTitle, {
-                    text: Strings.Settings.Settings.Sections.general.title,
-                    divider: true,
+                React.createElement(SettingsCollection, {
+                    title: Strings.Settings.Settings.Sections.general.title,
+                    children: [
+                        React.createElement(SettingsSwitchSection, {
+                            setting: "CheckForUpdates",
+                            name: Strings.Settings.Settings.Sections.general.checkforupdates.name,
+                            note: Strings.Settings.Settings.Sections.general.checkforupdates.note,
+                        }),
+                        React.createElement(SettingsSwitchSection, {
+                            setting: "ReloadOnLogin",
+                            name: Strings.Settings.Settings.Sections.general.reloadonlogin.name,
+                            note: Strings.Settings.Settings.Sections.general.reloadonlogin.note,
+                        }),
+                    ],
                 }),
-                React.createElement(SettingsSwitchSection, {
-                    setting: "CheckForUpdates",
-                    name: Strings.Settings.Settings.Sections.general.checkforupdates.name,
-                    note: Strings.Settings.Settings.Sections.general.checkforupdates.note,
+
+                React.createElement(SettingsCollection, {
+                    title: Strings.Settings.Settings.Sections.window.title,
+                    children: [
+                        React.createElement(SettingsSwitchSection, {
+                            setting: "Transparency",
+                            name: Strings.Settings.Settings.Sections.window.transparency.name,
+                            note: Strings.Settings.Settings.Sections.window.transparency.note,
+                            reload: true,
+                        }),
+                        React.createElement(SettingsSwitchSection, {
+                            setting: "Vibrancy",
+                            name: Strings.Settings.Settings.Sections.window.vibrancy.name,
+                            note: Strings.Settings.Settings.Sections.window.vibrancy.note,
+                            reload: true,
+                        }),
+                    ],
                 }),
-                React.createElement(SettingsSwitchSection, {
-                    setting: "ReloadOnLogin",
-                    name: Strings.Settings.Settings.Sections.general.reloadonlogin.name,
-                    note: Strings.Settings.Settings.Sections.general.reloadonlogin.note,
+
+                React.createElement(SettingsCollection, {
+                    title: Strings.Settings.Settings.Sections.tools.title,
+                    children: [
+                        React.createElement(SettingsSwitchSection, {
+                            setting: "CSSEnabled",
+                            name: Strings.Settings.Settings.Sections.tools.customcss.name,
+                            note: Strings.Settings.Settings.Sections.tools.customcss.note,
+                        }),
+                        React.createElement(SettingsSwitchSection, {
+                            setting: "JSEnabled",
+                            name: Strings.Settings.Settings.Sections.tools.startupscript.name,
+                            note: Strings.Settings.Settings.Sections.tools.startupscript.note,
+                            warning: Strings.Settings.Settings.Sections.tools.startupscript.warning,
+                        }),
+                    ],
                 }),
-                React.createElement(SettingsTitle, {
-                    text: Strings.Settings.Settings.Sections.window.title,
-                    divider: true,
+
+                React.createElement(SettingsCollection, {
+                    title: Strings.Settings.Settings.Sections.developer.title,
+                    children: [
+                        React.createElement(SettingsSwitchSection, {
+                            setting: "DebuggerKey",
+                            name: Strings.Settings.Settings.Sections.developer.debuggerkey.name,
+                            note: Strings.Settings.Settings.Sections.developer.deb,
+                        }),
+                        React.createElement(SettingsSwitchSection, {
+                            setting: "DevMode",
+                            name: Strings.Settings.Settings.Sections.developer.debugmode.name,
+                            note: Strings.Settings.Settings.Sections.developer.debugmode.note,
+                        }),
+                        React.createElement(SettingsSwitchSection, {
+                            setting: "CSSFeatures",
+                            name: Strings.Settings.Settings.Sections.developer.cssfeatures.name,
+                            note: Strings.Settings.Settings.Sections.developer.cssfeatures.note,
+                        }),
+                        React.createElement(SettingsInputSection, {
+                            setting: "FontSize",
+                            name: Strings.Settings.Settings.Sections.developer.fontsize.name,
+                            note: Strings.Settings.Settings.Sections.developer.fontsize.note,
+                            placeholder: "14",
+                            type: "number",
+                            vertical: true,
+                            maxLength: 2,
+                        }),
+                        React.createElement(SettingsSwitchSection, {
+                            setting: "DeveloperSettings",
+                            name: Strings.Settings.Settings.Sections.developer.developersettings.name,
+                            note: Strings.Settings.Settings.Sections.developer.developersettings.note,
+                        }),
+                    ],
                 }),
-                React.createElement(SettingsSwitchSection, {
-                    setting: "Transparency",
-                    name: Strings.Settings.Settings.Sections.window.transparency.name,
-                    note: Strings.Settings.Settings.Sections.window.transparency.note,
-                    reload: true,
-                    action: () => {
-                        DataStore.setData("VELOCITY_SETTINGS", "Vibrancy", false);
-                        const warning = document.getElementById("velocity-settings-section-transparency-warning");
-                        warning.innerHTML = Strings.Settings.requiresrestart;
-                    },
-                }),
-                React.createElement(SettingsSwitchSection, {
-                    setting: "Vibrancy",
-                    name: Strings.Settings.Settings.Sections.window.vibrancy.name,
-                    note: Strings.Settings.Settings.Sections.window.vibrancy.note,
-                    reload: true,
-                    action: () => {
-                        DataStore.setData("VELOCITY_SETTINGS", "Transparency", false);
-                        const warning = document.getElementById("velocity-settings-section-vibrancy-warning");
-                        warning.innerHTML = Strings.Settings.requiresrestart;
-                    },
-                }),
-                React.createElement(SettingsTitle, {
-                    text: Strings.Settings.Settings.Sections.tools.title,
-                    divider: true,
-                }),
-                React.createElement(SettingsSwitchSection, {
-                    setting: "CSSEnabled",
-                    name: Strings.Settings.Settings.Sections.tools.customcss.name,
-                    note: Strings.Settings.Settings.Sections.tools.customcss.note,
-                }),
-                React.createElement(SettingsSwitchSection, {
-                    setting: "JSEnabled",
-                    name: Strings.Settings.Settings.Sections.tools.startupscript.name,
-                    note: Strings.Settings.Settings.Sections.tools.startupscript.note,
-                    warning: Strings.Settings.Settings.Sections.tools.startupscript.warning,
-                }),
-                React.createElement(SettingsTitle, {
-                    text: Strings.Settings.Settings.Sections.developer.title,
-                    divider: true,
-                }),
-                React.createElement(SettingsSwitchSection, {
-                    setting: "DebuggerKey",
-                    name: Strings.Settings.Settings.Sections.developer.debuggerkey.name,
-                    note: Strings.Settings.Settings.Sections.developer.debuggerkey.note,
-                    reload: true,
-                    action: () => {
-                        const warning = document.getElementById("velocity-settings-section-debuggerkey-warning");
-                        warning.innerHTML = Strings.Settings.requiresrestart;
-                    },
-                }),
-                React.createElement(SettingsSwitchSection, {
-                    setting: "DevMode",
-                    name: Strings.Settings.Settings.Sections.developer.debugmode.name,
-                    note: Strings.Settings.Settings.Sections.developer.debugmode.note,
-                }),
-                React.createElement(SettingsSwitchSection, {
-                    setting: "CSSFeatures",
-                    name: Strings.Settings.Settings.Sections.developer.cssfeatures.name,
-                    note: Strings.Settings.Settings.Sections.developer.cssfeatures.note,
-                }),
-                React.createElement(SettingsInputSection, {
-                    setting: "FontSize",
-                    name: Strings.Settings.Settings.Sections.developer.fontsize.name,
-                    note: Strings.Settings.Settings.Sections.developer.fontsize.note,
-                    placeholder: "14",
-                    type: "number",
-                    vertical: true,
-                    maxLength: 2,
-                }),
-                React.createElement(SettingsSwitchSection, {
-                    setting: "DeveloperSettings",
-                    name: Strings.Settings.Settings.Sections.developer.developersettings.name,
-                    note: Strings.Settings.Settings.Sections.developer.developersettings.note,
-                }),
-                React.createElement(SettingsTitle, {
-                    text: Strings.Settings.Settings.Sections.advanced.title,
-                    divider: true,
-                }),
-                React.createElement(SettingsSwitchSection, {
-                    setting: "ValidityChecks",
-                    name: Strings.Settings.Settings.Sections.advanced.validitychecks.name,
-                    note: Strings.Settings.Settings.Sections.advanced.validitychecks.note,
-                    warning: Strings.Settings.Settings.Sections.advanced.validitychecks.warning,
+
+                React.createElement(SettingsCollection, {
+                    title: Strings.Settings.Settings.Sections.advanced.title,
+                    children: [
+                        React.createElement(SettingsSwitchSection, {
+                            setting: "ValidityChecks",
+                            name: Strings.Settings.Settings.Sections.advanced.validitychecks.name,
+                            note: Strings.Settings.Settings.Sections.advanced.validitychecks.note,
+                            warning: Strings.Settings.Settings.Sections.advanced.validitychecks.warning,
+                        }),
+                    ],
                 }),
 
                 React.createElement(Text, {
@@ -277,44 +271,8 @@ VApi.Patcher(
             label: Strings.Titles.plugins,
             className: `velocity-plugins-tab`,
             element: () => [
-                React.createElement(FormTitle, { tag: "h1" }, Strings.Settings.Plugins.title),
-
-                React.createElement("div", {
-                    className: "velocity-addon-modal-body-header",
-                    children: [
-                        React.createElement("div", {
-                            className: "velocity-addon-modal-body-header-buttons",
-                            children: [
-                                React.createElement(
-                                    Button,
-                                    {
-                                        id: "plugins-folder",
-                                        color: ButtonColors.BRAND,
-                                        size: ButtonSizes.SMALL,
-                                        className: ["velocity-button"],
-                                        onClick: () => {
-                                            shell.openPath(AddonManager.plugins.folder);
-                                        },
-                                    },
-                                    Strings.Settings.Plugins.Buttons.openfolder
-                                ),
-                            ],
-                        }),
-                    ],
-                }),
-                React.createElement("div", {
-                    id: "velocity-addons-grid",
-                    children: [
-                        AddonManager.plugins
-                            .getAll()
-                            .sort(addonSort)
-                            .map((plugin) =>
-                                React.createElement(Card, {
-                                    meta: plugin,
-                                    type: "plugins",
-                                })
-                            ),
-                    ],
+                React.createElement(AddonPage, {
+                    type: "plugins",
                 }),
             ],
         });
@@ -323,63 +281,8 @@ VApi.Patcher(
             label: Strings.Titles.themes,
             className: `velocity-themes-tab`,
             element: () => [
-                React.createElement(FormTitle, { tag: "h1" }, Strings.Settings.Themes.title),
-                React.createElement("div", {
-                    className: "velocity-addon-modal-body-header",
-                    children: [
-                        React.createElement(TextInput, {
-                            placeholder: Strings.Settings.Themes.Buttons.remoteurlplaceholder,
-                            type: "text",
-                            onInput: ({ target }) => {
-                                this.remoteUrl = target.value;
-                            },
-                        }),
-                        React.createElement("div", {
-                            className: "velocity-addon-modal-body-header-buttons",
-                            children: [
-                                React.createElement(
-                                    Button,
-                                    {
-                                        id: "load-remote-theme",
-                                        color: ButtonColors.BRAND,
-                                        size: ButtonSizes.SMALL,
-                                        className: ["velocity-button"],
-                                        onClick: () => {
-                                            AddonManager.remote.loadTheme(this.remoteUrl);
-                                        },
-                                    },
-                                    Strings.Settings.Themes.Buttons.loadremote
-                                ),
-                                React.createElement(
-                                    Button,
-                                    {
-                                        id: "themes-folder",
-                                        color: ButtonColors.PRIMARY,
-                                        size: ButtonSizes.SMALL,
-                                        className: ["velocity-button"],
-                                        onClick: () => {
-                                            shell.openPath(AddonManager.themes.folder);
-                                        },
-                                    },
-                                    Strings.Settings.Themes.Buttons.openfolder
-                                ),
-                            ],
-                        }),
-                    ],
-                }),
-                React.createElement("div", {
-                    id: "velocity-addons-grid",
-                    children: [
-                        AddonManager.themes
-                            .getAll()
-                            .sort(addonSort)
-                            .map((theme) =>
-                                React.createElement(Card, {
-                                    meta: theme,
-                                    type: "themes",
-                                })
-                            ),
-                    ],
+                React.createElement(AddonPage, {
+                    type: "themes",
                 }),
             ],
         });
@@ -566,8 +469,6 @@ VApi.Patcher(
     },
     { warning: true }
 );
-
-const TabBar = WebpackModules.find("TabBar").default;
 
 VApi.Patcher("VelocityInternal-SettingsInfo-Patch", TabBar.prototype, "render", ([args], returnValue) => {
     let children = returnValue.props.children;

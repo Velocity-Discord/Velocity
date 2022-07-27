@@ -67,10 +67,7 @@
         },
         "WhatsThis": {
             "header": "What the fuck is this?",
-            "content": [
-                "This is a Velocity Feature. It allows you to Install ",
-                "Updates and get some cool shit about Velocity directly from the client."
-            ]
+            "content": ["This is a Velocity Feature. It allows you to Install ", "Updates and get some cool shit about Velocity directly from the client."]
         },
         "Info": {
             "version": "Version",
@@ -78,10 +75,7 @@
         },
         "Sponsor": {
             "header": "Sponsor Velocity",
-            "rows": [
-                "Get a fuckin' shiny badge for your profile!",
-                "Show your bloody support for the Modification!"
-            ],
+            "rows": ["Get a fuckin' shiny badge for your profile!", "Show your bloody support for the Modification!"],
             "button": "Don't be a shit cunt and sponsor Velocity on GitHub"
         },
         "Updater": {

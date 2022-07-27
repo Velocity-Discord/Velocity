@@ -3,8 +3,12 @@ const request = require("./request");
 const logger = require("./logger");
 const path = require("path");
 const Config = require("../common/config.json");
-const { exec } = require("child_process");
-const { shell } = require("electron");
+
+const { shell, ipcRenderer } = require("electron");
+
+const exec = async (command) => {
+    return await ipcRenderer.send("exec", command);
+};
 
 const { Strings } = require("./i18n");
 
@@ -52,6 +56,45 @@ async function failModal(title, content) {
 }
 
 module.exports = new (class Updater {
+    async dangerousPull() {
+        const { React, WebpackModules, showToast } = VApi;
+        const Button = WebpackModules.find(["ButtonColors"]);
+        const ButtonEle = Button.default;
+
+        showToast("Updater", Strings.Toasts.Updater.startingpull, { type: "velocity" });
+
+        try {
+            exec(`cd ${process.env.VELOCITY_DIRECTORY} && cd ../ && git pull`, (error, stdout, stderr) => {
+                if (error || stderr) {
+                    const VDir = path.join(__dirname, "../../../");
+                    logger.error("Updater", error);
+                    showToast("Updater", Strings.Toasts.Updater.failedpull, { type: "error" });
+                    failModal(Strings.Modals.Updater.failedheader, [
+                        ...Array.from(Object.values(Strings.Modals.Updater.failed)),
+                        React.createElement(
+                            ButtonEle,
+                            {
+                                id: "velocity-folder",
+                                color: Button.ButtonColors.BRAND,
+                                className: ["velocity-button"],
+                                onClick: () => {
+                                    shell.openPath(VDir);
+                                },
+                            },
+                            Strings.Modals.Updater.openfolder
+                        ),
+                    ]);
+                    return;
+                }
+            });
+
+            VApi.DataStore.setData("VELOCITY_SETTINGS", "hasShownChangelog", false);
+        } catch (e) {
+            logger.error("Updater", e);
+            showToast("Updater", Strings.Toasts.Updater.failedpull, { type: "error" });
+        }
+    }
+
     async getUpdateStatus() {
         logger.log("Velocity", "Checking for updates");
         let updateData;

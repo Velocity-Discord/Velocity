@@ -3,7 +3,7 @@ const { info } = require("../../../package.json");
 module.exports = new (class Logger {
     print({ type = "info", title = info.name, input = "" }) {
         const i = console[type];
-        return i(`%c[${title}]%c`, ["font-weight: bold", "color: #3b62d6"].join(";"), "", ...input);
+        return i(`%c${title}%c`, "background: #5B88FC; font-weight: 600; padding: 4px 6px; border-radius: 4px; color: white; font-family: Helvetica", "", ...input);
     }
     /**
      * Logger.log

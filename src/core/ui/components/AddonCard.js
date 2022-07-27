@@ -18,15 +18,22 @@ const Tooltip = WebpackModules.find.prototypes("renderTooltip").default;
 const SwitchEle = WebpackModules.find("Switch").default;
 const Markdown = WebpackModules.find((m) => m.default?.displayName === "Markdown" && m.default.rules).default;
 
-module.exports = React.memo((props) => {
+module.exports = (props) => {
     const { meta, type } = props;
 
     const [enabled, setEnabled] = React.useState(AddonManager[type].isEnabled(meta.name));
+
     return React.createElement("div", {
-        className: "velocity-card",
+        className: `velocity-card ${AddonManager[type].isEnabled(meta.name) ? "enabled" : ""}`,
         type,
         id: meta.name,
         children: [
+            React.createElement("div", {
+                className: "velocity-card-accent",
+                style: {
+                    backgroundColor: meta.accentColor,
+                },
+            }),
             React.createElement("div", {
                 className: "velocity-card-header-wrapper",
                 children: [
@@ -312,4 +319,4 @@ module.exports = React.memo((props) => {
             }),
         ],
     });
-});
+};

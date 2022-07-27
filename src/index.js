@@ -5,6 +5,7 @@
 const { join } = require("path");
 const electron = ({ ipcMain, app, session, dialog } = require("electron"));
 const Module = require("module");
+const util = require("util");
 const DataStore = require("./core/datastore");
 
 process.env.VELOCITY_DIRECTORY = join(__dirname, "..");
@@ -111,6 +112,17 @@ app.once("ready", () => {
             detail: "This may be due to a Plugin or Module. Try restarting Discord in vanilla mode and try again. \n ERR_CODE:" + (a.code || "1"),
             buttons: ["OK"],
         });
+    });
+    ipcMain.handle("exec", async (e, a) => {
+        try {
+            const exec = util.promisify(require("child_process").exec);
+
+            const { error, stdout, stderr } = await exec(a);
+
+            return { error, stdout, stderr };
+        } catch (e) {
+            console.log(e);
+        }
     });
 });
 

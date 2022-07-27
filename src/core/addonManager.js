@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const DataStore = require("./datastore");
 const request = require("./request");
+const Neptune = require("./neptune");
 const Logger = require("./logger");
 const StyleManager = require("./styleParser");
 const cssBeta = DataStore("VELOCITY_SETTINGS").CSSFeatures;
@@ -10,6 +11,19 @@ const { Strings } = require("./i18n");
 
 const Velocity = DataStore("VELOCITY_SETTINGS");
 const DevMode = Velocity.DevMode;
+
+const AddonArray = class AddonArray extends Array {
+    constructor(...args) {
+        super(...args);
+        this.__proto__ = AddonArray.prototype;
+    }
+
+    push(...args) {
+        Neptune.Interface.emit("NEPTUNE::ADDON_UPDATE");
+
+        return super.push(...args);
+    }
+};
 
 Velocity.enabledThemes = Velocity.enabledThemes || {};
 Velocity.enabledPlugins = Velocity.enabledPlugins || {};
@@ -23,13 +37,13 @@ const filters = {
 };
 
 const remoteAddons = {
-    themes: [],
-    plugins: [],
+    themes: new AddonArray(),
+    plugins: new AddonArray(),
 };
 
 const addons = {
-    themes: [],
-    plugins: [],
+    themes: new AddonArray(),
+    plugins: new AddonArray(),
 };
 
 const addonsInit = {
@@ -66,13 +80,6 @@ function readMeta(contents) {
         meta[key] = value;
     }
     return meta;
-}
-
-function loadTheme(data, remote) {
-    const meta = readMeta(data);
-    meta.file = filePath;
-    meta.css = cssBeta ? StyleManager.parse(data) : data;
-    addons.themes.push(meta);
 }
 
 const RemoteActions = new (class {

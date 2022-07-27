@@ -1,3 +1,8 @@
+/**
+ * @type {Api}
+ */
+const VApi = window.VApi;
+
 const { WebpackModules, Patcher, React } = VApi;
 
 const { BUILT_IN_COMMANDS } = WebpackModules.find(["BUILT_IN_COMMANDS"]);

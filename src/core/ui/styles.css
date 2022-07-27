@@ -58,11 +58,9 @@ velocity-toasts {
 .velocity-card-header-wrapper {
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid var(--background-modifier-accent);
     margin-bottom: 10px;
     padding: 3%;
     padding-bottom: 5px;
-    background: var(--background-secondary-alt);
 }
 
 .velocity-card-header {
@@ -286,8 +284,9 @@ velocity-toasts {
 
 #velocity-settings-section {
     display: flex;
-    padding: 5%;
-    border-top: 1px solid var(--background-modifier-accent);
+    padding-block: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--background-modifier-accent);
 }
 
 #velocity-settings-section > div:not([class^="input"]):nth-child(2) {
@@ -438,59 +437,54 @@ velocity-toasts {
     margin-right: 4px;
 }
 
-.velocity-updater-modal-headline {
+.velocity-updater-banner {
+    width: 100%;
+    padding: 20px;
     display: flex;
-    gap: 10px;
-    align-items: center;
+    flex-direction: row;
+    gap: 24px;
+    background-color: var(--background-secondary);
+    border-radius: 4px;
 }
 
-.velocity-updater-modal-headline-text {
+.velocity-updater-banner-icon {
+    border-radius: 4px;
+    background-color: var(--background-primary);
+}
+
+.velocity-updater-banner-icon img {
+    width: 144px;
+    height: 144px;
+}
+
+.velocity-updater-banner-info-title {
     font-weight: 500;
 }
 
-.velocity-updater-modal-spinner {
-    display: none;
-    height: 100px;
-    align-items: center;
-    justify-content: center;
+.velocity-updater-banner-info-button {
+    margin-top: auto;
+    width: fit-content;
 }
 
-.velocity-updater-modal-spinner.visible {
+.velocity-updater-banner-info {
     display: flex;
+    flex-direction: column;
 }
 
-.velocity-updater-modal-headline-icon svg {
-    color: var(--text-normal);
-    height: 40px !important;
-    width: 40px !important;
-}
-
-.velocity-updater-modal-headline-icon.okay svg {
-    color: var(--info-positive-foreground);
-}
-
-.velocity-updater-modal-headline-icon.info svg {
-    color: var(--info-warning-foreground);
-}
-
-.velocity-updater-modal-headline-icon.danger svg {
-    color: var(--info-danger-foreground);
-}
-
-.velocity-updater-modal-headline-icon.hidden {
-    display: none;
-}
-
-.velocity-updater-modal-buttons {
+.velocity-updater-buttons {
     display: flex;
     gap: 10px;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .velocity-addon-modal-body-header-buttons {
     display: flex;
     margin-top: 6px;
     gap: 5px;
+}
+
+.velocity-addon-modal-body-header + .velocity-addon-page-tabbar {
+    margin-top: 20px;
 }
 
 .velocity-changelog-modal-footer {
@@ -597,6 +591,13 @@ velocity-toasts {
     padding: 2px 16px;
     width: auto;
     min-width: 0;
+}
+
+.velocity-card-accent {
+    background-color: var(--text-muted);
+    width: 3px;
+    height: 100%;
+    float: left;
 }
 
 .velocity-card-footer-left button {
@@ -885,4 +886,165 @@ velocity-toasts {
 .velocity-editor-body-sidebar:hover .velocity-editor-body-sidebar-item-text,
 .velocity-editor-body-sidebar:focus-within .velocity-editor-body-sidebar-item-text {
     max-width: 100px;
+}
+
+.velocity-addon-page-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.velocity-addon-page-header * {
+    margin: 0;
+}
+
+.velocity-store-card {
+    overflow: hidden;
+    background: var(--background-secondary);
+    border-radius: 8px;
+    height: 320px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s ease-out;
+}
+
+.velocity-store-card:hover {
+    background: var(--background-tertiary);
+    box-shadow: var(--elevation-high);
+    transform: translateY(-1px);
+}
+
+.velocity-store-card:hover img {
+    transform: scale(1.01) translateZ(0);
+}
+
+.velocity-store-card-image {
+    overflow: hidden;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    height: 50%;
+}
+
+.velocity-store-card-image img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    background: var(--background-secondary-alt);
+    transition: all 0.2s ease-out;
+}
+
+#velocity-store-grid {
+    margin: 20px 0 10px;
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: repeat(auto-fit, 48.4%);
+}
+
+.velocity-store-card-info {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    height: 50%;
+}
+
+.velocity-store-card-info-title-name {
+    color: var(--header-primary);
+    font-size: 17px;
+    line-height: 22px;
+    font-weight: 500;
+    font-family: var(--font-display);
+}
+
+.velocity-store-card-info-description {
+    font-size: 14px;
+    line-height: 18px;
+    color: var(--header-secondary);
+}
+
+.velocity-store-card-info-footer {
+    color: var(--header-secondary);
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+}
+
+.velocity-addon-store-body-breadcrumbs {
+    color: var(--text-muted);
+    gap: 10px;
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+}
+
+.velocity-addon-store-body-header {
+    display: flex;
+    margin-top: 20px;
+    align-items: flex-end;
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 14px;
+    gap: 5px;
+}
+
+.velocity-addon-store-body-header-title {
+    color: var(--header-primary);
+    font-size: 25px;
+    font-weight: 600;
+    line-height: 24px;
+}
+
+.velocity-addon-store-body-header-separator {
+    width: 1px;
+    height: 10px;
+    background: var(--text-muted);
+    opacity: 0.5;
+    transform: translateY(-2px);
+}
+
+.velocity-addon-store-body-description {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    background: var(--background-secondary);
+    color: var(--text-normal);
+}
+
+.velocity-addon-store-body-image {
+    margin-top: 20px;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    overflow: hidden;
+    border-radius: 4px;
+    background: var(--background-secondary);
+}
+
+.velocity-addon-store-body-actions {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    background: var(--background-secondary);
+    color: var(--text-normal);
+}
+
+.velocity-addon-store-body-actions-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.velocity-settings-collection-header {
+    display: flex;
+    color: var(--header-secondary);
+    align-items: center;
+    gap: 5px;
+    padding: 4px 0;
+}
+
+.velocity-settings-collection-header svg {
+    transition: all 0.2s ease;
 }
