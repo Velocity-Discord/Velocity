@@ -319,13 +319,18 @@ VApi.Patcher(
                                                     className: "velocity-developer-internal-patch-info",
                                                     children: [
                                                         patch.warning &&
-                                                            React.createElement(
-                                                                "div",
-                                                                {
-                                                                    className: "velocity-developer-internal-warning",
-                                                                },
-                                                                Strings.Settings.Developer.Sections.internalpatches.warning
-                                                            ),
+                                                            React.createElement(Tooltip, {
+                                                                text: Strings.Settings.Developer.Sections.internalpatches.tooltip,
+                                                                children: (props) =>
+                                                                    React.createElement(
+                                                                        "div",
+                                                                        {
+                                                                            ...props,
+                                                                            className: "velocity-developer-internal-warning",
+                                                                        },
+                                                                        Strings.Settings.Developer.Sections.internalpatches.warning
+                                                                    ),
+                                                            }),
                                                         patch.beta &&
                                                             React.createElement(
                                                                 "div",

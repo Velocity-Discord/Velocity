@@ -261,7 +261,8 @@
             "Sections": {
                 "internalpatches": {
                     "title": "Internal Patches",
-                    "warning": "WARNING - Killing this patch is dangerous and can cause issues."
+                    "warning": "WARNING",
+                    "tooltip": " Killing this patch is dangerous and can cause issues."
                 },
                 "backendstatus": {
                     "title": "Backend Status",
