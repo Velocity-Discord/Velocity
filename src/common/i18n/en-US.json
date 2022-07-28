@@ -121,7 +121,7 @@
         "requiresrestart": "Requires Restart.",
         "done": "Done",
         "Settings": {
-            "title": "Velocity Settings",
+            "title": "Settings",
             "footer": {
                 "text": "psst, need some help? Join our ",
                 "link": "Official Server"
@@ -195,7 +195,7 @@
             }
         },
         "Updater": {
-            "title": "Velocity Updater",
+            "title": "Updater",
             "Content": {
                 "branch": "Branch",
                 "hash": "Hash",
@@ -221,13 +221,13 @@
             }
         },
         "Plugins": {
-            "title": "Velocity Plugins",
+            "title": "Plugins",
             "Buttons": {
                 "openfolder": "Open Plugins Folder"
             }
         },
         "Themes": {
-            "title": "Velocity Themes",
+            "title": "Themes",
             "Buttons": {
                 "openfolder": "Open Theme Folder",
                 "loadremote": "Load Remote Theme",
