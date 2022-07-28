@@ -50,8 +50,9 @@ module.exports = () => {
             return;
         }
 
-        const gitHeadRef = await exec("git rev-parse HEAD", ({ stdout }) => stdout);
-        setCurrentCommit(gitHeadRef);
+        exec(`cd ${process.env.VELOCITY_DIRECTORY.replace("/dist", "")} && git rev-parse HEAD`, ({ stdout }) => {
+            setCurrentCommit(stdout);
+        });
 
         if (currentCommit === latestCommit) {
             return setStatus("uptodate");
