@@ -5,6 +5,7 @@ const VApi = window.VApi;
 
 const { React, WebpackModules, showChangelog } = VApi;
 
+const { ipcRenderer } = require("electron");
 const fs = require("fs");
 const path = require("path");
 const i18n = require("../../i18n");
@@ -20,6 +21,11 @@ const ButtonModules = WebpackModules.find(["ButtonColors"]);
 const Spinner = WebpackModules.find("Spinner").default;
 
 const UpstreamUrlPortions = Config.backend.upstream.url.split("/");
+
+const exec = async (command, callback) => {
+    const e = await ipcRenderer.invoke("exec", command);
+    return callback({ ...e });
+};
 
 module.exports = () => {
     const [status, setStatus] = React.useState("uptodate");
@@ -37,15 +43,15 @@ module.exports = () => {
             }
         });
 
-        const gitHeadPath = path.resolve(__dirname, "../../../../../.git/HEAD");
-        if (!fs.existsSync(gitHeadPath)) {
+        const gitDirPath = path.resolve(__dirname, "../../../../../.git");
+        if (!fs.existsSync(gitDirPath)) {
             setCurrentCommit("NOT_GIT");
             setStatus("error");
             return;
         }
 
-        const gitHeadRefContents = await fs.promises.readFile(gitHeadRefPath, { encoding: "utf8" }).trim();
-        setCurrentCommit(gitHeadRefContents);
+        const gitHeadRef = await exec("git rev-parse HEAD", ({ stdout }) => stdout);
+        setCurrentCommit(gitHeadRef);
 
         if (currentCommit === latestCommit) {
             return setStatus("uptodate");

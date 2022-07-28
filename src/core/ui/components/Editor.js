@@ -170,6 +170,13 @@ module.exports = function Editor(props) {
                                     },
                                     CSSTabsToRender[active]?.name || "No Active Tab"
                                 ),
+                                React.createElement(
+                                    "div",
+                                    {
+                                        className: "velocity-editor-header-title-scope",
+                                    },
+                                    CSSTabsToRender[active]?.scope || "main"
+                                ),
                             ],
                         }),
                         React.createElement(PanelButton, {
@@ -276,7 +283,11 @@ module.exports = function Editor(props) {
                                 window.editor.onDidChangeModelContent((e) => {
                                     if (CSSTabsToRender[activeIndex]) {
                                         if (e.changes?.[0]?.forceMoveMarkers !== false) return;
-                                        CSSTabsToRender[activeIndex].scope = window.editor.getValue().match(CSSScopeRegex)[1];
+                                        if (CSSScopeRegex.test(window.editor.getValue())) {
+                                            CSSTabsToRender[activeIndex].scope = window.editor.getValue().match(CSSScopeRegex)?.[1] || "main";
+                                        } else {
+                                            CSSTabsToRender[activeIndex].scope = "main";
+                                        }
                                         CSSTabsToRender[activeIndex].content = window.editor.getValue();
                                         updateTabsInSettings();
 

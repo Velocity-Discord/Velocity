@@ -1048,3 +1048,17 @@ velocity-toasts {
 .velocity-settings-collection-header svg {
     transition: all 0.2s ease;
 }
+
+.velocity-editor-header-title-scope {
+    border-radius: 8px;
+    font-family: var(--font-display);
+    font-weight: 500;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    background: var(--brand-experiment);
+    color: var(--header-primary);
+    font-size: 12px;
+    padding: 2px 6px;
+    text-transform: uppercase;
+}

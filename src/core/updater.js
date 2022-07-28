@@ -6,8 +6,9 @@ const Config = require("../common/config.json");
 
 const { shell, ipcRenderer } = require("electron");
 
-const exec = async (command) => {
-    return await ipcRenderer.send("exec", command);
+const exec = async (command, callback) => {
+    const e = await ipcRenderer.invoke("exec", command);
+    return callback({ ...e });
 };
 
 const { Strings } = require("./i18n");
@@ -64,7 +65,7 @@ module.exports = new (class Updater {
         showToast("Updater", Strings.Toasts.Updater.startingpull, { type: "velocity" });
 
         try {
-            exec(`cd ${process.env.VELOCITY_DIRECTORY} && cd ../ && git pull`, (error, stdout, stderr) => {
+            exec(`cd ${process.env.VELOCITY_DIRECTORY} && cd ../ && git pull`, ({ error, stdout, stderr }) => {
                 if (error || stderr) {
                     const VDir = path.join(__dirname, "../../../");
                     logger.error("Updater", error);
@@ -168,7 +169,7 @@ module.exports = new (class Updater {
 
                                                 showToast("Updater", Strings.Toasts.Updater.startingpull, { type: "velocity" });
                                                 try {
-                                                    exec(`cd ${process.env.VELOCITY_DIRECTORY} && cd ../ && git pull`, (error, stdout, stderr) => {
+                                                    exec(`cd ${process.env.VELOCITY_DIRECTORY} && cd ../ && git pull`, ({ error, stdout, stderr }) => {
                                                         if (error || stderr) {
                                                             const VDir = path.join(__dirname, "../../../");
                                                             logger.error("Updater", error);
@@ -251,7 +252,7 @@ module.exports = new (class Updater {
 
                                                 showToast("Updater", Strings.Toasts.Updater.startingpull, { type: "velocity" });
                                                 try {
-                                                    exec("git pull", (error, stdout, stderr) => {
+                                                    exec("git pull", ({ error, stdout, stderr }) => {
                                                         if (error || stderr) {
                                                             const VDir = path.join(__dirname, "../../../");
                                                             logger.error("Updater", error);
