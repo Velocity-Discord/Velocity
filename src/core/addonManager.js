@@ -96,6 +96,7 @@ const RemoteActions = new (class {
             meta.remote = true;
             meta.sessionId = remoteAddons.themes.length + 1;
             meta.css = cssBeta ? StyleManager.parse(data) : data;
+            meta.url = url;
 
             remoteAddons.themes.push(meta);
             addons.themes.push(meta);

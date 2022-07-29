@@ -6,6 +6,62 @@ const { webpackChunkdiscord_app } = webFrame.top.context;
 // REMINDER: Do not blacklist _modules
 const Blacklisted = ["setToken", "getToken", "showToken", "removeToken", "hideToken", "getEmail"];
 
+// All credit to Zerebos and his implementation in BDPluginLibrary
+function findInTree(tree, filter, { walkable = null, ignore = [] } = {}) {
+    if (!tree || typeof tree !== "object") {
+        return null;
+    }
+
+    if (typeof filter === "string") {
+        if (tree.hasOwnProperty(filter)) {
+            return tree[filter];
+        }
+
+        return;
+    } else if (filter(tree)) {
+        return tree;
+    }
+
+    let returnValue = null;
+
+    if (Array.isArray(tree)) {
+        for (const value of tree) {
+            returnValue = findInTree(value, filter, {
+                walkable,
+                ignore,
+            });
+
+            if (returnValue) {
+                return returnValue;
+            }
+        }
+    } else {
+        const walkables = !walkable ? Object.keys(tree) : walkable;
+
+        for (const key of walkables) {
+            if (!tree.hasOwnProperty(key) || ignore.includes(key)) {
+                continue;
+            }
+
+            returnValue = findInTree(tree[key], filter, {
+                walkable,
+                ignore,
+            });
+
+            if (returnValue) {
+                return returnValue;
+            }
+        }
+    }
+
+    return returnValue;
+}
+
+const findInReactTree = (tree, filter) =>
+    findInTree(tree, filter, {
+        walkable: ["props", "children", "child", "sibling"],
+    });
+
 if (Boolean(webpackChunkdiscord_app.Velocity_getModule)) module.exports = webpackChunkdiscord_app.Velocity_getModule;
 else {
     const webpackExports = webpackChunkdiscord_app.push([[Symbol("Velocity")], {}, (e) => e]);
@@ -206,5 +262,8 @@ else {
         findByDisplayNameDefault: byDisplayNameDefault,
         findByProps: byProps,
         findByPropsDefault: byPropsDefault,
+        util: {
+            findInReactTree,
+        },
     };
 }
