@@ -387,6 +387,19 @@ if (dPath) {
         const ButtonEle = WebpackModules.find(["ButtonColors"]).default;
         const ButtonColors = WebpackModules.find(["ButtonColors"]).ButtonColors;
         const ButtonSizes = WebpackModules.find(["ButtonColors"]).ButtonSizes;
+        const Message = WebpackModules.find((m) => m.default?.toString().includes("childrenExecutedCommand"));
+        const UserStore = WebpackModules.find(["getCurrentUser"]);
+
+        Message.default.displayName = "Message";
+
+        patch("VelocityInternal-Message-Patch", Message, "default", ([props], ret) => {
+            const { message } = WebpackModules.util.findInReactTree(ret, (m) => m.message);
+
+            ret.props.children.props["data-author-id"] = message?.author?.id;
+            ret.props.children.props["data-is-author-self"] = message?.author?.id === UserStore.getCurrentUser().id;
+            ret.props.children.props["data-is-author-bot"] = message?.author?.bot;
+            ret.props.children.props["data-message-type"] = message?.type;
+        });
 
         patch("VelocityInternal-Protocol-Patch", MessageContent, "type", ([props], res) => {
             const regex = /velocity\:\/\/(about)?(update)?/gi;
