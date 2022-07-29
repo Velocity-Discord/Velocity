@@ -4,6 +4,8 @@ declare interface Api {
         Velocity: string;
         VApi: string;
     };
+    React: any;
+    ReactDOM: any;
     showChangelog: () => void;
     Utilities: {
         waitFor: (query: string) => Promise<void>;
@@ -19,6 +21,7 @@ declare interface Api {
         log: (title: string, ...message: any) => void;
         error: (title: string, ...message: any) => void;
         warn: (title: string, ...message: any) => void;
+        print: (any) => void;
     };
     Styling: {
         escapeID: (id: string) => string;
@@ -51,11 +54,15 @@ declare interface Api {
     };
     CustomCSS: {
         reload: () => void;
-        get: () => string;
-        update: (css: string) => void;
     };
     StartupScript: {
+        /**
+         * @deprecated
+         */
         get: () => string;
+        /**
+         * @deprecated
+         */
         update: (script: string) => void;
     };
     Patcher: {
@@ -65,19 +72,20 @@ declare interface Api {
         unpatchAll: (name: string, verification?: any) => void;
     };
     Components: {
-        SettingsSection: (plugin: string, setting: string, note: string, name: string, warning: string, action: any) => void;
-        SettingsInput: (
-            plugin: string,
-            setting: string,
-            note: string,
-            name: string,
-            warning: string,
-            action: any,
-            placeholder: string,
-            type: string,
-            maxLength: number,
-            vertical: boolean
-        ) => void;
+        SettingsSection: (props: { plugin: string; setting: string; note: string; name: string; warning: string; action: any }) => void;
+        SettingsInput: (props: {
+            plugin: string;
+            setting: string;
+            note: string;
+            name: string;
+            warning: string;
+            action: any;
+            placeholder: string;
+            type: string;
+            maxLength: number;
+            vertical: boolean;
+        }) => void;
+        ErrorBoundary: any;
     };
     showToast: (title: string, content: string, options: { type: "success" | "error" | "velocity" | "warn"; timeout: number }) => void;
     showConfirmationModal: (
@@ -119,10 +127,14 @@ declare interface Api {
     showSponsorModal: () => void;
     WebpackModules: {
         find: (filter: any) => any;
+        findAll: (filter: any) => any[];
         findByDisplayName: (query: string) => any;
         findByDisplayNameDefault: (query: string) => any;
         findByProps: (props: any) => any;
         findByPropsDefault: (props: any) => any;
+        util: {
+            findInReactTree: (tree: any, filter: any) => any;
+        };
     };
     FluxDispatcher: any;
 }
