@@ -1,0 +1,25 @@
+name: Package Asar
+on:
+    push:
+        paths:
+            - "src/**"
+        branches:
+            - [main]
+
+jobs:
+    dist:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 16
+            - name: "Build Asar"
+            - run: npm dist
+            - name: Commit files
+              if: "contains(github.event.head_commit.message, '[Release]')"
+              run: |
+                  git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                  git config --local user.name "github-actions[bot]"
+                  git commit -m "Package Asar" -a
+                  git push -u origin main
