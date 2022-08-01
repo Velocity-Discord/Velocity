@@ -1,10 +1,8 @@
 name: Package Asar
 on:
     push:
-        paths:
-            - "src/**"
         branches:
-            - [main]
+            - "main"
 
 jobs:
     dist:
