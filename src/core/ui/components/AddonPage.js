@@ -132,7 +132,7 @@ const AddonBody = (props) => {
                         {
                             tag: "h1",
                         },
-                        "Actions"
+                        "Actions (NOT FUNCTIONAL)"
                     ),
                     React.createElement("div", {
                         className: "velocity-addon-store-body-actions-buttons",

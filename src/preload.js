@@ -116,8 +116,8 @@ if (dPath) {
             updater.checkForUpdates();
         }
 
-        let t = WebpackModules.find(["isDeveloper"]);
-        Object.defineProperty(t, "isDeveloper", { get: (_) => 1, set: (_) => _, configurable: true });
+        // let t = WebpackModules.find(["isDeveloper"]);
+        // Object.defineProperty(t, "isDeveloper", { get: (_) => 1, set: (_) => _, configurable: true });
 
         let Badges;
         request(Config.backend.badges.url, (_, __, body) => (Badges = JSON.parse(body)));
@@ -393,12 +393,16 @@ if (dPath) {
         Message.default.displayName = "Message";
 
         patch("VelocityInternal-Message-Patch", Message, "default", ([props], ret) => {
-            const { message } = WebpackModules.util.findInReactTree(ret, (m) => m.message);
+            const p = WebpackModules.util.findInReactTree(ret, (m) => m.message);
 
-            ret.props.children.props["data-author-id"] = message?.author?.id;
-            ret.props.children.props["data-is-author-self"] = message?.author?.id === UserStore.getCurrentUser().id;
-            ret.props.children.props["data-is-author-bot"] = message?.author?.bot;
-            ret.props.children.props["data-message-type"] = message?.type;
+            if (p) {
+                const { message } = p;
+
+                ret.props.children.props["data-author-id"] = message?.author?.id;
+                ret.props.children.props["data-is-author-self"] = message?.author?.id === UserStore.getCurrentUser().id;
+                ret.props.children.props["data-is-author-bot"] = message?.author?.bot;
+                ret.props.children.props["data-message-type"] = message?.type;
+            }
         });
 
         patch("VelocityInternal-Protocol-Patch", MessageContent, "type", ([props], res) => {
