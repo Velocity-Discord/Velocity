@@ -9,7 +9,7 @@
         "name": "Velocity",
         "description": "A Client Modification for Discord enhanced by Plugins and Themes!",
         "version": "1.0.4",
-        "hash": "4470d8",
+        "hash": "2362a3",
         "api": {
             "version": "1.0.0",
             "channel": "stable"
