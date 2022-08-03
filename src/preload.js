@@ -242,6 +242,9 @@ if (dPath) {
                 get Commands() {
                     return require("./core/commands");
                 },
+                get Clyde() {
+                    return require("./core/clyde");
+                },
             },
         };
 
