@@ -479,6 +479,7 @@ velocity-toasts {
 
 .velocity-addon-modal-body-header-buttons {
     display: flex;
+    align-items: center;
     margin-top: 6px;
     gap: 5px;
 }
@@ -1061,4 +1062,31 @@ velocity-toasts {
     font-size: 12px;
     padding: 2px 6px;
     text-transform: uppercase;
+}
+
+.velocity-addon-modal-body-header-search {
+    padding: 3px;
+    border-radius: 3px;
+    outline: none;
+    border: 0;
+    background-color: var(--background-tertiary);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    height: fit-content;
+    width: 100%;
+}
+
+.velocity-addon-modal-body-header-search-input {
+    padding: 2px 3px;
+    background: none;
+    border: 0;
+    color: var(--text-normal);
+    flex: 1;
+}
+
+.velocity-addon-modal-body-header-search svg {
+    height: 16px;
+    margin-right: 2px;
+    color: var(--interactive-normal);
 }

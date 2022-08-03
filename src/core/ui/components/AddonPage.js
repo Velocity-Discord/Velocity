@@ -12,6 +12,7 @@ const request = require("../../request");
 const Card = require("./AddonCard");
 const TabBar = WebpackModules.find("TabBar").default;
 const TextInput = WebpackModules.find("TextInput").default;
+const PanelButton = WebpackModules.find("PanelButton").default;
 const Button = WebpackModules.find(["ButtonColors"]).default;
 const ButtonColors = WebpackModules.find(["ButtonColors"]).ButtonColors;
 const ButtonSizes = WebpackModules.find(["ButtonSizes"]).ButtonSizes;
@@ -20,6 +21,7 @@ const TabBarClasses = WebpackModules.findByProps("topPill");
 const TabBarClasses1 = WebpackModules.findByProps("tabBar", "nowPlayingColumn");
 const LeftCaret = WebpackModules.find("LeftCaret").default;
 const Markdown = WebpackModules.find((m) => m.default?.displayName === "Markdown" && m.default?.rules).default;
+const SearchIcon = WebpackModules.find("Search").default;
 
 const { Strings } = require("../../i18n");
 
@@ -177,6 +179,8 @@ module.exports = (props) => {
     const [addon, setAddon] = React.useState(null);
     const forceUpdate = useForceUpdate();
 
+    const [search, setSearch] = React.useState("");
+
     const StoreCard = (props) => {
         const { meta, type } = props;
         const { NAME, AUTHOR, VERSION, DESCRIPTION, DATE_UPDATED, URL, IMAGE } = meta;
@@ -236,7 +240,11 @@ module.exports = (props) => {
             React.createElement("div", {
                 className: "velocity-addon-page-header",
                 children: [
-                    React.createElement(FormTitle, { tag: "h1" }, Strings.Settings.Themes.title),
+                    React.createElement(
+                        FormTitle,
+                        { tag: "h1" },
+                        `${Strings.Settings.Themes.title} - ${AddonManager.themes.getAll().filter((m) => m.name.toLowerCase().includes(search.toLowerCase()) || !search).length}`
+                    ),
                     React.createElement(TabBar, {
                         selectedItem: tab,
                         type: TabBarClasses.topPill,
@@ -266,7 +274,38 @@ module.exports = (props) => {
                     }),
                 ],
             }),
+            tab === 0 &&
+                React.createElement("div", {
+                    className: "velocity-addon-modal-body-header-buttons",
+                    children: [
+                        React.createElement("div", {
+                            className: "velocity-addon-modal-body-header-search",
+                            children: [
+                                React.createElement("input", {
+                                    className: "velocity-addon-modal-body-header-search-input",
+                                    type: "text",
+                                    placeholder: "Search",
+                                    onChange: (e) => {
+                                        const { value } = e.target;
+                                        setSearch(value);
+                                    },
+                                }),
+                                React.createElement(SearchIcon),
+                            ],
+                        }),
+                        React.createElement(PanelButton, {
+                            id: "themes-folder",
+                            icon: WebpackModules.find("Folder").default,
+                            className: ["velocity-button"],
+                            tooltipText: Strings.Settings.Themes.Buttons.openfolder,
+                            onClick: () => {
+                                shell.openPath(AddonManager.themes.folder);
+                            },
+                        }),
+                    ],
+                }),
             !addon &&
+                tab == 1 &&
                 React.createElement("div", {
                     className: "velocity-addon-modal-body-header",
                     children: [
@@ -293,19 +332,6 @@ module.exports = (props) => {
                                     },
                                     Strings.Settings.Themes.Buttons.loadremote
                                 ),
-                                React.createElement(
-                                    Button,
-                                    {
-                                        id: "themes-folder",
-                                        color: ButtonColors.PRIMARY,
-                                        size: ButtonSizes.SMALL,
-                                        className: ["velocity-button"],
-                                        onClick: () => {
-                                            shell.openPath(AddonManager.themes.folder);
-                                        },
-                                    },
-                                    Strings.Settings.Themes.Buttons.openfolder
-                                ),
                             ],
                         }),
                     ],
@@ -317,12 +343,26 @@ module.exports = (props) => {
                           AddonManager.themes
                               .getAll()
                               .sort(addonSort)
-                              .map((theme) =>
-                                  React.createElement(Card, {
-                                      meta: theme,
-                                      type: "themes",
-                                  })
-                              ),
+                              .map((theme) => {
+                                  if (theme.name.toLowerCase().includes(search.toLowerCase()) || !search) {
+                                      return React.createElement(Card, {
+                                          meta: theme,
+                                          type: "themes",
+                                      });
+                                  }
+                              }),
+                          !AddonManager.themes.getAll().some((theme) => {
+                              if (theme.name.toLowerCase().includes(search.toLowerCase()) || !search) {
+                                  return true;
+                              }
+                          }) &&
+                              React.createElement(WebpackModules.find(["EmptyStateImage"]).EmptyStateImage, {
+                                  height: 200,
+                                  width: 415,
+                                  darkSrc: "/assets/b669713872b43ca42333264abf9c858e.svg",
+                                  lightSrc: "/assets/c84361b810ca7c10d6e8ddb6ea722ebe.svg",
+                                  style: { flex: "none", marginInline: "auto" },
+                              }),
                       ],
                   })
                 : addon
@@ -347,7 +387,11 @@ module.exports = (props) => {
             React.createElement("div", {
                 className: "velocity-addon-page-header",
                 children: [
-                    React.createElement(FormTitle, { tag: "h1" }, Strings.Settings.Plugins.title),
+                    React.createElement(
+                        FormTitle,
+                        { tag: "h1" },
+                        `${Strings.Settings.Plugins.title} - ${AddonManager.plugins.getAll().filter((m) => m.name.toLowerCase().includes(search.toLowerCase()) || !search).length}`
+                    ),
                     React.createElement(TabBar, {
                         selectedItem: tab,
                         type: TabBarClasses.topPill,
@@ -384,19 +428,30 @@ module.exports = (props) => {
                         React.createElement("div", {
                             className: "velocity-addon-modal-body-header-buttons",
                             children: [
-                                React.createElement(
-                                    Button,
-                                    {
-                                        id: "plugins-folder",
-                                        color: ButtonColors.BRAND,
-                                        size: ButtonSizes.SMALL,
-                                        className: ["velocity-button"],
-                                        onClick: () => {
-                                            shell.openPath(AddonManager.plugins.folder);
-                                        },
+                                React.createElement("div", {
+                                    className: "velocity-addon-modal-body-header-search",
+                                    children: [
+                                        React.createElement("input", {
+                                            className: "velocity-addon-modal-body-header-search-input",
+                                            type: "text",
+                                            placeholder: "Search",
+                                            onChange: (e) => {
+                                                const { value } = e.target;
+                                                setSearch(value);
+                                            },
+                                        }),
+                                        React.createElement(SearchIcon),
+                                    ],
+                                }),
+                                React.createElement(PanelButton, {
+                                    id: "plugins-folder",
+                                    icon: WebpackModules.find("Folder").default,
+                                    className: ["velocity-button"],
+                                    tooltipText: Strings.Settings.Plugins.Buttons.openfolder,
+                                    onClick: () => {
+                                        shell.openPath(AddonManager.plugins.folder);
                                     },
-                                    Strings.Settings.Plugins.Buttons.openfolder
-                                ),
+                                }),
                             ],
                         }),
                     ],
@@ -408,12 +463,26 @@ module.exports = (props) => {
                           AddonManager.plugins
                               .getAll()
                               .sort(addonSort)
-                              .map((plugin) =>
-                                  React.createElement(Card, {
-                                      meta: plugin,
-                                      type: "plugins",
-                                  })
-                              ),
+                              .map((plugin) => {
+                                  if (plugin.name.toLowerCase().includes(search.toLowerCase()) || !search) {
+                                      return React.createElement(Card, {
+                                          meta: plugin,
+                                          type: "plugins",
+                                      });
+                                  }
+                              }),
+                          !AddonManager.plugins.getAll().some((plugin) => {
+                              if (plugin.name.toLowerCase().includes(search.toLowerCase()) || !search) {
+                                  return true;
+                              }
+                          }) &&
+                              React.createElement(WebpackModules.find(["EmptyStateImage"]).EmptyStateImage, {
+                                  height: 200,
+                                  width: 415,
+                                  darkSrc: "/assets/b669713872b43ca42333264abf9c858e.svg",
+                                  lightSrc: "/assets/c84361b810ca7c10d6e8ddb6ea722ebe.svg",
+                                  style: { flex: "none", marginInline: "auto" },
+                              }),
                       ],
                   })
                 : addon

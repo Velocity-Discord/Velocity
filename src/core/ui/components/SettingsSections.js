@@ -18,7 +18,11 @@ const { Strings } = require("../../i18n");
 
 module.exports = new (class SettingsSections {
     SettingsColorSection = (props) => {
-        const { setting, note, name, warning = "", action } = props;
+        const { setting, note, name, warning = "", action, defaultValue } = props;
+
+        if (!DataStore.getData("VELOCITY_SETTINGS", setting)) {
+            DataStore.setData("VELOCITY_SETTINGS", setting, defaultValue);
+        }
 
         const [color, setColor] = React.useState(DataStore.getData("VELOCITY_SETTINGS", setting));
 
@@ -68,6 +72,7 @@ module.exports = new (class SettingsSections {
             ],
         });
     };
+
     SettingsSwitchSection = (props) => {
         const { setting, note, name, warning, action, reload = false } = props;
 

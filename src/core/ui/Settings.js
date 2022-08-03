@@ -58,13 +58,6 @@ monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
 
 monaco.languages.css.cssDefaults.setDiagnosticsOptions({ lint: { universalSelector: "warn" } });
 
-const VApiTypings = fs.readFileSync(path.join(__dirname, "../../", "common", "typings", "monaco.d.ts"), "utf8");
-
-const libSource = [VApiTypings].join("\n");
-
-const libUri = "ts:filename/monaco.d.ts";
-monaco.languages.typescript.javascriptDefaults.addExtraLib(libSource, libUri);
-
 monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
     target: monaco.languages.typescript.ScriptTarget.ES6,
     allowNonTsExtensions: true,
@@ -342,12 +335,14 @@ VApi.Patcher(
                                                         React.createElement(
                                                             Button,
                                                             {
+                                                                disabled: patch.killed,
                                                                 size: ButtonSizes.SMALL,
                                                                 color: ButtonColors.RED,
                                                                 onClick: (target) => {
                                                                     target.target.tagName == "BUTTON"
                                                                         ? target.target.setAttribute("disabled", "true")
                                                                         : target.target.parentElement.setAttribute("disabled", "true");
+                                                                    patch.killed = true;
                                                                     VApi.Patcher.unpatchAll(patch.name, Neptune.InternalSecurityToken);
                                                                     showToast("Velocity", `${Strings.Toasts.Developer.killed} ${patch.name}`, {
                                                                         type: "error",
