@@ -3,7 +3,7 @@ const Locales = require("../common/i18n/");
 const Logger = require("./logger");
 const DataStore = require("./datastore");
 
-const Dispatcher = WebpackModules.find(["subscribe", "dirtyDispatch"]);
+const Dispatcher = WebpackModules.find(["subscribe", "dispatch"]);
 const UserSettingsStore = WebpackModules.find(["guildPositions"]);
 
 function extend(extendee, ...extenders) {
@@ -32,8 +32,13 @@ module.exports = new (class i18nManager {
         return "en-US";
     }
 
+    get Strings() {
+        // TODO - Placeholders
+        return this.rawStrings;
+    }
+
     constructor() {
-        this.Strings = extend({}, Locales[this.defaultLocale]);
+        this.rawStrings = extend({}, Locales[this.defaultLocale]);
     }
 
     initialize() {
@@ -69,11 +74,11 @@ module.exports = new (class i18nManager {
 
     setLocale(locale) {
         if (Locales[locale]) {
-            this.Strings = extend(Locales[this.defaultLocale], Locales[locale]);
+            this.rawStrings = extend(Locales[this.defaultLocale], Locales[locale]);
             Logger.log("Velocity", `Locale set to ${locale}`);
         } else {
             Logger.error("Velocity", `Locale ${locale} does not exist.`);
-            this.Strings = Locales[this.defaultLocale];
+            this.rawStrings = Locales[this.defaultLocale];
         }
     }
 })();

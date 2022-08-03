@@ -116,8 +116,19 @@ if (dPath) {
             updater.checkForUpdates();
         }
 
-        // let t = WebpackModules.find(["isDeveloper"]);
-        // Object.defineProperty(t, "isDeveloper", { get: (_) => 1, set: (_) => _, configurable: true });
+        try {
+            userMod = WebpackModules.find(["getUsers"]);
+            nodes = Object.values(WebpackModules.find(["isDeveloper"])._dispatcher._dependencyGraph.nodes);
+            nodes.find((x) => x.name === "ExperimentStore").actionHandler["CONNECTION_OPEN"]({ user: { flags: 1 }, type: "CONNECTION_OPEN", experiments: [] });
+            oldGCUser = userMod.getCurrentUser;
+            userMod.getCurrentUser = () => {
+                return { hasFlag: () => true };
+            };
+            nodes.find((x) => x.name === "DeveloperExperimentStore").actionHandler["CONNECTION_OPEN"]();
+            userMod.getCurrentUser = oldGCUser;
+        } catch (e) {
+            console.error(e);
+        }
 
         let Badges;
         request(Config.backend.badges.url, (_, __, body) => (Badges = JSON.parse(body)));
@@ -227,6 +238,11 @@ if (dPath) {
                 },
             },
             Patcher: patch,
+            Structures: {
+                get Commands() {
+                    return require("./core/commands");
+                },
+            },
         };
 
         const FluxDispatcher = WebpackModules.find(["_currentDispatchActionType", "_processingWaitQueue"]);
@@ -330,9 +346,6 @@ if (dPath) {
 
         // Wait for Discord to Finish Loading
         await waitFor('[class*="guilds"]');
-
-        const CommandManager = require("./core/commands");
-        VApi.Commands = CommandManager;
 
         if (ValidityChecks) Neptune.initialiseChecks();
 
@@ -764,7 +777,7 @@ if (dPath) {
         if (DevMode) logger.log("Velocity", "Settings Added");
 
         if (DataStore.getData("VELOCITY_SETTINGS", "ReloadOnLogin")) {
-            VApi.WebpackModules.find(["dirtyDispatch"]).subscribe("LOGIN", (event) => {
+            VApi.FluxDispatcher.subscribe("LOGIN", (event) => {
                 location.reload();
             });
         }
