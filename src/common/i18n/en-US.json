@@ -28,7 +28,8 @@
             "unloaded": "Unloaded",
             "enabled": "Enabled",
             "disabled": "Disabled",
-            "deleted": "Deleted"
+            "deleted": "Deleted",
+            "refetched": "Refetched Remote Data"
         },
         "Neptune": {
             "disabledvaliditychecks": "Disabled Validity Checks"
@@ -100,6 +101,7 @@
         }
     },
     "Tooltips": {
+        "refetch": "Refetch Remote Data",
         "source": "Source",
         "website": "Website",
         "invite": "Server Invite",
@@ -223,7 +225,8 @@
         "Plugins": {
             "title": "Plugins",
             "Buttons": {
-                "openfolder": "Open Plugins Folder"
+                "openfolder": "Open Plugins Folder",
+                "filter": "Filter"
             }
         },
         "Themes": {
@@ -231,7 +234,9 @@
             "Buttons": {
                 "openfolder": "Open Theme Folder",
                 "loadremote": "Load Remote Theme",
-                "remoteurlplaceholder": "Remote URL (.theme.css)"
+                "installremote": "Install Remote Theme",
+                "remoteurlplaceholder": "Remote URL (.theme.css)",
+                "filter": "Filter"
             }
         },
         "StartupScript": {

@@ -3,7 +3,7 @@
  */
 const VApi = window.VApi;
 
-const { AddonManager, React, WebpackModules, Logger } = VApi;
+const { Patcher, AddonManager, React, WebpackModules, Logger, showConfirmationModal } = VApi;
 const { shell } = require("electron");
 
 const Neptune = require("../../neptune");
@@ -22,6 +22,45 @@ const TabBarClasses1 = WebpackModules.findByProps("tabBar", "nowPlayingColumn");
 const LeftCaret = WebpackModules.find("LeftCaret").default;
 const Markdown = WebpackModules.find((m) => m.default?.displayName === "Markdown" && m.default?.rules).default;
 const SearchIcon = WebpackModules.find("Search").default;
+const EmptyStateImage = WebpackModules.find(["EmptyStateImage"]).EmptyStateImage;
+
+const ContextMenuModules = WebpackModules.find("Menu");
+const ContextMenuActions = WebpackModules.find(["openContextMenu"]);
+
+const Icons = {
+    Upload: WebpackModules.find("Upload").default,
+    Search: WebpackModules.find("Search").default,
+    Folder: WebpackModules.find("Folder").default,
+    Trash: WebpackModules.find("Trash").default,
+    Retry: WebpackModules.find("Retry").default,
+    PersonShield: WebpackModules.find("PersonShield").default,
+    EmojiSmile: WebpackModules.find("EmojiSmile").default,
+    Overflow: WebpackModules.find("OverflowMenu").default,
+    Cloud: (props) => {
+        return React.createElement("svg", {
+            ...props,
+            viewBox: "-2 -2 34 24",
+            fill: "currentColor",
+            children: [
+                React.createElement("path", {
+                    d: "M29.9736 12.1344c0 3.8664-3 7.0344-6.7992 7.296H6.2448c-3.42 0-6.192-2.772-6.192-6.192s2.772-6.192 6.192-6.192c.264 0 .5208.0168.7752.0504.2448-3.9168 3.4968-7.0176 7.476-7.0176 3.192 0 5.9184 1.9968 6.996 4.8096.3792-.0624.768-.0936 1.164-.0936 4.0416 0 7.3176 3.276 7.3176 7.3176Z",
+                }),
+            ],
+        });
+    },
+    Filter: (props) => {
+        return React.createElement("svg", {
+            ...props,
+            viewBox: "0 0 24 24",
+            fill: "currentColor",
+            children: [
+                React.createElement("path", {
+                    d: "M3.5 6A1 1 0 003.5 9L4.5 9 4.5 20.5A1 1 0 007.5 20.5L7.5 9 8.5 9A1 1 0 008.5 6L7.5 6 7.5 3.5A1 1 0 004.5 3.5L4.5 6 3.5 6M16.5 15 15.5 15A1 1 0 0015.5 18L16.5 18 16.5 20.5A1 1 0 0019.5 20.5L19.5 18 20.5 18A1 1 0 0020.5 15L19 15 19 3.5A1 1 0 0016.5 3.5",
+                }),
+            ],
+        });
+    },
+};
 
 const { Strings } = require("../../i18n");
 
@@ -180,6 +219,89 @@ module.exports = (props) => {
     const forceUpdate = useForceUpdate();
 
     const [search, setSearch] = React.useState("");
+    const [filters, setFilters] = React.useState({ name: true, description: true, author: true, version: true });
+
+    const filterItems = (items) => {
+        if (!search) return items;
+        return items.filter((item) => {
+            if (item.name) {
+                return (
+                    item.name.toLowerCase().includes(search.toLowerCase()) ||
+                    item.author.toLowerCase().includes(search.toLowerCase()) ||
+                    item.description.toLowerCase().includes(search.toLowerCase()) ||
+                    item.version.toLowerCase().includes(search.toLowerCase())
+                );
+            } else {
+                return (
+                    item.NAME.toLowerCase().includes(search.toLowerCase()) ||
+                    item.AUTHOR.toLowerCase().includes(search.toLowerCase()) ||
+                    item.DESCRIPTION.toLowerCase().includes(search.toLowerCase()) ||
+                    item.VERSION.toLowerCase().includes(search.toLowerCase())
+                );
+            }
+        });
+    };
+
+    const FilterButton = (props) => {
+        return React.createElement(PanelButton, {
+            id: "search-filter",
+            icon: Icons.Filter,
+            tooltipText: Strings.Settings.Plugins.Buttons.filter,
+            onClick: (e) => {
+                ContextMenuActions.openContextMenu(e, function () {
+                    const menu = React.createElement(
+                        ContextMenuModules.default,
+                        Object.assign({}, e, {
+                            onClose: ContextMenuActions.closeContextMenu,
+                            children: [
+                                React.createElement(ContextMenuModules.MenuCheckboxItem, {
+                                    label: "Name",
+                                    id: "name",
+                                    extended: true,
+                                    checked: filters.name,
+                                    action: () => {
+                                        setFilters({ ...filters, name: !filters.name });
+                                        menu.props.onClose();
+                                    },
+                                }),
+                                React.createElement(ContextMenuModules.MenuCheckboxItem, {
+                                    label: "Author",
+                                    id: "author",
+                                    extended: true,
+                                    checked: filters.author,
+                                    action: () => {
+                                        setFilters({ ...filters, author: !filters.author });
+                                        menu.props.onClose();
+                                    },
+                                }),
+                                React.createElement(ContextMenuModules.MenuCheckboxItem, {
+                                    label: "Version",
+                                    id: "version",
+                                    extended: true,
+                                    checked: filters.version,
+                                    action: () => {
+                                        setFilters({ ...filters, version: !filters.version });
+                                        menu.props.onClose();
+                                    },
+                                }),
+                                React.createElement(ContextMenuModules.MenuCheckboxItem, {
+                                    label: "Description",
+                                    id: "description",
+                                    extended: true,
+                                    checked: filters.description,
+                                    action: () => {
+                                        setFilters({ ...filters, description: !filters.description });
+                                        menu.props.onClose();
+                                    },
+                                }),
+                            ],
+                        })
+                    );
+                    return menu;
+                });
+            },
+        });
+    };
 
     const StoreCard = (props) => {
         const { meta, type } = props;
@@ -243,7 +365,7 @@ module.exports = (props) => {
                     React.createElement(
                         FormTitle,
                         { tag: "h1" },
-                        `${Strings.Settings.Themes.title} - ${AddonManager.themes.getAll().filter((m) => m.name.toLowerCase().includes(search.toLowerCase()) || !search).length}`
+                        `${Strings.Settings.Themes.title} - ${tab == 0 ? filterItems(AddonManager.themes.getAll()).length : filterItems(STORE_THEMES).length}`
                     ),
                     React.createElement(TabBar, {
                         selectedItem: tab,
@@ -260,7 +382,7 @@ module.exports = (props) => {
                                     id: 0,
                                     className: TabBarClasses1.tabBarItem,
                                 },
-                                "Themes"
+                                "Installed"
                             ),
                             React.createElement(
                                 TabBar.Item,
@@ -274,89 +396,76 @@ module.exports = (props) => {
                     }),
                 ],
             }),
-            tab === 0 &&
-                React.createElement("div", {
-                    className: "velocity-addon-modal-body-header-buttons",
-                    children: [
-                        React.createElement("div", {
-                            className: "velocity-addon-modal-body-header-search",
-                            children: [
-                                React.createElement("input", {
-                                    className: "velocity-addon-modal-body-header-search-input",
-                                    type: "text",
-                                    placeholder: "Search",
-                                    onChange: (e) => {
-                                        const { value } = e.target;
-                                        setSearch(value);
-                                    },
-                                }),
-                                React.createElement(SearchIcon),
-                            ],
+            React.createElement("div", {
+                className: "velocity-addon-modal-body-header-buttons",
+                children: [
+                    React.createElement("div", {
+                        className: "velocity-addon-modal-body-header-search",
+                        children: [
+                            React.createElement("input", {
+                                className: "velocity-addon-modal-body-header-search-input",
+                                type: "text",
+                                placeholder: "Search",
+                                onChange: (e) => {
+                                    const { value } = e.target;
+                                    setSearch(value);
+                                },
+                            }),
+                            React.createElement(SearchIcon),
+                        ],
+                    }),
+                    tab == 1 &&
+                        React.createElement(PanelButton, {
+                            id: "remote-theme-install",
+                            icon: Icons.Cloud,
+                            tooltipText: Strings.Settings.Themes.Buttons.installremote,
+                            onClick: () => {
+                                let remoteUrl;
+                                showConfirmationModal(
+                                    "Install Remote Theme",
+                                    [
+                                        "Enter the URL of the remote theme you want to install.",
+                                        React.createElement(TextInput, {
+                                            placeholder: Strings.Settings.Themes.Buttons.remoteurlplaceholder,
+                                            type: "text",
+                                            onInput: ({ target }) => {
+                                                remoteUrl = target.value;
+                                            },
+                                        }),
+                                    ],
+                                    {
+                                        onConfirm: () => {
+                                            AddonManager.themes.loadRemote(remoteUrl);
+                                        },
+                                        confirmText: "Install",
+                                    }
+                                );
+                            },
                         }),
+                    tab == 0 &&
                         React.createElement(PanelButton, {
                             id: "themes-folder",
-                            icon: WebpackModules.find("Folder").default,
-                            className: ["velocity-button"],
+                            icon: Icons.Folder,
                             tooltipText: Strings.Settings.Themes.Buttons.openfolder,
                             onClick: () => {
                                 shell.openPath(AddonManager.themes.folder);
                             },
                         }),
-                    ],
-                }),
-            !addon &&
-                tab == 1 &&
-                React.createElement("div", {
-                    className: "velocity-addon-modal-body-header",
-                    children: [
-                        React.createElement(TextInput, {
-                            placeholder: Strings.Settings.Themes.Buttons.remoteurlplaceholder,
-                            type: "text",
-                            onInput: ({ target }) => {
-                                this.remoteUrl = target.value;
-                            },
-                        }),
-                        React.createElement("div", {
-                            className: "velocity-addon-modal-body-header-buttons",
-                            children: [
-                                React.createElement(
-                                    Button,
-                                    {
-                                        id: "load-remote-theme",
-                                        color: ButtonColors.BRAND,
-                                        size: ButtonSizes.SMALL,
-                                        className: ["velocity-button"],
-                                        onClick: () => {
-                                            AddonManager.remote.loadTheme(this.remoteUrl);
-                                        },
-                                    },
-                                    Strings.Settings.Themes.Buttons.loadremote
-                                ),
-                            ],
-                        }),
-                    ],
-                }),
+                    React.createElement(FilterButton),
+                ],
+            }),
             tab === 0
                 ? React.createElement("div", {
                       id: "velocity-addons-grid",
                       children: [
-                          AddonManager.themes
-                              .getAll()
-                              .sort(addonSort)
-                              .map((theme) => {
-                                  if (theme.name.toLowerCase().includes(search.toLowerCase()) || !search) {
-                                      return React.createElement(Card, {
-                                          meta: theme,
-                                          type: "themes",
-                                      });
-                                  }
-                              }),
-                          !AddonManager.themes.getAll().some((theme) => {
-                              if (theme.name.toLowerCase().includes(search.toLowerCase()) || !search) {
-                                  return true;
-                              }
-                          }) &&
-                              React.createElement(WebpackModules.find(["EmptyStateImage"]).EmptyStateImage, {
+                          filterItems(AddonManager.themes.getAll()).map((theme) => {
+                              return React.createElement(Card, {
+                                  meta: theme,
+                                  type: "themes",
+                              });
+                          }),
+                          filterItems(AddonManager.themes.getAll()).length < 1 &&
+                              React.createElement(EmptyStateImage, {
                                   height: 200,
                                   width: 415,
                                   darkSrc: "/assets/b669713872b43ca42333264abf9c858e.svg",
@@ -373,12 +482,20 @@ module.exports = (props) => {
                 : React.createElement("div", {
                       id: "velocity-store-grid",
                       children: [
-                          STORE_THEMES.map((theme) => {
+                          filterItems(STORE_THEMES).map((theme) => {
                               return React.createElement(StoreCard, {
                                   meta: theme,
                                   type: "themes",
                               });
                           }),
+                          filterItems(STORE_THEMES).length < 1 &&
+                              React.createElement(EmptyStateImage, {
+                                  height: 200,
+                                  width: 415,
+                                  darkSrc: "/assets/b669713872b43ca42333264abf9c858e.svg",
+                                  lightSrc: "/assets/c84361b810ca7c10d6e8ddb6ea722ebe.svg",
+                                  style: { flex: "none", marginInline: "auto" },
+                              }),
                       ],
                   }),
         ];
@@ -390,7 +507,11 @@ module.exports = (props) => {
                     React.createElement(
                         FormTitle,
                         { tag: "h1" },
-                        `${Strings.Settings.Plugins.title} - ${AddonManager.plugins.getAll().filter((m) => m.name.toLowerCase().includes(search.toLowerCase()) || !search).length}`
+                        `${Strings.Settings.Plugins.title} - ${
+                            tab == 0
+                                ? AddonManager.plugins.getAll().filter((m) => m.name.toLowerCase().includes(search.toLowerCase()) || !search).length
+                                : STORE_PLUGINS.filter((m) => m.NAME.toLowerCase().includes(search.toLowerCase()) || !search).length
+                        }`
                     ),
                     React.createElement(TabBar, {
                         selectedItem: tab,
@@ -407,7 +528,7 @@ module.exports = (props) => {
                                     id: 0,
                                     className: TabBarClasses1.tabBarItem,
                                 },
-                                "Plugins"
+                                "Installed"
                             ),
                             React.createElement(
                                 TabBar.Item,
@@ -443,15 +564,16 @@ module.exports = (props) => {
                                         React.createElement(SearchIcon),
                                     ],
                                 }),
-                                React.createElement(PanelButton, {
-                                    id: "plugins-folder",
-                                    icon: WebpackModules.find("Folder").default,
-                                    className: ["velocity-button"],
-                                    tooltipText: Strings.Settings.Plugins.Buttons.openfolder,
-                                    onClick: () => {
-                                        shell.openPath(AddonManager.plugins.folder);
-                                    },
-                                }),
+                                tab == 0 &&
+                                    React.createElement(PanelButton, {
+                                        id: "plugins-folder",
+                                        icon: Icons.Folder,
+                                        tooltipText: Strings.Settings.Plugins.Buttons.openfolder,
+                                        onClick: () => {
+                                            shell.openPath(AddonManager.plugins.folder);
+                                        },
+                                    }),
+                                React.createElement(FilterButton),
                             ],
                         }),
                     ],
@@ -460,23 +582,14 @@ module.exports = (props) => {
                 ? React.createElement("div", {
                       id: "velocity-addons-grid",
                       children: [
-                          AddonManager.plugins
-                              .getAll()
-                              .sort(addonSort)
-                              .map((plugin) => {
-                                  if (plugin.name.toLowerCase().includes(search.toLowerCase()) || !search) {
-                                      return React.createElement(Card, {
-                                          meta: plugin,
-                                          type: "plugins",
-                                      });
-                                  }
-                              }),
-                          !AddonManager.plugins.getAll().some((plugin) => {
-                              if (plugin.name.toLowerCase().includes(search.toLowerCase()) || !search) {
-                                  return true;
-                              }
-                          }) &&
-                              React.createElement(WebpackModules.find(["EmptyStateImage"]).EmptyStateImage, {
+                          filterItems(AddonManager.plugins.getAll()).map((plugin) => {
+                              return React.createElement(Card, {
+                                  meta: plugin,
+                                  type: "plugins",
+                              });
+                          }),
+                          filterItems(AddonManager.plugins.getAll()).length < 1 &&
+                              React.createElement(EmptyStateImage, {
                                   height: 200,
                                   width: 415,
                                   darkSrc: "/assets/b669713872b43ca42333264abf9c858e.svg",
@@ -493,12 +606,20 @@ module.exports = (props) => {
                 : React.createElement("div", {
                       id: "velocity-store-grid",
                       children: [
-                          STORE_PLUGINS.map((plugin) => {
+                          filterItems(STORE_PLUGINS).map((plugin) => {
                               return React.createElement(StoreCard, {
                                   meta: plugin,
                                   type: "plugins",
                               });
                           }),
+                          filterItems(STORE_PLUGINS).length < 1 &&
+                              React.createElement(EmptyStateImage, {
+                                  height: 200,
+                                  width: 415,
+                                  darkSrc: "/assets/b669713872b43ca42333264abf9c858e.svg",
+                                  lightSrc: "/assets/c84361b810ca7c10d6e8ddb6ea722ebe.svg",
+                                  style: { flex: "none", marginInline: "auto" },
+                              }),
                       ],
                   }),
         ];
