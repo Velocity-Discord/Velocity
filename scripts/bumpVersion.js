@@ -26,8 +26,8 @@ async function run() {
     }
 
     try {
-        pkj.version = newVersion;
-        pkj.info.version = newVersion;
+        pkj.version = newVersion.toString();
+        pkj.info.version = newVersion.toString();
         fs.writeFileSync(pkjPath, JSON.stringify(pkj, null, "    "));
         console.log("Updated package.json version to:", newVersion);
     } catch (e) {
