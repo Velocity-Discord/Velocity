@@ -396,64 +396,65 @@ module.exports = (props) => {
                     }),
                 ],
             }),
-            React.createElement("div", {
-                className: "velocity-addon-modal-body-header-buttons",
-                children: [
-                    React.createElement("div", {
-                        className: "velocity-addon-modal-body-header-search",
-                        children: [
-                            React.createElement("input", {
-                                className: "velocity-addon-modal-body-header-search-input",
-                                type: "text",
-                                placeholder: "Search",
-                                onChange: (e) => {
-                                    const { value } = e.target;
-                                    setSearch(value);
+            !addon &&
+                React.createElement("div", {
+                    className: "velocity-addon-modal-body-header-buttons",
+                    children: [
+                        React.createElement("div", {
+                            className: "velocity-addon-modal-body-header-search",
+                            children: [
+                                React.createElement("input", {
+                                    className: "velocity-addon-modal-body-header-search-input",
+                                    type: "text",
+                                    placeholder: "Search",
+                                    onChange: (e) => {
+                                        const { value } = e.target;
+                                        setSearch(value);
+                                    },
+                                }),
+                                React.createElement(SearchIcon),
+                            ],
+                        }),
+                        tab == 1 &&
+                            React.createElement(PanelButton, {
+                                id: "remote-theme-install",
+                                icon: Icons.Cloud,
+                                tooltipText: Strings.Settings.Themes.Buttons.installremote,
+                                onClick: () => {
+                                    let remoteUrl;
+                                    showConfirmationModal(
+                                        "Install Remote Theme",
+                                        [
+                                            "Enter the URL of the remote theme you want to install.",
+                                            React.createElement(TextInput, {
+                                                placeholder: Strings.Settings.Themes.Buttons.remoteurlplaceholder,
+                                                type: "text",
+                                                onInput: ({ target }) => {
+                                                    remoteUrl = target.value;
+                                                },
+                                            }),
+                                        ],
+                                        {
+                                            onConfirm: () => {
+                                                AddonManager.themes.loadRemote(remoteUrl);
+                                            },
+                                            confirmText: "Install",
+                                        }
+                                    );
                                 },
                             }),
-                            React.createElement(SearchIcon),
-                        ],
-                    }),
-                    tab == 1 &&
-                        React.createElement(PanelButton, {
-                            id: "remote-theme-install",
-                            icon: Icons.Cloud,
-                            tooltipText: Strings.Settings.Themes.Buttons.installremote,
-                            onClick: () => {
-                                let remoteUrl;
-                                showConfirmationModal(
-                                    "Install Remote Theme",
-                                    [
-                                        "Enter the URL of the remote theme you want to install.",
-                                        React.createElement(TextInput, {
-                                            placeholder: Strings.Settings.Themes.Buttons.remoteurlplaceholder,
-                                            type: "text",
-                                            onInput: ({ target }) => {
-                                                remoteUrl = target.value;
-                                            },
-                                        }),
-                                    ],
-                                    {
-                                        onConfirm: () => {
-                                            AddonManager.themes.loadRemote(remoteUrl);
-                                        },
-                                        confirmText: "Install",
-                                    }
-                                );
-                            },
-                        }),
-                    tab == 0 &&
-                        React.createElement(PanelButton, {
-                            id: "themes-folder",
-                            icon: Icons.Folder,
-                            tooltipText: Strings.Settings.Themes.Buttons.openfolder,
-                            onClick: () => {
-                                shell.openPath(AddonManager.themes.folder);
-                            },
-                        }),
-                    React.createElement(FilterButton),
-                ],
-            }),
+                        tab == 0 &&
+                            React.createElement(PanelButton, {
+                                id: "themes-folder",
+                                icon: Icons.Folder,
+                                tooltipText: Strings.Settings.Themes.Buttons.openfolder,
+                                onClick: () => {
+                                    shell.openPath(AddonManager.themes.folder);
+                                },
+                            }),
+                        React.createElement(FilterButton),
+                    ],
+                }),
             tab === 0
                 ? React.createElement("div", {
                       id: "velocity-addons-grid",
@@ -542,10 +543,10 @@ module.exports = (props) => {
                     }),
                 ],
             }),
-            !addon &&
-                React.createElement("div", {
-                    className: "velocity-addon-modal-body-header",
-                    children: [
+            React.createElement("div", {
+                className: "velocity-addon-modal-body-header",
+                children: [
+                    !addon &&
                         React.createElement("div", {
                             className: "velocity-addon-modal-body-header-buttons",
                             children: [
@@ -576,8 +577,8 @@ module.exports = (props) => {
                                 React.createElement(FilterButton),
                             ],
                         }),
-                    ],
-                }),
+                ],
+            }),
             tab === 0
                 ? React.createElement("div", {
                       id: "velocity-addons-grid",
