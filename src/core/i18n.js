@@ -4,7 +4,7 @@ const Logger = require("./logger");
 const DataStore = require("./datastore");
 
 const Dispatcher = WebpackModules.find(["subscribe", "dispatch"]);
-const UserSettingsStore = WebpackModules.find(["guildPositions"]);
+const UserSettingsStore = WebpackModules.find(["getAllSettings", "theme"]);
 
 function extend(extendee, ...extenders) {
     for (let i = 0; i < extenders.length; i++) {
@@ -26,7 +26,7 @@ function extend(extendee, ...extenders) {
 
 module.exports = new (class i18nManager {
     get currentLocale() {
-        return DataStore.getData("VELOCITY_SETTINGS", "locale") == "en-AUS" ? "en-AUS" : UserSettingsStore.locale;
+        return DataStore.getData("VELOCITY_SETTINGS", "locale") == "en-AUS" ? "en-AUS" : UserSettingsStore?.locale ?? this.defaultLocale;
     }
     get defaultLocale() {
         return "en-US";
