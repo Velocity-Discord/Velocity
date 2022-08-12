@@ -117,14 +117,17 @@ if (dPath) {
         }
 
         try {
-            userMod = WebpackModules.find(["getUsers"]);
-            nodes = Object.values(WebpackModules.find(["isDeveloper"])._dispatcher._dependencyGraph.nodes);
-            nodes.find((x) => x.name === "ExperimentStore").actionHandler["CONNECTION_OPEN"]({ user: { flags: 1 }, type: "CONNECTION_OPEN", experiments: [] });
+            const c = window.webpackChunkdiscord_app.push([[Symbol()], {}, ({ c }) => Object.values(c)]);
+            userMod = c.find((x) => x?.exports?.default?.getUsers).exports.default.__proto__;
+            nodes = Object.values(c.find((x) => typeof x?.exports?.default?.isDeveloper !== "undefined").exports.default._dispatcher._actionHandlers._dependencyGraph.nodes);
+            try {
+                nodes.find((x) => x.name === "ExperimentStore").actionHandler["OVERLAY_INITIALIZE"]({ user: { flags: 1 } });
+            } catch {}
             oldGCUser = userMod.getCurrentUser;
             userMod.getCurrentUser = () => {
                 return { hasFlag: () => true };
             };
-            nodes.find((x) => x.name === "DeveloperExperimentStore").actionHandler["CONNECTION_OPEN"]();
+            nodes.find((x) => x.name === "DeveloperExperimentStore").actionHandler["OVERLAY_INITIALIZE"]();
             userMod.getCurrentUser = oldGCUser;
         } catch (e) {
             console.error(e);
