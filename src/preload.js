@@ -130,7 +130,7 @@ if (dPath) {
             nodes.find((x) => x.name === "DeveloperExperimentStore").actionHandler["OVERLAY_INITIALIZE"]();
             userMod.getCurrentUser = oldGCUser;
         } catch (e) {
-            console.error(e);
+            logger.error("Velocity", "Failed to patch Experiments");
         }
 
         let Badges;

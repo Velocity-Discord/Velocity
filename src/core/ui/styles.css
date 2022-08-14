@@ -938,8 +938,8 @@ velocity-toasts {
 #velocity-store-grid {
     margin: 20px 0 10px;
     display: grid;
-    grid-gap: 20px;
-    grid-template-columns: repeat(auto-fit, 48.4%);
+    grid-gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
 }
 
 .velocity-store-card-info {
