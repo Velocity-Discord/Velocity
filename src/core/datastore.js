@@ -58,7 +58,14 @@ const Storage = (pluginName) =>
         get: (_, key) => storage.getData(pluginName, key),
         set: (_, key, value) => {
             if (value === undefined || value === null) return storage.deleteData(pluginName, key);
-            return storage.setData(pluginName, key, value);
+            storage.setData(pluginName, key, value);
+
+            return true;
+        },
+        deleteProperty: (_, key) => {
+            storage.deleteData(pluginName, key);
+
+            return true;
         },
     });
 
