@@ -308,7 +308,7 @@ fs.readdir(pluginDir, (err, files) => {
             PluginExport.settings = DataStore.getAllData(meta.name);
         }
 
-        PluginExport.config = meta;
+        PluginExport.meta = meta;
 
         addons.plugins.push(meta);
         function load() {
@@ -348,7 +348,7 @@ fs.readdir(pluginDir, (err, files) => {
                 PluginExport.settings = DataStore.getAllData(meta.name);
             }
 
-            PluginExport.config = meta;
+            PluginExport.meta = meta;
 
             addons.plugins.push(meta);
 
@@ -448,7 +448,7 @@ fs.watch(pluginDir, { persistent: false }, async (eventType, filename) => {
                 PluginExport.settings = DataStore.getAllData(meta.name);
             }
 
-            PluginExport.config = meta;
+            PluginExport.meta = meta;
 
             function load() {
                 if (plugin.default) plugin = plugin.default;
