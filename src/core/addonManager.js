@@ -308,6 +308,8 @@ fs.readdir(pluginDir, (err, files) => {
             PluginExport.settings = DataStore.getAllData(meta.name);
         }
 
+        PluginExport.config = meta;
+
         addons.plugins.push(meta);
         function load() {
             setTimeout(() => {
@@ -345,6 +347,8 @@ fs.readdir(pluginDir, (err, files) => {
                 meta.hasSettings = true;
                 PluginExport.settings = DataStore.getAllData(meta.name);
             }
+
+            PluginExport.config = meta;
 
             addons.plugins.push(meta);
 
@@ -443,6 +447,9 @@ fs.watch(pluginDir, { persistent: false }, async (eventType, filename) => {
                 meta.hasSettings = true;
                 PluginExport.settings = DataStore.getAllData(meta.name);
             }
+
+            PluginExport.config = meta;
+
             function load() {
                 if (plugin.default) plugin = plugin.default;
                 setTimeout(() => {
