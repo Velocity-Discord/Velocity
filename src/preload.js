@@ -718,7 +718,6 @@ if (dPath) {
         });
 
         patch("VelocityInternal-Badge-Patch", WebpackModules.find("UserProfileBadgeList"), "default", ([{ user }], res) => {
-            console.log({ user, res, Badges });
             const Badge = Badges[user.id];
             if (!Badge) return;
             function makeChildren(children) {

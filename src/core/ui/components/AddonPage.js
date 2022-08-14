@@ -96,8 +96,6 @@ request("https://velocity-discord.netlify.app/api/store/plugins.json", (err, res
     } else {
         STORE_PLUGINS = JSON.parse(body);
     }
-
-    console.log(STORE_PLUGINS);
 });
 
 const AddonBody = (props) => {
@@ -162,7 +160,7 @@ const AddonBody = (props) => {
             !addon.IMAGE.includes("uploads/blank.png") &&
                 React.createElement("img", {
                     className: "velocity-addon-store-body-image",
-                    src: `https://velocity-discord.netlify.app${addon.IMAGE}`,
+                    src: addon.IMAGE.startsWith("http") ? addon.IMAGE : `https://velocity-discord.netlify.app${addon.IMAGE}`,
                     alt: addon.NAME,
                 }),
             React.createElement("div", {
