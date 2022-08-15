@@ -427,14 +427,14 @@ module.exports = (props) => {
                                             React.createElement(TextInput, {
                                                 placeholder: Strings.Settings.Themes.Buttons.remoteurlplaceholder,
                                                 type: "text",
-                                                onInput: ({ target }) => {
+                                                onChange: ({ target }) => {
                                                     remoteUrl = target.value;
                                                 },
                                             }),
                                         ],
                                         {
                                             onConfirm: () => {
-                                                AddonManager.themes.loadRemote(remoteUrl);
+                                                AddonManager.remote.loadTheme(remoteUrl);
                                             },
                                             confirmText: "Install",
                                         }
