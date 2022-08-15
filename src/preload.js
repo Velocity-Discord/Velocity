@@ -11,6 +11,7 @@ const Config = require("./common/config.json");
 const { info } = require("../../package.json");
 const StyleManager = require("./core/styleParser");
 const Neptune = require("./core/neptune");
+const Socket = require("./core/socket");
 
 const dPath = process.env.DISCORD_PRELOAD;
 
@@ -352,6 +353,9 @@ if (dPath) {
 
         // Wait for Discord to Finish Loading
         await waitFor('[class*="guilds"]');
+
+        Socket.initialise();
+        logger.log("Velocity", "Socket Initialized");
 
         if (ValidityChecks) Neptune.initialiseChecks();
 
