@@ -16,7 +16,8 @@ const join = (...args) => {
         toJoin.push(arg);
     });
 
-    return process.platform === "win32" ? toJoin.join("\\") : toJoin.join("/");
+    if (process) return process.platform === "win32" ? toJoin.join("\\") : toJoin.join("/");
+    return toJoin.join("/");
 };
 
 const basename = (path, ext) => {
@@ -49,9 +50,33 @@ const extname = (path) => {
     return path.split(".").pop();
 };
 
+const resolve = (basepath, ...args) => {
+    let ind;
+    let toReturn = ``;
+
+    args.forEach((arg, i) => {
+        if (arg.startsWith("./")) arg = arg.substring(2);
+        arg = arg.replaceAll("./", "/").replaceAll("//", "/");
+        if (arg.startsWith("../")) {
+            ind = basepath.lastIndexOf("/");
+            if (ind === -1) ind = basepath.lastIndexOf("\\");
+            if (ind === -1) {
+                toReturn += arg;
+            } else {
+                toReturn += basepath.substring(0, ind + 1) + arg.substring(3);
+            }
+        }
+
+        toReturn += arg;
+    });
+
+    return join(basepath, toReturn);
+};
+
 module.exports = {
     join,
     basename,
     dirname,
     extname,
+    resolve,
 };
