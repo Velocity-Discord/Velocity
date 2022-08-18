@@ -11,6 +11,7 @@ const path = require("path");
 
 const { Strings } = i18n;
 
+const PanelButton = WebpackModules.find("PanelButton").default;
 const Button = WebpackModules.find(["ButtonColors"]).default;
 const ButtonColors = WebpackModules.find(["ButtonColors"]).ButtonColors;
 const ButtonSizes = WebpackModules.find(["ButtonColors"]).ButtonSizes;
@@ -102,6 +103,7 @@ module.exports = (props) => {
                                 try {
                                     AddonManager[type].toggle(meta.name);
                                     setEnabled(!enabled);
+
                                     if (!enabled) {
                                         showToast("Addon Manager", `${Strings.Toasts.AddonManager.enabled} ${meta.name}`, { type: "success" });
                                     } else {
@@ -247,6 +249,27 @@ module.exports = (props) => {
                         React.createElement("div", {
                             className: "velocity-card-footer-left",
                             children: [
+                                meta.remote &&
+                                    React.createElement(Tooltip, {
+                                        children: (props) =>
+                                            React.createElement(PanelButton, {
+                                                ...props,
+                                                tooltipText: Strings.Tooltips.refetch,
+                                                className: "velocity-card-footer-refetch-button",
+                                                icon: WebpackModules.find("Retry").default,
+                                                onClick: () => {
+                                                    setEnabled(false);
+
+                                                    showToast("Remote Addon Manager", `${Strings.Toasts.AddonManager.disabled} ${meta.name}`, { type: "success" });
+
+                                                    AddonManager[type].disable(meta.name);
+                                                    AddonManager.remote.unloadTheme(meta.name);
+                                                    AddonManager.remote.loadTheme(meta.url);
+
+                                                    showToast("Remote Addon Manager", `${Strings.Toasts.AddonManager.refetched} ${meta.name}`, { type: "success" });
+                                                },
+                                            }),
+                                    }),
                                 meta.sponsor &&
                                     React.createElement(Tooltip, {
                                         text: Strings.Tooltips.sponsor,

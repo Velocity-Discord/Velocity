@@ -29,7 +29,7 @@
             "enabled": "Enabled",
             "disabled": "Disabled",
             "deleted": "Deleted",
-            "refetched": "Refetched Remote Data"
+            "refetched": "Refetched"
         },
         "Neptune": {
             "disabledvaliditychecks": "Disabled Validity Checks"

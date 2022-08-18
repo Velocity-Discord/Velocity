@@ -132,8 +132,6 @@ const RemoteActions = new (class {
                     return val;
                 })
             );
-
-            VApi.showToast("Remote Addon Manager", `${Strings.Toasts.AddonManager.unloaded} ${name}`);
         }
     }
 })();
