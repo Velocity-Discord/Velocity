@@ -315,7 +315,7 @@ module.exports = (props) => {
                     className: "velocity-store-card-image",
                     children: [
                         React.createElement("img", {
-                            src: `https://velocity-discord.netlify.app${IMAGE}`,
+                            src: addon.IMAGE.startsWith("http") ? IMAGE : `https://velocity-discord.netlify.app${IMAGE}`,
                             alt: NAME,
                         }),
                     ],

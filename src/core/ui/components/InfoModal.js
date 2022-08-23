@@ -5,13 +5,13 @@ const VApi = window.VApi;
 
 const { WebpackModules, React, modals } = VApi;
 const { info } = require("../../../../../package.json");
-const Text = WebpackModules.find("LegacyText").default;
 
 const { Strings } = require("../../i18n");
 
 module.exports = async function InfoModal() {
     const ConfirmationModal = WebpackModules.find("ConfirmModal").default;
     const Button = WebpackModules.find(["ButtonColors"]);
+    const Text = WebpackModules.find("LegacyText").default;
 
     return new Promise((resolve) => {
         modals.open((props) => {
