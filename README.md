@@ -11,6 +11,9 @@
 # Velocity
 Velocity is an upcoming Discord Client modification that allows you to extend discord's functionality and capabilities. 
 
+> **Note** |
+> **Velocity v1.x.x is now end-of-life.** The update that will bring electron v17 to discord is growing imminent, with the change already brought to Discord Development earlier this month, This update will completely break Velocity v1 and in preparation development on v2 has already started. For now, active development and updates for v1 are stopping immediately .
+
 ---
 ## Installation
 
