@@ -25,13 +25,13 @@ function patch(patchId, moduleToPatch, functionToPatch, callback, opts = {}) {
         if (DidUnpatch) return;
         DidUnpatch = true;
 
-        let found = patches[method].find((p) => p.Symbol === patchInfo.Symbol);
-        let index = patches[method].indexOf(found);
-        patches[method].splice(index, 1);
-        found = allPatches[patchId].find((p) => p.Symbol === patchInfo.Symbol);
-        index = allPatches[patchId].indexOf(found);
-        allPatches[patchId].splice(index, 1);
-        if (!allPatches[patchId].length) delete allPatches[patchId];
+        patches[method] = patches[method].filter((patch) => patch.Symbol !== CallbackSymbol);
+        allPatches[patchId] = allPatches[patchId].filter((patch) => patch.Symbol !== CallbackSymbol);
+
+        if (patches.before.length === 0 && patches.after.length === 0 && patches.instead.length === 0) {
+            delete moduleToPatch[functionToPatch][patchSymbol];
+            delete moduleToPatch[functionToPatch].unpatch;
+        }
     }
 
     if (!moduleToPatch[functionToPatch][patchSymbol]) {
@@ -59,6 +59,10 @@ function patch(patchId, moduleToPatch, functionToPatch, callback, opts = {}) {
             toString: () => originalFunction.toString(),
         });
     }
+
+    if (!allPatches[patchId]) allPatches[patchId] = [];
+    allPatches[patchId].push({ ...patchInfo, unpatch });
+
     return unpatch;
 }
 
@@ -80,6 +84,6 @@ export default class Patcher {
     }
 
     unpatchAll() {
-        for (const patch of allPatches[this.name]) patch.unpatch();
+        allPatches[this.name]?.forEach((p) => p.unpatch());
     }
 }

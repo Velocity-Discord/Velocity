@@ -3,8 +3,9 @@ import _module from "module";
 import path from "path";
 import fs from "fs";
 
-if (!fs.existsSync(path.join(__dirname, "../../data/config.json"))) fs.writeFileSync(path.join(__dirname, "../../data/config.json"), JSON.stringify({}));
-const Settings = JSON.parse(fs.readFileSync(path.join(__dirname, "../../data/config.json"), "utf8"));
+if (!fs.existsSync(join(__dirname, "../../data"))) fs.mkdirSync(join(__dirname, "../../data"));
+if (!fs.existsSync(join(__dirname, "../../data/config.json"))) fs.writeFileSync(join(__dirname, "../../data/config.json"), JSON.stringify({}));
+const Settings = JSON.parse(fs.readFileSync(join(__dirname, "../../data/config.json"), "utf8"));
 
 export default class BrowserWindow extends electron.BrowserWindow {
     constructor(opts) {

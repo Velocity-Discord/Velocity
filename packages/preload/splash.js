@@ -1,6 +1,7 @@
-import { existsSync, writeFileSync, readFileSync } from "fs";
+import { existsSync, writeFileSync, readFileSync, mkdirSync } from "fs";
 import { join } from "path";
 
+if (!existsSync(join(__dirname, "../../data"))) mkdirSync(join(__dirname, "../../data"));
 if (!existsSync(join(__dirname, "../../data/config.json"))) writeFileSync(join(__dirname, "../../data/config.json"), JSON.stringify({}));
 const Settings = JSON.parse(readFileSync(join(__dirname, "../../data/config.json"), "utf8"));
 
@@ -9,8 +10,8 @@ const originalPreload = process.env.DISCORD_PRELOAD;
 if (originalPreload) require(originalPreload);
 
 const initialise = () => {
-    const themesToInject = Settings.enabledThemes;
-    const snippetsToInject = Settings.editorTabs.filter((tab) => tab.language === "css");
+    const themesToInject = Settings.enabledThemes || [];
+    const snippetsToInject = Settings.editorTabs?.filter((tab) => tab.language === "css");
 
     document.body.classList.add("velocity-splash");
 
