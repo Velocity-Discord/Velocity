@@ -1,6 +1,6 @@
 import electron from "electron";
 import _module from "module";
-import path from "path";
+import { join } from "path";
 import fs from "fs";
 
 if (!fs.existsSync(join(__dirname, "../../data"))) fs.mkdirSync(join(__dirname, "../../data"));
@@ -18,7 +18,7 @@ export default class BrowserWindow extends electron.BrowserWindow {
             ...opts,
             webPreferences: {
                 ...opts.webPreferences,
-                preload: opts.title && opts.webPreferences && opts.webPreferences.nativeWindowOpen ? path.join(__dirname, "preload.js") : path.join(__dirname, "preloadSplash.js"),
+                preload: opts.title && opts.webPreferences && opts.webPreferences.nativeWindowOpen ? join(__dirname, "preload.js") : join(__dirname, "preloadSplash.js"),
                 nodeIntegration: true,
                 devTools: true,
             },

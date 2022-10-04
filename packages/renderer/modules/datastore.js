@@ -49,7 +49,7 @@ export const deleteData = (store, key) => {
     try {
         const data = getAllData(store);
         delete data[key];
-        fs.writeFileSync(path.join(dir, `${store}.json`), JSON.stringify(data));
+        fs.writeFile(path.join(dir, `${store}.json`), JSON.stringify(data));
     } catch (e) {
         Logger.error(e);
     }
