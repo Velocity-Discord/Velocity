@@ -5,13 +5,13 @@ const { spring } = VelocityCore.pseudoRequire("unsafe:react-flip-toolkit");
 
 injectComponentStyle("notification", {
     ".velocity-notification": {
-        backgroundColor: "var(--velocity-notification-background)",
+        backgroundColor: "var(--velocity-notification-background, var(--background-floating))",
         borderRadius: "5px",
         padding: "15px",
         color: "var(--header-primary)",
         backdropFilter: "blur(var(--velocity-notification-blur))",
         zIndex: "1",
-        maxWidth: "300px",
+        maxWidth: "325px",
         width: "fit-content",
         borderLeft: "5px solid #fff",
         transition: "all 0.2s ease",

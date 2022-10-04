@@ -1,17 +1,22 @@
 import ButtonContainer from "./components/reworks/ButtonContainer";
+import ComponentPreview from "./components/ComponentPreview";
 import AddonHeader from "./components/settings/AddonHeader";
 import ColorPicker from "./components/settings/ColorPicker";
 import AddonCard from "./components/settings/AddonCard";
 import TextInput from "./components/settings/TextInput";
+import Notification from "./components/Notification";
 import SettingPage from "./components/settings/Page";
 import Section from "./components/settings/Section";
 import Switch from "./components/settings/Switch";
 import Slider from "./components/settings/Slider";
 import Editor from "./components/settings/Editor";
 import EmptyState from "./components/EmptyState";
+import Toast from "./components/Toast";
+
 import Velocity from "../modules/velocity";
 import ColorUtils from "../util/color";
 import logger from "../util/logger";
+
 import IPC_EVENTS from "../../common/IPC_EVENTS";
 
 import { showNotification, showToast } from "../modules/notifications";
@@ -231,7 +236,8 @@ export const initialiseSettings = async () => {
                 label: "Developer",
                 className: `velocity-developer-tab`,
                 element: () => {
-                    const [cu, setCu] = React.useState(null);
+                    const [toastColor, setToastColor] = React.useState("");
+                    const [notificationColor, setNotificationColor] = React.useState("");
 
                     return (
                         <SettingPage title="Developer">
@@ -255,8 +261,46 @@ export const initialiseSettings = async () => {
                                         >
                                             React Crash
                                         </ButtonModules.default>
-                                        {cu}
                                     </ButtonContainer>
+                                    <FormDivider style={{ marginBlock: "20px" }} />
+                                </Section>
+                                <Section title="Velocity Components">
+                                    <ComponentPreview>
+                                        <Notification
+                                            title="Notification Title"
+                                            color={notificationColor}
+                                            buttons={[
+                                                {
+                                                    label: "Change Color",
+                                                    action: () => {
+                                                        // cycle through "", "danger", "success", "warning", "velocity"
+                                                        if (notificationColor === "") setNotificationColor("error");
+                                                        else if (notificationColor === "error") setNotificationColor("success");
+                                                        else if (notificationColor === "success") setNotificationColor("warning");
+                                                        else if (notificationColor === "warning") setNotificationColor("velocity");
+                                                        else if (notificationColor === "velocity") setNotificationColor("");
+                                                    },
+                                                },
+                                                {
+                                                    label: "Change Toast Color",
+                                                    action: () => {
+                                                        // cycle through "", "danger", "success", "warning", "velocity"
+                                                        if (toastColor === "") setToastColor("error");
+                                                        else if (toastColor === "error") setToastColor("success");
+                                                        else if (toastColor === "success") setToastColor("warning");
+                                                        else if (toastColor === "warning") setToastColor("velocity");
+                                                        else if (toastColor === "velocity") setToastColor("");
+                                                    },
+                                                },
+                                            ]}
+                                            id="velocity-notification-9999"
+                                        >
+                                            Notification Content
+                                        </Notification>
+                                    </ComponentPreview>
+                                    <ComponentPreview>
+                                        <Toast color={toastColor}>Toast Content</Toast>
+                                    </ComponentPreview>
                                 </Section>
                             </FormItem>
                         </SettingPage>

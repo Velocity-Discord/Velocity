@@ -13,6 +13,7 @@ injectComponentStyle("toast", {
         justifyContent: "center",
         alignItems: "center",
         pointerEvents: "all",
+        width: "fit-content",
     },
     ".velocity-toast.color-velocity": {
         backgroundColor: "#5B88FC",
