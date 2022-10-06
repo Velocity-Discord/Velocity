@@ -1,4 +1,6 @@
-import { showNotification } from "./notifications";
+import { showNotification, showConfirmationModal } from "./notifications";
+import { installAddon } from "./actions";
+import webpack from "./webpack";
 
 export default {
     get websockets() {
@@ -47,6 +49,25 @@ export default {
                     case "velocity:relaunch":
                         DiscordNative.app.relaunch();
                         break;
+                }
+
+                if (data.startsWith("velocity:install-addon")) {
+                    DiscordNative.window.focus();
+
+                    const addon = data.split("|")[1];
+                    const name = data.split("|")[2];
+
+                    if (addon) {
+                        showConfirmationModal({
+                            title: `Install ${name || "Addon"}?`,
+                            content: "Are you sure you want to install this addon? Addons can be dangerous and can break your Discord client.",
+                            confirmText: "Install",
+                            danger: true,
+                            onConfirm: () => {
+                                installAddon(addon);
+                            },
+                        });
+                    }
                 }
             });
         });

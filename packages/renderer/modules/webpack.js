@@ -194,14 +194,27 @@ globalPromise.then(async () => {
     });
 
     common = {
+        Dispatcher: (await waitFor(["dispatch", "isDispatching"])).default,
         React: await waitFor(["createElement", "useEffect"]),
         ReactDOM: await waitFor(["render", "hydrate"]),
+        Stores: {
+            MessageStore: (await waitFor(["getMessage", "getMessages"])).default,
+            SelectedGuildStore: (await waitFor(["getLastSelectedGuildId"])).default,
+            SelectedChannelStore: (await waitFor(["getLastSelectedChannelId"])).default,
+            UserStore: (await waitFor(["getCurrentUser"])).default,
+            RelationshipStore: (await waitFor(["isBlocked"])).default,
+            GuildStore: (await waitFor(["getGuild"])).default,
+            GuildMemberStore: (await waitFor(["getMember"])).default,
+            ChannelStore: (await waitFor(["hasChannel"])).default,
+            InviteStore: (await waitFor(["getInvites"])).default,
+        },
         Components: {
             FormItem: await waitFor((m) => m.default?.toString().includes("titleClassName") && m.default?.toString().includes("style")),
             FormText: await waitFor((m) => m.default?.Sizes?.SIZE_32 && m.default?.Colors),
             FormDivider: await waitFor((m) => m.default?.toString().includes("().divider") && m.default?.toString().includes("style")),
             SwitchItem: await waitFor((m) => m.default?.toString().includes("helpdeskArticleId")),
             Popout: await waitFor((m) => m.default?.prototype?.render?.toString().includes("shouldShowPopout")),
+            ConfirmModal: await waitFor((m) => m.default?.toString().includes("confirmText")),
             TextInput: await waitFor((m) => m.default?.prototype?.render?.toString().includes("inputClassName") && m.default?.prototype?.render?.toString().includes("inputPrefix")),
             TextForm: await waitFor((m) => m.default?.prototype?.render?.toString().includes("minLength")),
             TooltipContainer: await waitFor((m) => m.default?.toString().includes("shouldShowTooltip") && m.default?.Positions),
@@ -259,6 +272,10 @@ globalPromise.then(async () => {
             Folder: await waitFor((m) => m.default?.toString().includes("M20 7H12L10.553 5.106C10.214 4.428 9")),
             Retry: await waitFor((m) => m.default?.toString().includes("M12 2C6.485 2 2 6.485 2 12H5.33333C5.33333 8.32")),
             Overflow: await waitFor((m) => m.default?.toString().includes("M7 12.001C7 10.8964 6.10457 10.001 5 10.001C3.89543 10.001 3 10.8964")),
+        },
+        Classes: {
+            Anchor: await waitFor(["anchorUnderlineOnHover"]),
+            ContextMenu: await waitFor(["menu", "styleFlexible"]),
         },
     };
 });

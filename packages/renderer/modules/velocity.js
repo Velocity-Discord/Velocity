@@ -1,5 +1,6 @@
-import { showNotification, showToast } from "./notifications";
+import { showNotification, showToast, showConfirmationModal } from "./notifications";
 import { installAddon } from "./actions";
+import { waitUntil } from "../util/time";
 import * as DataStore from "./datastore";
 import * as Styling from "./styling";
 import * as addons from "./addons";
@@ -27,5 +28,9 @@ export default {
     Notifications: {
         showNotification,
         showToast,
+        showConfirmationModal,
+    },
+    Utilities: {
+        waitUntil,
     },
 };

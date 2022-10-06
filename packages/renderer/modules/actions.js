@@ -12,6 +12,7 @@ export const getDataFromBase = async (baseURL) => {
     let manifestURL;
     try {
         url = new URL(baseURL.endsWith("/") ? baseURL : baseURL + "/");
+
         manifestURL = new URL("velocity_manifest.json", url);
     } catch (e) {
         return showToast("Invalid URL", { type: "error" });
@@ -30,6 +31,7 @@ export const getDataFromBase = async (baseURL) => {
         };
     } catch (e) {
         Logger.error("Failed to traverse addon paths:", e);
+        showToast("Failed to traverse addon paths", { type: "error" });
     }
 
     return resolve;
@@ -79,7 +81,12 @@ export const installAddon = async (baseURL) => {
     const imports = await traverseImports(data, baseURL);
 
     imports.forEach(async (importData) => {
-        fs.writeFileSync(path.join(dir, importData.path), await VelocityCore.request(importData.url));
+        try {
+            fs.writeFileSync(path.join(dir, importData.path), await VelocityCore.request(importData.url));
+        } catch (e) {
+            Logger.error("Failed to install addon:", e);
+            showToast(`Could not traverse imports for ${data.manifest.name}`, { type: "error" });
+        }
     });
 
     Logger.log(`Installed ${data.manifest.name}`);

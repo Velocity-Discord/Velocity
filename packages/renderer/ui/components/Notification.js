@@ -51,6 +51,8 @@ injectComponentStyle("notification", {
         fontSize: "14px",
         marginTop: "5px",
         color: "var(--header-secondary)",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
     },
     ".notification-buttons": {
         display: "grid",

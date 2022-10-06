@@ -143,3 +143,25 @@ export const showToast = (content, options = {}) => {
         });
     }, timeout);
 };
+
+export const showConfirmationModal = (options = {}) => {
+    const { Components } = WebpackModules.common;
+
+    const { danger, title = "", content = "", confirmText = "Confirm", cancelText = "Cancel", onConfirm = () => {}, onCancel = () => {} } = options;
+
+    let children = content;
+
+    const ConfirmModal = Components.ConfirmModal.default;
+    const Markdown = Components.Markdown.default;
+    const ModalActions = Components.ModalActions;
+    const ButtonColors = Components.ButtonModules.ButtonColors;
+
+    if (!Array.isArray(children)) children = [content];
+    children = children.map((c) => (typeof c === "string" ? <Markdown>{c}</Markdown> : c));
+
+    return ModalActions.openModal((props) => (
+        <ConfirmModal {...props} header={title} confirmText={confirmText} cancelText={cancelText} onConfirm={onConfirm} onCancel={onCancel} confirmButtonColor={danger ? ButtonColors.RED : ButtonColors.BRAND}>
+            {children}
+        </ConfirmModal>
+    ));
+};
