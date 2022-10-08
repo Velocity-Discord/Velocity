@@ -39,7 +39,7 @@ export const checkForUpdates = async () => {
             confirmText: "Download",
             onConfirm: () => {
                 VelocityCore.request(release.assets[0].browser_download_url, (err, _, data) => {
-                    if (err) {
+                    if (!err) {
                         fs.writeFileSync(path.join(VelocityCore.baseDir, "dist/velocity.asar"), data);
                         Notifications.showNotification({
                             title: "Update Downloaded",
