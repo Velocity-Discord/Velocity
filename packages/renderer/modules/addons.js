@@ -12,7 +12,7 @@ const sucrase = VelocityCore.pseudoRequire("unsafe:sucrase");
 const fs = VelocityCore.pseudoRequire("node:fs");
 const path = VelocityCore.pseudoRequire("node:path");
 const shell = VelocityCore.pseudoRequire("unsafe:electron").shell;
-const VELOCITY_DIRECTORY = VelocityCore.pseudoRequire("v:dir");
+const VELOCITY_DIRECTORY = VelocityCore.baseDir;
 
 const Settings = Stream("config");
 
@@ -78,6 +78,7 @@ export const initPlugins = () => {
                         donate: _manifest.social?.donate,
                     },
                     main: _manifest.main,
+                    updateURL: _manifest.updateURL,
                     _type: "Plugins",
                 };
 
@@ -89,9 +90,7 @@ export const initPlugins = () => {
                     production: true,
                 }).code;
 
-                const instance = new Function("Velocity", "module", "require", `${main}; return module.exports`)(Velocity, { exports: {} }, (p) => {
-                    return VelocityCore.pseudoRequire(path.resolve(manifest.filePath, p));
-                });
+                const instance = new Function("Velocity", "module", "VelocityCore", `${main}; return module.exports//# sourceURL=velocity://${manifest.name}.js`)(Velocity, { exports: {} }, VelocityCore);
 
                 manifest.instance = new instance(manifest);
 
@@ -244,6 +243,7 @@ export const initThemes = () => {
                         donate: _manifest.social?.donate,
                     },
                     main: _manifest.main,
+                    updateURL: _manifest.updateURL,
                     _type: "Themes",
                 };
 

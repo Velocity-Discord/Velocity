@@ -8,7 +8,7 @@ const { spring } = VelocityCore.pseudoRequire("unsafe:react-flip-toolkit");
 injectComponentStyle("notifications", {
     "velocity-notifications": {
         position: "fixed",
-        right: "25px",
+        right: "15px",
         top: "15px",
         zIndex: "3000",
         display: "flex",
@@ -36,7 +36,7 @@ injectComponentStyle("notifications", {
 let NotifId = 0;
 
 export const showNotification = (props = {}) => {
-    const { title = "", content = "", buttons = [], color = "" } = props;
+    const { title = "", content = "", buttons = [], type = "" } = props;
 
     NotifId++;
 
@@ -48,7 +48,7 @@ export const showNotification = (props = {}) => {
     notifications.appendChild(newNotif);
 
     ReactDOM.render(
-        <Notif id={_id} color={color} title={title} buttons={buttons}>
+        <Notif id={_id} color={type} title={title} buttons={buttons}>
             {content}
         </Notif>,
         newNotif

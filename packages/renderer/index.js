@@ -1,4 +1,5 @@
 import { initPlugins, initThemes } from "./modules/addons";
+import { checkForUpdates } from "./modules/updater";
 import { initialiseSettings } from "./ui/settings";
 import { addVariables } from "./modules/variables";
 import { runSnippets } from "./modules/snippets";
@@ -59,6 +60,8 @@ const initialise = async () => {
     Logger.log(`Snippets Run`);
 
     webpack.remapDefaults();
+
+    checkForUpdates();
 };
 
 initialise();

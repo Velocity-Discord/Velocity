@@ -11,7 +11,7 @@ const Settings = Stream("config");
 
 const fs = VelocityCore.pseudoRequire("node:fs");
 const path = VelocityCore.pseudoRequire("node:path");
-const VELOCITY_DIRECTORY = VelocityCore.pseudoRequire("v:dir");
+const VELOCITY_DIRECTORY = VelocityCore.baseDir;
 
 const { WebpackModules } = Velocity;
 

@@ -101,20 +101,22 @@ export default (props) => {
                 </button>
             </div>
             <div className="notification-content">{children}</div>
-            <div
-                className="notification-buttons"
-                style={{
-                    "--buttons": buttons.length,
-                }}
-            >
-                {buttons.map((btn) => {
-                    return (
-                        <Button size={ButtonSizes.TINY} color={ButtonColors[btn.color] || ButtonColors["BRAND"]} onClick={btn.action} disabled={btn.disabled}>
-                            {btn.label}
-                        </Button>
-                    );
-                })}
-            </div>
+            {buttons.length ? (
+                <div
+                    className="notification-buttons"
+                    style={{
+                        "--buttons": buttons.length,
+                    }}
+                >
+                    {buttons.map((btn) => {
+                        return (
+                            <Button size={ButtonSizes.TINY} color={ButtonColors[btn.color] || ButtonColors["BRAND"]} onClick={btn.action} disabled={btn.disabled}>
+                                {btn.label}
+                            </Button>
+                        );
+                    })}
+                </div>
+            ) : null}
         </div>
     );
 };

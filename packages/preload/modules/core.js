@@ -1,7 +1,7 @@
 import pkj from "../../../package.json";
 import https from "https";
 
-const supportedNodeModules = ["path", "fs", "https", "http", "os", "crypto", "zlib", "events"];
+const supportedNodeModules = ["path", "fs", "https", "http", "os", "crypto", "zlib", "events", "original-fs"];
 
 export default {
     Meta: {
@@ -70,5 +70,8 @@ export default {
 
         if (cb) cb(err, response, body);
         return body;
+    },
+    get baseDir() {
+        return process.env.VELOCITY_DIRECTORY;
     },
 };

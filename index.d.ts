@@ -1,6 +1,6 @@
 interface VelocityCore {
     pseudoRequire(path: string): any;
-    request(url: string | object | any, options: object, callback: (err: any | undefined, response: any, body: any) => void): Promise<any>;
+    request(url: string | object | any, options?: object, callback?: (err: any | undefined, response: any, body: any) => void): Promise<any>;
 }
 
 interface PluginConstruct {

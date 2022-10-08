@@ -3,7 +3,7 @@ const Logger = new logger("Datastore");
 
 const fs = VelocityCore.pseudoRequire("node:fs");
 const path = VelocityCore.pseudoRequire("node:path");
-const VELOCITY_DIRECTORY = VelocityCore.pseudoRequire("v:dir");
+const VELOCITY_DIRECTORY = VelocityCore.baseDir;
 
 const validateDir = () => {
     if (!fs.existsSync(dir)) {
