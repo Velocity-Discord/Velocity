@@ -19,13 +19,12 @@ export default class BrowserWindow extends electron.BrowserWindow {
             webPreferences: {
                 ...opts.webPreferences,
                 preload: opts.title && opts.webPreferences && opts.webPreferences.nativeWindowOpen ? join(__dirname, "preload.js") : join(__dirname, "preloadSplash.js"),
-                nodeIntegration: true,
                 devTools: true,
             },
             transparent: !!Settings.Transparency,
-            vibrancy: Settings.Vibrancy ? "hud" : undefined,
             backgroundColor: "#00000000",
-            visualEffectState: "active",
+            vibrancy: Settings.Vibrancy ? "hud" : undefined,
+            visualEffectState: Settings.Vibrancy ? "active" : undefined,
         };
 
         let win = new electron.BrowserWindow(opts);

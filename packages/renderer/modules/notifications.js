@@ -145,16 +145,16 @@ export const showToast = (content, options = {}) => {
 };
 
 export const showConfirmationModal = (options = {}) => {
-    const { Components } = WebpackModules.common;
+    const { Components, Actions } = WebpackModules.common;
 
     const { danger, title = "", content = "", confirmText = "Confirm", cancelText = "Cancel", onConfirm = () => {}, onCancel = () => {} } = options;
 
     let children = content;
 
+    const ButtonColors = Components.ButtonModules.ButtonColors;
     const ConfirmModal = Components.ConfirmModal.default;
     const Markdown = Components.Markdown.default;
-    const ModalActions = Components.ModalActions;
-    const ButtonColors = Components.ButtonModules.ButtonColors;
+    const ModalActions = Actions.ModalActions;
 
     if (!Array.isArray(children)) children = [content];
     children = children.map((c) => (typeof c === "string" ? <Markdown>{c}</Markdown> : c));

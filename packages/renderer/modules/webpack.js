@@ -244,16 +244,10 @@ globalPromise.then(async () => {
                 ModalFooter: Object.values(_ModalElements).find((m) => m.toString().includes("wrap") && m.toString().includes("footer")),
                 ModalRoot: Object.values(_ModalElements).find((m) => m.toString().includes("size") && m.toString().includes("dialog")),
             },
-            ModalActions: {
-                _ModalActions,
-                openModal: Object.values(_ModalActions).find((m) => m?.toString()?.includes("onCloseCallback") && m?.toString()?.includes("Layer")),
-                closeModal: Object.values(_ModalActions).find((m) => m?.toString()?.includes("onCloseCallback()")),
-            },
             EmptyState: await waitFor(
                 (m) => m.default?.toString().includes("onCTAClick") && m.default?.toString().includes("description") && m.default?.toString().includes("artURL") && !m.default?.toString().includes("stream")
             ),
             Alert: await waitFor((m) => m.default?.toString().includes("title") && m.default?.toString().includes("body") && m.default?.toString().includes("secondaryConfirmText")),
-            ContextMenuActions,
             ContextMenuClasses: await waitFor(["menu", "styleFlexible"]),
         },
         Constants: {},
@@ -276,6 +270,15 @@ globalPromise.then(async () => {
         Classes: {
             Anchor: await waitFor(["anchorUnderlineOnHover"]),
             ContextMenu: await waitFor(["menu", "styleFlexible"]),
+        },
+        Actions: {
+            ContextMenuActions,
+            ModalActions: {
+                _ModalActions,
+                openModal: Object.values(_ModalActions).find((m) => m?.toString()?.includes("onCloseCallback") && m?.toString()?.includes("Layer")),
+                closeModal: Object.values(_ModalActions).find((m) => m?.toString()?.includes("onCloseCallback()")),
+            },
+            Invites: (await waitFor(["acceptInvite"])).default,
         },
     };
 });

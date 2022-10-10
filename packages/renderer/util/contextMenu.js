@@ -28,9 +28,9 @@ const Menu = (props) => {
 };
 
 const MenuItem = (props) => {
-    const { Components } = WebpackModules.common;
+    const { Components, Actions } = WebpackModules.common;
 
-    const ContextMenuActions = Components.ContextMenuActions;
+    const ContextMenuActions = Actions.ContextMenuActions;
     const ContextMenuClasses = Components.ContextMenuClasses;
 
     const { type, label, action, color, checked, disabled, onChange, icon } = props;
@@ -113,9 +113,9 @@ export const buildContextMenu = (items) => {
 };
 
 export const useContextMenu = (event, items) => {
-    const { Components } = WebpackModules.common;
+    const { Actions } = WebpackModules.common;
 
-    const ContextMenuActions = Components.ContextMenuActions;
+    const ContextMenuActions = Actions.ContextMenuActions;
 
     const menu = buildContextMenu(items);
 

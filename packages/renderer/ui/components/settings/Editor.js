@@ -1,9 +1,9 @@
 import { injectComponentStyle } from "../../../util/components";
 import { runSnippets, updateSnippets } from "../../../modules/snippets";
 import { Stream } from "../../../modules/datastore";
+import ObservableArray from "../../../structs/array";
 import Velocity from "../../../modules/velocity";
 import loader from "@monaco-editor/loader";
-import ObservableArray from "../../../structs/array";
 
 import FormTitle from "../reworks/FormTitle";
 
@@ -104,7 +104,7 @@ new Promise((resolve) => {
 });
 
 export default (props) => {
-    const { Components, Icons } = WebpackModules.common;
+    const { Components, Icons, Actions } = WebpackModules.common;
 
     const [active, setActive] = React.useState(0);
     const [tabs, setTabs] = React.useState(EDITOR_TABS);
@@ -144,10 +144,10 @@ export default (props) => {
 
     let selected = Settings.editorTabs[active];
 
-    const Alert = Components.Alert.default;
-    const TextInput = Components.TextInput.default;
     const PanelButton = Components.PanelButton.default;
-    const ModalActions = Components.ModalActions;
+    const TextInput = Components.TextInput.default;
+    const ModalActions = Actions.ModalActions;
+    const Alert = Components.Alert.default;
 
     return (
         <div className="velocity-editor">

@@ -31,7 +31,7 @@ const Logger = new logger("Settings");
 const Settings = Stream("config");
 
 export const initialiseSettings = async () => {
-    const { WebpackModules } = Velocity;
+    const { WebpackModules, Utilities } = Velocity;
 
     const Patcher = new Velocity.Patcher("VelocityInternal_Settings");
 
@@ -46,14 +46,14 @@ export const initialiseSettings = async () => {
             location++;
         };
 
-        const { Components } = WebpackModules.common;
+        const { Components, Classes, Actions } = WebpackModules.common;
 
         const ModalRoot = Components.ModalElements.ModalRoot;
         const FormDivider = Components.FormDivider.default;
         const ButtonModules = Components.ButtonModules;
         const FormItem = Components.FormItem.default;
         const FormText = Components.FormText.default;
-        const ModalActions = Components.ModalActions;
+        const ModalActions = Actions.ModalActions;
 
         insert({ section: "DIVIDER" });
         insert({ section: "HEADER", label: "Velocity" });
