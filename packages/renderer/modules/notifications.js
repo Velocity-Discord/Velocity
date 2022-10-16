@@ -145,23 +145,34 @@ export const showToast = (content, options = {}) => {
 };
 
 export const showConfirmationModal = (options = {}) => {
-    const { Components, Actions } = WebpackModules.common;
+    const { Components, Actions, Classes } = WebpackModules.common;
 
-    const { danger, title = "", content = "", confirmText = "Confirm", cancelText = "Cancel", onConfirm = () => {}, onCancel = () => {} } = options;
+    const { title = "", content = "", confirmText = "Confirm", cancelText = "Cancel", onConfirm = () => {}, onCancel = () => {}, danger = false } = options;
 
-    let children = content;
-
-    const ButtonColors = Components.ButtonModules.ButtonColors;
-    const ConfirmModal = Components.ConfirmModal.default;
-    const Markdown = Components.Markdown.default;
+    const Text = Components.Text.default;
     const ModalActions = Actions.ModalActions;
-
-    if (!Array.isArray(children)) children = [content];
-    children = children.map((c) => (typeof c === "string" ? <Markdown>{c}</Markdown> : c));
+    const Markdown = Components.Markdown.default;
+    const ModalElements = Components.ModalElements;
+    const Button = Components.ButtonModules.default;
+    const ButtonLooks = Components.ButtonModules.ButtonLooks;
+    const ButtonColors = Components.ButtonModules.ButtonColors;
 
     return ModalActions.openModal((props) => (
-        <ConfirmModal {...props} header={title} confirmText={confirmText} cancelText={cancelText} onConfirm={onConfirm} onCancel={onCancel} confirmButtonColor={danger ? ButtonColors.RED : ButtonColors.BRAND}>
-            {children}
-        </ConfirmModal>
+        <ModalElements.ModalRoot {...props}>
+            <ModalElements.ModalHeader separator={false}>
+                <Text size={Text.Sizes.SIZE_20} color={Text.Colors.HEADER_PRIMARY} className={Classes.Titles.h1}>
+                    {title}
+                </Text>
+            </ModalElements.ModalHeader>
+            <ModalElements.ModalContent className="velocity-modal-content">{typeof content == "string" ? <Markdown className="velocity-modal-content">{content}</Markdown> : content}</ModalElements.ModalContent>
+            <ModalElements.ModalFooter>
+                <Button color={danger ? ButtonColors.RED : ButtonColors.BRAND} onClick={onConfirm}>
+                    {confirmText}
+                </Button>
+                <Button color={ButtonColors.PRIMARY} look={ButtonLooks.LINK} onClick={onCancel}>
+                    {cancelText}
+                </Button>
+            </ModalElements.ModalFooter>
+        </ModalElements.ModalRoot>
     ));
 };

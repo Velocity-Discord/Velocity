@@ -243,6 +243,8 @@ globalPromise.then(async () => {
                 ModalHeader: Object.values(_ModalElements).find((m) => m.toString().includes("wrap") && m.toString().includes("header")),
                 ModalFooter: Object.values(_ModalElements).find((m) => m.toString().includes("wrap") && m.toString().includes("footer")),
                 ModalRoot: Object.values(_ModalElements).find((m) => m.toString().includes("size") && m.toString().includes("dialog")),
+                ModalContent: Object.values(_ModalElements).find((m) => m.toString().includes("scrollerRef") && m.toString().includes("content")),
+                CloseButton: Object.values(_ModalElements).find((m) => m.toString().includes("BLANK") && m.toString().includes("withCircleBackground")),
             },
             EmptyState: await waitFor(
                 (m) => m.default?.toString().includes("onCTAClick") && m.default?.toString().includes("description") && m.default?.toString().includes("artURL") && !m.default?.toString().includes("stream")
@@ -270,6 +272,7 @@ globalPromise.then(async () => {
         Classes: {
             Anchor: await waitFor(["anchorUnderlineOnHover"]),
             ContextMenu: await waitFor(["menu", "styleFlexible"]),
+            Titles: await waitFor(["h1", "h2"]),
         },
         Actions: {
             ContextMenuActions,
