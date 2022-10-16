@@ -166,10 +166,23 @@ export const showConfirmationModal = (options = {}) => {
             </ModalElements.ModalHeader>
             <ModalElements.ModalContent className="velocity-modal-content">{typeof content == "string" ? <Markdown className="velocity-modal-content">{content}</Markdown> : content}</ModalElements.ModalContent>
             <ModalElements.ModalFooter>
-                <Button color={danger ? ButtonColors.RED : ButtonColors.BRAND} onClick={onConfirm}>
+                <Button
+                    color={danger ? ButtonColors.RED : ButtonColors.BRAND}
+                    onClick={(e) => {
+                        onConfirm(e);
+                        props.onClose();
+                    }}
+                >
                     {confirmText}
                 </Button>
-                <Button color={ButtonColors.PRIMARY} look={ButtonLooks.LINK} onClick={onCancel}>
+                <Button
+                    color={ButtonColors.PRIMARY}
+                    look={ButtonLooks.LINK}
+                    onClick={(e) => {
+                        onCancel(e);
+                        props.onClose();
+                    }}
+                >
                     {cancelText}
                 </Button>
             </ModalElements.ModalFooter>
