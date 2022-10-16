@@ -10,6 +10,7 @@ export default {
         this.socket = new this.websockets.Server({ port: 1842 });
 
         this.socket.on("connection", (client) => {
+            let CLIENT_ACCEPTED = false;
             const dismis = showNotification({
                 title: "New Socket Connection",
                 content: `A new socket connection has been established.`,
@@ -18,6 +19,7 @@ export default {
                         label: "Okay",
                         action: () => {
                             dismis();
+                            CLIENT_ACCEPTED = true;
                         },
                     },
                     {
@@ -44,10 +46,14 @@ export default {
                         );
                         break;
                     case "velocity:reload":
-                        location.reload();
+                        if (CLIENT_ACCEPTED) {
+                            location.reload();
+                        }
                         break;
                     case "velocity:relaunch":
-                        DiscordNative.app.relaunch();
+                        if (CLIENT_ACCEPTED) {
+                            DiscordNative.app.relaunch();
+                        }
                         break;
                 }
 
