@@ -7,6 +7,7 @@ import TextInput from "./components/settings/TextInput";
 import Notification from "./components/Notification";
 import SettingPage from "./components/settings/Page";
 import Section from "./components/settings/Section";
+import UpdaterView from "./components/UpdaterView";
 import Switch from "./components/settings/Switch";
 import Slider from "./components/settings/Slider";
 import Editor from "./components/settings/Editor";
@@ -225,6 +226,19 @@ export const initialiseSettings = async () => {
                 return (
                     <SettingPage title="Snippets">
                         <Editor />
+                    </SettingPage>
+                );
+            },
+        });
+
+        insert({
+            section: "updater",
+            label: "Updater",
+            className: `velocity-updater-tab`,
+            element: () => {
+                return (
+                    <SettingPage title="Updater">
+                        <UpdaterView />
                     </SettingPage>
                 );
             },

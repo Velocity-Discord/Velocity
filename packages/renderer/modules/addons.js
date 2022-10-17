@@ -78,7 +78,7 @@ export const initPlugins = () => {
                         donate: _manifest.social?.donate,
                     },
                     main: _manifest.main,
-                    updateURL: _manifest.updateURL,
+                    updates: _manifest.updates,
                     _type: "Plugins",
                 };
 
@@ -243,7 +243,7 @@ export const initThemes = () => {
                         donate: _manifest.social?.donate,
                     },
                     main: _manifest.main,
-                    updateURL: _manifest.updateURL,
+                    updates: _manifest.updates,
                     _type: "Themes",
                 };
 

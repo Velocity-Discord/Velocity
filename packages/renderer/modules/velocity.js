@@ -1,4 +1,5 @@
 import { showNotification, showToast, showConfirmationModal } from "./notifications";
+import { Updater, AddonUpdater } from "./updater";
 import { installAddon } from "./actions";
 import { waitUntil } from "../util/time";
 import * as DataStore from "./datastore";
@@ -15,6 +16,9 @@ webpack.globalPromise.then(async () => {
 });
 
 export default {
+    CoreUpdater: new Updater(),
+    ThemeUpdater: new AddonUpdater("themes"),
+    PluginUpdater: new AddonUpdater("plugins"),
     Plugin,
     Styling,
     Patcher,

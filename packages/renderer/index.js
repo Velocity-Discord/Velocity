@@ -1,5 +1,4 @@
 import { initPlugins, initThemes } from "./modules/addons";
-import { checkForUpdates } from "./modules/updater";
 import { initialiseSettings } from "./ui/settings";
 import { addVariables } from "./modules/variables";
 import { runSnippets } from "./modules/snippets";
@@ -61,7 +60,11 @@ const initialise = async () => {
 
     webpack.remapDefaults();
 
-    checkForUpdates();
+    setTimeout(() => {
+        Velocity.CoreUpdater.checkForUpdates();
+        Velocity.PluginUpdater.checkForUpdates();
+        Velocity.ThemeUpdater.checkForUpdates();
+    }, 1000);
 };
 
 initialise();
