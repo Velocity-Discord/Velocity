@@ -63,14 +63,14 @@ injectComponentStyle("notification", {
 });
 
 export default (props) => {
-    const { title, color, children, buttons, id } = props;
+    const { title, color, children, buttons, id, onContextMenu } = props;
 
     const Button = webpack.common.Components.ButtonModules.default;
     const ButtonColors = webpack.common.Components.ButtonModules.ButtonColors;
     const ButtonSizes = webpack.common.Components.ButtonModules.ButtonSizes;
 
     return (
-        <div className={`velocity-notification color-${color}`}>
+        <div onContextMenu={onContextMenu} className={`velocity-notification color-${color}`}>
             <div className="notification-title">
                 {title}
                 <button

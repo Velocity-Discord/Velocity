@@ -1,7 +1,5 @@
 import { injectComponentStyle } from "./components";
-import Velocity from "../modules/velocity";
-
-const { WebpackModules } = Velocity;
+import WebpackModules from "../modules/webpack";
 
 injectComponentStyle("context-menu", {
     ".velocity-context-menu": {

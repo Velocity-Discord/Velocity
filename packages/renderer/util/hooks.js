@@ -32,3 +32,8 @@ export const useFilter = (items, filter) => {
 
     return filteredItems;
 };
+
+export const useForceUpdate = () => {
+    const [value, setValue] = React.useState(0);
+    return () => setValue((value) => value + 1);
+};

@@ -2,6 +2,7 @@ import { notifications, toasts, injectComponentStyle } from "../util/components"
 import Notif from "../ui/components/Notification";
 import Toast from "../ui/components/Toast";
 import WebpackModules from "./webpack";
+import { useContextMenu } from "../util/contextMenu";
 
 const { spring } = VelocityCore.pseudoRequire("unsafe:react-flip-toolkit");
 
@@ -10,7 +11,7 @@ injectComponentStyle("notifications", {
         position: "fixed",
         right: "15px",
         top: "15px",
-        zIndex: "3000",
+        zIndex: "1001",
         display: "flex",
         flexDirection: "column",
         alignItems: "flex-end",
@@ -34,6 +35,7 @@ injectComponentStyle("notifications", {
 });
 
 let NotifId = 0;
+const Notifications = {};
 
 export const showNotification = (props = {}) => {
     const { title = "", content = "", buttons = [], type = "" } = props;
@@ -48,7 +50,31 @@ export const showNotification = (props = {}) => {
     notifications.appendChild(newNotif);
 
     ReactDOM.render(
-        <Notif id={_id} color={type} title={title} buttons={buttons}>
+        <Notif
+            id={_id}
+            color={type}
+            title={title}
+            buttons={buttons}
+            onContextMenu={(e) =>
+                useContextMenu(e, [
+                    {
+                        label: "Close",
+                        action: () => {
+                            Notifications[_id]?.close?.();
+                        },
+                    },
+                    {
+                        label: "Close All",
+                        color: "Danger",
+                        action: () => {
+                            for (const id in Notifications) {
+                                Notifications[id]?.close?.();
+                            }
+                        },
+                    },
+                ])
+            }
+        >
             {content}
         </Notif>,
         newNotif
@@ -69,25 +95,35 @@ export const showNotification = (props = {}) => {
         },
     });
 
-    return () => {
-        const ele = document.getElementById(`velocity-notification-${_id}`);
-        spring({
-            config: "noWobble",
-            values: {
-                translateY: [0, -15],
-                opacity: [1, 0],
-            },
-            onUpdate: ({ translateY, opacity }) => {
-                ele.style.opacity = opacity;
-                ele.style.transform = `translateY(${translateY}px)`;
-            },
-            delay: Array.from(document.querySelectorAll(".velocity-notification-container")).findIndex((n) => n.id == `velocity-notification-${_id}`) * 35,
-            onComplete: () => {
-                ReactDOM.unmountComponentAtNode(ele);
-                ele.remove();
-            },
-        });
+    Notifications[_id] = {
+        id: _id,
+        ele: newNotif,
+        close: () => {
+            const ele = document.getElementById(`velocity-notification-${_id}`);
+            if (!ele) return delete Notifications[_id];
+
+            spring({
+                config: "noWobble",
+                values: {
+                    translateY: [0, -15],
+                    opacity: [1, 0],
+                },
+                onUpdate: ({ translateY, opacity }) => {
+                    ele.style.opacity = opacity;
+                    ele.style.transform = `translateY(${translateY}px)`;
+                },
+                delay: Array.from(document.querySelectorAll(".velocity-notification-container")).findIndex((n) => n.id == `velocity-notification-${_id}`) * 35,
+                onComplete: () => {
+                    ReactDOM.unmountComponentAtNode(ele);
+                    ele.remove();
+                },
+            });
+
+            delete Notifications[_id];
+        },
     };
+
+    return Notifications[_id]?.close;
 };
 
 let ToastId = 0;
