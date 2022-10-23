@@ -1,5 +1,6 @@
-import { injectComponentStyle } from "../../../util/components";
 import { runSnippets, updateSnippets } from "../../../modules/snippets";
+import { injectComponentStyle } from "../../../util/components";
+import { showToast } from "../../../modules/notifications";
 import { Stream } from "../../../modules/datastore";
 import ObservableArray from "../../../structs/array";
 import Velocity from "../../../modules/velocity";
@@ -221,6 +222,8 @@ export default (props) => {
                         tooltipText="Options"
                         icon={Icons.Gear.default}
                         onClick={() => {
+                            if (!selected) return showToast("No File Selected", { type: "error" });
+
                             let name = selected.name;
 
                             ModalActions.openModal((p) => (
@@ -261,8 +264,11 @@ export default (props) => {
                         tooltipText="Delete File"
                         icon={Icons.Trash.default}
                         onClick={() => {
+                            if (!selected) return showToast("No File Selected", { type: "error" });
+
                             EDITOR_TABS.activeFilter((t, i) => i !== active);
                             setActive(0);
+                            setTabs(EDITOR_TABS);
                         }}
                     />
                 </div>
