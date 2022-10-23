@@ -26,7 +26,7 @@ import { Stream } from "../modules/datastore";
 import { Registry } from "../modules/addons";
 import { useFilter } from "../util/hooks";
 
-const { ipcRenderer } = VelocityCore.pseudoRequire("unsafe:electron");
+const { ipcRenderer } = VelocityCore.pseudoRequire("electron");
 
 const Logger = new logger("Settings");
 const Settings = Stream("config");

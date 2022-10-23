@@ -250,7 +250,9 @@ globalPromise.then(async () => {
             EmptyState: await waitFor(
                 (m) => m.default?.toString().includes("onCTAClick") && m.default?.toString().includes("description") && m.default?.toString().includes("artURL") && !m.default?.toString().includes("stream")
             ),
-            Alert: await waitFor((m) => m.default?.toString().includes("title") && m.default?.toString().includes("body") && m.default?.toString().includes("secondaryConfirmText")),
+            Alert: await waitFor(
+                (m) => m.default?.toString().includes("title") && m.default?.toString().includes("body") && m.default?.toString().includes("secondaryConfirmText") && !m.default?.toString().includes("DONT_ASK_AGAIN")
+            ),
             ContextMenuClasses: await waitFor(["menu", "styleFlexible"]),
         },
         Constants: {},

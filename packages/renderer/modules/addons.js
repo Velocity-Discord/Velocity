@@ -8,10 +8,10 @@ import logger from "../util/logger";
 
 const Logger = new logger("Addon Manager");
 
-const sucrase = VelocityCore.pseudoRequire("unsafe:sucrase");
-const fs = VelocityCore.pseudoRequire("node:fs");
-const path = VelocityCore.pseudoRequire("node:path");
-const shell = VelocityCore.pseudoRequire("unsafe:electron").shell;
+const sucrase = VelocityCore.pseudoRequire("sucrase");
+const fs = VelocityCore.pseudoRequire("fs");
+const path = VelocityCore.pseudoRequire("path");
+const shell = VelocityCore.pseudoRequire("electron").shell;
 const VELOCITY_DIRECTORY = VelocityCore.baseDir;
 
 const Settings = Stream("config");

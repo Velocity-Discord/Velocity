@@ -3,8 +3,8 @@ import * as AddonManager from "./addons";
 import * as Notifications from "./notifications";
 import logger from "../util/logger";
 
-const fs = VelocityCore.pseudoRequire("node:original-fs");
-const path = VelocityCore.pseudoRequire("node:path");
+const fs = VelocityCore.pseudoRequire("original-fs");
+const path = VelocityCore.pseudoRequire("path");
 
 const Logger = new logger("Updater");
 

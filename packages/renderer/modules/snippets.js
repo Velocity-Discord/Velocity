@@ -6,7 +6,7 @@ import logger from "../util/logger";
 const Settings = Stream("config");
 const Logger = new logger("Snippets");
 
-const sucrase = VelocityCore.pseudoRequire("unsafe:sucrase");
+const sucrase = VelocityCore.pseudoRequire("sucrase");
 
 export const runSnippets = (type) => {
     Settings.editorTabs.forEach((tab) => {

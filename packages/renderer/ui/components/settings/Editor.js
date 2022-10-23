@@ -9,8 +9,8 @@ import FormTitle from "../reworks/FormTitle";
 
 const Settings = Stream("config");
 
-const fs = VelocityCore.pseudoRequire("node:fs");
-const path = VelocityCore.pseudoRequire("node:path");
+const fs = VelocityCore.pseudoRequire("fs");
+const path = VelocityCore.pseudoRequire("path");
 const VELOCITY_DIRECTORY = VelocityCore.baseDir;
 
 const { WebpackModules } = Velocity;

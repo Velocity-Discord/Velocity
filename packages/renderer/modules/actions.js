@@ -2,8 +2,8 @@ import { showToast } from "./notifications";
 import * as addons from "./addons";
 import logger from "../util/logger";
 
-const fs = VelocityCore.pseudoRequire("node:fs");
-const path = VelocityCore.pseudoRequire("node:path");
+const fs = VelocityCore.pseudoRequire("fs");
+const path = VelocityCore.pseudoRequire("path");
 
 const Logger = new logger("Addon Actions");
 
