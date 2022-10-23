@@ -1,7 +1,5 @@
-import webpack from "../../modules/webpack";
 import { injectComponentStyle } from "../../util/components";
-
-const { spring } = VelocityCore.pseudoRequire("unsafe:react-flip-toolkit");
+import webpack from "../../modules/webpack";
 
 injectComponentStyle("notification", {
     ".velocity-notification": {
@@ -62,61 +60,47 @@ injectComponentStyle("notification", {
     },
 });
 
-export default (props) => {
-    const { title, color, children, buttons, id, onContextMenu } = props;
+export default () => {
+    return React.forwardRef((props, ref) => {
+        const { title, color, children, buttons, id, onContextMenu, close } = props;
 
-    const Button = webpack.common.Components.ButtonModules.default;
-    const ButtonColors = webpack.common.Components.ButtonModules.ButtonColors;
-    const ButtonSizes = webpack.common.Components.ButtonModules.ButtonSizes;
+        const Button = webpack.common.Components.ButtonModules.default;
+        const ButtonColors = webpack.common.Components.ButtonModules.ButtonColors;
+        const ButtonSizes = webpack.common.Components.ButtonModules.ButtonSizes;
 
-    return (
-        <div onContextMenu={onContextMenu} className={`velocity-notification color-${color}`}>
-            <div className="notification-title">
-                {title}
-                <button
-                    className="notification-close"
-                    onClick={() => {
-                        const ele = document.getElementById(`velocity-notification-${id}`);
-                        spring({
-                            config: "noWobble",
-                            values: {
-                                translateY: [0, -15],
-                                opacity: [1, 0],
-                            },
-                            onUpdate: ({ translateY, opacity }) => {
-                                ele.style.opacity = opacity;
-                                ele.style.transform = `translateY(${translateY}px)`;
-                            },
-                            delay: Array.from(document.querySelectorAll(".velocity-notification-container")).findIndex((n) => n.id == `velocity-notification-${id}`) * 35,
-                            onComplete: () => {
-                                ReactDOM.unmountComponentAtNode(ele);
-                                ele.remove();
-                            },
-                        });
-                    }}
-                >
-                    <svg width="18" height="18" viewBox="0 0 24 24">
-                        <path fill="currentColor" d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path>
-                    </svg>
-                </button>
-            </div>
-            <div className="notification-content">{children}</div>
-            {buttons.length ? (
-                <div
-                    className="notification-buttons"
-                    style={{
-                        "--buttons": buttons.length,
-                    }}
-                >
-                    {buttons.map((btn) => {
-                        return (
-                            <Button size={ButtonSizes.TINY} color={ButtonColors[btn.color] || ButtonColors["BRAND"]} onClick={btn.action} disabled={btn.disabled}>
-                                {btn.label}
-                            </Button>
-                        );
-                    })}
+        return (
+            <div onContextMenu={onContextMenu} className={`velocity-notification color-${color}`} ref={ref}>
+                <div className="notification-title">
+                    {title}
+                    <button
+                        className="notification-close"
+                        onClick={() => {
+                            close();
+                        }}
+                    >
+                        <svg width="18" height="18" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path>
+                        </svg>
+                    </button>
                 </div>
-            ) : null}
-        </div>
-    );
+                <div className="notification-content">{children}</div>
+                {buttons.length ? (
+                    <div
+                        className="notification-buttons"
+                        style={{
+                            "--buttons": buttons.length,
+                        }}
+                    >
+                        {buttons.map((btn) => {
+                            return (
+                                <Button size={ButtonSizes.TINY} color={ButtonColors[btn.color] || ButtonColors["BRAND"]} onClick={btn.action} disabled={btn.disabled}>
+                                    {btn.label}
+                                </Button>
+                            );
+                        })}
+                    </div>
+                ) : null}
+            </div>
+        );
+    });
 };

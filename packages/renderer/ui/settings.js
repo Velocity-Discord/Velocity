@@ -253,6 +253,8 @@ export const initialiseSettings = async () => {
                     const [toastColor, setToastColor] = React.useState("");
                     const [notificationColor, setNotificationColor] = React.useState("");
 
+                    const Notif = Notification();
+
                     return (
                         <SettingPage title="Developer">
                             <FormItem>
@@ -280,7 +282,7 @@ export const initialiseSettings = async () => {
                                 </Section>
                                 <Section title="Velocity Components">
                                     <ComponentPreview>
-                                        <Notification
+                                        <Notif
                                             title="Notification Title"
                                             color={notificationColor}
                                             buttons={[
@@ -310,7 +312,7 @@ export const initialiseSettings = async () => {
                                             id="velocity-notification-9999"
                                         >
                                             Notification Content
-                                        </Notification>
+                                        </Notif>
                                     </ComponentPreview>
                                     <ComponentPreview>
                                         <Toast color={toastColor}>Toast Content</Toast>

@@ -1,13 +1,11 @@
+import { ToastContainer, NotificationContainer } from "../ui/components/NotificationContainers";
 import { notifications, toasts, injectComponentStyle } from "../util/components";
-import Notif from "../ui/components/Notification";
-import Toast from "../ui/components/Toast";
-import WebpackModules from "./webpack";
 import { useContextMenu } from "../util/contextMenu";
-
-const { spring } = VelocityCore.pseudoRequire("unsafe:react-flip-toolkit");
+import ObservableArray from "../structs/array";
+import WebpackModules from "./webpack";
 
 injectComponentStyle("notifications", {
-    "velocity-notifications": {
+    ".velocity-notification-wrapper": {
         position: "fixed",
         right: "15px",
         top: "15px",
@@ -15,15 +13,13 @@ injectComponentStyle("notifications", {
         display: "flex",
         flexDirection: "column",
         alignItems: "flex-end",
-        gap: "10px",
         transition: "all 0.2s ease",
         pointerEvents: "none",
     },
-    "velocity-toasts": {
+    ".velocity-toast-wrapper": {
         position: "fixed",
         display: "flex",
         flexDirection: "column",
-        gap: "10px",
         alignItems: "center",
         marginTop: "15px",
         width: "100%",
@@ -34,150 +30,72 @@ injectComponentStyle("notifications", {
     },
 });
 
+let ToastId = 0;
+const Toasts = new ObservableArray();
+
+export const initialiseToasts = () => {
+    ReactDOM.render(<ToastContainer toasts={Toasts} />, toasts);
+};
+
+export const showToast = (content, options = {}) => {
+    const { type = "", timeout = 3000 } = options;
+
+    ToastId++;
+
+    const id = ToastId;
+
+    const newToast = {
+        color: type,
+        id: id,
+        children: content,
+        timeout,
+    };
+
+    Toasts.push(newToast);
+};
+
 let NotifId = 0;
-const Notifications = {};
+const Notifs = new ObservableArray();
+
+export const initialiseNotifications = () => {
+    ReactDOM.render(<NotificationContainer notifications={Notifs} />, notifications);
+};
 
 export const showNotification = (props = {}) => {
     const { title = "", content = "", buttons = [], type = "" } = props;
 
     NotifId++;
 
-    const _id = NotifId;
+    const id = NotifId;
 
-    const newNotif = document.createElement("div");
-    newNotif.classList.add("velocity-notification-container");
-    newNotif.setAttribute("id", `velocity-notification-${_id}`);
-    notifications.appendChild(newNotif);
-
-    ReactDOM.render(
-        <Notif
-            id={_id}
-            color={type}
-            title={title}
-            buttons={buttons}
-            onContextMenu={(e) =>
-                useContextMenu(e, [
-                    {
-                        label: "Close",
-                        action: () => {
-                            Notifications[_id]?.close?.();
-                        },
-                    },
-                    {
-                        label: "Close All",
-                        color: "Danger",
-                        action: () => {
-                            for (const id in Notifications) {
-                                Notifications[id]?.close?.();
-                            }
-                        },
-                    },
-                ])
-            }
-        >
-            {content}
-        </Notif>,
-        newNotif
-    );
-
-    newNotif.style.opacity = 0;
-
-    spring({
-        config: "noWobble",
-        values: {
-            translateY: [-15, 0],
-            opacity: [0, 1],
-        },
-        delay: Array.from(document.querySelectorAll(".velocity-notification-container")).findIndex((n) => n.id == `velocity-notification-${_id}`) * 35,
-        onUpdate: ({ translateY, opacity }) => {
-            newNotif.style.opacity = opacity;
-            newNotif.style.transform = `translateY(${translateY}px)`;
-        },
-    });
-
-    Notifications[_id] = {
-        id: _id,
-        ele: newNotif,
+    const newNotif = {
+        id: id,
+        color: type,
+        title: title,
+        buttons: buttons,
+        children: content,
         close: () => {
-            const ele = document.getElementById(`velocity-notification-${_id}`);
-            if (!ele) return delete Notifications[_id];
-
-            spring({
-                config: "noWobble",
-                values: {
-                    translateY: [0, -15],
-                    opacity: [1, 0],
-                },
-                onUpdate: ({ translateY, opacity }) => {
-                    ele.style.opacity = opacity;
-                    ele.style.transform = `translateY(${translateY}px)`;
-                },
-                delay: Array.from(document.querySelectorAll(".velocity-notification-container")).findIndex((n) => n.id == `velocity-notification-${_id}`) * 35,
-                onComplete: () => {
-                    ReactDOM.unmountComponentAtNode(ele);
-                    ele.remove();
-                },
-            });
-
-            delete Notifications[_id];
+            Notifs.splice(Notifs.indexOf(newNotif), 1);
         },
+        onContextMenu: (e) =>
+            useContextMenu(e, [
+                {
+                    label: "Close",
+                    action: () => {
+                        Notifs.splice(Notifs.indexOf(newNotif), 1);
+                    },
+                },
+                {
+                    label: "Close All",
+                    color: "Danger",
+                    action: () => {
+                        Notifs.splice(0, Notifs.length);
+                    },
+                },
+            ]),
     };
 
-    return Notifications[_id]?.close;
-};
-
-let ToastId = 0;
-
-export const showToast = (content, options = {}) => {
-    const { type = "", timeout = 1200 } = options;
-
-    ToastId++;
-
-    const newToast = document.createElement("div");
-    newToast.setAttribute("id", `velocity-toast-${ToastId}`);
-    newToast.classList.add("velocity-toast-container");
-    toasts.appendChild(newToast);
-
-    ReactDOM.render(
-        <Toast id={ToastId} color={type}>
-            {content}
-        </Toast>,
-        newToast
-    );
-
-    newToast.style.opacity = 0;
-
-    spring({
-        config: "noWobble",
-        values: {
-            translateY: [-15, 0],
-            opacity: [0, 1],
-        },
-        delay: Array.from(document.querySelectorAll(".velocity-toast-container")).findIndex((n) => n.id == `velocity-toast-${ToastId}`) * 35,
-        onUpdate: ({ translateY, opacity }) => {
-            newToast.style.opacity = opacity;
-            newToast.style.transform = `translateY(${translateY}px)`;
-        },
-    });
-
-    setTimeout(() => {
-        spring({
-            config: "noWobble",
-            values: {
-                translateY: [0, -15],
-                opacity: [1, 0],
-            },
-            onUpdate: ({ translateY, opacity }) => {
-                newToast.style.opacity = opacity;
-                newToast.style.transform = `translateY(${translateY}px)`;
-            },
-            delay: Array.from(document.querySelectorAll(".velocity-toast-container")).findIndex((n) => n.id == `velocity-toast-${ToastId}`) * 35,
-            onComplete: () => {
-                ReactDOM.unmountComponentAtNode(newToast);
-                newToast.remove();
-            },
-        });
-    }, timeout);
+    Notifs.push(newNotif);
 };
 
 export const showConfirmationModal = (options = {}) => {

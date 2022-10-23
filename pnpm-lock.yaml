@@ -9,7 +9,6 @@ specifiers:
   electron-devtools-installer: ^3.2.0
   react: ^18.2.0
   react-dom: ^18.2.0
-  react-flip-toolkit: ^7.0.16
   rollup: ^2.79.0
   rollup-plugin-terser: ^7.0.2
   sucrase: ^3.25.0
@@ -18,7 +17,6 @@ dependencies:
   electron-devtools-installer: 3.2.0
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
-  react-flip-toolkit: 7.0.16_biqbaboplfbrettd7655fr4n2y
   sucrase: 3.25.0
 
 devDependencies:
@@ -299,13 +297,6 @@ packages:
     resolution: {integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==}
     dev: true
 
-  /flip-toolkit/7.0.16:
-    resolution: {integrity: sha512-MeoLilutfKSGtN8kdUsIU3x0y+84RnnK2rgUcQ6CgVTeIsWxmEAmLBq+p3YGT0lNIZf6bqqUyyKLo0jkBTgRvg==}
-    engines: {node: '>=8', npm: '>=5'}
-    dependencies:
-      rematrix: 0.2.2
-    dev: false
-
   /fs.realpath/1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
 
@@ -491,14 +482,6 @@ packages:
     resolution: {integrity: sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==}
     dev: false
 
-  /prop-types/15.8.1:
-    resolution: {integrity: sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==}
-    dependencies:
-      loose-envify: 1.4.0
-      object-assign: 4.1.1
-      react-is: 16.13.1
-    dev: false
-
   /randombytes/2.1.0:
     resolution: {integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==}
     dependencies:
@@ -513,23 +496,6 @@ packages:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.0
-    dev: false
-
-  /react-flip-toolkit/7.0.16_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-ZLnXYJfYhZZ5lKP+FiUjX0lHKe8ZZoAd2HMuOAW3w5ZESNgNTyzu0pRu/bDBqlIox5UkeSlTDBt3dVBcTqv1gg==}
-    engines: {node: '>=8', npm: '>=5'}
-    peerDependencies:
-      react: '>= 16.x'
-      react-dom: '>= 16.x'
-    dependencies:
-      flip-toolkit: 7.0.16
-      prop-types: 15.8.1
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
-    dev: false
-
-  /react-is/16.13.1:
-    resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
     dev: false
 
   /react/18.2.0:
@@ -549,10 +515,6 @@ packages:
       safe-buffer: 5.1.2
       string_decoder: 1.1.1
       util-deprecate: 1.0.2
-    dev: false
-
-  /rematrix/0.2.2:
-    resolution: {integrity: sha512-agFFS3RzrLXJl5LY5xg/xYyXvUuVAnkhgKO7RaO9J1Ssth6yvbO+PIiV67V59MB5NCdAK2flvGvNT4mdKVniFA==}
     dev: false
 
   /resolve/1.22.1:

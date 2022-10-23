@@ -1,7 +1,7 @@
 // partially modified from https://github.com/kernel-addons/webpack
 
-import logger from "../util/logger";
 import { sleep } from "../util/time";
+import logger from "../util/logger";
 
 const Logger = new logger("Webpack");
 
@@ -197,6 +197,7 @@ globalPromise.then(async () => {
         Dispatcher: (await waitFor(["dispatch", "isDispatching"])).default,
         React: await waitFor(["createElement", "useEffect"]),
         ReactDOM: await waitFor(["render", "hydrate"]),
+        ReactSpring: await waitFor(["useSpring", "animated"]),
         Stores: {
             MessageStore: (await waitFor(["getMessage", "getMessages"])).default,
             SelectedGuildStore: (await waitFor(["getLastSelectedGuildId"])).default,

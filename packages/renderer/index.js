@@ -1,3 +1,4 @@
+import { initialiseToasts, initialiseNotifications } from "./modules/notifications";
 import { initPlugins, initThemes } from "./modules/addons";
 import { initialiseSettings } from "./ui/settings";
 import { addVariables } from "./modules/variables";
@@ -47,6 +48,9 @@ const initialise = async () => {
     await waitUntil(() => webpack.common.React);
 
     Logger.log(`React Loaded`);
+
+    initialiseToasts();
+    initialiseNotifications();
 
     webpack.remapDefaults();
 
