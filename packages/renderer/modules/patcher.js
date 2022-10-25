@@ -2,88 +2,119 @@ import logger from "../util/logger";
 
 const Logger = new logger("Patcher");
 
-const patchSymbol = Symbol("Velocity.Patcher");
-const internalSymbol = Symbol("VelocityInternal");
-export let allPatches = {};
-
-function patch(patchId, moduleToPatch, functionToPatch, callback, opts = {}) {
-    let { method = "after" } = opts;
-    let originalFunction = moduleToPatch[functionToPatch];
-    if (!originalFunction) {
-        moduleToPatch[functionToPatch] = () => {};
-        originalFunction = moduleToPatch[functionToPatch];
-    }
-    method = method.toLowerCase();
-    if (!(method === "before" || method === "after" || method === "instead")) throw new Error(`'${method}' is a invalid patch type`);
-    let patches = moduleToPatch?.[functionToPatch]?.[patchSymbol]?.patches ?? { before: [], after: [], instead: [] };
-    let CallbackSymbol = Symbol();
-    let patchInfo = { unpatch, patchName: patchId, moduleToPatch, functionToPatch, callback, method, Symbol: CallbackSymbol };
-    patches[method].unshift(Object.assign(callback, { unpatch, Symbol: CallbackSymbol }));
-    let DidUnpatch = false;
-
-    function unpatch(auth) {
-        if (DidUnpatch) return;
-        DidUnpatch = true;
-
-        patches[method] = patches[method].filter((patch) => patch.Symbol !== CallbackSymbol);
-        allPatches[patchId] = allPatches[patchId].filter((patch) => patch.Symbol !== CallbackSymbol);
-
-        if (patches.before.length === 0 && patches.after.length === 0 && patches.instead.length === 0) {
-            delete moduleToPatch[functionToPatch][patchSymbol];
-            delete moduleToPatch[functionToPatch].unpatch;
-        }
-    }
-
-    if (!moduleToPatch[functionToPatch][patchSymbol]) {
-        moduleToPatch[functionToPatch] = function () {
-            for (const patch of patches.before) patch([...arguments], this);
-            let insteadFunction = originalFunction;
-            for (const patch of patches.instead) insteadFunction = patch([...arguments], insteadFunction, this);
-            let res = insteadFunction.apply(this, [...arguments]);
-            for (const patch of patches.after) patch([...arguments], res, this);
-            return res;
-        };
-        moduleToPatch[functionToPatch][patchSymbol] = {
-            original: originalFunction,
-            module: moduleToPatch,
-            function: functionToPatch,
-            patches,
-            unpatchAll: () => {
-                for (const patch of patches.before) patch.unpatch();
-                for (const patch of patches.instead) patch.unpatch();
-                for (const patch of patches.after) patch.unpatch();
-                moduleToPatch[functionToPatch] = originalFunction;
-            },
-        };
-        Object.assign(moduleToPatch[functionToPatch], originalFunction, {
-            toString: () => originalFunction.toString(),
-        });
-    }
-
-    if (!allPatches[patchId]) allPatches[patchId] = [];
-    allPatches[patchId].push({ ...patchInfo, unpatch });
-
-    return unpatch;
-}
-
 export default class Patcher {
-    constructor(name) {
-        this.name = name;
+    constructor(id) {
+        this.id = id;
     }
 
-    after(moduleToPatch, functionToPatch, callback) {
-        return patch(this.name, moduleToPatch, functionToPatch, callback, { method: "after" });
+    patches = [];
+
+    _buildPatch(type, module, method, options) {
+        const patch = {
+            type,
+            module,
+            method,
+            options,
+            id: this.id,
+            revert: () => {
+                this.unpatch(module, method);
+            },
+            proxy: null,
+            originalMethod: module[method],
+        };
+
+        patch.proxy = this._buildProxy(patch);
+
+        const descriptor = Object.getOwnPropertyDescriptor(module, method);
+
+        if (descriptor && descriptor.get) {
+            patch.overWritten = true;
+            try {
+                Object.defineProperty(module, method, {
+                    configurable: true,
+                    enumerable: true,
+                    get: () => patch.proxy,
+                    set: (value) => {
+                        patch.originalMethod = value;
+                    },
+                    ...descriptor,
+                });
+            } catch (e) {
+                Logger.error("Failed to overwrite getter", e);
+            }
+        } else {
+            module[method] = patch.proxy;
+        }
+
+        this.patches.push(patch);
+
+        return patch;
     }
 
-    before(moduleToPatch, functionToPatch, callback) {
-        return patch(this.name, moduleToPatch, functionToPatch, callback, { method: "before" });
+    _buildProxy(patch) {
+        return function () {
+            const { type, options, originalMethod } = patch;
+
+            let toReturn = originalMethod.apply(this, arguments);
+
+            switch (type) {
+                case "before":
+                    try {
+                        options.callback(arguments);
+                    } catch (e) {
+                        Logger.error("Failed to call before patch", e);
+                    }
+                case "instead":
+                    try {
+                        toReturn = options.callback(arguments, originalMethod.bind(this));
+                    } catch (e) {
+                        Logger.error("Failed to call instead patch", e);
+                    }
+                case "after":
+                    try {
+                        options.callback(arguments, toReturn);
+                    } catch (e) {
+                        Logger.error("Failed to call after patch", e);
+                    }
+            }
+
+            return toReturn;
+        };
     }
 
-    instead(moduleToPatch, functionToPatch, callback) {
-        return patch(this.name, moduleToPatch, functionToPatch, callback, { method: "instead" });
+    unpatch(module, method) {
+        const patch = this.patches.find((p) => p.module === module && p.method === method);
+
+        if (!patch) return;
+
+        if (patch.overWritten) {
+            Object.defineProperty(module, method, {
+                ...Object.getOwnPropertyDescriptor(module, method),
+                get: () => patch.originalMethod,
+                set: undefined,
+            });
+        } else {
+            module[method] = patch.originalMethod;
+        }
+
+        this.patches.splice(this.patches.indexOf(patch), 1);
     }
 
     unpatchAll() {
-        allPatches[this.name]?.forEach((p) => p.unpatch());
+        this.patches.forEach((patch) => {
+            this.unpatch(patch.module, patch.method);
+        });
+    }
+
+    before(module, method, callback, options) {
+        return this._buildPatch("before", module, method, { ...options, callback });
+    }
+
+    instead(module, method, callback, options) {
+        return this._buildPatch("instead", module, method, { ...options, callback });
+    }
+
+    after(module, method, callback, options) {
+        return this._buildPatch("after", module, method, { ...options, callback });
     }
 }

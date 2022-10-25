@@ -49,7 +49,6 @@ export const initialiseSettings = async () => {
 
         const { Components, Classes, Actions } = WebpackModules.common;
 
-        const ModalRoot = Components.ModalElements.ModalRoot;
         const FormDivider = Components.FormDivider.default;
         const ButtonModules = Components.ButtonModules;
         const FormItem = Components.FormItem.default;
@@ -272,6 +271,7 @@ export const initialiseSettings = async () => {
                                         </ButtonModules.default>
                                         <ButtonModules.default
                                             onClick={() => {
+                                                const ModalRoot = Components.ModalElements.ModalRoot;
                                                 ModalActions.openModal(<ModalRoot children={{}}></ModalRoot>);
                                             }}
                                         >
