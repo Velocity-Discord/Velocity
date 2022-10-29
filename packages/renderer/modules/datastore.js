@@ -1,8 +1,8 @@
 import logger from "../util/logger";
 const Logger = new logger("Datastore");
 
-const fs = VelocityCore.pseudoRequire("fs");
-const path = VelocityCore.pseudoRequire("path");
+const fs = VelocityCore.modules.fs;
+const path = VelocityCore.modules.path;
 const VELOCITY_DIRECTORY = VelocityCore.baseDir;
 
 const validateDir = () => {

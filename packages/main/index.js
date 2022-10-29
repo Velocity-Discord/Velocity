@@ -1,10 +1,12 @@
-import electron, { ipcMain } from "electron";
+import electron, { ipcMain, app } from "electron";
 import _module from "module";
 import path from "path";
 import fs from "fs";
 
 import BrowserWindow from "./modules/browserWindow";
 import IPC_EVENTS from "../common/IPC_EVENTS";
+
+import { load } from "@velocity-discord/scaffold";
 
 import installExtension, { REACT_DEVELOPER_TOOLS } from "electron-devtools-installer";
 
@@ -34,13 +36,9 @@ electron.app.on("ready", () => {
     });
 });
 
-function LoadDiscord() {
-    const basePath = path.join(process.resourcesPath, "app.asar");
-    const pkg = JSON.parse(fs.readFileSync(path.join(basePath, "package.json"), "utf8"));
-    electron.app.setAppPath(basePath);
-    electron.app.name = pkg.name;
-    _module._load(path.join(basePath, pkg.main), null, true);
-}
+const LoadDiscord = () => {
+    load(app);
+};
 
 const electronPath = require.resolve("electron");
 delete require.cache[electronPath]?.exports;

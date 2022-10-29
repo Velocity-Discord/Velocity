@@ -1,4 +1,4 @@
 {
     "name": "velocity",
-    "main": "./main.js"
+    "main": "main.js"
 }

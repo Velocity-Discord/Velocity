@@ -5,6 +5,7 @@ specifiers:
   '@rollup/plugin-json': ^4.1.0
   '@rollup/plugin-node-resolve': ^14.1.0
   '@rollup/plugin-sucrase': ^4.0.4
+  '@velocity-discord/scaffold': ^1.0.6
   asar: ^3.2.0
   electron-devtools-installer: ^3.2.0
   react: ^18.2.0
@@ -14,13 +15,14 @@ specifiers:
   sucrase: ^3.25.0
 
 dependencies:
+  '@velocity-discord/scaffold': 1.0.6
   electron-devtools-installer: 3.2.0
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   sucrase: 3.25.0
 
 devDependencies:
-  '@monaco-editor/loader': 1.3.2_monaco-editor@0.34.0
+  '@monaco-editor/loader': 1.3.2_monaco-editor@0.34.1
   '@rollup/plugin-json': 4.1.0_rollup@2.79.0
   '@rollup/plugin-node-resolve': 14.1.0_rollup@2.79.0
   '@rollup/plugin-sucrase': 4.0.4_rollup@2.79.0
@@ -88,12 +90,12 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
 
-  /@monaco-editor/loader/1.3.2_monaco-editor@0.34.0:
+  /@monaco-editor/loader/1.3.2_monaco-editor@0.34.1:
     resolution: {integrity: sha512-BTDbpHl3e47r3AAtpfVFTlAi7WXv4UQ/xZmz8atKl4q7epQV5e7+JbigFDViWF71VBi4IIBdcWP57Hj+OWuc9g==}
     peerDependencies:
       monaco-editor: '>= 0.21.0 < 1'
     dependencies:
-      monaco-editor: 0.34.0
+      monaco-editor: 0.34.1
       state-local: 1.0.7
     dev: true
 
@@ -179,6 +181,10 @@ packages:
     dependencies:
       '@types/node': 18.7.15
     dev: true
+
+  /@velocity-discord/scaffold/1.0.6:
+    resolution: {integrity: sha512-H+ocVUIBr0UNXbE4ozIl+U5aOIw+cvxqdpX/2bY4d+tcaWTn7G8PYy7QO+r/ei4HFIeHE7x4mQTcq/0daSOz0g==}
+    dev: false
 
   /acorn/8.8.0:
     resolution: {integrity: sha512-QOxyigPVrpZ2GXT+PFyZTl6TtOFc5egxHIP9IlQ+RbupQuX4RkT/Bee4/kQuC02Xkzg84JcT7oLYtDIQxp+v7w==}
@@ -437,8 +443,8 @@ packages:
       minimist: 1.2.6
     dev: false
 
-  /monaco-editor/0.34.0:
-    resolution: {integrity: sha512-VF+S5zG8wxfinLKLrWcl4WUizMx+LeJrG4PM/M78OhcwocpV0jiyhX/pG6Q9jIOhrb/ckYi6nHnaR5OojlOZCQ==}
+  /monaco-editor/0.34.1:
+    resolution: {integrity: sha512-FKc80TyiMaruhJKKPz5SpJPIjL+dflGvz4CpuThaPMc94AyN7SeC9HQ8hrvaxX7EyHdJcUY5i4D0gNyJj1vSZQ==}
     dev: true
 
   /mz/2.7.0:

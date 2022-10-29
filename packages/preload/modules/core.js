@@ -1,4 +1,4 @@
-import * as nodePolyfills from "../polyfill";
+import { fs, path, sucrase, electron, originalFs } from "./nodeModules";
 import pkj from "../../../package.json";
 import https from "https";
 
@@ -7,26 +7,13 @@ export default {
         version: pkj.version,
         hash: pkj.hash,
     },
-    modules: nodePolyfills,
-    pseudoRequire(path) {
-        if (typeof path !== "string") throw new TypeError(`[INVALID_ARG_TYPE]: path must be a string, received '${typeof path}'`);
-
-        const pathIsVelocity = path.startsWith("v:");
-
-        if (pathIsVelocity) {
-            const modulePath = path.replace("v:", "");
-
-            switch (modulePath) {
-                case "dir":
-                    return process.env.VELOCITY_DIRECTORY;
-            }
-        }
-
-        try {
-            return require(path);
-        } catch (e) {
-            throw new Error(`[MODULE_NOT_FOUND]: The module '${path}' could not be found.`);
-        }
+    modules: {
+        fs,
+        path,
+        sucrase,
+        originalFs,
+        shell: electron.shell,
+        ipcRenderer: electron.ipcRenderer,
     },
     async request(url, options = {}, callback) {
         let err;

@@ -1,5 +1,11 @@
 interface VelocityCore {
-    pseudoRequire(path: string): any;
+    modules: {
+        fs: any,
+        path: any,
+        sucrase: any,
+        electron: any,
+        originalFs: any,
+    }
     request(url: string | object | any, options?: object, callback?: (err: any | undefined, response: any, body: any) => void): Promise<any>;
 }
 
