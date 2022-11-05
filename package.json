@@ -15,7 +15,7 @@
     },
     "main": "dist/velocity.asar/main.js",
     "dependencies": {
-        "@velocity-discord/scaffold": "^1.0.6",
+        "@velocity-discord/scaffold": "^1.0.8",
         "electron-devtools-installer": "^3.2.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
