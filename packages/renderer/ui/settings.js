@@ -6,6 +6,7 @@ import AddonCard from "./components/settings/AddonCard";
 import TextInput from "./components/settings/TextInput";
 import Notification from "./components/Notification";
 import SettingPage from "./components/settings/Page";
+import FormItem from "./components/reworks/FormItem";
 import Section from "./components/settings/Section";
 import UpdaterView from "./components/UpdaterView";
 import Switch from "./components/settings/Switch";
@@ -51,7 +52,6 @@ export const initialiseSettings = async () => {
 
         const FormDivider = Components.FormDivider.default;
         const ButtonModules = Components.ButtonModules;
-        const FormItem = Components.FormItem.default;
         const FormText = Components.FormText.default;
         const ModalActions = Actions.ModalActions;
 

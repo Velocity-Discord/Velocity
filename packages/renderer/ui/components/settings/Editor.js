@@ -7,6 +7,7 @@ import Velocity from "../../../modules/velocity";
 import loader from "@monaco-editor/loader";
 
 import FormTitle from "../reworks/FormTitle";
+import RadioGroup from "../reworks/RadioGroup";
 
 const Settings = Stream("config");
 
@@ -190,17 +191,27 @@ export default (props) => {
                                                 placeholder="Name"
                                             />
                                             <FormTitle tag="h5">Language</FormTitle>
-                                            <TextInput
+                                            <RadioGroup
+                                                options={[
+                                                    {
+                                                        name: "JavaScript",
+                                                        value: "js",
+                                                    },
+                                                    {
+                                                        name: "CSS",
+                                                        value: "css",
+                                                    },
+                                                ]}
+                                                value={language}
                                                 onChange={(e) => {
                                                     language = e;
                                                 }}
-                                                placeholder="js/css"
                                             />
                                         </div>
                                     }
                                     onConfirm={() => {
-                                        if (!name) return;
-                                        if (!["js", "css"].includes(language)) return;
+                                        if (!name) return showToast("Name cannot be empty.", { type: "error" });
+                                        if (!["js", "css"].includes(language)) return showToast("Invalid language.", { type: "error" });
 
                                         EDITOR_TABS.push({
                                             name,

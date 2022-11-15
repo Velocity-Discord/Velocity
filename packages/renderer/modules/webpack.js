@@ -210,7 +210,6 @@ globalPromise.then(async () => {
             InviteStore: (await waitFor(["getInvites"])).default,
         },
         Components: {
-            FormItem: await waitFor((m) => m.default?.toString().includes("titleClassName") && m.default?.toString().includes("style")),
             FormText: await waitFor((m) => m.default?.Sizes?.SIZE_32 && m.default?.Colors),
             FormDivider: await waitFor((m) => m.default?.toString().includes("().divider") && m.default?.toString().includes("style")),
             SwitchItem: await waitFor((m) => m.default?.toString().includes("helpdeskArticleId")),
@@ -239,6 +238,7 @@ globalPromise.then(async () => {
             Anchor: await waitFor((m) => m.default?.contextType && m.default?.defaultProps && m.default?.prototype?.renderNonInteractive),
             Markdown: await waitFor((m) => m.default?.rules && m.default?.defaultProps?.parser),
             Text: await waitFor((m) => m.default?.Sizes?.SIZE_10),
+            VarientText: await waitFor((m) => m.x?.name === "p"),
             ModalElements: {
                 _ModalElements,
                 ModalHeader: Object.values(_ModalElements).find((m) => m.toString().includes("wrap") && m.toString().includes("header")),
@@ -276,6 +276,8 @@ globalPromise.then(async () => {
             Anchor: await waitFor(["anchorUnderlineOnHover"]),
             ContextMenu: await waitFor(["menu", "styleFlexible"]),
             Titles: await waitFor(["h1", "h2"]),
+            RadioItems: await waitFor(["item", "collapsibleItem"]),
+            Position: await waitFor(["directionRow"]),
         },
         Actions: {
             ContextMenuActions,
