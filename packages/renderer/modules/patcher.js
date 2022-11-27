@@ -31,13 +31,13 @@ export default class Patcher {
             patch.overWritten = true;
             try {
                 Object.defineProperty(module, method, {
+                    ...descriptor,
                     configurable: true,
                     enumerable: true,
                     get: () => patch.proxy,
                     set: (value) => {
                         patch.originalMethod = value;
                     },
-                    ...descriptor,
                 });
             } catch (e) {
                 Logger.error("Failed to overwrite getter", e);
