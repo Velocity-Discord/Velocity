@@ -3,7 +3,7 @@ import _module from "module";
 import path from "path";
 import fs from "fs";
 
-import BrowserWindow from "./modules/browserWindow";
+import BrowserWindow from "./modules/browserwindow";
 import IPC_EVENTS from "../common/IPC_EVENTS";
 
 import { load } from "@velocity-discord/scaffold";
