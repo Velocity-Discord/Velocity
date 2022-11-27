@@ -1,7 +1,6 @@
+.DS_Store
 node_modules
-**/.DS_Store 
-themes/**/*
-!themes/.exists
-plugins/**/*
-!plugins/.exists
-settings/
+data
+themes
+plugins
+dist

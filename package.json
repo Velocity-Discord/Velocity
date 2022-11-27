@@ -1,34 +1,33 @@
 {
     "name": "velocity",
-    "version": "1.0.12",
-    "description": "A Client Modification for Discord enhanced by Plugins and Themes!",
-    "main": "./dist/velocity.asar",
+    "version": "2.0.0",
+    "description": "A Discord Client modification that allows you to extend discord's functionality and capabilities however you want.",
+    "hash": "6d51ab",
     "author": "TheCommieAxolotl",
     "license": "MIT",
-    "info": {
-        "name": "Velocity",
-        "description": "A Client Modification for Discord enhanced by Plugins and Themes!",
-        "version": "1.0.12",
-        "hash": "e438da",
-        "api": {
-            "version": "1.0.0",
-            "channel": "stable"
-        }
-    },
     "scripts": {
-        "dist": "node ./scripts/dist --",
-        "bump": "npm run bump:hash && npm run bump:version -- --minor",
-        "watch": "node ./scripts/watch.js --",
-        "install": "node ./scripts/install.js --",
-        "uninstall": "node ./scripts/uninstall.js --",
-        "bump:hash": "node ./scripts/bumpHash.js --",
-        "bump:version": "node ./scripts/bumpVersion.js",
-        "stylelint": "stylelint ./src/**/*.css"
+        "dev": "rollup -c -w",
+        "build": "rollup -c",
+        "watch": "node scripts/watch.js",
+        "inject": "node scripts/inject.js",
+        "bundle": "node scripts/bundle.js",
+        "bump:hash": "node scripts/hash.js"
+    },
+    "main": "dist/velocity.asar/main.js",
+    "dependencies": {
+        "@velocity-discord/scaffold": "^1.0.8",
+        "electron-devtools-installer": "^3.2.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "sucrase": "^3.25.0"
     },
     "devDependencies": {
+        "@monaco-editor/loader": "^1.3.2",
+        "@rollup/plugin-json": "^4.1.0",
+        "@rollup/plugin-node-resolve": "^14.1.0",
+        "@rollup/plugin-sucrase": "^4.0.4",
         "asar": "^3.2.0",
-        "stylelint": "^14.11.0",
-        "stylelint-config-prettier": "^9.0.3",
-        "stylelint-config-standard": "^28.0.0"
+        "rollup": "^2.79.0",
+        "rollup-plugin-terser": "^7.0.2"
     }
 }
