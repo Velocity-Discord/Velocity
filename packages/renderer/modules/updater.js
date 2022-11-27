@@ -35,10 +35,12 @@ export const Updater = class {
         let res, obj;
 
         try {
-            res = await VelocityCore.request(this.endpoint + "/latest");
+            res = await VelocityCore.request(this.endpoint + "/latest", {
+                headers: { "User-Agent": "Velocity-Discord" },
+            });
             obj = JSON.parse(res);
         } catch (e) {
-            return this.fail("Failed to fetch latest release.");
+            return this.fail(`Failed to fetch latest release. ${e}`);
         }
 
         const data = {

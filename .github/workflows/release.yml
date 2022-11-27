@@ -38,4 +38,4 @@ jobs:
                   prerelease: false
                   title: "Velocity Automatic Release"
                   files: |
-                      *.asar
+                      dist/velocity.asar
