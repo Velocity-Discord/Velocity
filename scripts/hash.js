@@ -3,7 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
-const package = require("../../package.json");
+const package = require("../package.json");
 
 console.log("\u001b[32m|--------------------------------------|\u001b[0m");
 console.log("\u001b[32m| \u001b[1;94mVelocity\u001b[0m");
