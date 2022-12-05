@@ -1,11 +1,12 @@
 interface VelocityCore {
     modules: {
-        fs: any,
-        path: any,
-        sucrase: any,
-        electron: any,
-        originalFs: any,
-    }
+        fs: typeof import("./packages/preload/modules/nodeModules").fs;
+        path: typeof import("./packages/preload/modules/nodeModules").path;
+        shell: typeof import("./packages/preload/modules/nodeModules").shell;
+        sucrase: typeof import("./packages/preload/modules/nodeModules").sucrase;
+        electron: typeof import("./packages/preload/modules/nodeModules").electron;
+        originalFs: typeof import("./packages/preload/modules/nodeModules").originalFs;
+    };
     request(url: string | object | any, options?: object, callback?: (err: any | undefined, response: any, body: any) => void): Promise<any>;
 }
 

@@ -1,4 +1,4 @@
-import { fs, path, sucrase, electron, originalFs } from "./nodeModules";
+import { fs, path, shell, sucrase, electron, originalFs } from "./nodeModules";
 import pkj from "../../../package.json";
 import https from "https";
 
@@ -10,9 +10,9 @@ export default {
     modules: {
         fs,
         path,
+        shell,
         sucrase,
         originalFs,
-        shell: electron.shell,
         ipcRenderer: electron.ipcRenderer,
     },
     async request(url, options = {}, callback) {
