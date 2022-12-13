@@ -44,7 +44,9 @@ export const Updater = class {
         }
 
         const data = {
-            version: obj.tag_name.startsWith("v") ? obj.tag_name.slice(1) : obj.tag_name,
+            version: obj.name.replace("[Release] ", "").replace(/^v/, ""),
+            tag_name: obj.tag_name,
+            name: obj.name,
             notes: obj.body,
             asar: obj.assets.find((a) => a.name.endsWith(".asar")),
             timestamp: new Date(obj.published_at),
