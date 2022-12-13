@@ -35,15 +35,11 @@ jobs:
             - name: Get changes since last release
               id: changes
               uses: simbo/changes-since-last-release-action@v1
-              with:
-                  github-token: ${{ secrets.GITHUB_TOKEN }}
-                  branch: main
-                  labels: Release
 
             - name: Release Stuff
               if: "contains(github.event.head_commit.message, '[Release] ')"
               run: |
-                  gh release create latest dist/velocity.asar
+                  gh release upload latest --clobber dist/velocity.asar
                   gh release edit latest --title "${{ github.event.head_commit.message }}" --notes "${{ steps.changes.outputs.log }}"
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
