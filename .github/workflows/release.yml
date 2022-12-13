@@ -30,19 +30,19 @@ jobs:
             - name: Package Asar
               run: pnpm bundle
 
-             - name: Get Version
+            - name: Get Version
               if: "contains(github.event.head_commit.message, '[Release] ')"
               uses: sergeysova/jq-action@v2
               id: version
               with:
-                cmd: 'jq -r .version package.json'
+                  cmd: "jq -r .version package.json"
 
             - name: Get Hash
               if: "contains(github.event.head_commit.message, '[Release] ')"
               uses: sergeysova/jq-action@v2
               id: hash
               with:
-                cmd: 'jq -r .hash package.json'
+                  cmd: "jq -r .hash package.json"
 
             - name: Release Stuff
               if: "contains(github.event.head_commit.message, '[Release] ')"
