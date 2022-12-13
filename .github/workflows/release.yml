@@ -30,12 +30,15 @@ jobs:
             - name: Package Asar
               run: pnpm bundle
 
-            - uses: "marvinpinto/action-automatic-releases@latest"
+            - name: Get Info
+              run: |
+                  echo "version=echo ${{github.event.head_commit.message}} | sed 's/[Release]//'" >> $GITHUB_ENV
+
+            - name: Release Stuff
               if: "contains(github.event.head_commit.message, '[Release]')"
-              with:
-                  repo_token: "${{ secrets.GITHUB_TOKEN }}"
-                  automatic_release_tag: "${{ github.event.head_commit.message }}"
-                  prerelease: false
-                  title: "Velocity Automatic Release"
-                  files: |
-                      dist/velocity.asar
+              run: |
+                  gh release upload latest --clobber dist/velocity.asar
+                  gh release edit latest --title $VERSION
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  VERSION: ${{ env.version }}
