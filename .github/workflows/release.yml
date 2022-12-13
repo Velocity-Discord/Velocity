@@ -34,7 +34,7 @@ jobs:
               if: "contains(github.event.head_commit.message, '[Release]')"
               with:
                   repo_token: "${{ secrets.GITHUB_TOKEN }}"
-                  automatic_release_tag: "latest"
+                  automatic_release_tag: "${{ github.event.head_commit.message }} | sed 's/\[Release\] v//g'"
                   prerelease: false
                   title: "Velocity Automatic Release"
                   files: |
