@@ -34,7 +34,7 @@ jobs:
               if: "contains(github.event.head_commit.message, '[Release]')"
               with:
                   repo_token: "${{ secrets.GITHUB_TOKEN }}"
-                  tag_name: "${{ github.event.head_commit.message }}"
+                  automatic_release_tag: "${{ github.event.head_commit.message }}"
                   prerelease: false
                   title: "Velocity Automatic Release"
                   files: |
