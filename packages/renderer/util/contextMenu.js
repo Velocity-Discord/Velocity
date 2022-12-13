@@ -18,18 +18,18 @@ injectComponentStyle("context-menu", {
 });
 
 const Menu = (props) => {
-    const { Components } = WebpackModules.common;
+    const { Classes } = WebpackModules.common;
 
-    const ContextMenuClasses = Components.ContextMenuClasses;
+    const ContextMenuClasses = Classes.ContextMenu;
 
     return <div className={`velocity-context-menu ${ContextMenuClasses.scroller} ${ContextMenuClasses.menu} ${ContextMenuClasses.styleFlexible}`}>{props.children}</div>;
 };
 
 const MenuItem = (props) => {
-    const { Components, Actions } = WebpackModules.common;
+    const { Classes, Actions } = WebpackModules.common;
 
     const ContextMenuActions = Actions.ContextMenuActions;
-    const ContextMenuClasses = Components.ContextMenuClasses;
+    const ContextMenuClasses = Classes.ContextMenu;
 
     const { type, label, action, color, checked, disabled, onChange, icon } = props;
 

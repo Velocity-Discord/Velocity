@@ -253,7 +253,6 @@ globalPromise.then(async () => {
             Alert: await waitFor(
                 (m) => m.default?.toString().includes("title") && m.default?.toString().includes("body") && m.default?.toString().includes("secondaryConfirmText") && !m.default?.toString().includes("DONT_ASK_AGAIN")
             ),
-            ContextMenuClasses: await waitFor(["menu", "styleFlexible"]),
         },
         Constants: {},
         Icons: {
@@ -274,7 +273,7 @@ globalPromise.then(async () => {
         },
         Classes: {
             Anchor: await waitFor(["anchorUnderlineOnHover"]),
-            ContextMenu: await waitFor(["menu", "styleFlexible"]),
+            ContextMenu: await waitFor(["menu", "iconContainer"]),
             Titles: await waitFor(["h1", "h2"]),
             RadioItems: await waitFor(["item", "collapsibleItem"]),
             Position: await waitFor(["directionRow"]),
