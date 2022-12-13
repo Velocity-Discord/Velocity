@@ -39,7 +39,8 @@ jobs:
             - name: Release Stuff
               if: "contains(github.event.head_commit.message, '[Release] ')"
               run: |
-                  gh release upload latest --clobber dist/velocity.asar
+                  gh release delete latest --yes
+                  gh release create latest dist/velocity.asar
                   gh release edit latest --title "${{ github.event.head_commit.message }}" --notes "${{ steps.changes.outputs.log }}"
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
