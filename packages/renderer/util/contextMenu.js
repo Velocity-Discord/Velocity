@@ -22,7 +22,7 @@ const Menu = (props) => {
 
     const ContextMenuClasses = Classes.ContextMenu;
 
-    return <div className={`velocity-context-menu ${ContextMenuClasses.scroller} ${ContextMenuClasses.menu} ${ContextMenuClasses.styleFlexible}`}>{props.children}</div>;
+    return <div className={`velocity-context-menu ${ContextMenuClasses.scroller} ${ContextMenuClasses.menu} ${ContextMenuClasses.flexible}`}>{props.children}</div>;
 };
 
 const MenuItem = (props) => {
