@@ -2,7 +2,7 @@
     "name": "velocity",
     "version": "2.0.2",
     "description": "A Discord Client modification that allows you to extend discord's functionality and capabilities however you want.",
-    "hash": "d35648",
+    "hash": "508ae2",
     "author": "TheCommieAxolotl",
     "license": "MIT",
     "scripts": {
