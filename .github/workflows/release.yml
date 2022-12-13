@@ -30,26 +30,10 @@ jobs:
             - name: Package Asar
               run: pnpm bundle
 
-            - name: Get Version
-              if: "contains(github.event.head_commit.message, '[Release] ')"
-              uses: sergeysova/jq-action@v2
-              id: version
-              with:
-                  cmd: "jq -r .version package.json"
-
-            - name: Get Hash
-              if: "contains(github.event.head_commit.message, '[Release] ')"
-              uses: sergeysova/jq-action@v2
-              id: hash
-              with:
-                  cmd: "jq -r .hash package.json"
-
             - name: Release Stuff
               if: "contains(github.event.head_commit.message, '[Release] ')"
               run: |
                   gh release upload latest --clobber dist/velocity.asar
-                  gh release edit latest --title $VERSION --notes "Release $VERSION ($HASH)"
+                  gh release edit latest --title "${{ github.event.head_commit.message }}""
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  VERSION: ${{ steps.version.outputs.result }}
-                  HASH: ${{ steps.hash.outputs.result }}
