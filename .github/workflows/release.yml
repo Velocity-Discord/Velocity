@@ -51,5 +51,5 @@ jobs:
                   gh release edit latest --title $VERSION --notes "Release $VERSION ($HASH)"
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  VERSION: ${{ steps.version.outputs.result.value }}
-                  HASH: ${{ steps.hash.outputs.result.value }}
+                  VERSION: ${{ steps.version.outputs.result }}
+                  HASH: ${{ steps.hash.outputs.result }}
