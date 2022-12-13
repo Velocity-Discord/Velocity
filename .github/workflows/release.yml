@@ -42,4 +42,4 @@ jobs:
                   gh release edit latest --title $VERSION
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  VERSION: ${{ env.version }}
+                  VERSION: testing
