@@ -192,7 +192,7 @@ export default () => {
                     <div className="velocity-updater-title">{title}</div>
                     <div className="velocity-updater-subtitle">
                         {state === "available"
-                            ? `Version ${updateInfo.version} is available`
+                            ? `Version ${updateInfo.version} is available.`
                             : [
                                   `Last checked`,
                                   <Tooltip

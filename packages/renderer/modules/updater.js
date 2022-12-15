@@ -55,10 +55,10 @@ export const Updater = class {
         if (!data.asar) return this.fail("Failed to find asar in latest release.");
 
         this.updateInfo = data;
-        this.state = "available";
 
         if (data.version !== VelocityCore.Meta.version) {
             this.updateAvailable = true;
+            this.state = "available";
             Notifications.showNotification({
                 title: "Update Available",
                 content: `A new update is available! Click here to download it.`,
@@ -71,6 +71,9 @@ export const Updater = class {
                     },
                 ],
             });
+        } else {
+            this.updateAvailable = false;
+            this.state = "no-updates";
         }
 
         return data;
