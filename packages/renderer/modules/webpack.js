@@ -228,7 +228,7 @@ globalPromise.then(async () => {
             ColorPickerModules: {
                 _ColorPickerModules,
                 default: _ColorPickerModules.default,
-                CustomColorPicker: Object.values(_ColorPickerModules).find((m) => m.toString().includes("handleHexChange")),
+                CustomColorPicker: Object.values(_ColorPickerModules).find((m) => typeof m === "object"),
                 CustomColorButton: Object.values(_ColorPickerModules).find((m) => m.prototype?.render?.toString().includes("customColor") && m.prototype?.render?.toString().includes("isCustom")),
                 DefaultColorButton: Object.values(_ColorPickerModules).find((m) => m.prototype?.render?.toString().includes("isDefault")),
             },
