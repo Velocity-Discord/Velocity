@@ -1,12 +1,13 @@
-import Velocity from "../../../modules/velocity";
 import { injectComponentStyle } from "../../../util/components";
 import { useContextMenu } from "../../../util/contextMenu";
 import { showToast } from "../../../modules/notifications";
+import Velocity from "../../../modules/velocity";
 
+import ColorPicker from "../../../ui/components/settings/ColorPicker";
+import TextInput from "../../../ui/components/settings/TextInput";
+import SwitchEle from "../../../ui/components/reworks/Switch";
 import Switch from "../../../ui/components/settings/Switch";
 import Slider from "../../../ui/components/settings/Slider";
-import TextInput from "../../../ui/components/settings/TextInput";
-import ColorPicker from "../../../ui/components/settings/ColorPicker";
 import FormTitle from "../reworks/FormTitle";
 
 const { WebpackModules, AddonManager } = Velocity;
@@ -80,7 +81,6 @@ injectComponentStyle("addon-card", {
 export default (props) => {
     const { Components, Icons } = WebpackModules.common;
 
-    const SwitchEle = Components.Switch.default;
     const Markdown = Components.Markdown.default;
     const PanelButton = Components.PanelButton.default;
 

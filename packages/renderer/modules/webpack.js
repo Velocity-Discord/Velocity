@@ -234,7 +234,6 @@ globalPromise.then(async () => {
             },
             Slider: await waitFor(Filters.byPrototypeFields(["renderMark"])),
             PanelButton: await waitFor((m) => m.default?.toString().includes("onContextMenu") && m.default?.toString().includes("tooltipText")),
-            Switch: await waitFor((m) => m.default?.toString().includes("PRIMARY_DARK_400") && m.default?.toString().includes("STATUS_GREEN_600") && m.default?.toString().includes("checkbox")),
             Anchor: await waitFor((m) => m.default?.contextType && m.default?.defaultProps && m.default?.prototype?.renderNonInteractive),
             Markdown: await waitFor((m) => m.default?.rules && m.default?.defaultProps?.parser),
             Text: await waitFor((m) => m.default?.Sizes?.SIZE_10),
