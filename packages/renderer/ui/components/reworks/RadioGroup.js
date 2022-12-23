@@ -6,7 +6,7 @@ export default (props) => {
 
     const [active, setActive] = React.useState(value || 0);
 
-    const Text = Components.VarientText.x;
+    const Text = Components.Text.default;
     const ItemClasses = Classes.RadioItems;
     const PositionClasses = Classes.Position;
 
@@ -37,7 +37,7 @@ export default (props) => {
                                 </svg>
                             </div>
                             <div className={ItemClasses.info}>
-                                <Text color="none" variant="text-md/medium">
+                                <Text size={Text.Sizes.SIZE_16} color={""}>
                                     {option.name}
                                 </Text>
                             </div>

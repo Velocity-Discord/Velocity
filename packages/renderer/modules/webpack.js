@@ -237,7 +237,6 @@ globalPromise.then(async () => {
             Anchor: await waitFor((m) => m.default?.contextType && m.default?.defaultProps && m.default?.prototype?.renderNonInteractive),
             Markdown: await waitFor((m) => m.default?.rules && m.default?.defaultProps?.parser),
             Text: await waitFor((m) => m.default?.Sizes?.SIZE_10),
-            VarientText: await waitFor((m) => m.x?.name === "p"),
             ModalElements: {
                 _ModalElements,
                 ModalHeader: Object.values(_ModalElements).find((m) => m.toString().includes("wrap") && m.toString().includes("header")),
