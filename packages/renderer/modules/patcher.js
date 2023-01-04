@@ -9,41 +9,39 @@ export default class Patcher {
 
     patches = [];
 
-    _buildPatch(type, module, method, options) {
+    _buildPatch(type, mod, method, options) {
         const patch = {
             type,
-            module,
+            module: mod,
             method,
             options,
             id: this.id,
             revert: () => {
-                this.unpatch(module, method);
+                this.unpatch(mod, method);
             },
             proxy: null,
-            originalMethod: module[method],
+            originalMethod: mod[method],
         };
 
         patch.proxy = this._buildProxy(patch);
 
-        const descriptor = Object.getOwnPropertyDescriptor(module, method);
+        const descriptor = Object.getOwnPropertyDescriptor(mod, method);
 
         if (descriptor && descriptor.get) {
             patch.overWritten = true;
             try {
-                Object.defineProperty(module, method, {
-                    ...descriptor,
+                Object.defineProperty(mod, method, {
                     configurable: true,
                     enumerable: true,
+                    ...descriptor,
                     get: () => patch.proxy,
-                    set: (value) => {
-                        patch.originalMethod = value;
-                    },
+                    set: (value) => (patch.originalMethod = value),
                 });
             } catch (e) {
                 Logger.error("Failed to overwrite getter", e);
             }
         } else {
-            module[method] = patch.proxy;
+            mod[method] = patch.proxy;
         }
 
         this.patches.push(patch);
@@ -82,19 +80,19 @@ export default class Patcher {
         };
     }
 
-    unpatch(module, method) {
-        const patch = this.patches.find((p) => p.module === module && p.method === method);
+    unpatch(mod, method) {
+        const patch = this.patches.find((p) => p.module === mod && p.method === method);
 
         if (!patch) return;
 
         if (patch.overWritten) {
-            Object.defineProperty(module, method, {
-                ...Object.getOwnPropertyDescriptor(module, method),
+            Object.defineProperty(mod, method, {
+                ...Object.getOwnPropertyDescriptor(mod, method),
                 get: () => patch.originalMethod,
                 set: undefined,
             });
         } else {
-            module[method] = patch.originalMethod;
+            mod[method] = patch.originalMethod;
         }
 
         this.patches.splice(this.patches.indexOf(patch), 1);
