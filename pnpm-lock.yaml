@@ -5,7 +5,7 @@ specifiers:
   '@rollup/plugin-json': ^4.1.0
   '@rollup/plugin-node-resolve': ^14.1.0
   '@rollup/plugin-sucrase': ^4.0.4
-  '@velocity-discord/scaffold': ^1.0.9
+  '@velocity-discord/scaffold': ^1.1.0
   asar: ^3.2.0
   electron-devtools-installer: ^3.2.0
   react: ^18.2.0
@@ -15,7 +15,7 @@ specifiers:
   sucrase: ^3.29.0
 
 dependencies:
-  '@velocity-discord/scaffold': 1.0.9
+  '@velocity-discord/scaffold': 1.1.0
   electron-devtools-installer: 3.2.0
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
@@ -181,8 +181,8 @@ packages:
       '@types/node': 18.11.9
     dev: true
 
-  /@velocity-discord/scaffold/1.0.9:
-    resolution: {integrity: sha512-6OizozxIMPy1veA5dF7zTF4UHeqiugDGY4/Rc1hHm1okYHmqaUc9M3UpF5wHvXX/W7P9PyvLgbS5VmLyuQfUZA==}
+  /@velocity-discord/scaffold/1.1.0:
+    resolution: {integrity: sha512-UmBGvQIXLKG7y0JgPp5gzxgcz/uJC/C3iI18OBCqF3UoRUTDPW/cHBuzk5oGhfFj8OUZfDHefR8HQ7/eSbAXOw==}
     dev: false
 
   /acorn/8.8.1:
