@@ -25,7 +25,7 @@ const Menu = (props) => {
     return <div className={`velocity-context-menu ${ContextMenuClasses.scroller} ${ContextMenuClasses.menu} ${ContextMenuClasses.flexible}`}>{props.children}</div>;
 };
 
-const MenuItem = (props) => {
+export const MenuItem = (props) => {
     const { Classes, Actions } = WebpackModules.common;
 
     const ContextMenuActions = Actions.ContextMenuActions;
@@ -98,6 +98,12 @@ const MenuItem = (props) => {
                 </div>
             );
     }
+};
+
+export const buildMenuItem = (options = {}) => {
+    const { type, label, action, color, checked, disabled, onChange, icon } = options;
+
+    return <MenuItem type={type} label={label} action={action} color={color} checked={checked} disabled={disabled} onChange={onChange} icon={icon} />;
 };
 
 export const buildContextMenu = (items) => {

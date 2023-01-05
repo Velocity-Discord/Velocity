@@ -2,6 +2,7 @@ import { showNotification, showToast, showConfirmationModal } from "./notificati
 import { Updater, AddonUpdater } from "./updater";
 import { installAddon } from "./actions";
 import { waitUntil } from "../util/time";
+import * as ContextMenu from "../util/contextMenu";
 import * as DataStore from "./datastore";
 import * as Styling from "./styling";
 import * as addons from "./addons";
@@ -23,6 +24,7 @@ export default {
     Styling,
     Patcher,
     DataStore,
+    ContextMenu,
     Logger: logger,
     AddonManager: {
         ...addons,
