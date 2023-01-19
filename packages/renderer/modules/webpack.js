@@ -234,7 +234,7 @@ globalPromise.then(async () => {
             },
             Slider: await waitFor(Filters.byPrototypeFields(["renderMark"])),
             PanelButton: await waitFor((m) => m.default?.toString().includes("onContextMenu") && m.default?.toString().includes("tooltipText")),
-            Anchor: await waitFor((m) => m.default?.contextType && m.default?.defaultProps && m.default?.prototype?.renderNonInteractive),
+            Anchor: await waitFor((m) => m.P3?.contextType && m.P3?.defaultProps && m.P3?.prototype?.renderNonInteractive),
             Markdown: await waitFor((m) => m.default?.rules && m.default?.defaultProps?.parser),
             Text: await waitFor((m) => m.default?.Sizes?.SIZE_10),
             ModalElements: {
