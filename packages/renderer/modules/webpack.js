@@ -171,6 +171,16 @@ globalPromise.then(async () => {
         }
     });
 
+    const _FormModules = await waitFor((m) => {
+        if (m.default) return false;
+
+        for (const k of Object.keys(m)) {
+            if (!m[k]) continue;
+            if (typeof m[k].toString !== "function") continue;
+            if (m[k].toString().includes("().divider") && m[k].toString().includes("className")) return true;
+        }
+    });
+
     const _ColorPickerModules = await waitFor((m) => m.default?.toString().includes("customColor"));
 
     const ContextMenuActions = {};
@@ -210,13 +220,14 @@ globalPromise.then(async () => {
             InviteStore: (await waitFor(["getInvites"])).default,
         },
         Components: {
+            _FormModules,
             FormText: await waitFor((m) => m.default?.Sizes?.SIZE_32 && m.default?.Colors),
-            FormDivider: await waitFor((m) => m.default?.toString().includes("().divider") && m.default?.toString().includes("style")),
-            SwitchItem: await waitFor((m) => m.default?.toString().includes("helpdeskArticleId")),
+            FormDivider: Object.values(_FormModules).find((k) => k?.toString().includes("divider")),
+            TextInput: Object.values(_FormModules).find((k) => k?.Sizes?.MINI && k?.defaultProps),
+            Slider: Object.values(_FormModules).find((k) => k?.getDerivedStateFromProps && k?.defaultProps?.stickToMarkers),
+            SwitchItem: Object.values(_FormModules).find((k) => k?.toString?.().includes("e.note") && k?.toString?.().includes("focusTarget")),
             Popout: await waitFor((m) => m.default?.prototype?.render?.toString().includes("shouldShowPopout")),
             ConfirmModal: await waitFor((m) => m.default?.toString().includes("confirmText")),
-            TextInput: await waitFor((m) => m.default?.prototype?.render?.toString().includes("inputClassName") && m.default?.prototype?.render?.toString().includes("inputPrefix")),
-            TextForm: await waitFor((m) => m.default?.prototype?.render?.toString().includes("minLength")),
             TooltipContainer: await waitFor((m) => m.default?.toString().includes("shouldShowTooltip") && m.default?.Positions),
             ButtonModules: {
                 _ButtonModules,
@@ -232,7 +243,6 @@ globalPromise.then(async () => {
                 CustomColorButton: Object.values(_ColorPickerModules).find((m) => m.prototype?.render?.toString().includes("customColor") && m.prototype?.render?.toString().includes("isCustom")),
                 DefaultColorButton: Object.values(_ColorPickerModules).find((m) => m.prototype?.render?.toString().includes("isDefault")),
             },
-            Slider: await waitFor(Filters.byPrototypeFields(["renderMark"])),
             PanelButton: await waitFor((m) => m.default?.toString().includes("onContextMenu") && m.default?.toString().includes("tooltipText")),
             Anchor: await waitFor((m) => m.P3?.contextType && m.P3?.defaultProps && m.P3?.prototype?.renderNonInteractive),
             Markdown: await waitFor((m) => m.default?.rules && m.default?.defaultProps?.parser),
