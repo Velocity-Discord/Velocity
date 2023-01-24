@@ -147,7 +147,7 @@ export default (props) => {
     let selected = Settings.editorTabs[active];
 
     const PanelButton = Components.PanelButton.default;
-    const TextInput = Components.TextInput.default;
+    const TextInput = Components.TextInput;
     const ModalActions = Actions.ModalActions;
     const Alert = Components.Alert.default;
 

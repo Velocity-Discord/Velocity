@@ -6,7 +6,7 @@ import FormItem from "../reworks/FormItem";
 export default (props) => {
     const { Components } = WebpackModules.common;
 
-    const SwitchItem = Components.SwitchItem.default;
+    const SwitchItem = Components.SwitchItem;
 
     const { name, note, setting, action, container = "config" } = props;
 

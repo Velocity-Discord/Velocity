@@ -50,7 +50,7 @@ export const initialiseSettings = async () => {
 
         const { Components, Classes, Actions } = WebpackModules.common;
 
-        const FormDivider = Components.FormDivider.default;
+        const FormDivider = Components.FormDivider;
         const ButtonModules = Components.ButtonModules;
         const FormText = Components.FormText.default;
         const ModalActions = Actions.ModalActions;

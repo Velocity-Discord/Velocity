@@ -8,7 +8,7 @@ export default (props) => {
     const { Components } = WebpackModules.common;
 
     const FormText = Components.FormText.default;
-    const TextInput = Components.TextInput.default;
+    const TextInput = Components.TextInput;
 
     const { name, note, setting, action, disabled, maxLength, type, placeholder, container = "config" } = props;
 

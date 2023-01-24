@@ -10,6 +10,7 @@ import webpack from "../modules/webpack";
 import logger from "../util/logger";
 import Patcher from "./patcher";
 import Plugin from "./pluginapi";
+import socket from "./socket";
 
 webpack.globalPromise.then(async () => {
     window.React = await webpack.waitFor(["createElement", "useEffect"]);
@@ -30,6 +31,7 @@ export default {
         ...addons,
         installAddon,
     },
+    WebSocket: socket,
     WebpackModules: webpack,
     Notifications: {
         showNotification,

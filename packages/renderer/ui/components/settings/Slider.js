@@ -8,7 +8,7 @@ export default (props) => {
     const { Components } = WebpackModules.common;
 
     const FormText = Components.FormText.default;
-    const Slider = Components.Slider.default;
+    const Slider = Components.Slider;
 
     const { name, note, setting, action, disabled = false, minValue = 0, maxValue = 100, handleSize = 10, units = "", container = "config", stickToMarkers } = props;
 
