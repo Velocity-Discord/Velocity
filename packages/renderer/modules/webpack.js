@@ -181,6 +181,16 @@ globalPromise.then(async () => {
         }
     });
 
+    const _FormModulesAgain = await waitFor((m) => {
+        if (m.default) return false;
+
+        for (const k of Object.keys(m)) {
+            if (!m[k]) continue;
+            if (typeof m[k].toString !== "function") continue;
+            if (m[k].toString().includes("sortedMarkers") && m[k].toString().includes("moveGrabber")) return true;
+        }
+    });
+
     const _ColorPickerModules = await waitFor((m) => m.default?.toString().includes("customColor"));
 
     const ContextMenuActions = {};
@@ -204,96 +214,226 @@ globalPromise.then(async () => {
     });
 
     common = {
-        Dispatcher: (await waitFor(["dispatch", "isDispatching"])).default,
-        React: await waitFor(["createElement", "useEffect"]),
-        ReactDOM: await waitFor(["render", "hydrate"]),
-        ReactSpring: await waitFor(["useSpring", "animated"]),
+        get Dispatcher() {
+            return findModule(["dispatch", "isDispatching"]).default;
+        },
+        get React() {
+            return findModule(["createElement", "useEffect"]);
+        },
+        get ReactDOM() {
+            return findModule(["render", "hydrate"]);
+        },
+        get ReactSpring() {
+            return findModule(["useSpring", "animated"]);
+        },
         Stores: {
-            MessageStore: (await waitFor(["getMessage", "getMessages"])).default,
-            SelectedGuildStore: (await waitFor(["getLastSelectedGuildId"])).default,
-            SelectedChannelStore: (await waitFor(["getLastSelectedChannelId"])).default,
-            UserStore: (await waitFor(["getCurrentUser"])).default,
-            RelationshipStore: (await waitFor(["isBlocked"])).default,
-            GuildStore: (await waitFor(["getGuild"])).default,
-            GuildMemberStore: (await waitFor(["getMember"])).default,
-            ChannelStore: (await waitFor(["hasChannel"])).default,
-            InviteStore: (await waitFor(["getInvites"])).default,
+            get MessageStore() {
+                return findModule(["getMessage", "getMessages"]).default;
+            },
+            get SelectedGuildStore() {
+                return findModule(["getLastSelectedGuildId"]).default;
+            },
+            get SelectedChannelStore() {
+                return findModule(["getLastSelectedChannelId"]).default;
+            },
+            get UserStore() {
+                return findModule(["getCurrentUser"]).default;
+            },
+            get RelationshipStore() {
+                return findModule(["isBlocked"]).default;
+            },
+            get GuildStore() {
+                return findModule(["getGuild"]).default;
+            },
+            get GuildMemberStore() {
+                return findModule(["getMember"]).default;
+            },
+            get ChannelStore() {
+                return findModule(["hasChannel"]).default;
+            },
+            get InviteStore() {
+                return findModule(["getInvites"]).default;
+            },
         },
         Components: {
             _FormModules,
-            FormText: await waitFor((m) => m.default?.Sizes?.SIZE_32 && m.default?.Colors),
-            FormDivider: Object.values(_FormModules).find((k) => k?.toString().includes("divider")),
-            TextInput: Object.values(_FormModules).find((k) => k?.Sizes?.MINI && k?.defaultProps),
-            Slider: Object.values(_FormModules).find((k) => k?.getDerivedStateFromProps && k?.defaultProps?.keyboardStep),
-            SwitchItem: Object.values(_FormModules).find((k) => k?.toString?.().includes("e.note") && k?.toString?.().includes("focusTarget")),
-            Popout: await waitFor((m) => m.default?.prototype?.render?.toString().includes("shouldShowPopout")),
-            ConfirmModal: await waitFor((m) => m.default?.toString().includes("confirmText")),
-            TooltipContainer: await waitFor((m) => m.default?.toString().includes("shouldShowTooltip") && m.default?.Positions),
+            _FormModulesAgain,
+            get FormText() {
+                return findModule((m) => m.default?.Sizes?.SIZE_32 && m.default?.Colors);
+            },
+            get FormDivider() {
+                return Object.values(_FormModules).find((k) => k?.toString().includes("divider"));
+            },
+            get TextInput() {
+                return findModule((m) => {
+                    for (const i of Object.values(m)) {
+                        if (i.Sizes?.MINI && i.defaultProps) return true;
+                    }
+                });
+            },
+            get Slider() {
+                return Object.values(_FormModulesAgain).find((k) => k?.toString?.().includes("moveGrabber") && k?.toString?.().includes("sortedMarkers"));
+            },
+            get SwitchItem() {
+                return Object.values(_FormModulesAgain).find((k) => k?.toString?.().includes("e.note") && k?.toString?.().includes("focusTarget"));
+            },
+            get Popout() {
+                return findModule((m) => m.default?.prototype?.render?.toString().includes("shouldShowPopout"));
+            },
+            get ConfirmModal() {
+                return findModule((m) => m.default?.toString().includes("confirmText"));
+            },
+            get TooltipContainer() {
+                return findModule((m) => m.default?.toString().includes("shouldShowTooltip") && m.default?.Positions);
+            },
             ButtonModules: {
                 _ButtonModules,
-                default: Object.values(_ButtonModules).find((m) => m.toString().includes("borderColor") && m.toString().includes("e.grow")),
-                ButtonColors: Object.values(_ButtonModules).find((m) => m.BRAND_NEW),
-                ButtonLooks: Object.values(_ButtonModules).find((m) => m.FILLED),
-                ButtonSizes: Object.values(_ButtonModules).find((m) => m.TINY),
+                get default() {
+                    return Object.values(_ButtonModules).find((m) => m.toString().includes("borderColor") && m.toString().includes("e.grow"));
+                },
+                get ButtonColors() {
+                    return Object.values(_ButtonModules).find((m) => m.BRAND_NEW);
+                },
+                get ButtonLooks() {
+                    return Object.values(_ButtonModules).find((m) => m.FILLED);
+                },
+                get ButtonSizes() {
+                    return Object.values(_ButtonModules).find((m) => m.TINY);
+                },
             },
             ColorPickerModules: {
                 _ColorPickerModules,
-                default: _ColorPickerModules.default,
-                CustomColorPicker: Object.values(_ColorPickerModules).find((m) => typeof m === "object"),
-                CustomColorButton: Object.values(_ColorPickerModules).find((m) => m.prototype?.render?.toString().includes("customColor") && m.prototype?.render?.toString().includes("isCustom")),
-                DefaultColorButton: Object.values(_ColorPickerModules).find((m) => m.prototype?.render?.toString().includes("isDefault")),
+                get default() {
+                    return _ColorPickerModules.default;
+                },
             },
-            PanelButton: await waitFor((m) => m.default?.toString().includes("onContextMenu") && m.default?.toString().includes("tooltipText")),
-            Anchor: await waitFor((m) => m.P3?.contextType && m.P3?.defaultProps && m.P3?.prototype?.renderNonInteractive),
-            Markdown: await waitFor((m) => m.default?.rules && m.default?.defaultProps?.parser),
-            Text: await waitFor((m) => m.default?.Sizes?.SIZE_10),
+            get CustomColorPicker() {
+                return Object.values(_ColorPickerModules).find((m) => typeof m === "object");
+            },
+            get CustomColorButton() {
+                return Object.values(_ColorPickerModules).find((m) => m.prototype?.render?.toString().includes("customColor") && m.prototype?.render?.toString().includes("isCustom"));
+            },
+            get DefaultColorButton() {
+                return Object.values(_ColorPickerModules).find((m) => m.prototype?.render?.toString().includes("isDefault"));
+            },
+            get PanelButton() {
+                return findModule((m) => m.default?.toString().includes("onContextMenu") && m.default?.toString().includes("tooltipText"));
+            },
+            get Anchor() {
+                return findModule((m) => m.P3?.contextType && m.P3?.defaultProps && m.P3?.prototype?.renderNonInteractive);
+            },
+            get Markdown() {
+                return findModule((m) => m.default?.rules && m.default?.defaultProps?.parser);
+            },
+            get Text() {
+                return findModule((m) => m.default?.Sizes?.SIZE_10);
+            },
+
             ModalElements: {
                 _ModalElements,
-                ModalHeader: Object.values(_ModalElements).find((m) => m.toString().includes("wrap") && m.toString().includes("header")),
-                ModalFooter: Object.values(_ModalElements).find((m) => m.toString().includes("wrap") && m.toString().includes("footer")),
-                ModalRoot: Object.values(_ModalElements).find((m) => m.toString().includes("size") && m.toString().includes("dialog")),
-                ModalContent: Object.values(_ModalElements).find((m) => m.toString().includes("scrollerRef") && m.toString().includes("content")),
-                CloseButton: Object.values(_ModalElements).find((m) => m.toString().includes("BLANK") && m.toString().includes("withCircleBackground")),
+                get ModalHeader() {
+                    return Object.values(_ModalElements).find((m) => m.toString().includes("wrap") && m.toString().includes("header"));
+                },
+                get ModalFooter() {
+                    return Object.values(_ModalElements).find((m) => m.toString().includes("wrap") && m.toString().includes("footer"));
+                },
+                get ModalRoot() {
+                    return Object.values(_ModalElements).find((m) => m.toString().includes("size") && m.toString().includes("dialog"));
+                },
+                get ModalContent() {
+                    return Object.values(_ModalElements).find((m) => m.toString().includes("scrollerRef") && m.toString().includes("content"));
+                },
+                get CloseButton() {
+                    return Object.values(_ModalElements).find((m) => m.toString().includes("BLANK") && m.toString().includes("withCircleBackground"));
+                },
             },
-            EmptyState: await waitFor(
-                (m) => m.default?.toString().includes("onCTAClick") && m.default?.toString().includes("description") && m.default?.toString().includes("artURL") && !m.default?.toString().includes("stream")
-            ),
-            Alert: await waitFor(
-                (m) => m.default?.toString().includes("title") && m.default?.toString().includes("body") && m.default?.toString().includes("secondaryConfirmText") && !m.default?.toString().includes("DONT_ASK_AGAIN")
-            ),
+            get EmptyState() {
+                return findModule(
+                    (m) => m.default?.toString().includes("onCTAClick") && m.default?.toString().includes("description") && m.default?.toString().includes("artURL") && !m.default?.toString().includes("stream")
+                );
+            },
+            get Alert() {
+                return findModule(
+                    (m) => m.default?.toString().includes("title") && m.default?.toString().includes("body") && m.default?.toString().includes("secondaryConfirmText") && !m.default?.toString().includes("DONT_ASK_AGAIN")
+                );
+            },
         },
         Constants: {},
         Icons: {
-            Pin: await waitFor((m) => m.default?.toString().includes("M19 3H4.99C3.88 3 3.01 3.89 3.01 5L3")),
-            Gear: await waitFor((m) => m.default?.toString().includes("M14 7V9C14 9 12.5867 9 12.5733 9.00667C12.42 9.58667 12.1733 10.1267 11.84 10.6067L12.74 11.5067L11")),
-            Plus: await waitFor((m) => m.default?.toString().includes("15 10 10 10 10 15 8 15 8 1")),
-            Pencil: await waitFor((m) => m.default?.toString().includes("M19.2929 9.8299L19.9409 9.18278C21.353")),
-            Play: await waitFor((m) => m.default?.toString().includes("0 0 0 14 11 7")),
-            Trash: await waitFor((m) => m.default?.toString().includes("M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z")),
-            Rocket: await waitFor((m) => m.default?.toString().includes("M4.92871 13.4149L10.5857 19.0709L18.363")),
-            Link: await waitFor((m) => m.default?.toString().includes("M10.59 13.41c.41.39.41 1.03 0 1.42-.39.39-1.0")),
-            PersonAdd: await waitFor((m) => m.default?.toString().includes("M6.5 8.00667C7.88 8.00667 9 6.88667 9 5.50667C9 4.12667 7.88 3.00667 6.5 3.00667C5.12 3.00667 4 4.12667 4 5.50667C4 6.88667 5.12 8.00667")),
-            Upload: await waitFor((m) => m.default?.toString().includes("M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v")),
-            Search: await waitFor((m) => m.default?.toString().includes("M21.707 20.293L16.314 14.9C17.403 13.504 18 11.79")),
-            Folder: await waitFor((m) => m.default?.toString().includes("M20 7H12L10.553 5.106C10.214 4.428 9")),
-            Retry: await waitFor((m) => m.default?.toString().includes("M12 2C6.485 2 2 6.485 2 12H5.33333C5.33333 8.32")),
-            Overflow: await waitFor((m) => m.default?.toString().includes("M7 12.001C7 10.8964 6.10457 10.001 5 10.001C3.89543 10.001 3 10.8964")),
+            get Pin() {
+                return findModule((m) => m.default?.toString().includes("M22 12L12.101 2.10101L10.686 3.51401L12.101"));
+            },
+            get Gear() {
+                return findModule((m) => m.default?.toString().includes("M14 7V9C14 9 12.5867 9 12.5733 9.00667C12.42 9.58667 12.1733 10.1267 11.84 10.6067L12.74 11.5067L11"));
+            },
+            get Plus() {
+                return findModule((m) => m.default?.toString().includes("15 10 10 10 10 15 8 15 8 1"));
+            },
+            get Pencil() {
+                return findModule((m) => m.default?.toString().includes("M19.2929 9.8299L19.9409 9.18278C21.353"));
+            },
+            get Play() {
+                return findModule((m) => m.default?.toString().includes("0 0 0 14 11 7"));
+            },
+            get Trash() {
+                return findModule((m) => m.default?.toString().includes("M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"));
+            },
+            get Rocket() {
+                return findModule((m) => m.default?.toString().includes("M4.92871 13.4149L10.5857 19.0709L18.363"));
+            },
+            get Link() {
+                return findModule((m) => m.default?.toString().includes("M10.59 13.41c.41.39.41 1.03 0 1.42-.39.39-1.0"));
+            },
+            get PersonAdd() {
+                return findModule((m) => m.default?.toString().includes("M6.5 8.00667C7.88 8.00667 9 6.88667 9 5.50667C9 4.12667 7.88 3.00667 6.5 3.00667C5.12 3.00667 4 4.12667 4 5.50667C4 6.88667 5.12 8.00667"));
+            },
+            get Upload() {
+                return findModule((m) => m.default?.toString().includes("M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v"));
+            },
+            get Search() {
+                return findModule((m) => m.default?.toString().includes("M21.707 20.293L16.314 14.9C17.403 13.504 18 11.79"));
+            },
+            get Folder() {
+                return findModule((m) => m.default?.toString().includes("M20 7H12L10.553 5.106C10.214 4.428 9"));
+            },
+            get Retry() {
+                return findModule((m) => m.default?.toString().includes("M12 2C6.485 2 2 6.485 2 12H5.33333C5.33333 8.32"));
+            },
+            get Overflow() {
+                return findModule((m) => m.default?.toString().includes("M7 12.001C7 10.8964 6.10457 10.001 5 10.001C3.89543 10.001 3 10.8964"));
+            },
         },
         Classes: {
-            Anchor: await waitFor(["anchorUnderlineOnHover"]),
-            ContextMenu: await waitFor(["menu", "iconContainer"]),
-            Titles: await waitFor(["h1", "h2"]),
-            RadioItems: await waitFor(["item", "collapsibleItem"]),
-            Position: await waitFor(["directionRow"]),
+            get Anchor() {
+                return findModule(["anchorUnderlineOnHover"]);
+            },
+            get ContextMenu() {
+                return findModule(["menu", "iconContainer"]);
+            },
+            get Titles() {
+                return findModule(["h1", "h2"]);
+            },
+            get RadioItems() {
+                return findModule(["item", "collapsibleItem"]);
+            },
+            get Position() {
+                return findModule(["directionRow"]);
+            },
         },
         Actions: {
             ContextMenuActions,
             ModalActions: {
                 _ModalActions,
-                openModal: Object.values(_ModalActions).find((m) => m?.toString()?.includes("onCloseCallback") && m?.toString()?.includes("Layer")),
-                closeModal: Object.values(_ModalActions).find((m) => m?.toString()?.includes("onCloseCallback()")),
+                get openModal() {
+                    return Object.values(_ModalActions).find((m) => m?.toString()?.includes("onCloseCallback") && m?.toString()?.includes("Layer"));
+                },
+                get closeModal() {
+                    return Object.values(_ModalActions).find((m) => m?.toString()?.includes("onCloseCallback()"));
+                },
             },
-            Invites: (await waitFor(["acceptInvite"])).default,
+            get Invites() {
+                return findModule(["acceptInvite"]).default;
+            },
         },
     };
 });

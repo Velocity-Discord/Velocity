@@ -38,7 +38,6 @@ export const initialiseSettings = async () => {
     const Patcher = new Velocity.Patcher("VelocityInternal_Settings");
 
     const UserSettings = await WebpackModules.waitFor((m) => m.default?.prototype?.getPredicateSections);
-    const TabBar = (await WebpackModules.waitFor((m) => m.default?.prototype?.render?.toString().includes("this.tabBar"))).default;
 
     Patcher.after(UserSettings.default.prototype, "getPredicateSections", (_, returnValue) => {
         let location = returnValue.findIndex((s) => s.section.toLowerCase() == "discord nitro") - 2;
@@ -324,30 +323,5 @@ export const initialiseSettings = async () => {
                 },
             });
         }
-    });
-
-    Patcher.after(TabBar.prototype, "render", (_, returnValue) => {
-        const children = returnValue.props.children;
-        if (!children || !children.length || children.length < 3) return;
-        if (!children[children.length - 3].type.toString().includes("separator")) return;
-
-        if (!children[children.length - 2].type.toString().includes("socialLinks")) return;
-
-        const infoClasses = WebpackModules.find(["versionHash"]);
-        const Text = WebpackModules.common.Components.Text.default;
-
-        const originalVersions = children[children.length - 1].type;
-        children[children.length - 1].type = function () {
-            const returnVal = originalVersions(...arguments);
-            returnVal.props.children.splice(
-                1,
-                0,
-                <span className={`${Text.Colors.MUTED} ${Text.Sizes.SIZE_12} ${infoClasses.line}`}>
-                    Velocity {VelocityCore.Meta.version}
-                    <span className={infoClasses.versionHash}> ({VelocityCore.Meta.hash})</span>
-                </span>
-            );
-            return returnVal;
-        };
     });
 };
